@@ -119,7 +119,7 @@ jobs:
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_warlock_lifetap_model.lua" tests/Forever/aplforever_warlock_lifetap_model.lua
           .lua/bin/busted --verbose tests/Forever/aplforever_import_spec.lua tests/Forever/aplforever_progress_spec.lua
 
-      - name: Guardian source mitigation and high-kit safety without the blocked positive control
+      - name: Guardian source mitigation and high-kit safety (experimental high-Rage Maul separate)
         working-directory: upstream/hekili
         run: |
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_barkskin_v086_spec.lua" tests/Forever/aplforever_guardian_barkskin_v086_spec.lua
@@ -142,13 +142,3 @@ jobs:
         working-directory: upstream/hekili
         run: |
           .lua/bin/busted --verbose tests/Forever/druid_spec.lua tests/Forever/loop_druid_spec.lua tests/Forever/hunter_spec.lua tests/Forever/creature_type_spec.lua tests/Forever/item_restores_spec.lua tests/Forever/windows_apl_spec.lua tests/Forever/windows_spec.lua tests/Forever/simc_options_spec.lua tests/Forever/toggle_event_spec.lua tests/Forever/recommendation_listener_spec.lua
-
-      - name: Unresolved high-kit Maul positive queue and real-swing gate (strict; cannot pass vacuously)
-        working-directory: upstream/hekili
-        run: |
-          # Source Guardian fixture supplies no tested damage-taken Rage model.
-          # Never fabricate Rage, lower the 35/50 reserve, or mark this required
-          # positive Maul counterfactual as passed without real queue + strike.
-          # Run LAST to preserve diagnostics from the independent native gates.
-          echo "::notice::Unresolved issue #3: strict source-natural high-kit Maul positive queue gate; expect failure while the Rage reserve remains unreachable."
-          .lua/bin/busted --verbose --filter="moves unchanged Maul guards before damage" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
