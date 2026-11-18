@@ -6,7 +6,7 @@ The historical private `tkbiccay/APLForever` is **reference-only**: do not devel
 
 ## Current progress and remaining gate
 
-This clean-history public repository has been initialised under GPLv3 with governance and owner control. **Historical APLs and their tests have not yet been imported or recertified.** Never mark the library migrated until every required file, SHA, source/third-party right, public URL and test gate is checked.
+Clean-history public bootstrap and protected `main` are verified. **PR #1 stages 32 exact-blob historic APL revisions, catalogue and Python/native developer tests** with selected research; private Git history/PRs/Actions logs have not been transferred. A successful public integrity `validate` is **not** a Hekili v0.9.0 source-native acceptance or gameplay approval. The import remains *reviewable* until PR #1 is green and merged. See `docs/IMPORT_PROVENANCE.md` and `docs/knowledge/CONTINUATION_HANDOVER.md`.
 
 ### Migration
 

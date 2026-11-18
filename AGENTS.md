@@ -26,4 +26,4 @@ Only **@tkbiccay** can make official merges, statuses, releases. No contributor 
 
 ## First tasks for new public repository
 
-Finish [PUBLIC_MIGRATION.md](PUBLIC_MIGRATION.md): audit and import **source snapshot without private Git history**, verify every selected APL hash, establish public working catalogue and native CI under the latest tagged addon; verify active GitHub `main` ruleset. No APL promotion until tests and live validation satisfy the full gate.
+**Initial snapshot import is staged in public PR #1:** 32 immutable APLs, the catalogue, curated native/Python test fixtures and critical knowledge. Actual Active `main` ruleset is verified; `validate` integrity passed on the original PR head, but the *updated* PR must rerun and pass. Next task is source-native **v0.9.0** under exact published pin, then Guardian/Feral improvements. See `docs/CODEX_CONTINUATION.md` and `docs/knowledge/CONTINUATION_HANDOVER.md`. Do not promote an APL until evidence and in-game validation satisfy the full gate.

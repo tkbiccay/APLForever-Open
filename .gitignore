@@ -1,0 +1,26 @@
+# Local environments and build outputs
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.coverage
+htmlcov/
+.lua/
+.wow/
+.local/
+.env
+.env.*
+!.env.example
+*.log
+*.zip
+*.7z
+*.rar
+*.sqlite
+*.sqlite3
+*.pem
+*.p12
+*.pfx
+*.key
+id_rsa
+id_ed25519
