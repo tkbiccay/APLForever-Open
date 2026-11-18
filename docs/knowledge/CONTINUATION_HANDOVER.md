@@ -29,3 +29,9 @@ Whole reachable-chain repeated fallback after DoTs/upkeep and unaffordable skill
 5. Log smallest reproducible next decision in the relevant role Research_/Tests_/Changelog_/Limitations_ + public issue/PR. Update this file only when substantive status/plan changes.
 
 **Never:** write to old private repo, copy private Git history/Actions logs/private links, allow CI to mark Approved, share custom runtime dependencies across APLs, run untrusted public PR code on a personal runner, publish raw snapshot secrets, or weaken a failing validator to get green.
+
+## Public issue #3 / PR #2 fixture correction
+
+The failed-first public run 44402011522 remains evidence. The released v0.9.0 Guardian header spends 21 Feral points before talent 1328617. The native dominant-tree level cut therefore learns talent Lacerate at level 31, while trained rank 2 remains level 34. The v0.9.0 fixture checks L30 negative and L31 positive for shipped and both historical custom profiles. The original v0.8.5 spec and its expectations are preserved byte-for-byte.
+
+The two-attacker v0.9.0 reorder trace never reached its Maul reserve (max truth 30.75, belief floor 26). Existing two-attacker natural low-Rage safety worlds remain strict. The separate in-memory unchanged-guard reorder uses three source-world attackers for positive queue, later strike, nonzero payment and zero unqueue assertions. This is test-only reachability evidence, not a recommended priority reorder or performance claim. Focused tests precede broad native checks in public run https://github.com/tkbiccay/APLForever-Open/actions/runs/44407953920. Full release acceptance must use the completed workflow result. No APL, Current selection, hash or rollback changes were made.
