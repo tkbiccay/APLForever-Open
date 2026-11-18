@@ -1,14 +1,18 @@
 # APLForever
 
-**Open-source, independently maintained Action Priority Lists (APLs) for World of Warcraft: Forever and Hekili Forever.**
+**Proudly AI-developed and human-maintained, open-source Action Priority Lists (APLs) for World of Warcraft: Forever and Hekili Forever.**
 
-> **Project status:** Public repository bootstrap. The historical private repository is an **archive/reference only**; all new development, issues, pull requests, source-native validation and official releases happen **here**. No APL is Approved simply because it appears in this repository.
+A fun, independent passion project: people and AI collaborating to explore better, safer gameplay recommendations. We share what works, what fails, and what we still don't know. No inflated DPS claims or pretence that AI-generated code is automatically correct.
+
+> **Project status:** Public baseline imported; active source-native v0.9.0 compatibility work in PR #2. The historical private repository is an **archive/reference only**; all new development, issues, pull requests, source-native validation and official releases happen **here**. No APL is Approved simply because it appears in this repository.
 
 ## Mission
 
 Develop one complete, independently importable and reliably castable APL for each supported Hekili Forever class/spec/role. Cover levelling 1–60 and appropriate PvE situations without inventing combat state the addon cannot observe.
 
-Our development priorities are **Druid Guardian/Feral Tank → Druid Feral DPS → other supported roles**. We favour safe, stable recommendations, correct user toggle handling and fully audited final/repeated fallbacks. The shipped Hekili priority is a research benchmark, not a design ceiling. New APL designs are encouraged when justified by tests.
+Our joint top priorities are **Druid Guardian/Feral Tank and Hunter Beast Mastery (equal priority) → Druid Feral DPS → remaining supported roles**. We favour safe, stable recommendations, correct user toggle handling and fully audited final/repeated fallbacks. The shipped Hekili priority is a research benchmark, not a design ceiling. New APL designs are encouraged when justified by tests.
+
+See our [AI-first working model and efficient validation strategy](docs/AI_FIRST_WORKING_MODEL.md) for how the maintainer, ChatGPT, Codex and community work together.
 
 ## Development and approval
 
@@ -37,5 +41,5 @@ APLForever-authored original code and documentation are licensed under **GNU GPL
 
 ## Current launch phase
 
-**Initial library import:** 32 full historical APL revisions, 28-role catalogue, independent SHA-256 checks, and reviewed Python/native test fixtures were migrated as a clean-history snapshot in [PR #1](https://github.com/tkbiccay/APLForever-Open/pull/1). This preserves historic statuses and rollbacks; it does **not** mean Hekili v0.9.0 source-native or in-game validation has passed. See [public migration/provenance](docs/IMPORT_PROVENANCE.md) and [Codex continuation](docs/CODEX_CONTINUATION.md).
+**Initial library import:** 32 full historical APL revisions, 28-role catalogue, independent SHA-256 checks, and reviewed Python/native test fixtures were migrated as a clean-history snapshot in [PR #1](https://github.com/tkbiccay/APLForever-Open/pull/1). This preserves historic statuses and rollbacks. Public v0.9.0 independent native gates have passed, but the strict high-Rage positive Maul experiment remains blocked in [issue #3](https://github.com/tkbiccay/APLForever-Open/issues/3); no in-game approval is implied. See [public migration/provenance](docs/IMPORT_PROVENANCE.md) and [Codex continuation](docs/CODEX_CONTINUATION.md).
 

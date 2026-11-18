@@ -4,7 +4,7 @@
 
 ## Goal and priority
 
-Build ONE self-contained, adaptive, safe, castable Hekili Forever APL per supported spec/role. Priority: **Druid Feral Tank (catalogue Druid_Guardian) → Druid Feral DPS → remaining roles**, unless a critical cross-spec safety or current-release compatibility regression pre-empts them. Maintain levels 1–60 and viable ST/AoE, levelling/world/dungeon/raid scenarios without inventing data.
+Build ONE self-contained, adaptive, safe, castable Hekili Forever APL per supported spec/role. Joint first priorities: **Druid Guardian/Feral Tank (catalogue Druid_Guardian) AND Hunter Beast Mastery (catalogue Hunter_BeastMastery), equal priority → Druid Feral DPS → remaining roles**, unless a critical cross-spec safety or current-release compatibility regression pre-empts them. Maintain levels 1–60 and viable ST/AoE, levelling/world/dungeon/raid scenarios without inventing data.
 
 Shipped WoWSims-derived/default rotations are research references and test comparators **not architectural ceilings**. Consider original priorities, talent/level guards, pet/form/stance/cooldown/defensive/utility options and safe end-of-chain fallbacks, only when the current released engine actually supports the required actions and observations. Respect player Major/Minor Cooldowns, Defensives, Interrupts and Potions toggles; verify named items and helper states.
 
@@ -16,7 +16,9 @@ Shipped WoWSims-derived/default rotations are research references and test compa
 4. Test with actual released Hekili native import/compile/Belief/accepted-refused cast progression. Compare **shipped default and last-working** under matched settings; use headless tests first and ask for irreducibly in-game `/hek snap` evidence. Replay and WoWSims numbers don't prove in-game reliability or approval.
 5. Log source pins, assumptions, failed tests, noise/variance, unchanged regressions, lesson transfer and next minimal test. Inconclusive comparisons protect last-working. Do not auto-promote Current/Candidate from CI.
 
-**Testing priority:** native correctness, responsiveness, fallback repeat safety > unproven numerical sims. Optional WoWSims DPS simulation needs a concrete decision and faithful model, not a bridge by default.
+**Testing priority:** native correctness, responsiveness, fallback repeat safety > unproven numerical sims. Use a lean risk-based test pyramid: fast integrity checks for every PR, focused released-source regression checks for changed mechanics, broad cross-role gates only for releases/shared-engine changes, and live validation only where simulation cannot faithfully reproduce observed behaviour. An unreachable optional positive experimental scenario is BLOCKED, never secretly waived or counted as passed; isolate it from unrelated baseline acceptance while preserving its strict test and evidence. Keep both co-priority roles progressing without speculative parallel churn. ChatGPT and the human maintainer lead decisions; Codex works only on explicitly delegated bounded engineering tasks. See [AI-first working model](docs/AI_FIRST_WORKING_MODEL.md).
+
+ Optional WoWSims DPS simulation needs a concrete decision and faithful model, not a bridge by default.
 
 ## Lifecycle and maintainership
 
@@ -26,4 +28,4 @@ Only **@tkbiccay** can make official merges, statuses, releases. No contributor 
 
 ## First tasks for new public repository
 
-**Initial snapshot import is staged in public PR #1:** 32 immutable APLs, the catalogue, curated native/Python test fixtures and critical knowledge. Actual Active `main` ruleset is verified; `validate` integrity passed on the original PR head, but the *updated* PR must rerun and pass. Next task is source-native **v0.9.0** under exact published pin, then Guardian/Feral improvements. See `docs/CODEX_CONTINUATION.md` and `docs/knowledge/CONTINUATION_HANDOVER.md`. Do not promote an APL until evidence and in-game validation satisfy the full gate.
+**Public baseline merged through PR #1:** 32 immutable APL revisions and independent tests are now on protected main. PR #2 checks pinned v0.9.0 source-native compatibility; independent role/native tests passed on public run 44410434709 but its old experimental positive Maul assertion failed because the source scenario never reached its real Rage reserve. Issue #3 remains BLOCKED. Treat Guardian and Hunter BM as co-priorities after a properly scoped source gate; BM has a v1.1 Draft file under Current but its catalogue `preferred_apl` is deliberately null. Do not silently set a preferred or Approved status. See `docs/CODEX_CONTINUATION.md` and `docs/AI_FIRST_WORKING_MODEL.md`.
