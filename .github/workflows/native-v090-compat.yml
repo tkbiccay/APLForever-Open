@@ -99,11 +99,10 @@ jobs:
           .lua/bin/lua -v
           .lua/bin/busted --version
 
-      - name: Focused v0.9.0 Guardian fixture gate before broad tests
+      - name: Focused v0.9.0 Guardian L30 negative and L31 positive source unlock
         working-directory: upstream/hekili
         run: |
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
-          .lua/bin/busted --verbose --filter="moves unchanged Maul guards before damage" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
           .lua/bin/busted --verbose --filter="progresses through level 30" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
           .lua/bin/busted --verbose --filter="progresses through level 31" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
       - name: Verify retired Hunter BM/MM world keys before all-role source import
@@ -120,12 +119,16 @@ jobs:
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_warlock_lifetap_model.lua" tests/Forever/aplforever_warlock_lifetap_model.lua
           .lua/bin/busted --verbose tests/Forever/aplforever_import_spec.lua tests/Forever/aplforever_progress_spec.lua
 
-      - name: Guardian exact v1.0 working v1.1 archive v1.2 Draft and Barkskin source gate
+      - name: Guardian source mitigation and high-kit safety without the blocked positive control
         working-directory: upstream/hekili
         run: |
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_barkskin_v086_spec.lua" tests/Forever/aplforever_guardian_barkskin_v086_spec.lua
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
-          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_barkskin_v086_spec.lua tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_barkskin_v086_spec.lua
+          .lua/bin/busted --verbose --filter="advances three real" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="records real Rage" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="progresses through level" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="safely follows caster" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
 
       - name: Feral v1.0 Current and v1.1 Draft natural resource source gate
         working-directory: upstream/hekili
@@ -139,3 +142,13 @@ jobs:
         working-directory: upstream/hekili
         run: |
           .lua/bin/busted --verbose tests/Forever/druid_spec.lua tests/Forever/loop_druid_spec.lua tests/Forever/hunter_spec.lua tests/Forever/creature_type_spec.lua tests/Forever/item_restores_spec.lua tests/Forever/windows_apl_spec.lua tests/Forever/windows_spec.lua tests/Forever/simc_options_spec.lua tests/Forever/toggle_event_spec.lua tests/Forever/recommendation_listener_spec.lua
+
+      - name: Unresolved high-kit Maul positive queue and real-swing gate (strict; cannot pass vacuously)
+        working-directory: upstream/hekili
+        run: |
+          # Source Guardian fixture supplies no tested damage-taken Rage model.
+          # Never fabricate Rage, lower the 35/50 reserve, or mark this required
+          # positive Maul counterfactual as passed without real queue + strike.
+          # Run LAST to preserve diagnostics from the independent native gates.
+          echo "::notice::Unresolved issue #3: strict source-natural high-kit Maul positive queue gate; expect failure while the Rage reserve remains unreachable."
+          .lua/bin/busted --verbose --filter="moves unchanged Maul guards before damage" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
