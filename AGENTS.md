@@ -1,0 +1,29 @@
+# APLForever-Open — canonical development instructions
+
+**This public repository is now the only active development and delivery destination.** The old private `tkbiccay/APLForever` is strictly a **read-only historical reference**, NOT an upstream to push to, auto-mirror, mutate, track new issues against or run modern CI in. Never modify the private repository or link to private CI as the public proof of a test.
+
+## Goal and priority
+
+Build ONE self-contained, adaptive, safe, castable Hekili Forever APL per supported spec/role. Priority: **Druid Feral Tank (catalogue Druid_Guardian) → Druid Feral DPS → remaining roles**, unless a critical cross-spec safety or current-release compatibility regression pre-empts them. Maintain levels 1–60 and viable ST/AoE, levelling/world/dungeon/raid scenarios without inventing data.
+
+Shipped WoWSims-derived/default rotations are research references and test comparators **not architectural ceilings**. Consider original priorities, talent/level guards, pet/form/stance/cooldown/defensive/utility options and safe end-of-chain fallbacks, only when the current released engine actually supports the required actions and observations. Respect player Major/Minor Cooldowns, Defensives, Interrupts and Potions toggles; verify named items and helper states.
+
+## Evidence and approvals
+
+1. Verify latest tagged **Hekili Forever** release/commit and source documentation; validate version-specific syntax, IDs, real resources, observation/Belief limitations, shipped kit and defaults. Check credible Forever-relevant independent guides; don't import Retail/Classic/SoD or synthetic oracle claims as live truth.
+2. Preserve **exact selected, last-working, approved and shipped comparator bytes** plus SHA-256 and rollback. APLs are complete standalone import files; internal lists must be defined inside the same file; no other APLs/custom runtime helpers required.
+3. Audit **every reachable action list** and **final/repeated fallback**, including low level, low/unknown resources, DoTs/upkeep expiry, ST/AoE, CD toggle OFF/ON, facing/movement, ready-but-unaffordable and unaffordable repeat suggestions. Particular regression: **DEMO-006** post-DoT Life Tap repetition; symptom reported, root cause unconfirmed.
+4. Test with actual released Hekili native import/compile/Belief/accepted-refused cast progression. Compare **shipped default and last-working** under matched settings; use headless tests first and ask for irreducibly in-game `/hek snap` evidence. Replay and WoWSims numbers don't prove in-game reliability or approval.
+5. Log source pins, assumptions, failed tests, noise/variance, unchanged regressions, lesson transfer and next minimal test. Inconclusive comparisons protect last-working. Do not auto-promote Current/Candidate from CI.
+
+**Testing priority:** native correctness, responsiveness, fallback repeat safety > unproven numerical sims. Optional WoWSims DPS simulation needs a concrete decision and faithful model, not a bridge by default.
+
+## Lifecycle and maintainership
+
+Catalogue is canonical after migration. `roles/<Class>/{Current,Candidates,Checkpoints,Archive}/` and original APL SHA-256 are protected. No overwrite of historical APLs; new candidates get new filenames. Roles: 28 intended; 23 supported / five healer roles previously blocked pending verified engine triage support (re-check upon migration). Never claim historical private results are independently rerun in public.
+
+Only **@tkbiccay** can make official merges, statuses, releases. No contributor or agent gets blanket permission to change protected `main`; use small PRs with green real CI and explicit owner review, not mandatory second human approval. Reuse previously verified source observations/fixtures and report unsupported conditions honestly. `GPL-3.0-only` for original work; protect licences for any reused third-party source.
+
+## First tasks for new public repository
+
+Finish [PUBLIC_MIGRATION.md](PUBLIC_MIGRATION.md): audit and import **source snapshot without private Git history**, verify every selected APL hash, establish public working catalogue and native CI under the latest tagged addon; verify active GitHub `main` ruleset. No APL promotion until tests and live validation satisfy the full gate.
