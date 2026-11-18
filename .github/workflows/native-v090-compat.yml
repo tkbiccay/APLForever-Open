@@ -99,6 +99,13 @@ jobs:
           .lua/bin/lua -v
           .lua/bin/busted --version
 
+      - name: Focused v0.9.0 Guardian fixture gate before broad tests
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="test-only full v1.1" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="progresses through level 30" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="progresses through level 31" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
       - name: Verify retired Hunter BM/MM world keys before all-role source import
         working-directory: upstream/hekili
         run: |
@@ -117,8 +124,8 @@ jobs:
         working-directory: upstream/hekili
         run: |
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_barkskin_v086_spec.lua" tests/Forever/aplforever_guardian_barkskin_v086_spec.lua
-          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v085_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v085_spec.lua
-          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_barkskin_v086_spec.lua tests/Forever/aplforever_guardian_highkit_tail_v085_spec.lua
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_barkskin_v086_spec.lua tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
 
       - name: Feral v1.0 Current and v1.1 Draft natural resource source gate
         working-directory: upstream/hekili
