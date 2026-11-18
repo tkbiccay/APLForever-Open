@@ -591,7 +591,7 @@
             {
               "kind": "native_import_compile_single_update",
               "result": "Pass",
-              "reference": "https://github.com/tkbiccay/APLForever/actions/runs/43645496132",
+              "reference": "Private historical CI run 43645496132 (archival reference only; not a public verification)",
               "scope": "Native import/compile/one update only; cast progression NOT RUN"
             }
           ],
@@ -1129,7 +1129,7 @@
             {
               "kind": "native",
               "source": "Hekili Forever v0.8.6",
-              "reference": "https://github.com/tkbiccay/APLForever/actions/runs/44182255034",
+              "reference": "Private historical CI run 44182255034 (archival reference only; not a public verification)",
               "result": "PASS: 843/843 source-native CI; 48 ON/OFF real-range movement cases and 72 natural Fury worlds (18 v1.2), zero candidate source refusals or three-hostile-swing repeated-ready fallback. Archived v1.1 expected-bad cost refusal four times. No in-game proof."
             }
           ],

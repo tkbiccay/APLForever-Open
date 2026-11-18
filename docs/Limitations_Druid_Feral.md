@@ -1,0 +1,20 @@
+# Limitations — Druid Feral DPS
+
+**16 November 2026; both Current v1.0 and Candidate v1.1 are Draft.** Selected-for-testing Current is not Approved, and there is **no last-known-working Checkpoint**. Never auto-import Candidate v1.1 as the player's daily profile.
+
+- **Positional safety:** the source world lets Hekili see whether the target focuses the player, but does **not** prove an actual rear-arc. v1.1's Shred branch is only source-native supported as a proxy. A boss may face the player despite targeting someone else. In-game Shred usability and stable Claw fallback must be checked; do not invent `target.behind` reads.
+- **Combo-state visibility:** all six source worlds earned 5 actual points, while APL-observed points were 0 at source-true 4–5CP decision windows, max observed 2. The test's direct controller field for ComboPoints was **nil** (a zero summary is from a fallback conversion), *not* a verified client zero. The original cause is **unknown**. No Rip, Ferocious Bite or 4CP branch was source-accepted in any comparator.
+- **Secondary Mana/Shifting Power:** source-world Mana remained 2674/2674, action known=true but ready=false in relevant windows, and no profile cast Shifting Power. Exact source of readiness mismatch is unverified; need source/fixture/engine inspection, no fake Mana gains or undocumented API bypass.
+- **Health/defensives:** the legacy source contained player `health.pct` checks for Barkskin/Frenzied Regeneration; availability during actual Forever combat and safe automatic healing/mitigation have not been established. Manual emergency ability use remains necessary.
+- **Talents/level guards:** only level-60 source-talent setup was tested. Cat unlock 20, Rake 24 and each talent/rank level are independent unrun game/native checks. Rake known guard does not prove every low-level fallback.
+- **AoE/forms:** manual Bear-form fallback retained but untested as full DPS pack transition. No assured multi-DoT state, reliable target counting, automatic Cat/Bear swapping or last-three-icons across actual level-1–60 combat.
+- **Fair performance proof:** shipped and Current comparisons used one deterministic source-world seed with unmeasured damage, unknown positioning and missing finishers; no practical DPS or survival superiority can be claimed. APL-first control must still obey major/minor/defensive off-switches and preserve user's manual choices.
+- **Runtime independence:** complete Candidate v1.1 has all action lists inline; shared testing/knowledge files are **development-only**, never required for an import. Original Current v1.0 is preserved exactly as rollback comparator, but **not promoted to ReportedWorking**.
+
+See [six-profile tests](Tests_Druid_Feral_v1.1.md), [research](Research_Druid_Feral_v1.1.md), [PR #65]([private historical reference; not publicly accessible]) and game-wide [final fallback issue #30]([private historical reference; not publicly accessible]).
+
+## 17 November correction to historical source-native limitations
+
+The prior six-world missing-CP / Shifting Power observation is now **resolved as a native fixture configuration fault** (not a proven client/API or production APL defect): the overlay's `__index` fields were invisible to the source loop's `pairs(content.OBSERVE)`. [PR #66]([private historical reference; not publicly accessible]) restored the exact source Feral observer settings, and [corrected CI]([private historical reference; not publicly accessible]) observed 4–5 CP faithfully in all six worlds, six to eight accepted Rip casts and five accepted Shifting Power casts per world, zero world refusals/errors. The previous "no finishers" and "secondary Mana unready" **headless verdicts are invalidated** for this source fixture. No alternate in-game API workaround or APL revision is justified.
+
+**Still limited:** actual behind-arc Shred usability, real client combo visibility/CDM and Mana under latency/range, full rank/level progression, target swaps/AoE, serious survival, all final/repeated fallback paths, player acceptance and production DPS comparisons. v1.0 and v1.1 remain Draft, with no verified working Checkpoint or Approval.

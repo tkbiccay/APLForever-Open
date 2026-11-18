@@ -43,6 +43,58 @@ def check() -> list[str]:
         path = ROOT / name
         if path.is_file() and TOKEN.search(path.read_text(encoding="utf-8")):
             errors.append("Possible literal GitHub credential in " + name)
+
+    # Fail closed when a newly tracked public file resembles a leaked credential,
+    # private CI reference or personal path. Never exclude all of tests/.
+    import subprocess
+    try:
+        tracked = subprocess.check_output(
+            ["git", "-C", str(ROOT), "ls-files", "-z"], stderr=subprocess.PIPE
+        ).split(b"\x00")
+    except (OSError, subprocess.CalledProcessError):
+        errors.append("Cannot enumerate tracked files for public safety scan")
+        tracked = []
+
+    patterns = {
+        "github_credential": TOKEN,
+        "aws_key": re.compile(r"\b(?:AKIA|ASIA)[A-Z0-9]{16}\b"),
+        "private_key": re.compile(r"-----BEGIN (?:[A-Z ]* )?PRIVATE KEY-----"),
+        "credential_assignment": re.compile(
+            r"(?i)\b(?:password|passwd|api[_-]?key|client_secret|access[_-]?token)"
+            r"\s*[:=]\s*['\"]?[A-Za-z0-9+/_=-]{16,}"
+        ),
+        "embedded_basic_auth": re.compile(r"https?://[^\s/:@]+:[^\s@]+@[^\s]+"),
+        "private_ci_link": re.compile(
+            r"https://github\.com/tkbiccay/APLForever/(?:actions|pull|issues)/"
+        ),
+        "personal_windows_path": re.compile(r"[A-Za-z]:\\Users\\[^\\\s]+"),
+    }
+    personal_mail = re.compile(r"\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
+    for name in tracked:
+        if not name:
+            continue
+        relative = name.decode("utf-8", "replace")
+        path = ROOT / relative
+        if not path.is_file() or path.is_symlink():
+            errors.append("Missing or symlink tracked file: " + relative)
+            continue
+        if re.search(r"(?i)(?:^|/)(?:\.env(?:\..*)?|id_rsa|id_ed25519|[^/]+\.(?:pem|p12|pfx|key|sqlite3?|log))$", relative):
+            errors.append("Sensitive filename requiring review: " + relative)
+        data = path.read_bytes()
+        if b"\x00" in data:
+            errors.append("Binary tracked file requires review: " + relative)
+            continue
+        content = data.decode("utf-8", "replace")
+        for kind, pattern in patterns.items():
+            if pattern.search(content):
+                errors.append("Potential " + kind + " in " + relative)
+        for email_match in personal_mail.findall(content):
+            domain = email_match.rpartition("@")[2].lower()
+            if domain not in {"example.com", "example.org", "example.net",
+                              "example.invalid", "users.noreply.github.com"}:
+                errors.append("Potential personal email address in " + relative)
+                break
+
     catalogue = ROOT / "catalogue/roles.json"
     if catalogue.exists():
         try:

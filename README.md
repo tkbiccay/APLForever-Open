@@ -37,5 +37,5 @@ APLForever-authored original code and documentation are licensed under **GNU GPL
 
 ## Current launch phase
 
-This is a **clean-history public bootstrap**. APLs, the role catalogue, tests and historical source evidence must be imported by a reviewable change with provenance, private-content screening and byte-for-byte rollback checks before publication. Until then, do not represent the original private library as already migrated. See [PUBLIC_MIGRATION.md](PUBLIC_MIGRATION.md).
+**Initial library import:** 32 full historical APL revisions, 28-role catalogue, independent SHA-256 checks, and reviewed Python/native test fixtures were migrated as a clean-history snapshot in [PR #1](https://github.com/tkbiccay/APLForever-Open/pull/1). This preserves historic statuses and rollbacks; it does **not** mean Hekili v0.9.0 source-native or in-game validation has passed. See [public migration/provenance](docs/IMPORT_PROVENANCE.md) and [Codex continuation](docs/CODEX_CONTINUATION.md).
 
