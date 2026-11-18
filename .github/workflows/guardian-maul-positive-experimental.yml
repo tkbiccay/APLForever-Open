@@ -1,0 +1,55 @@
+name: Experimental Guardian high-Rage Maul evidence (manual only)
+
+# NOT a merge-required gate or compatibility pass. Explicit negative evidence
+# remains in issue #3 and the native source fixture remains unchanged. Manual
+# use only when a verified source-faithful scenario is ready to test.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  strict-positive-maul:
+    name: strict-positive-maul
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      APLFOREVER_SOURCE_RELEASE: v0.9.0
+    steps:
+      - name: Check out APLForever-Open only
+        uses: actions/checkout@v4
+        with:
+          path: aplforever
+          persist-credentials: false
+      - name: Check out pinned released Hekili Forever source
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 8f95f2ea0a45428554c1e938ed7357b870030514
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify pinned source
+        working-directory: upstream/hekili
+        run: test "$(git rev-parse HEAD)" = "8f95f2ea0a45428554c1e938ed7357b870030514"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate immutable catalogue and prepare manifest
+        working-directory: aplforever
+        run: |
+          python scripts/check_public_repository.py
+          python scripts/build_native_manifest.py --output "$RUNNER_TEMP/aplforever-native-manifest.lua" --source-release v0.9.0
+          {
+            echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/aplforever"
+            echo "APLFOREVER_NATIVE_MANIFEST=$RUNNER_TEMP/aplforever-native-manifest.lua"
+          } >> "$GITHUB_ENV"
+      - name: Bootstrap pinned source-native Lua runtime
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Strict positive custom Maul queue and later real swing (expected blocker)
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          echo "::notice::Experimental, non-required issue #3 coverage. Do not interpret no Rage reserve as a passing Maul result."
+          .lua/bin/busted --verbose --filter="moves unchanged Maul guards before damage" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
