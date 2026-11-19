@@ -49,10 +49,11 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.1",
+      "latest_revision": "v1.2",
       "limitations": [
         "Archived Cat/Bear/caster branches require evidence-based review: distinguish legitimate pre-unlock and defensive shifts from sustained off-role rotation. Preserve original APL unchanged.",
-        "Unpromoted Feral DPS v1.1 Candidate must prove Shred/Claw castability by position and resolve combo-point and Shifting Power observability. Current v1.0 remains a Draft, not proven working."
+        "Unpromoted Feral DPS v1.1 Candidate must prove Shred/Claw castability by position and resolve combo-point and Shifting Power observability. Current v1.0 remains a Draft, not proven working.",
+        "v0.10.0: Current v1.0 and older v1.1 Candidate have three unreachable in-combat health.pct defensive thresholds; v1.2 removes them as a Draft but is not preferred or gameplay validated."
       ],
       "revisions": [
         {
@@ -99,6 +100,27 @@
           "gear": null,
           "settings": null,
           "caveat": "Full standalone Shred-over-Claw positional-proxy fallback and 4-CP Rip Draft; no in-game facing proof, no source-native candidate result yet; do not displace Current v1.0 or claim working status."
+        },
+        {
+          "revision": "v1.2",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt",
+          "status": "Draft",
+          "sha256": "52568f2d069699c5b453aaa98515c3c2096594f4b790ba0e8591c417bcdb95c9",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Hekili Forever v0.10.0 3c2cf3e32472cc807b1ba29d992fc13a273da8ee: player health hidden, threat readable, Barkskin source toggle; issue #14"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+          "min_source_release": "v0.10.0",
+          "game_build": null,
+          "addon_version": "v0.10.0",
+          "talents": null,
+          "gear": null,
+          "settings": "Defensives toggle ON to consider Barkskin when tanking/in melee; Frenzied Regeneration and Nature's Grasp manually controlled.",
+          "caveat": "Self-contained Draft only. Barkskin considered only in real combat while player is tanking and in melee, never based on hidden player health. Frenzied Regeneration and Nature's Grasp are deliberately manual pending real triage evidence. No numerical DPS or survival claim; exact source-native test pending, in-game unrun."
         }
       ],
       "apl_name": "Druid_Feral"
