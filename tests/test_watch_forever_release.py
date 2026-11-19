@@ -28,32 +28,33 @@ class ForeverReleaseWatchTests(unittest.TestCase):
     def test_pinned_actual_release_is_verifiable(self):
         self.assertEqual("zmsl/hekili", self.pin["upstream_repository"])
         self.assertEqual((0, 10, 0), watch.semver("v0.10.0"))
-        self.assertEqual("v0.10.0", self.old)
-        self.assertEqual("3c2cf3e32472cc807b1ba29d992fc13a273da8ee",
-                         self.pin["release_commit"])
+        self.assertEqual(self.old, self.pin["release_tag"])
+        self.assertRegex(self.pin["release_commit"], r"^[0-9a-f]{40}$")
 
     def test_no_issues_when_release_is_unchanged_or_older(self):
-        for version in ("v0.10.0", "v0.9.0"):
+        for version in (self.old, "v0.9.0"):
             status, title, body = watch.assess(self.release(version),
                                                 self.pin, set(), self.commit)
             self.assertEqual(("pinned-current-or-newer", None, None),
                              (status, title, body))
 
     def test_new_published_version_generates_safe_tracked_issue(self):
+        fixture_pin = {**self.pin, "release_tag": "v0.10.0"}
         state, title, body = watch.assess(self.release("v0.10.1"),
-                                          self.pin, set(), self.commit)
+                                          fixture_pin, set(), self.commit)
         self.assertEqual("new-release", state)
         self.assertEqual("Upstream Hekili Forever v0.10.1 — compatibility triage", title)
         self.assertIn(self.commit, body)
         self.assertIn("not", body.lower())
         self.assertIn("standalone", body)
-        self.assertIn("No", body)
+        self.assertIn("Do not change the protected", body)
         self.assertNotIn("approved automatically", body.lower())
 
     def test_existing_closed_or_open_title_is_idempotent(self):
         title = "Upstream Hekili Forever v0.11.0 — compatibility triage"
+        fixture_pin = {**self.pin, "release_tag": "v0.10.0"}
         state, matched, body = watch.assess(self.release("v0.11.0"),
-                                            self.pin, {title}, self.commit)
+                                            fixture_pin, {title}, self.commit)
         self.assertEqual(("already-tracked", title, None),
                          (state, matched, body))
 

@@ -56,7 +56,7 @@ def ticket(tag: str, commit: str, published_at: str) -> tuple[str, str]:
 - **Project boundary:** APLForever develops **our own** standalone APLs. We do **not** develop, maintain or control the external Hekili Forever addon.
 - **Verified upstream release:** https://github.com/zmsl/hekili/releases/tag/{tag}
 - **Published at (UTC):** {published_at}
-- **Resolved upstream commit:** \`{commit}\`
+- **Resolved upstream commit:** `{commit}`
 - **Official source repository:** https://github.com/zmsl/hekili
 - **Local pinned baseline:** [current-release.json](https://github.com/tkbiccay/APLForever-Open/blob/main/docs/knowledge/engine/current-release.json)
 - **Release process:** [RELEASE_LEDGER.md](https://github.com/tkbiccay/APLForever-Open/blob/main/docs/knowledge/engine/RELEASE_LEDGER.md)
