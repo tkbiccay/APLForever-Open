@@ -88,6 +88,52 @@ class NativeManifestTests(unittest.TestCase):
                              "roles/Warrior/Current/APL_Warrior_Fury_DPS_v1.0_Draft.txt")
             self.assertEqual(verified, self.expected_protected_revision_count())
 
+
+    def test_unselected_newer_bm_candidate_does_not_replace_current(self) -> None:
+        """A new v1.2 Draft must not change the meaning of preferred_apl=null."""
+        import copy
+
+        data = json.loads((ROOT / "catalogue" / "roles.json").read_text(encoding="utf-8-sig"))
+        hunter = copy.deepcopy(next(role for role in data["roles"]
+                                    if role["apl_name"] == "Hunter_BeastMastery"))
+        self.assertIsNone(hunter["preferred_apl"])
+        candidate = copy.deepcopy(hunter["revisions"][-1])
+        candidate["revision"] = "v1.2"
+        candidate["apl_file"] = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt"
+        candidate["status"] = "Draft"
+        hunter["revisions"].append(candidate)
+
+        chosen = manifest.select_revision(hunter, "v0.9.0")
+        self.assertEqual("v1.1", chosen["revision"])
+        self.assertEqual("roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+                         chosen["apl_file"])
+
+        # A SPECIFIC manual preferred selection remains honoured; only
+        # accidental latest-revision selection is disallowed.
+        hunter["preferred_apl"] = candidate["apl_file"]
+        self.assertEqual("v1.2", manifest.select_revision(hunter, "v0.9.0")["revision"])
+
+    def test_historical_hunter_fallback_and_candidate_only_fail_closed(self) -> None:
+        """Retain v0.8.2 archive compatibility; never silently select Candidates."""
+        data = json.loads((ROOT / "catalogue" / "roles.json").read_text(encoding="utf-8-sig"))
+        hunter = next(role for role in data["roles"]
+                      if role["apl_name"] == "Hunter_BeastMastery")
+        old = manifest.select_revision(hunter, "v0.8.2")
+        self.assertEqual("v1.0", old["revision"])
+        self.assertIn("/Archive/", old["apl_file"])
+
+        candidate_only = {
+            "apl_name": "Hunter_BeastMastery",
+            "preferred_apl": None,
+            "revisions": [{
+                "revision": "v9.9",
+                "apl_file": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v9.9_Draft.txt",
+                "min_source_release": "v0.9.0",
+            }],
+        }
+        with self.assertRaisesRegex(ValueError, "cannot auto-promote"):
+            manifest.select_revision(candidate_only, "v0.9.0")
+
     def test_protected_v082_bundle_selects_original_hunter(self) -> None:
         import build_testing_bundle
         import json
