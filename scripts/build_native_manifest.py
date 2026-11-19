@@ -30,7 +30,15 @@ def _compatible(revision: dict[str, Any], source_release: str) -> bool:
 
 
 def select_revision(role: dict[str, Any], source_release: str) -> dict[str, Any]:
-    """Choose the preferred revision only when compatible; otherwise latest compatible."""
+    """Select a compatible native TEST reference, not an APL promotion.
+
+    An explicit catalogue preferred_apl wins when compatible. Otherwise use
+    Current, then a historical Archive if the Current file requires a later
+    source release (e.g. archived Hunter BM v1.0 on v0.8.2). Never let a newly
+    added unselected Candidates revision displace a stable test reference
+    simply because its version is higher. If nothing safe is available, fail
+    closed rather than silently treating a Candidate as the selected APL.
+    """
     eligible = [revision for revision in role["revisions"] if _compatible(revision, source_release)]
     if not eligible:
         raise ValueError(f"no source-compatible revision for {role['apl_name']} on {source_release}")
@@ -39,7 +47,26 @@ def select_revision(role: dict[str, Any], source_release: str) -> dict[str, Any]
         found = next((revision for revision in eligible if revision["apl_file"] == preferred), None)
         if found is not None:
             return found
-    return max(eligible, key=lambda rev: tuple(int(part) for part in rev["revision"][1:].split(".")))
+
+    def newest_in(folder: str) -> dict[str, Any] | None:
+        candidates = [
+            revision for revision in eligible
+            if folder in Path(revision["apl_file"]).parts
+        ]
+        if not candidates:
+            return None
+        return max(
+            candidates,
+            key=lambda rev: tuple(int(part) for part in rev["revision"][1:].split("."))
+        )
+
+    selected = newest_in("Current") or newest_in("Archive")
+    if selected is None:
+        raise ValueError(
+            f"no compatible Current/Archive test reference for {role['apl_name']} "
+            f"on {source_release}; unselected Candidates cannot auto-promote"
+        )
+    return selected
 
 
 def _lua_string(value: str) -> str:

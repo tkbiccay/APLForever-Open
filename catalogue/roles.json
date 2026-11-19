@@ -222,9 +222,10 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.1",
+      "latest_revision": "v1.2",
       "limitations": [
-        "Archived Hunter BM ranged/melee actions may represent a valid DPS weave; verify talent, pet, range, swing timing, safety and benefit before promotion."
+        "Archived Hunter BM ranged/melee actions may represent a valid DPS weave; verify talent, pet, range, swing timing, safety and benefit before promotion.",
+        "v1.2 under Candidates is not selected, preferred, reported-working or Approved; source world can test accepted Hawk casts but cannot prove real pet damage or live cooldown-manager observation."
       ],
       "revisions": [
         {
@@ -267,6 +268,26 @@
           "caveat": "Source-pinned development candidate; actual Call/Revive casts and post-cast pet transitions not yet validated in game.",
           "purity_review": "Pet-upkeep only; source-verified Lone Wolf gate and main-pet Bestial Wrath state; retain original custom ranged/melee architecture.",
           "relocated_from": "roles/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+        },
+        {
+          "revision": "v1.2",
+          "apl_file": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt",
+          "status": "Draft",
+          "sha256": "6abe7e0ff17ff3bfadf9dd8fe234399457127c3535272447b355120f2f5325cd",
+          "min_source_release": "v0.9.0",
+          "evidence": [
+            "Hekili Forever v0.9.0 8f95f2ea0a45428554c1e938ed7357b870030514 Hunter.lua:408-413,784-799; hunter_world.lua:80-100",
+            "Public PR #8 source-native six-yard out-of-range negative comparator (shipped Serpent Sting 109 refused; v1.1 zero) and in-memory Hawk accepted-cast positive test"
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+          "game_build": null,
+          "addon_version": "v0.9.0",
+          "talents": null,
+          "gear": null,
+          "settings": null,
+          "caveat": "UNSELECTED Draft Candidate only; pet/hawk survival and in-game damage are unverified. In-game validation and separate confirmed current/working selection required.",
+          "purity_review": "Complete standalone Hunter BM priority. Only one evidence-backed guard changed from v1.1: Summon Hawk independently checks its registered 0-35 yard range and pet.hawk.count<2, rather than requiring all Hunter ranged shots' minimum 8 yards."
         }
       ],
       "apl_name": "Hunter_BeastMastery"

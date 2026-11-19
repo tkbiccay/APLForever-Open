@@ -119,6 +119,12 @@ jobs:
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_hunter_fixture_v090_spec.lua" tests/Forever/aplforever_hunter_fixture_v090_spec.lua
           .lua/bin/busted --verbose tests/Forever/aplforever_hunter_fixture_v090_spec.lua
 
+      - name: Hunter BM exact v0.9.0 native combat progression and Major toggles
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_hunter_bm_progress_v090_spec.lua" tests/Forever/aplforever_hunter_bm_progress_v090_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_hunter_bm_progress_v090_spec.lua
+
       - name: Import and source-advance every supported APL and protected pilot revision
         working-directory: upstream/hekili
         run: |
