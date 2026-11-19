@@ -1,0 +1,37 @@
+name: Pinned class mechanics reference
+
+# Small, version-verified knowledge gate; no Lua bootstrap or home runner.
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/mechanics-reference.yml"
+      - "knowledge/**"
+      - "docs/reference/**"
+      - "scripts/build_mechanics_reference.py"
+      - "tests/test_mechanics_reference.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-mechanics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: aplforever
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 8f95f2ea0a45428554c1e938ed7357b870030514
+          path: upstream/hekili
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify pinned source data, all registered talents and rendered reference
+        working-directory: aplforever
+        run: python scripts/build_mechanics_reference.py --check --source-root ../upstream/hekili
