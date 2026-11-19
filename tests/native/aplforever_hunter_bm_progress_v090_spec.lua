@@ -217,7 +217,7 @@ local function naturalManaTail(profile)
                 local rec = output and output.recs[1]
                 local first = r.ours[r.combat] or "NO_ACTION"
                 samples[#samples + 1] = {
-                    t = t, first = first, wait = rec and rec.wait or nil,
+                    t = t, tick = r.combat, first = first, wait = rec and rec.wait or nil,
                     mana = mana, accepted = accepted, events = events,
                 }
                 if lastEventCount >= 0 then realWorldAdvances = realWorldAdvances + 1 end
@@ -258,7 +258,7 @@ local function naturalManaTail(profile)
         and (c.wait or 0) <= 0.05
     if immediateRepeat then
         local acceptedOfFirst = 0
-        for i = firstLowTick, run.combat do
+        for i = a.tick, c.tick do
             if run.pressed[i] == first then acceptedOfFirst = acceptedOfFirst + 1 end
         end
         assert.is_true(acceptedOfFirst > 0,
@@ -270,6 +270,62 @@ describe("Hunter BM v0.9.0 natural sub-200 Mana tail / repeated fallback", funct
     for _, profile in ipairs(profiles) do
         it(profile.name .. " advances through three true low-Mana checkpoints", function()
             naturalManaTail(profile)
+        end)
+    end
+end)
+
+
+-- At 5-8 yards the source client cannot legally cast ranged shots (min 8)
+-- or melee actions (max 5). Summon Hawk and Hunter's Mark have their OWN
+-- verified range bands; never incorrectly label them as ranged shots.
+-- This checks source-world on-demand presses and refusals only: the
+-- upstream turret fixture auto-starts ranged white attacks even when
+-- moved to 6 yd, so it cannot prove real auto-shot clipping/suppression.
+local function sourceDeadZone(profile)
+    local gapWorld = setmetatable({ distance = 6 }, { __index = C.WORLD })
+    local gapContent = setmetatable({ WORLD = gapWorld }, { __index = C })
+    local L = loop.new(gapContent)
+    local H = L.us
+    assert.are.same({}, H.loadErrors)
+    install(H, profile)
+    H.Hekili.DB.profile.toggles.cooldowns.value = false
+    H.Hekili.DB.profile.toggles.defensives.value = false
+    H.Hekili.DB.profile.toggles.movement.value = false
+
+    local run = loop.run(L, 30417, { duration = 22 }, { { H = H } })
+    local pressed = run.pressedBy or {}
+    local outOfBand = {
+        "arcane_shot", "aimed_shot", "serpent_sting", "multi_shot",
+        "raptor_strike", "mongoose_bite", "strider_kick",
+    }
+    local firstThree = {}
+    for i = 1, math.min(3, run.combat) do
+        firstThree[#firstThree + 1] = run.ours[i] or "NO_ACTION"
+    end
+    print("BM_V090_SIX_YARD " .. profile.name .. " " .. pretty.write({
+        distance = run.W.distance, accepted = pressed, firstThree = firstThree,
+        rawRefused = run.refused, worldEvents = #run.W.truth,
+        errors = run.errors, raises = run.raises,
+    }, ""))
+
+    assert.are.equal(6, run.W.distance,
+        "published world did not actually apply the six-yard gap")
+    assert.is_true(run.combat >= 20 and #run.W.truth > 3,
+        "dead-zone negative case did not genuinely advance combat time/events")
+    assert.are.equal(0, run.errors)
+    assert.are.equal(0, run.raises)
+    assert.are.same({}, run.refused,
+        "six-yard range/facing/resource refusal requires real diagnosis")
+    for _, key in ipairs(outOfBand) do
+        assert.are.equal(0, pressed[key] or 0,
+            "source accepted " .. key .. " outside its verified range band")
+    end
+end
+
+describe("Hunter BM v0.9.0 source-world six-yard ranged/melee dead zone", function()
+    for _, profile in ipairs(profiles) do
+        it(profile.name .. " never casts an out-of-band activated ability", function()
+            sourceDeadZone(profile)
         end)
     end
 end)
