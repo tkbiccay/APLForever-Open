@@ -17,6 +17,12 @@ This rule applies to **all work**, not just recurring APL bugs: spell/talent dis
 
 Canonical source facts: [class mechanics JSON and generated reference](knowledge/README.md). This material is **development-time only**; no imported APL depends on a cross-role knowledge file or common custom runtime logic. Separately label native toggle vs suggested APL lane and verified mechanical fact vs interpretation/unknown. The source pin and validator cannot establish in-game behaviour or approve an APL.
 
+## Main-first development and branch lifecycle
+
+**Canonical working location is protected `main`**, not a growing set of permanent feature branches. Keep verified source/knowledge/docs and **all catalogue-declared standalone Draft Candidates on main** in `roles/<Class>/Candidates/`. `Current` is the explicitly selected development/test or player reference; `Checkpoints` retains approved/reported-working rollback snapshots where applicable; `Archive` is history. Always check catalogue status, `preferred_apl`, `last_working_apl` and hashes. **`latest_revision` does not select a Candidate.** Merge-to-main or green CI does **not** promote the Candidate.
+
+For each bounded change: start from the latest `main`, create **one short-lived PR branch**, preserve exact old files, run cheap validator plus relevant pinned source-native tests, merge to protected `main` when reliable, and **delete the merged branch**. Branch cleanup is GitHub UI/Settings because not every connector exposes ref deletion. Never delete an unmerged/unreviewed branch or bypass the `main` PR protection to save clicks. Enable GitHub's native **Automatically delete head branches** setting; do not build a custom deletion bot or accumulate permanent "development" branches. Read the [one-page navigation and workflow](docs/WORKING_FROM_MAIN.md) before creating another branch.
+
 ## Evidence and approvals
 
 1. Verify latest tagged **Hekili Forever** release/commit and source documentation; validate version-specific syntax, IDs, real resources, observation/Belief limitations, shipped kit and defaults. Check credible Forever-relevant independent guides; don't import Retail/Classic/SoD or synthetic oracle claims as live truth.
@@ -37,7 +43,7 @@ Only **@tkbiccay** can make official merges, statuses, releases. No contributor 
 
 ## Current development checkpoints
 
-**Public baseline merged through PR #1:** 32 immutable APL revisions and independent tests are now on protected main. PR #2 **merged** pinned v0.9.0 scoped source-native compatibility; [final reconciled public run 44469961206](https://github.com/tkbiccay/APLForever-Open/actions/runs/44469961206) **PASSED** its independent native gates. The separate strict positive Maul experimental test remains BLOCKED under issue #3: no verified natural Rage reserve was reached; it cannot support a Maul reorder. No role becomes Approved from source-native CI. Treat Guardian and Hunter BM as co-priorities after a properly scoped source gate; BM has a v1.1 Draft file under Current but its catalogue `preferred_apl` is deliberately null. Do not silently set a preferred or Approved status. See `docs/CODEX_CONTINUATION.md` and `docs/AI_FIRST_WORKING_MODEL.md`.
+**Public baseline merged through PR #1:** 32 immutable APL revisions and independent tests are now on protected main. PR #2 **merged** pinned v0.9.0 scoped source-native compatibility; [final reconciled public run 44469961206](https://github.com/tkbiccay/APLForever-Open/actions/runs/44469961206) **PASSED** its independent native gates. The separate strict positive Maul experimental test remains BLOCKED under issue #3: no verified natural Rage reserve was reached; it cannot support a Maul reorder. No role becomes Approved from source-native CI. Treat Guardian and Hunter BM as co-priorities after a properly scoped source gate. BM v1.1 Draft remains in Current and **v1.2 Draft now resides in main/Candidates**, but its catalogue `preferred_apl` is deliberately null. Do not silently set a preferred or Approved status. PRs #6, #8 and #9 merged into main after their respective checks; the sole live working tree is main. See `docs/CODEX_CONTINUATION.md` and `docs/AI_FIRST_WORKING_MODEL.md`.
 
 
 ## Project history and fun facts

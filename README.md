@@ -4,7 +4,7 @@
 
 A fun, independent passion project: people and AI collaborating to explore better, safer gameplay recommendations. We share what works, what fails, and what we still don't know. No inflated DPS claims or pretence that AI-generated code is automatically correct.
 
-> **Project status:** Clean-history public baseline imported, and scoped Hekili Forever v0.9.0 source-native compatibility [passed and merged in PR #2](https://github.com/tkbiccay/APLForever-Open/pull/2). Hunter BM development [continues in PR #6](https://github.com/tkbiccay/APLForever-Open/pull/6). Strict experimental high-Rage Maul proof remains blocked; no APL is Approved merely because it imports or passes CI. The old private repository is **reference-only**; every new development action happens here.
+> **Project status (19 November 2026):** `main` is our single canonical working location. [Hunter BM v1.2 Draft Candidate](roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt), [Hunter BM v1.1 Current Draft](roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt), the [Guardian reported-working rollback](roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt), and the [source-pinned Hunter/Druid reference](knowledge/README.md) are all present on `main`. PRs #6, #8 and #9 merged after green CI; merge **never** means a Candidate was Approved. Positive high-Rage Maul remains blocked. The old private repository is read-only.
 
 ## Project fun facts
 
@@ -39,6 +39,21 @@ Develop one complete, independently importable and reliably castable APL for eac
 Our joint top priorities are **Druid Guardian/Feral Tank and Hunter Beast Mastery (equal priority) → Druid Feral DPS → remaining supported roles**. We favour safe, stable recommendations, correct user toggle handling and fully audited final/repeated fallbacks. The shipped Hekili priority is a research benchmark, not a design ceiling. New APL designs are encouraged when justified by tests.
 
 See our [project priorities](docs/PROJECT_PRIORITIES.md) and [AI-first working model and efficient validation strategy](docs/AI_FIRST_WORKING_MODEL.md) for how the maintainer, ChatGPT, Codex and community work together.
+
+## Where to work (main first)
+
+**Always start with** [the main branch](https://github.com/tkbiccay/APLForever-Open/tree/main) and the [main-first development guide](docs/WORKING_FROM_MAIN.md). The [catalogue](catalogue/roles.json) decides what is selected and validated — not the newest revision number or a PR branch name.
+
+| Location on main | Meaning |
+| --- | --- |
+| [Current](roles/Hunter/Current/) | Selected development/test import, **not necessarily Approved** |
+| [Candidates](roles/Hunter/Candidates/) | Full new standalone experimental APLs ready for targeted testing |
+| `roles/<Class>/Checkpoints/` (where present) | Immutable fallback snapshots; the last-working APL may instead remain in `Current` |
+| [Archive](roles/Hunter/Archive/) | Historical APLs preserved for comparison and rollback |
+| [Knowledge](knowledge/) | Research once → Preserve → Reuse, source-pinned mechanics and limits |
+| [Tests](tests/) | Headless regression tests and pinned source evidence |
+
+**Workflow:** make a short-lived review/CI branch → check hashes, import and relevant source-native tests → merge safe work (including **unselected Draft Candidates**) into protected `main` → delete the merged branch. Promoting a Candidate into `Current` or `Approved` is an entirely separate, explicit evidence-backed action. Never do routine development on historical merged branches.
 
 ## Development and approval
 
