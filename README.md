@@ -48,7 +48,7 @@ See our [project priorities](docs/PROJECT_PRIORITIES.md) and [AI-first working m
 | --- | --- |
 | [Current](roles/Hunter/Current/) | Selected development/test import, **not necessarily Approved** |
 | [Candidates](roles/Hunter/Candidates/) | Full new standalone experimental APLs ready for targeted testing |
-| [Checkpoints](roles/Druid/Checkpoints/) | Immutable fallback snapshots where available; a last-working APL can still be Current |
+| `roles/<Class>/Checkpoints/` (where present) | Immutable fallback snapshots; the last-working APL may instead remain in `Current` |
 | [Archive](roles/Hunter/Archive/) | Historical APLs preserved for comparison and rollback |
 | [Knowledge](knowledge/) | Research once → Preserve → Reuse, source-pinned mechanics and limits |
 | [Tests](tests/) | Headless regression tests and pinned source evidence |
