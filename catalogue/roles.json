@@ -139,7 +139,7 @@
       "last_working_apl": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.2",
+      "latest_revision": "v1.3",
       "limitations": [],
       "revisions": [
         {
@@ -212,10 +212,31 @@
           "settings": "Hekili Forever Defensives toggle must be ON; all other user toggles respected",
           "caveat": "Full standalone v1.1-derived experimental proactive Barkskin before upkeep, after Demoralising Roar, known/ready/Form/within5 and Defensives ON guard. Health is secret, so this is an unconditional cooldown-on-combat mitigation policy when toggled ON, NOT verified incoming-damage timing, threat, survivability, or real player HP. Requires isolated import/source progression and actual gameplay before selection; protect v1.0 Reported Working and archived v1.1.",
           "source_candidate": "roles/Druid/Archive/APL_Druid_Guardian_v1.1_Draft.txt"
+        },
+        {
+          "revision": "v1.3",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Guardian_Tank_v1.3_Draft.txt",
+          "status": "Draft",
+          "sha256": "200d7109ffcc345c41b05312a49b658b9a456a6f17fb56ea952f84d1d57079e0",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Hekili Forever published v0.10.0 3c2cf3e32472cc807b1ba29d992fc13a273da8ee; source-registered Guardian demoralizing_roar maintenance setting and supported group/tanking conditions; issue #21, native tests pending"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
+          "game_build": null,
+          "addon_version": "v0.10.0",
+          "talents": null,
+          "gear": null,
+          "settings": "Routine Roar: explicit maintain_demoralizing_roar setting or group&tanking after 5 seconds with 10 Rage reserve; Defensives continues to control Barkskin. Solo default setting OFF; sim fixture defaults differ.",
+          "caveat": "Entire standalone v1.2-derived experimental Roar upkeep Draft. Not source-native/in-game validated or selected. Group+tanking threat signal and range estimator still need practical validation; no survival, TPS, DPS, high-Rage Maul positive or hidden-health proof. Protect v1.0 Reported Working and v1.2 Draft."
         }
       ],
       "notes": [
-        "Guardian historical reported-working rollback; Demoralizing Roar setting dependency remains unverified"
+        "Guardian historical reported-working rollback; Demoralizing Roar setting dependency remains unverified",
+        "v1.3 Draft: auto group+tanking Roar path separated from Defensives; requires source-native positive and in-game verification; v1.0 remains reported-working preferred."
       ],
       "apl_name": "Druid_Guardian"
     },
