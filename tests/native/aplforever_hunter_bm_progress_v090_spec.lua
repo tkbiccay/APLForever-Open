@@ -35,8 +35,21 @@ local profiles = {
 
 local function install(H, profile)
     if not profile.path then return end
+    local src = readFile(profile.path)
+    if profile.testOnlySixYardHawk then
+        -- The source registers Summon Hawk's 0-35 yd range. This in-memory
+        -- hypothesis relaxes ONLY the inherited 8yd Hunter ranged-shot
+        -- boundary; both protected full APLs remain byte-for-byte intact.
+        local old = "actions+=/summon_hawk,if=target.outside8&action.summon_hawk.in_range&pet.hawk.count<2"
+        local new = "actions+=/summon_hawk,if=action.summon_hawk.in_range&pet.hawk.count<2"
+        local at = src:find(old, 1, true)
+        assert.is_not_nil(at, "standalone BM v1.1 Hawk anchor changed")
+        assert.is_nil(src:find(old, at + #old, true),
+            "ambiguous source anchor: never alter multiple Hawk lines")
+        src = src:sub(1, at - 1) .. new .. src:sub(at + #old)
+    end
     local parsed, warnings = H.Hekili:ImportSimcAPL(
-        "Hunter_BeastMastery", "APLForever", readFile(profile.path), C.PACK)
+        "Hunter_BeastMastery", "APLForever", src, C.PACK)
     assert.is_table(parsed)
     assert.is_table(parsed.default)
     assert.is_table(parsed.precombat)
@@ -314,8 +327,28 @@ local function sourceDeadZone(profile)
         "dead-zone negative case did not genuinely advance combat time/events")
     assert.are.equal(0, run.errors)
     assert.are.equal(0, run.raises)
-    assert.are.same({}, run.refused,
-        "six-yard range/facing/resource refusal requires real diagnosis")
+    if profile.name == "shipped" then
+        -- FAILED-FIRST negative control: actual pinned shipped v0.9.0
+        -- Turret repeatedly suggests 8-35yd Serpent Sting at 6yd. The
+        -- source world rejected 109 range attempts / 22s in run 44488313535.
+        -- Preserve this failing comparator as explicit expected failure,
+        -- NOT as proof that a bad recommendation is safe or acceptable.
+        assert.is_true((run.refused.range or 0) >= 3,
+            "shipped native range regression changed: re-investigate")
+        for reason in pairs(run.refused) do
+            assert.are.equal("range", reason,
+                "unclassified additional shipped refusal")
+        end
+        assert.are.same({ "serpent_sting", "serpent_sting", "serpent_sting" },
+            firstThree, "expected shipped repeated uncastable first action")
+    else
+        assert.are.same({}, run.refused,
+            "custom six-yard range/facing/resource refusal: FAIL")
+    end
+    if profile.testOnlySixYardHawk then
+        assert.is_true((pressed.summon_hawk or 0) >= 1,
+            "test-only independently ranged Hawk was never source-accepted")
+    end
     for _, key in ipairs(outOfBand) do
         assert.are.equal(0, pressed[key] or 0,
             "source accepted " .. key .. " outside its verified range band")
@@ -324,8 +357,14 @@ end
 
 describe("Hunter BM v0.9.0 source-world six-yard ranged/melee dead zone", function()
     for _, profile in ipairs(profiles) do
-        it(profile.name .. " never casts an out-of-band activated ability", function()
+        it(profile.name .. " source-native range comparator", function()
             sourceDeadZone(profile)
         end)
     end
+    it("in-memory complete v1.1 relaxes only Hawk's verified 0-35yd range", function()
+        sourceDeadZone({
+            name = "draft-v1.1-test-only-hawk-gap",
+            path = draft().apl_file, testOnlySixYardHawk = true,
+        })
+    end)
 end)
