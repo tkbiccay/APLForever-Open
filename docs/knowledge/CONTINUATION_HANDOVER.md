@@ -16,6 +16,16 @@
 **Portable restart:** Read `AGENTS.md`, this handover, `docs/PROJECT_PRIORITIES.md`, `docs/AI_FIRST_WORKING_MODEL.md`, catalogue/roles and live PR/CI before acting, whether ChatGPT, Claude, Grok or Codex. Human owner @tkbiccay decides merges and Approved status; no role upgraded in this pass.
 
 
+## Continuation 8d — 19 November 2026: Hunter BM Draft Candidate and safe selection
+
+- **Source-pinned reusable mechanics:** [official Hunter v0.9.0 class](https://github.com/zmsl/hekili/blob/8f95f2ea0a45428554c1e938ed7357b870030514/src/Hekili_Hunter/Hunter.lua) and full talent/ability reference on separate green but unmerged [knowledge PR #9](https://github.com/tkbiccay/APLForever-Open/pull/9). Reuse only source-confirmed Hawk 0–35yd, 8–35yd shots, two-slot modelled Hawk Belief and `cooldowns` registration. Source guardian count **is modelled, not actual pet observation**.
+- **Created full independent Hunter BM v1.2 Draft Candidate** at `roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt`, SHA `6abe7e0ff17ff3bfadf9dd8fe234399457127c3535272447b355120f2f5325cd`. A single validated range-safety innovation retains the cap guard but drops the blanket 8yd shot distance for **Summon Hawk only**. Nothing else in original v1.1 changed. Native focused gate on [run 44496062850](https://github.com/tkbiccay/APLForever-Open/actions/runs/44496062850) PASS; **full suite must be checked on latest final branch head** before claiming broad PASS. No in-game or numeric DPS proof.
+- **Discovered and fixed a dual selection hazard**: null `preferred_apl` previously let newer Candidate become implicit native test selection and apparent `Current` in the repository layout validator. Both now distinguish explicit selected/Current from latest history. `latest_revision=v1.2` records the new historical Draft, while **BM preferred_apl and last_working_apl remain NULL** and the manifest tests the original v1.1. All previous 32 APL bytes/hashes preserved; 33rd is new separate SHA.
+- **Real source guardian check:** actual released `VS.Guardian` cap 2 reached two active modelled slots and the candidate did not accept Hawk when both modelled slots already live in the focused 6yd native test. The 12yd and 175s tests remain mandatory; live Hawk spawns and auto shots remain unverified.
+- **Research once → Preserve → Reuse** is now a universal project rule per separate PR #9. Cross-spec transfer here is **guarding native Current/Candidates selection** and using independently verified ability-specific range rather than blanket ranged assumptions. The Guardian v1.0 Reported Working / Needs Retest rollback remains protected, and positive high-Rage Maul is still blocked. Do not promote BM or merge automatically.
+
+[BM v1.2 Research](../Research_Hunter_BeastMastery_v1.2.md) · [BM v1.2 Tests](../Tests_Hunter_BeastMastery_v1.2.md) · [PR #8](https://github.com/tkbiccay/APLForever-Open/pull/8).
+
 ## Continuation 8c — 19 November 2026: Hunter BM low-Mana and exact range defect
 
 - **Released build:** zmsl/hekili v0.9.0 `8f95f2ea0a45428554c1e938ed7357b870030514`. Public-only working PR: [#8](https://github.com/tkbiccay/APLForever-Open/pull/8). The published BM Turret, archived v1.0 and draft v1.1 remain untouched. All 32 APL SHA-256 catalogue records, the Guardian v1.0 Reported Working/Needs Retest rollback, and BM `preferred_apl=null` were preserved.
