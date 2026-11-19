@@ -12,6 +12,12 @@ APL-first means verified precombat, 1–60 level/rank/talent guards, forms/pets/
 
 **Current equal top priority:** Druid Guardian/Feral Tank **and** Hunter Beast Mastery. Feral DPS follows. Critical source compatibility or a repeatable safety bug can jump the queue. The catalogue, not an evocative folder name, defines status; Hunter BM v1.1 in Current remains Draft with no preferred APL.
 
+### External Hekili Forever releases are our compatibility target
+
+We **do not own, control or maintain Hekili Forever**. Upstream `zmsl/hekili` independently publishes its addon, mechanics and API. We maintain only **our custom APLs**, research/tests and proofs. The goal is for our APLs to stay compatible with the **latest actually published stable release**; no forced redesign when source-native behaviour remains correct, but immediately log and diagnose a release-breaking fault. Never rely on unreleased upstream commits, ask upstream to change for our APL to work, or invent an unsupported engine read.
+
+A lightweight [daily watcher](../.github/workflows/monitor-forever-release.yml) opens a review issue for a newly published upstream tag, with **no automatic changes to APLs or CI status**. After review, pin the exact commit in [current-release.json](knowledge/engine/current-release.json) and record each role's **source-native compatibility** separately from **in-game validation and approval** in the [release ledger](knowledge/engine/RELEASE_LEDGER.md). Use the existing source-native risk-based gates and protect exact defaults, Current, last-working and all Candidates. Release issues do not displace the equal Guardian/Hunter P0 development priorities except for real compatibility or safety regressions.
+
 ### 2. Headless proof that protects actual gameplay
 
 The test system is a means to better recommendations, not its own endless project. Pin the current released Hekili Forever source, translated spell data, Belief limits, talents, gear, toggles and accepted/refused cast state. Test **default versus last-working versus candidate** in matched scenarios: opener, three presses, low-level unlocks, extreme and uncertain resources, CD switches, pet or form, ST/cleave/AoE, follow-on fallbacks and repeat-inappropriate suggestions.
