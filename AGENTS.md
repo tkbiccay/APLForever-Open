@@ -4,6 +4,9 @@
 
 ## Goal and priority
 
+The concise operating contract is [docs/PROJECT_PRIORITIES.md](docs/PROJECT_PRIORITIES.md): **(1) fully standalone original APLs per supported role; (2) truthful, efficient native/headless validation; (3) verified cross-spec resolution transfer; (4) human/ChatGPT leadership with Codex ONLY on explicitly delegated bounded tasks; (5) immutable rollback/approval protection and a friendly openly AI-developed hobby ethos.** GitHub fun facts are separate from actual APL correctness and may not drive artificial commits.
+
+
 Build ONE self-contained, adaptive, safe, castable Hekili Forever APL per supported spec/role. Joint first priorities: **Druid Guardian/Feral Tank (catalogue Druid_Guardian) AND Hunter Beast Mastery (catalogue Hunter_BeastMastery), equal priority → Druid Feral DPS → remaining roles**, unless a critical cross-spec safety or current-release compatibility regression pre-empts them. Maintain levels 1–60 and viable ST/AoE, levelling/world/dungeon/raid scenarios without inventing data.
 
 Shipped WoWSims-derived/default rotations are research references and test comparators **not architectural ceilings**. Consider original priorities, talent/level guards, pet/form/stance/cooldown/defensive/utility options and safe end-of-chain fallbacks, only when the current released engine actually supports the required actions and observations. Respect player Major/Minor Cooldowns, Defensives, Interrupts and Potions toggles; verify named items and helper states.
@@ -26,6 +29,11 @@ Catalogue is canonical after migration. `roles/<Class>/{Current,Candidates,Check
 
 Only **@tkbiccay** can make official merges, statuses, releases. No contributor or agent gets blanket permission to change protected `main`; use small PRs with green real CI and explicit owner review, not mandatory second human approval. Reuse previously verified source observations/fixtures and report unsupported conditions honestly. `GPL-3.0-only` for original work; protect licences for any reused third-party source.
 
-## First tasks for new public repository
+## Current development checkpoints
 
-**Public baseline merged through PR #1:** 32 immutable APL revisions and independent tests are now on protected main. PR #2 establishes pinned v0.9.0 scoped source-native compatibility; [public run 44413198025](https://github.com/tkbiccay/APLForever-Open/actions/runs/44413198025) **PASSED** all its independent gates. The separate strict positive Maul experimental test remains BLOCKED under issue #3: no verified natural Rage reserve was reached; it cannot support a Maul reorder. No role becomes Approved from source-native CI. Treat Guardian and Hunter BM as co-priorities after a properly scoped source gate; BM has a v1.1 Draft file under Current but its catalogue `preferred_apl` is deliberately null. Do not silently set a preferred or Approved status. See `docs/CODEX_CONTINUATION.md` and `docs/AI_FIRST_WORKING_MODEL.md`.
+**Public baseline merged through PR #1:** 32 immutable APL revisions and independent tests are now on protected main. PR #2 **merged** pinned v0.9.0 scoped source-native compatibility; [final reconciled public run 44469961206](https://github.com/tkbiccay/APLForever-Open/actions/runs/44469961206) **PASSED** its independent native gates. The separate strict positive Maul experimental test remains BLOCKED under issue #3: no verified natural Rage reserve was reached; it cannot support a Maul reorder. No role becomes Approved from source-native CI. Treat Guardian and Hunter BM as co-priorities after a properly scoped source gate; BM has a v1.1 Draft file under Current but its catalogue `preferred_apl` is deliberately null. Do not silently set a preferred or Approved status. See `docs/CODEX_CONTINUATION.md` and `docs/AI_FIRST_WORKING_MODEL.md`.
+
+
+## Project history and fun facts
+
+First documented APLForever work: **7 November 2026**. Public APLForever-Open created **18 November 2026**, with clean separate Git history. The read-only [fun-facts workflow](.github/workflows/project-fun-facts.yml) runs weekly/on demand and produces a job summary/artifact; never let stats generation push to protected `main`, touch private source history or become a reason for unnecessary PRs. Source of truth for finished APLs is still catalogue/roles.json and executed tests, **not** commit or line counts.
