@@ -34,7 +34,7 @@ Natural level-60 low-Rage v1.2 high-kit Maul queue remains **Blocked**. Recorded
 | v1.1 reference | NO_ACTION / NO_ACTION / NO_ACTION | 0 | 0 |
 | v1.2 Candidate | Summon Hawk / Summon Hawk / Summon Hawk | **3** | **0** |
 
-The three v1.2 Hawk presses were accepted at **3.4, 9.4 and 21.4 seconds** with modelled live Hawk counts **0, 1 and 1** immediately before each; the model reached a maximum of two active slots. These are different event-advanced world states, not three simultaneous Hawks or evidence of spamming an unusable button. Temporary Hawk Belief does not establish main-pet status or real pet damage. The six-yard fixture has a known **unfaithful Auto Shot** component, so do not infer real ranged-auto behaviour.
+The three v1.2 Hawk presses were accepted at **3.4, 9.4 and 21.4 seconds** with modelled live Hawk counts **0, 1 and 1** immediately before each; the model reached a maximum of two active slots. The three casts are genuine accepted actions at separate world times, not three simultaneous Hawks or a repeated unusable cast. **The separate firstThree array contains the first three recommendation samples, not three verified post-cast recommendation transitions.** Do not treat it as a full repeated-fallback oracle. Temporary Hawk Belief does not establish main-pet status or real pet damage. The six-yard fixture has a known **unfaithful Auto Shot** component, so do not infer real ranged-auto behaviour.
 
 At 12 yards, v1.1 and v1.2 were identical on that native world: **13 accepted actions Major OFF** and **19 Major ON**; this is expected because the Candidate's difference affects Hawk at 6–8 yards. Natural low-Mana tails also matched. No justified DPS-gain claim.
 

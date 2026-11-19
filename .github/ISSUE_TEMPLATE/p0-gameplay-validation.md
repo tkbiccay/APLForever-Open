@@ -6,7 +6,7 @@ labels: []
 assignees: []
 ---
 
-**Instructions:** [Read the minimal v0.10.0 Guardian/Hunter calibration guide](../../docs/Tests_P0_Guardian_Hunter_v0.10.0.md). There are no target dummies in Forever; use a safe level-appropriate open-world enemy.
+**Instructions:** [Read the minimal v0.10.0 Guardian/Hunter calibration guide](https://github.com/tkbiccay/APLForever-Open/blob/main/docs/Tests_P0_Guardian_Hunter_v0.10.0.md). There are no target dummies in Forever; use a safe level-appropriate open-world enemy.
 
 ### Reproducible setup
 - Guardian/Feral Tank or Hunter Beast Mastery:
