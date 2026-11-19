@@ -19,6 +19,15 @@ local fixture = {
     Warrior = require("Forever.helpers.warrior_world"),
 }
 
+-- BM and MM Turret source worlds replaced the weave worlds in v0.9.0.
+-- Legacy pins keep their exact older fixtures; later releases retain Turret.
+local function usesTurretHunterFixture()
+    local release = os.getenv("APLFOREVER_SOURCE_RELEASE") or "v0.8.2"
+    local major, minor, patch = release:match("^v(%d+)%.(%d+)%.(%d+)$")
+    assert(major and minor and patch, "invalid Forever source release: " .. release)
+    return tonumber(major) > 0 or tonumber(minor) >= 9
+end
+
 local function contentFor(entry)
     if entry.apl_name == "Warrior_Protection" then
         return require("Forever.helpers.protection_gate").content()
@@ -27,15 +36,15 @@ local function contentFor(entry)
     if entry.class == "Warrior" and entry.spec == "Arms" then
         return byClass
     end
-    -- Exact published v0.9.0 retired BM/MM weave worlds and ships only
+    -- Since published v0.9.0, retired BM/MM weave worlds ship only
     -- BeastMasteryTurret / MarksmanshipTurret. Older pinned v0.8.x
     -- workflows must retain their original BeastMastery / Marksmanship
     -- fixtures, not silently compare unlike reference builds.
     if entry.class == "Hunter"
         and (entry.spec == "BeastMastery" or entry.spec == "Marksmanship") then
-        if os.getenv("APLFOREVER_SOURCE_RELEASE") == "v0.9.0" then
+        if usesTurretHunterFixture() then
             return assert(byClass[entry.spec .. "Turret"],
-                "v0.9.0 source lacks retired Hunter replacement world for " .. entry.apl_name)
+                "v0.9.0+ source lacks the expected Hunter Turret world for " .. entry.apl_name)
         end
         return assert(byClass[entry.spec],
             "legacy source lacks Hunter world for " .. entry.apl_name)
