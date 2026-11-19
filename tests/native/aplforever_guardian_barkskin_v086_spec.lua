@@ -63,7 +63,7 @@ local function importedSource(e, experimental)
     return source
 end
 
-local function examine(profile, level, on)
+local function examine(profile, level, on, maintainRoar)
     local content = ws.content(stock, {
         pack = stock.PACK, level = level, learn = learn,
         talents = ws.header("druid_guardian").talents,
@@ -103,6 +103,15 @@ local function examine(profile, level, on)
     toggles.defensives.value = on
     toggles.cooldowns.value = false
     toggles.movement.value = false
+    if maintainRoar ~= nil then
+        -- Real registered setting, not a fabricated tank/group API. The
+        -- source harness defaults this ON under scenario=sim (raid boss),
+        -- whereas in-game it defaults OFF. Override explicitly here.
+        local spec = assert(H.Hekili.Engine.settings.specs[H.Hekili.State.spec.id])
+        assert.is_table(spec.settings)
+        spec.settings.maintain_demoralizing_roar = maintainRoar
+        H.Hekili:SettingsChanged()
+    end
     assert.are.equal(level >= 44, H.Hekili.State:IsKnown("barkskin"),
         "real source trainer-level Barkskin unlock")
     local barkskinAura = assert(H.Hekili.Class.auras.barkskin).id
@@ -135,7 +144,21 @@ local function examine(profile, level, on)
     end
     if (profile.experimental or profile.name == "v1.2" or profile.name == "v1.3") and on and level >= 44 then
         assert.is_true(barkskin >= 1, "new branch never cast known ready Barkskin with Defensives ON")
-        assert.is_true(roar >= 1, "Barkskin must not silently eliminate actual Roar upkeep")
+        if maintainRoar ~= false then
+            assert.is_true(roar >= 1, "Barkskin must not silently eliminate enabled Roar upkeep")
+        end
+    end
+    if maintainRoar ~= nil then
+        if profile.name == "v1.3" and maintainRoar == false then
+            -- This fixture is solo and has no verified active-tank status.
+            -- It does NOT exercise the separate group&tanking auto branch.
+            assert.are.equal(0, roar, "solo maintenance OFF must not spend Rage on Roar")
+        elseif profile.name == "v1.3" and maintainRoar == true then
+            assert.is_true(roar >= 1,
+                "explicit Guardian maintenance ON must source-cast Roar despite Defensives OFF")
+        elseif profile.name == "v1.2" and not on then
+            assert.are.equal(0, roar, "v1.2 remains gated by Defensives")
+        end
     end
     return { barkskin = barkskin, roar = roar, applied = applied, acceptedTotal = acceptedTotal }
 end
@@ -152,6 +175,19 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
     for _, level in ipairs({ 43, 44 }) do
         it("test-only branch real Barkskin unlock level " .. level, function()
             examine(p[6], level, true)
+        end)
+    end
+    it("v1.3 OFF toggle with explicit Roar setting ON accepts upkeep while v1.2 stays OFF", function()
+        local old = examine(p[4], 60, false, true)
+        local upgraded = examine(p[5], 60, false, true)
+        assert.are.equal(0, old.roar)
+        assert.is_true(upgraded.roar >= 1)
+        assert.are.equal(0, upgraded.barkskin)
+    end)
+    for _, on in ipairs({false, true}) do
+        it("v1.3 solo maintenance OFF avoids Roar under Defensives " .. tostring(on), function()
+            local result = examine(p[5], 60, on, false)
+            assert.are.equal(0, result.roar)
         end)
     end
     it("exact v1.2 standalone matches the in-memory v1.1+branch action counts", function()
