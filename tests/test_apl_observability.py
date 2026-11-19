@@ -33,7 +33,7 @@ class ObservabilityTests(unittest.TestCase):
         source = (
             "actions.precombat=bloodrage,if=health.pct>=95\n"
             "actions=call_action_list,name=cat\n"
-            "actions.cat=call_action_list,name=defensives\n"
+            "actions.cat+=/call_action_list,name=defensives\n"
             "actions.defensives=barkskin,if=health.pct<50\n"
         )
         found = audit.scan_apl(source)

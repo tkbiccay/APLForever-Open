@@ -54,7 +54,7 @@ def phases(rows: list[tuple[int, str, str]]) -> dict[str, str]:
     links: dict[str, set[str]] = collections.defaultdict(set)
     lists = {list_name for _, list_name, _ in rows}
     for _, origin, rhs in rows:
-        if rhs.split(",", 1)[0].strip() in {"call_action_list", "run_action_list"}:
+        if rhs.split(",", 1)[0].strip().lstrip("/") in {"call_action_list", "run_action_list"}:
             called = LIST_NAME.search(rhs)
             if called:
                 links[origin].add(called.group(1))
