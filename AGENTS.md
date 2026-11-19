@@ -11,6 +11,12 @@ Build ONE self-contained, adaptive, safe, castable Hekili Forever APL per suppor
 
 Shipped WoWSims-derived/default rotations are research references and test comparators **not architectural ceilings**. Consider original priorities, talent/level guards, pet/form/stance/cooldown/defensive/utility options and safe end-of-chain fallbacks, only when the current released engine actually supports the required actions and observations. Respect player Major/Minor Cooldowns, Defensives, Interrupts and Potions toggles; verify named items and helper states.
 
+## Universal efficiency rule: Research once → Preserve → Reuse
+
+This rule applies to **all work**, not just recurring APL bugs: spell/talent discovery, user toggles, engine/API/Belief constraints, fixture design, regression triage, CI architecture, security, docs and release review. **Before new work, query existing verified knowledge and previous failed attempts; after new evidence, record the minimum reusable source-pinned fact, scope, outcome, uncertainty and next decision; before reusing, validate applicability.** Preserve positive AND negative evidence and exact hashes/rollback. Never repeat research or build a new abstraction solely to appear productive. Avoid churn, bulk sweeps, gratuitous AI/Codex calls or duplicated documentation.
+
+Canonical source facts: [class mechanics JSON and generated reference](knowledge/README.md). This material is **development-time only**; no imported APL depends on a cross-role knowledge file or common custom runtime logic. Separately label native toggle vs suggested APL lane and verified mechanical fact vs interpretation/unknown. The source pin and validator cannot establish in-game behaviour or approve an APL.
+
 ## Evidence and approvals
 
 1. Verify latest tagged **Hekili Forever** release/commit and source documentation; validate version-specific syntax, IDs, real resources, observation/Belief limitations, shipped kit and defaults. Check credible Forever-relevant independent guides; don't import Retail/Classic/SoD or synthetic oracle claims as live truth.

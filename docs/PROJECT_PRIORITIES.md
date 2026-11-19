@@ -34,6 +34,12 @@ Immutable Current/Checkpoint/Archive/Candidate history, SHA-256 checks, protecte
 
 Spend time and AI/API/Actions credits only when they answer a worthwhile question. Prefer small, source-faithful decisions over premature DPS modelling, unverified complex branching or vanity automation. Publish honest failures and explain why an experiment is blocked.
 
+## Universal efficiency: Research once → Preserve → Reuse
+
+Apply to **everything we develop**: class ability/talent knowledge, range/toggles, code, CI, headless fixtures, bug/root-cause diagnosis, APL architecture, release reviews and documentation. Before spending credits or repeating a failed approach, check the single source of truth and existing source-pin/evidence. Save only the verified mechanics, limitations, rejected assumptions, failure traces and reproducible lessons. Reuse a proven concept or method only with role/source-specific proof and a guarded regression.
+
+For the current equal-priority Hunter BM and Guardian pilot, class-level source facts and the exact source-registered 50 Hunter / 52 Druid talents live in [knowledge/classes](../knowledge/README.md); generated [BM](reference/Hunter_BeastMastery.md) and [Guardian](reference/Druid_Guardian.md) references avoid copying class metadata across specs. Native toggle and recommended APL intent are never conflated. Pin Hekili Forever release sources; unknown facts must stay unknown and source-world ranges do not establish live-client DPS or range safety. Knowledge is **not** an APL runtime dependency. Use targeted source verification rather than creating a permanent huge test infrastructure.
+
 ## What we celebrate
 
 **Real progress:** more supported roles with complete, source-castable standalone APLs; safe fallback coverage; verified lessons reused across specs; maintained in-game approved rollbacks; fewer repeat bugs and less player micromanagement.

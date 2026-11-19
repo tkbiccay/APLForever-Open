@@ -26,6 +26,12 @@ The counts are a dated snapshot from before the fun-facts tracker was merged. Te
 
 Our actual goals are [custom standalone APLs, reliable headless testing, cross-spec lessons and owner-led AI collaboration](docs/PROJECT_PRIORITIES.md). GitHub numbers are just a bit of fun.
 
+## Research once → Preserve → Reuse
+
+Our source-pinned [class mechanics knowledge base](knowledge/README.md) records verified spell/talent registration, multi-role classifications, source-native toggle/Belief limitations, and explicit unknowns. The pilot includes [Hunter Beast Mastery](docs/reference/Hunter_BeastMastery.md) and [Druid Guardian](docs/reference/Druid_Guardian.md) source-linked pages. Class facts are stored once, generated for quick browsing and checked against the exact tagged Hekili Forever source in GitHub Actions.
+
+**Every** research/testing/bugfix/CI task checks prior evidence, preserves a reproducible lesson, and transfers only what's verified for the next spec. It must never create shared APL runtime dependencies, replace the last-working rollback, or use green CI as an in-game approval.
+
 ## Mission
 
 Develop one complete, independently importable and reliably castable APL for each supported Hekili Forever class/spec/role. Cover levelling 1–60 and appropriate PvE situations without inventing combat state the addon cannot observe.
