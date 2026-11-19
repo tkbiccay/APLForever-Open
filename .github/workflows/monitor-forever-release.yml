@@ -1,0 +1,34 @@
+name: Monitor published Hekili Forever releases
+
+# External upstream only: detect a new published tag and create one review issue.
+# Never execute upstream code, modify any APL, change compatibility status,
+# select a candidate, or dispatch expensive native test matrices.
+on:
+  schedule:
+    - cron: "23 6 * * *" # One cheap check per day, 06:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: published-hekili-forever-release-watch
+  cancel-in-progress: false
+
+jobs:
+  check-published-release:
+    name: published-release-check
+    if: github.repository == 'tkbiccay/APLForever-Open' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check out trusted protected main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Check current upstream published release, open one issue if newer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/watch_forever_release.py --apply
