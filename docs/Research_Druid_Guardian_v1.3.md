@@ -15,7 +15,7 @@ Maintainer **reported** the Demoralising Roar recommendation appearing when **De
 
 ## Full APL deltas from v1.2 (not an import diff)
 
-Only two whole-file source lines changed in independent `roles/Druid/Candidates/APL_Druid_Guardian_Tank_v1.3_Draft.txt`: the mitigation list is called under Bear Form regardless of the generic Defensives toggle; its single Roar eligibility requires known ability, existing near-target/absent-debuff checks, and **either**:
+Only two whole-file source lines changed in independent `roles/Druid/Candidates/APL_Druid_Guardian_v1.3_Draft.txt`: the mitigation list is called under Bear Form regardless of the generic Defensives toggle; its single Roar eligibility requires known ability, existing near-target/absent-debuff checks, and **either**:
 
 1. Existing native `settings.maintain_demoralizing_roar` opt-in and at least the verified Roar cost; **or**
 2. `group&tanking&combat>0&time>=5` and the Roar cost **plus 10 Rage** in Belief's conservative lower bound.
