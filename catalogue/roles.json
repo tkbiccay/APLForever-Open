@@ -215,7 +215,7 @@
         },
         {
           "revision": "v1.3",
-          "apl_file": "roles/Druid/Candidates/APL_Druid_Guardian_Tank_v1.3_Draft.txt",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Guardian_v1.3_Draft.txt",
           "status": "Draft",
           "sha256": "200d7109ffcc345c41b05312a49b658b9a456a6f17fb56ea952f84d1d57079e0",
           "evidence": [
