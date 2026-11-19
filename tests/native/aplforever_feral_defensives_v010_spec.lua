@@ -38,7 +38,7 @@ local function scenario(defensives)
     H.Hekili.DB.profile.toggles.cooldowns.value = false
     H.Hekili.DB.profile.toggles.defensives.value = defensives
     H.Hekili.DB.profile.toggles.movement.value = false
-    local run = loop.run(L, 30417, { duration = 32 })
+    local run = loop.run(L, 30417, { duration = 32 }, { { H = H } })
     local pressCount = 0
     for _, n in pairs(run.pressedBy or {}) do pressCount = pressCount + n end
     print(("FERAL_V12_V010 source=3c2cf3e defensive=%s accepted=%d barkskin=%d refused=%d"):format(
