@@ -67,6 +67,8 @@ See our [project priorities](docs/PROJECT_PRIORITIES.md) and [AI-first working m
 
 The [static observability audit and per-role evidence matrix](docs/HEADLESS_VALIDATION.md) runs on every PR as part of public repository validation, covering **all 34 protected APL revisions**. It fails new secret/fixed-state APL conditions while keeping exact known historical issues visible (not silently accepted). The matrix is generated from the catalogue and dated native-test evidence; see the `per-role-headless-evidence` artifact and job summary in [Validate public repository](https://github.com/tkbiccay/APLForever-Open/actions/workflows/validate.yml). The underlying **source-native** tests still determine castability and repeated-fallback safety; a static clean scan does not prove either. Guardian and Hunter BM remain equal first priorities.
 
+**P0 gameplay verification:** [Guardian + Hunter BM v0.10.0 native trace comparisons and short open-world check](docs/Tests_P0_Guardian_Hunter_v0.10.0.md). [Submit a player result](https://github.com/tkbiccay/APLForever-Open/issues/new/choose). No target dummies in Forever; capture /hek snap while an incorrect recommendation is visible. This calibrates existing evidence rather than creating a new simulator.
+
 ## Development and approval
 
 - **Current** means the selected test/import revision, **not automatically Approved**.
