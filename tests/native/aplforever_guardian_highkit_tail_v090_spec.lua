@@ -38,7 +38,7 @@ local function profiles()
     assert.are.equal(
         "da358b7c04b47732966c47a91b7f6f5d32410f9077aabe2aac39252139a47b76",
         out[4].entry.sha256, "Guardian candidate content pin unexpectedly changed")
-    assert.are.equal("roles/Druid/Candidates/APL_Druid_Guardian_Tank_v1.3_Draft.txt",
+    assert.are.equal("roles/Druid/Candidates/APL_Druid_Guardian_v1.3_Draft.txt",
         out[5].entry.apl_file, "v1.3 must remain separate unselected candidate")
     return out
 end
