@@ -91,6 +91,7 @@ jobs:
           PY
 
       - name: Bootstrap source-native v0.10.0 runtime
+        id: source_bootstrap
         working-directory: upstream/hekili
         run: make bootstrap
 
@@ -127,6 +128,14 @@ jobs:
           .lua/bin/busted --verbose --filter="progresses through level" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
           .lua/bin/busted --verbose --filter="safely follows caster" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
 
+      - name: Independent Feral v1.2 Draft on real v0.10.0 source
+        working-directory: upstream/hekili
+        run: |
+          # Reuses the complete SHA-catalogued v1.2 from protected main.
+          # Does not replace the selected v1.0 or waive its real warnings.
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_feral_defensives_v010_spec.lua" tests/Forever/aplforever_feral_defensives_v010_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_feral_defensives_v010_spec.lua
+
       - name: All supported-role imports and state-advanced repeated-fallback gate
         working-directory: upstream/hekili
         run: |
@@ -136,6 +145,9 @@ jobs:
           .lua/bin/busted --verbose tests/Forever/aplforever_import_spec.lua tests/Forever/aplforever_progress_spec.lua
 
       - name: Current release Guardian Hunter engine canaries
+        # Always probe independent official source canaries after a known APL
+        # failure; the earlier step still fails the job (no fake green).
+        if: ${{ !cancelled() && steps.source_bootstrap.outcome == 'success' }}
         working-directory: upstream/hekili
         run: |
           .lua/bin/busted --verbose tests/Forever/druid_spec.lua tests/Forever/hunter_spec.lua tests/Forever/loop_hunter_spec.lua tests/Forever/forecast_window_spec.lua tests/Forever/gcd_rule_spec.lua

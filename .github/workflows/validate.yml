@@ -36,6 +36,16 @@ jobs:
           else
             echo "::notice::Bootstrap only: legacy validator and role catalogue have not been imported."
           fi
+      - name: Audit immutable APLs for newly introduced secret/fixed state
+        run: python scripts/audit_apl_observability.py --check --report "$RUNNER_TEMP/headless-matrix.md"
+      - name: Attach per-role static and source-evidence matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: per-role-headless-evidence
+          path: ${{ runner.temp }}/headless-matrix.md
+          if-no-files-found: warn
+          retention-days: 14
       - name: Public source-native compatibility scope
         run: |
           echo "Bootstrap CI is NOT a Hekili engine import, source-native regression or gameplay approval."

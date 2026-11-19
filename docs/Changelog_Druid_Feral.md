@@ -1,5 +1,12 @@
 # Changelog — Druid Feral DPS
 
+## v1.2 — 19 November 2026 — unselected Draft Candidate
+
+- New complete standalone Feral DPS APL `roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt`, hash `52568f2d069699c5b453aaa98515c3c2096594f4b790ba0e8591c417bcdb95c9`. Source-triggered correction for [issue #14](https://github.com/tkbiccay/APLForever-Open/issues/14): replace dead `health.pct<=65` Barkskin guard with a verified observable **combat + tanking + within5 + Defensives ON** condition. Barkskin is a proactive defensive with a real spell GCD, not claimed automatic health triage.
+- Remove dead health-based Frenzied Regeneration and Nature's Grasp recommendations; leave their real emergency/utility use **manual** rather than fake hidden health or unmodelled Rage drains.
+- Original v1.0 Current and v1.1 Candidate bytes/hashes preserved. No Cat/Bear/caster damage list, final fallback, or Major/Minor toggle edits; no automatic selection, measured damage/survival gain or in-game validation. v0.10.0 native candidate gate **PASSED 3/3** in [run 44574486358](https://github.com/tkbiccay/APLForever-Open/actions/runs/44574486358): 24 source-accepted combat actions / 0 refusals with Defensives OFF and ON; positive Barkskin remains unproven because stock Feral kit excludes the spell.
+- See [research](Research_Druid_Feral_v1.2.md) and [issue #14](https://github.com/tkbiccay/APLForever-Open/issues/14).
+
 ## v1.1 — 16 November 2026 — Draft Candidate (not Current)
 
 - Original, complete single-file Feral DPS priority; preserves all internal Cat, Bear and caster action lists, precombat, major/minor CDs, defensives and final fallbacks without another APL/runtime helper.

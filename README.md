@@ -32,6 +32,14 @@ Our source-pinned [class mechanics knowledge base](knowledge/README.md) records 
 
 **Every** research/testing/bugfix/CI task checks prior evidence, preserves a reproducible lesson, and transfers only what's verified for the next spec. It must never create shared APL runtime dependencies, replace the last-working rollback, or use green CI as an in-game approval.
 
+## Independent of Hekili Forever — always target its latest release
+
+[Hekili Forever](https://github.com/zmsl/hekili) is **someone else's addon**; we do not control its development, engine, patches or release schedule. We control only the research, source-native tests and **our own independently authored, complete APL files** in this repository. Whenever upstream publishes a new version, our job is to reassess compatibility, fix source-confirmed APL faults in **new standalone Draft Candidates**, and keep every reported-working rollback until genuinely better gameplay is demonstrated. An unchanged APL that still works does not need a rewrite.
+
+Our [current published release and compatibility status](docs/knowledge/engine/current-release.json) is source-pinned in the [release ledger](docs/knowledge/engine/RELEASE_LEDGER.md). A [lightweight daily GitHub Action](.github/workflows/monitor-forever-release.yml) checks for newer **published** Forever versions and opens a single review issue if needed; it never edits APLs, triggers expensive simulations, adopts an upstream default, or marks a role Approved. Latest published, bounded headless-tested and in-game validated are **different** facts.
+
+**19 November 2026:** upstream **v0.10.0** is published. Its full 23-role compatibility remains **Partial / Needs Retest**, with [Draft PR #13](https://github.com/tkbiccay/APLForever-Open/pull/13) blocked by documented inherited Feral in-combat health conditions and an Arms precombat warning. The newly published [Feral v1.2 Candidate](roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt) passed narrow native tests but remains **unselected**. Guardian and Hunter BM stay our co-equal P0 priorities.
+
 ## Mission
 
 Develop one complete, independently importable and reliably castable APL for each supported Hekili Forever class/spec/role. Cover levelling 1–60 and appropriate PvE situations without inventing combat state the addon cannot observe.
@@ -54,6 +62,12 @@ See our [project priorities](docs/PROJECT_PRIORITIES.md) and [AI-first working m
 | [Tests](tests/) | Headless regression tests and pinned source evidence |
 
 **Workflow:** make a short-lived review/CI branch → check hashes, import and relevant source-native tests → merge safe work (including **unselected Draft Candidates**) into protected `main` → [automatic safe cleanup of merged branches](.github/workflows/safe-merged-branch-cleanup.yml). Promoting a Candidate into `Current` or `Approved` is an entirely separate, explicit evidence-backed action. Never do routine development on historical merged branches.
+
+## Headless-first evidence, without pretend approvals
+
+The [static observability audit and per-role evidence matrix](docs/HEADLESS_VALIDATION.md) runs on every PR as part of public repository validation, covering **all 34 protected APL revisions**. It fails new secret/fixed-state APL conditions while keeping exact known historical issues visible (not silently accepted). The matrix is generated from the catalogue and dated native-test evidence; see the `per-role-headless-evidence` artifact and job summary in [Validate public repository](https://github.com/tkbiccay/APLForever-Open/actions/workflows/validate.yml). The underlying **source-native** tests still determine castability and repeated-fallback safety; a static clean scan does not prove either. Guardian and Hunter BM remain equal first priorities.
+
+**P0 gameplay verification:** [Guardian + Hunter BM v0.10.0 native trace comparisons and short open-world check](docs/Tests_P0_Guardian_Hunter_v0.10.0.md). [Submit a player result](https://github.com/tkbiccay/APLForever-Open/issues/new/choose). No target dummies in Forever; capture /hek snap while an incorrect recommendation is visible. This calibrates existing evidence rather than creating a new simulator.
 
 ## Development and approval
 

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "upstream_release": "v0.10.0",
+  "upstream_sha": "3c2cf3e32472cc807b1ba29d992fc13a273da8ee",
+  "policy": "Exact immutable historical findings; new/revised usages fail CI. A known issue is never considered safe or Approved.",
+  "known_findings": [
+    {
+      "path": "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+      "sha256": "f2f72d0621c8e709c7df8f2ccff248ce0af604a1c02e115a5ad725cf93d288f1",
+      "signatures": {
+        "player_health:combat": 3
+      },
+      "reference_url": "https://github.com/tkbiccay/APLForever-Open/issues/14"
+    },
+    {
+      "path": "roles/Druid/Candidates/APL_Druid_Feral_v1.1_Draft.txt",
+      "sha256": "f611e4510a52ca125103eed9f3d1d4fc99a0b656b161cdc88134f0e72b6e52f7",
+      "signatures": {
+        "player_health:combat": 3
+      },
+      "reference_url": "https://github.com/tkbiccay/APLForever-Open/issues/14"
+    },
+    {
+      "path": "roles/Warrior/Current/APL_Warrior_Arms_DPS_v1.0_StaticValidated.txt",
+      "sha256": "3bb923e9b071a3d9432471731ce609a3e8852741364ce4334d136e4509335f2c",
+      "signatures": {
+        "player_health:precombat": 1
+      },
+      "reference_url": "https://github.com/tkbiccay/APLForever-Open/issues/15"
+    },
+    {
+      "path": "roles/Warlock/Archive/APL_Warlock_Demonology_DPS_v0.8_Default.txt",
+      "sha256": "da6e5b71c3fc8710745e4ef7037faf5c810958186508b870b3596334d19d3241",
+      "signatures": {
+        "fixed_fight_time:combat": 11
+      },
+      "reference_url": "https://github.com/zmsl/hekili/blob/v0.10.0/docs/wiki/APL-Conditions-On-Forever.md"
+    }
+  ]
+}
