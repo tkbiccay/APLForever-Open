@@ -1,0 +1,49 @@
+name: Project fun facts
+
+# Read-only, low-cost weekly recap. Run on demand, or once when this tracker
+# changes on main. No bot commits, private repository access, or PR churn.
+on:
+  schedule:
+    - cron: "12 8 * * 1"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/project_fun_facts.py"
+      - "tests/test_project_fun_facts.py"
+      - ".github/workflows/project-fun-facts.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-fun-facts
+  cancel-in-progress: true
+
+jobs:
+  fun-facts:
+    if: github.repository == 'tkbiccay/APLForever-Open'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Offline counter tests
+        run: python -m unittest discover -s tests -p 'test_project_fun_facts.py' -v
+      - name: Generate current public stats only
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/project_fun_facts.py --output "$RUNNER_TEMP/project-fun-facts.md"
+      - name: Publish to run summary
+        run: cat "$RUNNER_TEMP/project-fun-facts.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Attach small Markdown snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-project-fun-facts
+          path: ${{ runner.temp }}/project-fun-facts.md
+          retention-days: 30
