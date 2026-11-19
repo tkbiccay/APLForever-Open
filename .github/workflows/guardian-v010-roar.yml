@@ -7,7 +7,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/guardian-v010-roar.yml"
-      - "roles/Druid/Candidates/APL_Druid_Guardian_Tank_v1.3_Draft.txt"
+      - "roles/Druid/Candidates/APL_Druid_Guardian_v1.3_Draft.txt"
       - "tests/native/aplforever_guardian_barkskin_v086_spec.lua"
       - "catalogue/**"
 
