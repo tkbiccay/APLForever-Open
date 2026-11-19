@@ -68,7 +68,7 @@ def phases(rows: list[tuple[int, str, str]]) -> dict[str, str]:
             if name in seen:
                 continue
             seen.add(name)
-            pending.extend(links.get(name, ()) - seen)
+            pending.extend(links.get(name, set()) - seen)
         return seen
 
     combat, precombat = reachable("default"), reachable("precombat")
