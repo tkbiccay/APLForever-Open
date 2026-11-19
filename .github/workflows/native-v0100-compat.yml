@@ -1,0 +1,141 @@
+name: Hekili Forever v0.10.0 source-native compatibility
+
+# Exact released Forever engine; native validation is not in-game approval.
+# v0.9.0 retains a separate immutable comparator workflow.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/native-v0100-compat.yml"
+      - "catalogue/**"
+      - "roles/**"
+      - "tests/native/**"
+      - "scripts/build_native_manifest.py"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-v0100-compat-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-native-v0100:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      APLFOREVER_SOURCE_RELEASE: v0.10.0
+    steps:
+      - name: Check out exact public APLForever PR
+        uses: actions/checkout@v4
+        with:
+          path: aplforever
+          persist-credentials: false
+
+      - name: Check out published Hekili Forever v0.10.0
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 3c2cf3e32472cc807b1ba29d992fc13a273da8ee
+          path: upstream/hekili
+          persist-credentials: false
+
+      - name: Verify exact upstream source commit
+        working-directory: upstream/hekili
+        run: test "$(git rev-parse HEAD)" = "3c2cf3e32472cc807b1ba29d992fc13a273da8ee"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify all protected APL hashes and no implicit Candidate selection
+        working-directory: aplforever
+        run: |
+          python scripts/build_native_manifest.py --output "$RUNNER_TEMP/aplforever-native-manifest.lua" --source-release v0.10.0
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.build_native_manifest import select_revision
+          data = json.loads(Path("catalogue/roles.json").read_text(encoding="utf-8-sig"))
+          roles = {r["apl_name"]: r for r in data["roles"]}
+          guardian, hunter = roles["Druid_Guardian"], roles["Hunter_BeastMastery"]
+          assert guardian["preferred_apl"] == "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
+          assert select_revision(guardian, "v0.10.0")["revision"] == "v1.0"
+          assert hunter["preferred_apl"] is None and hunter["last_working_apl"] is None
+          assert select_revision(hunter, "v0.10.0")["revision"] == "v1.1"
+          assert hunter["latest_revision"] == "v1.2"
+          print("v0.10.0 manifest: protected Guardian + BM selections, unselected newer Candidates")
+          PY
+          {
+            echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/aplforever"
+            echo "APLFOREVER_NATIVE_MANIFEST=$RUNNER_TEMP/aplforever-native-manifest.lua"
+          } >> "$GITHUB_ENV"
+
+      - name: Flag P0 source that depends on unreadable player health in combat
+        working-directory: aplforever
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          paths = [
+              "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
+              "roles/Druid/Candidates/APL_Druid_Guardian_v1.2_Draft.txt",
+              "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+              "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt",
+          ]
+          for path in paths:
+              source = Path(path).read_text(encoding="utf-8")
+              assert not re.search(r"(?<![\w.])health\.(?:pct|current)\b", source), path
+          print("No reviewed Guardian/BM APL uses the hidden player-health field")
+          PY
+
+      - name: Bootstrap source-native v0.10.0 runtime
+        working-directory: upstream/hekili
+        run: make bootstrap
+
+      - name: Verify released player health and ability-rank engine contracts
+        working-directory: upstream/hekili
+        run: |
+          .lua/bin/busted --verbose tests/Forever/health_read_spec.lua tests/Forever/ability_ranks_spec.lua
+
+      - name: Hunter BM pet first-icon and retired-world negative gates
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_hunter_bm_pet_v090_spec.lua" tests/Forever/aplforever_hunter_bm_pet_v090_spec.lua
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_hunter_fixture_v090_spec.lua" tests/Forever/aplforever_hunter_fixture_v090_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_hunter_fixture_v090_spec.lua tests/Forever/aplforever_hunter_bm_pet_v090_spec.lua
+
+      - name: Hunter BM genuine accepted casts Hawk range and resource tail
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_hunter_bm_progress_v090_spec.lua" tests/Forever/aplforever_hunter_bm_progress_v090_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_hunter_bm_progress_v090_spec.lua
+
+      - name: Guardian source-registered Barkskin and Defensives gate
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_barkskin_v086_spec.lua" tests/Forever/aplforever_guardian_barkskin_v086_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_barkskin_v086_spec.lua
+
+      - name: Guardian shipped working and Candidate low-Rage and unlock/fallback gates
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="advances three real" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="records real Rage" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="progresses through level" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="safely follows caster" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+
+      - name: All supported-role imports and state-advanced repeated-fallback gate
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_import_spec.lua" tests/Forever/aplforever_import_spec.lua
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_progress_spec.lua" tests/Forever/aplforever_progress_spec.lua
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_warlock_lifetap_model.lua" tests/Forever/aplforever_warlock_lifetap_model.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_import_spec.lua tests/Forever/aplforever_progress_spec.lua
+
+      - name: Current release Guardian Hunter engine canaries
+        working-directory: upstream/hekili
+        run: |
+          .lua/bin/busted --verbose tests/Forever/druid_spec.lua tests/Forever/hunter_spec.lua tests/Forever/loop_hunter_spec.lua tests/Forever/forecast_window_spec.lua tests/Forever/gcd_rule_spec.lua
