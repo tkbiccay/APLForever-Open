@@ -105,6 +105,14 @@ jobs:
           cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
           .lua/bin/busted --verbose --filter="progresses through level 30" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
           .lua/bin/busted --verbose --filter="progresses through level 31" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+      - name: Hunter BM source-native pet icon comparison (first recommendation only)
+        working-directory: upstream/hekili
+        run: |
+          # Controlled client usability only. Does NOT simulate accepted
+          # Call/Revive Pet, real pet arrival, or post-recovery state changes.
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_hunter_bm_pet_v090_spec.lua" tests/Forever/aplforever_hunter_bm_pet_v090_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_hunter_bm_pet_v090_spec.lua
+
       - name: Verify retired Hunter BM/MM world keys before all-role source import
         working-directory: upstream/hekili
         run: |
