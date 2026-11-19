@@ -1,0 +1,15 @@
+# Feral DPS v1.2 — safe defensive intent without hidden health
+
+**19 November 2026 · Hekili Forever v0.10.0** `3c2cf3e32472cc807b1ba29d992fc13a273da8ee`; default comparison: shipped v0.10.0 Feral. Preserved selected comparator: Feral v1.0 Draft (not Reported Working), SHA `f2f72d0621c8e709c7df8f2ccff248ce0af604a1c02e115a5ad725cf93d288f1`; preserved unselected v1.1 Draft SHA `f611e4510a52ca125103eed9f3d1d4fc99a0b656b161cdc88134f0e72b6e52f7`.
+
+## Source-confirmed mechanism and hypothesis
+
+- [v0.10.0 APL conditions](https://github.com/zmsl/hekili/blob/v0.10.0/docs/wiki/APL-Conditions-On-Forever.md) say player `health.pct` is 100 during combat, while `tanking` and `aggro` are read from threat status. Three low-health defensive branches in Current v1.0 and Candidate v1.1 **never activate as intended in combat**; [release-native run](https://github.com/tkbiccay/APLForever-Open/actions/runs/44558486270) catches the warning. See [issue #14](https://github.com/tkbiccay/APLForever-Open/issues/14).
+- [Druid.lua v0.10.0](https://github.com/zmsl/hekili/blob/v0.10.0/src/Hekili_Druid/Druid.lua): `barkskin` (22812) costs no modelled resource, 60s cooldown, spell GCD, Defensives toggle, 15s aura. `frenzied_regeneration` (22842) has a **source-unmodelled Rage/health drain**, because health is secret. `natures_grasp` (16689) has a mana cost, caster-form restriction and conditional reactive effect; no verified low-health trigger exists.
+- **Novel intended use:** keep a single APL-controlled *proactive* Barkskin action, **only** with user Defensives ON, combat underway, `tanking` observed, enemy in melee range, known/ready and no current Barkskin. This is *not* emergency health triage; the real threat and timing still require in-game checks. Do not auto-cast Frenzied Regeneration without a meaningful health signal or guess Nature's Grasp survival need. Those two remain manual.
+- **No other Feral APL design changed:** exact v1.1 Cat Shred/Claw, combo-point/Rip, caster, Bear, upkeep, major/minor toggles, action list topology and final fallbacks are retained. This draft is fully standalone, has no shared runtime files, and changes only one defensive line plus removal of two unreachable health-gated lines.
+- New hash **`52568f2d069699c5b453aaa98515c3c2096594f4b790ba0e8591c417bcdb95c9`**; standalone Candidate `roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt`, **not selected**. `preferred_apl` remains Feral v1.0, `last_working_apl` null. Default v0.10.0 may win despite this fix: practical selection still requires comparative, repeated in-game evidence.
+
+## Validation and limits
+
+**Before CI:** syntax/fallback source audit only; actual source-native canary and combat attempts **Pending**. No synthetic low-health proof, no assumed mitigation benefit, no DPS gain or healing output claim. Require no Health warning in candidate, correct action-list import, original DPS accepted actions with Defensives OFF, and if source world supports a real threat/Barkskin event, one eligible acceptance with toggle ON; else explicitly mark that branch not modelled. Do not suppress old v1.0 warnings or mark them fixed. Preserve old SHA rollbacks.
