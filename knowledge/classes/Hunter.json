@@ -1,0 +1,725 @@
+{
+  "schema_version": 1,
+  "class": "Hunter",
+  "pin": {
+    "product": "Hekili Forever",
+    "tag": "v0.9.0",
+    "commit": "8f95f2ea0a45428554c1e938ed7357b870030514",
+    "client_data_build": "1.60.1.70338",
+    "class_file": "src/Hekili_Hunter/Hunter.lua",
+    "class_file_blob_sha": "37fe897f3a22bd65983a0c13cd48b1440ce6a76b"
+  },
+  "pilot_role": "Hunter_BeastMastery",
+  "pilot_spec": "BeastMastery",
+  "tree_names": [
+    "Beast Mastery",
+    "Marksmanship",
+    "Survival"
+  ],
+  "abilities": [
+    {
+      "key": "rapid_fire",
+      "id": 3045,
+      "source_line": 696,
+      "tags": [
+        "offensive",
+        "major_cooldown",
+        "buff"
+      ],
+      "suggested_apl_lane": "MajorCooldowns",
+      "native_toggle": "cooldowns",
+      "gcd": "off",
+      "cooldown_seconds": null,
+      "resource_type": "mana",
+      "spend_literal": 100,
+      "range": null,
+      "note": "Native cooldowns toggle. Rapid Killing alters the base 300s cooldown; source models this dynamically.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "bestial_wrath",
+      "id": 19574,
+      "source_line": 718,
+      "tags": [
+        "offensive",
+        "major_cooldown",
+        "pet_management"
+      ],
+      "suggested_apl_lane": "MajorCooldowns",
+      "native_toggle": "cooldowns",
+      "gcd": "off",
+      "cooldown_seconds": 120,
+      "resource_type": "mana",
+      "spend_literal": 0.12,
+      "range": null,
+      "note": "Requires the pet to be out; 12% base Mana; native cooldowns toggle. Off-GCD.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "serpent_sting",
+      "id": 1978,
+      "source_line": 738,
+      "tags": [
+        "offensive",
+        "dot",
+        "debuff",
+        "ranged"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 0,
+      "resource_type": "mana",
+      "spend_literal": null,
+      "range": {
+        "minimum_yards": 8,
+        "maximum_yards": 35,
+        "evidence": "source_world",
+        "source": "tests/Forever/helpers/hunter_world.lua",
+        "source_anchor": "serpent_sting = { 8, 35 }"
+      },
+      "note": "Published source world uses 8–35 yd; 6yd out-of-range loop is a verified regression in the shipped Turret reference.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "arcane_shot",
+      "id": 3044,
+      "source_line": 759,
+      "tags": [
+        "offensive",
+        "ranged"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": null,
+      "resource_type": "mana",
+      "spend_literal": 0.11,
+      "range": {
+        "minimum_yards": 8,
+        "maximum_yards": 35,
+        "evidence": "source_world",
+        "source": "tests/Forever/helpers/hunter_world.lua",
+        "source_anchor": "arcane_shot = { 8, 35 }"
+      },
+      "note": "Shares cooldown with Summon Hawk. Improved Arcane Shot alters its cooldown.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "summon_hawk",
+      "id": 1293241,
+      "source_line": 784,
+      "tags": [
+        "offensive",
+        "summoning",
+        "pet_management"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 6,
+      "resource_type": "mana",
+      "spend_literal": 0.11,
+      "range": {
+        "minimum_yards": 0,
+        "maximum_yards": 35,
+        "evidence": "source_world",
+        "source": "tests/Forever/helpers/hunter_world.lua",
+        "source_anchor": "summon_hawk = { 0, 35 }"
+      },
+      "note": "Source registers a 0–35 yd range in the world; source pack models guardians capped at two for 18s but world damage and live count fidelity are incomplete.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "aimed_shot",
+      "id": 19434,
+      "source_line": 802,
+      "tags": [
+        "offensive",
+        "ranged"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 6,
+      "resource_type": "mana",
+      "spend_literal": null,
+      "range": {
+        "minimum_yards": 8,
+        "maximum_yards": 35,
+        "evidence": "source_world",
+        "source": "tests/Forever/helpers/hunter_world.lua",
+        "source_anchor": "aimed_shot = { 8, 35 }"
+      },
+      "note": "Shares cooldown with Multi-Shot. Cast duration and cost are dynamic.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "multi_shot",
+      "id": 2643,
+      "source_line": 824,
+      "tags": [
+        "offensive",
+        "ranged",
+        "aoe"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 6,
+      "resource_type": "mana",
+      "spend_literal": null,
+      "range": {
+        "minimum_yards": 8,
+        "maximum_yards": 35,
+        "evidence": "source_world",
+        "source": "tests/Forever/helpers/hunter_world.lua",
+        "source_anchor": "multi_shot = { 8, 35 }"
+      },
+      "note": "Shares cooldown with Aimed Shot. Ranged cast and cost are dynamic.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "concussive_shot",
+      "id": 5116,
+      "source_line": 1053,
+      "tags": [
+        "utility",
+        "control",
+        "slow",
+        "ranged"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 12,
+      "resource_type": "mana",
+      "spend_literal": 0.08,
+      "range": null,
+      "note": "Has a registered 12-second cooldown; range still needs exact independent source-world and in-game checks.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "intimidation",
+      "id": 19577,
+      "source_line": 1080,
+      "tags": [
+        "utility",
+        "control",
+        "stun",
+        "pet_management"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 60,
+      "resource_type": "mana",
+      "spend_literal": 0.08,
+      "range": null,
+      "note": "A pet-delivered stun; pet cast/landing and interrupt semantics must be independently verified.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "disengage",
+      "id": 781,
+      "source_line": 1122,
+      "tags": [
+        "utility",
+        "movement"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 5,
+      "resource_type": "mana",
+      "spend_literal": null,
+      "range": null,
+      "note": "Registered 5-second cooldown in this Forever class pack; do not import Retail movement assumptions.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "feign_death",
+      "id": 5384,
+      "source_line": 1136,
+      "tags": [
+        "defensive",
+        "utility",
+        "threat"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "off",
+      "cooldown_seconds": 30,
+      "resource_type": "mana",
+      "spend_literal": 80,
+      "range": null,
+      "note": "Off-GCD with a registered 30-second cooldown; threat/drop mechanics and use in live combat need verification.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "mend_pet",
+      "id": 136,
+      "source_line": 1239,
+      "tags": [
+        "healing",
+        "pet_management",
+        "utility"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 0,
+      "resource_type": "mana",
+      "spend_literal": null,
+      "range": null,
+      "note": "Five-second channel; Improved Mend Pet modifies the cost. No source-native pet triage proof.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "call_pet",
+      "id": 883,
+      "source_line": 1263,
+      "tags": [
+        "summoning",
+        "pet_management",
+        "utility"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 0,
+      "resource_type": null,
+      "spend_literal": null,
+      "range": null,
+      "note": "Registration uses plain client usability, but source forecast does not make the pet appear; no accepted-cast pet transition proven.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "revive_pet",
+      "id": 982,
+      "source_line": 1275,
+      "tags": [
+        "healing",
+        "pet_management",
+        "utility"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 0,
+      "resource_type": "mana",
+      "spend_literal": null,
+      "range": null,
+      "note": "Base Mana cost and cast time modified by Improved Revive Pet; the source does not model full pet arrival on cast completion.",
+      "classification_grade": "Supported"
+    }
+  ],
+  "talents": [
+    {
+      "key": "deadly_aspects",
+      "tree": 1,
+      "spell_id": 19552,
+      "max_rank": 5,
+      "source_line": 1308,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "endurance_training",
+      "tree": 1,
+      "spell_id": 19583,
+      "max_rank": 5,
+      "source_line": 1309,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "focused_fire",
+      "tree": 1,
+      "spell_id": 1223755,
+      "max_rank": 2,
+      "source_line": 1310,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_aspect_of_the_monkey",
+      "tree": 1,
+      "spell_id": 19549,
+      "max_rank": 3,
+      "source_line": 1311,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_revive_pet",
+      "tree": 1,
+      "spell_id": 24443,
+      "max_rank": 2,
+      "source_line": 1312,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Source registration reduces Revive Pet cast by 3s and base Mana cost by 20% per rank."
+    },
+    {
+      "key": "pathfinding",
+      "tree": 1,
+      "spell_id": 19559,
+      "max_rank": 2,
+      "source_line": 1313,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "bestial_swiftness",
+      "tree": 1,
+      "spell_id": 19596,
+      "max_rank": 1,
+      "source_line": 1314,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "unleashed_fury",
+      "tree": 1,
+      "spell_id": 19616,
+      "max_rank": 5,
+      "source_line": 1315,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_mend_pet",
+      "tree": 1,
+      "spell_id": 19572,
+      "max_rank": 2,
+      "source_line": 1316,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "ferocity",
+      "tree": 1,
+      "spell_id": 19598,
+      "max_rank": 5,
+      "source_line": 1317,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "summon_hawk",
+      "tree": 1,
+      "spell_id": 1293241,
+      "max_rank": 1,
+      "source_line": 1318,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Talent rank 1 registers Summon Hawk; the action's spell ranks/cap are separate mechanics."
+    },
+    {
+      "key": "spirit_bond",
+      "tree": 1,
+      "spell_id": 19578,
+      "max_rank": 2,
+      "source_line": 1319,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "intimidation",
+      "tree": 1,
+      "spell_id": 19577,
+      "max_rank": 1,
+      "source_line": 1320,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "bestial_discipline",
+      "tree": 1,
+      "spell_id": 19590,
+      "max_rank": 2,
+      "source_line": 1321,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "frenzy",
+      "tree": 1,
+      "spell_id": 19621,
+      "max_rank": 5,
+      "source_line": 1322,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "bestial_wrath",
+      "tree": 1,
+      "spell_id": 19574,
+      "max_rank": 1,
+      "source_line": 1323,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Talent ability; source requires a living, out pet to activate."
+    },
+    {
+      "key": "hawk_eye",
+      "tree": 2,
+      "spell_id": 19498,
+      "max_rank": 3,
+      "source_line": 1325,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_concussive_shot",
+      "tree": 2,
+      "spell_id": 19407,
+      "max_rank": 5,
+      "source_line": 1326,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "lethal_attacks",
+      "tree": 2,
+      "spell_id": 19426,
+      "max_rank": 5,
+      "source_line": 1327,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_stings",
+      "tree": 2,
+      "spell_id": 1310661,
+      "max_rank": 3,
+      "source_line": 1328,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "efficiency",
+      "tree": 2,
+      "spell_id": 19416,
+      "max_rank": 5,
+      "source_line": 1329,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "careful_aim",
+      "tree": 2,
+      "spell_id": 1223984,
+      "max_rank": 5,
+      "source_line": 1330,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "rapid_killing",
+      "tree": 2,
+      "spell_id": 415405,
+      "max_rank": 2,
+      "source_line": 1331,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Rapid Fire cooldown model is 300s less 60s per rank."
+    },
+    {
+      "key": "improved_arcane_shot",
+      "tree": 2,
+      "spell_id": 19454,
+      "max_rank": 5,
+      "source_line": 1332,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Arcane Shot cooldown is 6s less 0.3s per rank in the class pack."
+    },
+    {
+      "key": "lone_wolf",
+      "tree": 2,
+      "spell_id": 415370,
+      "max_rank": 1,
+      "source_line": 1333,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Source guards pet recovery against Lone Wolf; this is a cross-tree interaction."
+    },
+    {
+      "key": "trueshot_aura",
+      "tree": 2,
+      "spell_id": 1299346,
+      "max_rank": 1,
+      "source_line": 1334,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "mortal_shots",
+      "tree": 2,
+      "spell_id": 19485,
+      "max_rank": 5,
+      "source_line": 1335,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "rapid_recuperation",
+      "tree": 2,
+      "spell_id": 1223987,
+      "max_rank": 2,
+      "source_line": 1336,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "barrage",
+      "tree": 2,
+      "spell_id": 19461,
+      "max_rank": 3,
+      "source_line": 1337,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "scatter_shot",
+      "tree": 2,
+      "spell_id": 19503,
+      "max_rank": 1,
+      "source_line": 1338,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "ranged_weapon_specialization",
+      "tree": 2,
+      "spell_id": 19507,
+      "max_rank": 5,
+      "source_line": 1339,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "sniper_shot",
+      "tree": 2,
+      "spell_id": 1310687,
+      "max_rank": 1,
+      "source_line": 1340,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_tracking",
+      "tree": 3,
+      "spell_id": 24293,
+      "max_rank": 5,
+      "source_line": 1342,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "deflection",
+      "tree": 3,
+      "spell_id": 19295,
+      "max_rank": 5,
+      "source_line": 1343,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "entrapment",
+      "tree": 3,
+      "spell_id": 19184,
+      "max_rank": 5,
+      "source_line": 1344,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "savage_strikes",
+      "tree": 3,
+      "spell_id": 19159,
+      "max_rank": 2,
+      "source_line": 1345,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "survivalist",
+      "tree": 3,
+      "spell_id": 19255,
+      "max_rank": 5,
+      "source_line": 1346,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_wing_clip",
+      "tree": 3,
+      "spell_id": 19228,
+      "max_rank": 3,
+      "source_line": 1347,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "clever_traps",
+      "tree": 3,
+      "spell_id": 19239,
+      "max_rank": 2,
+      "source_line": 1348,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "surefooted",
+      "tree": 3,
+      "spell_id": 19290,
+      "max_rank": 3,
+      "source_line": 1349,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "deterrence",
+      "tree": 3,
+      "spell_id": 19263,
+      "max_rank": 1,
+      "source_line": 1350,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "survival_tactics",
+      "tree": 3,
+      "spell_id": 19376,
+      "max_rank": 2,
+      "source_line": 1351,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "predators_edge",
+      "tree": 3,
+      "spell_id": 1310627,
+      "max_rank": 5,
+      "source_line": 1352,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "counterattack",
+      "tree": 3,
+      "spell_id": 19306,
+      "max_rank": 1,
+      "source_line": 1353,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "resourcefulness",
+      "tree": 3,
+      "spell_id": 440529,
+      "max_rank": 2,
+      "source_line": 1354,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "expose_prey",
+      "tree": 3,
+      "spell_id": 1310532,
+      "max_rank": 2,
+      "source_line": 1355,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "survivalists_discipline",
+      "tree": 3,
+      "spell_id": 1310496,
+      "max_rank": 2,
+      "source_line": 1356,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "strider_kick",
+      "tree": 3,
+      "spell_id": 1317257,
+      "max_rank": 1,
+      "source_line": 1357,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "lightning_reflexes",
+      "tree": 3,
+      "spell_id": 19168,
+      "max_rank": 5,
+      "source_line": 1358,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "lacerating_strikes",
+      "tree": 3,
+      "spell_id": 1310533,
+      "max_rank": 1,
+      "source_line": 1359,
+      "mechanics_reviewed": false
+    }
+  ]
+}

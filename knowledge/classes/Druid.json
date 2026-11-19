@@ -1,0 +1,695 @@
+{
+  "schema_version": 1,
+  "class": "Druid",
+  "pin": {
+    "product": "Hekili Forever",
+    "tag": "v0.9.0",
+    "commit": "8f95f2ea0a45428554c1e938ed7357b870030514",
+    "client_data_build": "1.60.1.70338",
+    "class_file": "src/Hekili_Druid/Druid.lua",
+    "class_file_blob_sha": "b5860453140d57f0992893a939d2fd2ba163e396"
+  },
+  "pilot_role": "Druid_Guardian",
+  "pilot_spec": "Guardian",
+  "tree_names": [
+    "Balance",
+    "Feral Combat",
+    "Restoration"
+  ],
+  "abilities": [
+    {
+      "key": "barkskin",
+      "id": 22812,
+      "source_line": 907,
+      "tags": [
+        "defensive",
+        "mitigation",
+        "buff"
+      ],
+      "suggested_apl_lane": "Defensives",
+      "native_toggle": "defensives",
+      "gcd": "spell",
+      "cooldown_seconds": 60,
+      "resource_type": null,
+      "spend_literal": null,
+      "range": null,
+      "note": "Native defensive toggle, 60s cooldown; cast is GCD=spell in v0.9.0, not automatically off-GCD.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "bash",
+      "id": 5211,
+      "source_line": 926,
+      "tags": [
+        "utility",
+        "control",
+        "stun"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": null,
+      "resource_type": "rage",
+      "spend_literal": 10,
+      "range": null,
+      "note": "Bear-only stun, 10 Rage. Brutal Impact reduces its cooldown by 15s per rank.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "bear_form",
+      "id": 5487,
+      "source_line": 952,
+      "tags": [
+        "utility",
+        "form",
+        "defensive"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 0,
+      "resource_type": "mana",
+      "spend_literal": null,
+      "range": null,
+      "note": "Bear Form includes Dire Bear rank. Form changes alter usable actions; GCD=spell.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "demoralizing_roar",
+      "id": 99,
+      "source_line": 1123,
+      "tags": [
+        "defensive",
+        "debuff",
+        "threat"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 0,
+      "resource_type": "rage",
+      "spend_literal": 10,
+      "range": null,
+      "note": "Defensive purpose but the class ability has NO native defensives toggle. The APL must explicitly handle intended control. Costs 10 Rage.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "enrage",
+      "id": 5229,
+      "source_line": 1149,
+      "tags": [
+        "resource",
+        "utility"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "off",
+      "cooldown_seconds": 60,
+      "resource_type": null,
+      "spend_literal": null,
+      "range": null,
+      "note": "Off-GCD Bear-only Rage generation with 60s cooldown; no native cooldown/defensive toggle declared.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "frenzied_regeneration",
+      "id": 22842,
+      "source_line": 1307,
+      "tags": [
+        "defensive",
+        "healing",
+        "mitigation"
+      ],
+      "suggested_apl_lane": "Defensives",
+      "native_toggle": "defensives",
+      "gcd": "spell",
+      "cooldown_seconds": 180,
+      "resource_type": null,
+      "spend_literal": null,
+      "range": null,
+      "note": "Native defensive toggle, 180s cooldown. Source cannot model its full Rage health-drain against hidden health.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "growl",
+      "id": 6795,
+      "source_line": 1352,
+      "tags": [
+        "utility",
+        "taunt",
+        "threat"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "off",
+      "cooldown_seconds": 8,
+      "resource_type": null,
+      "spend_literal": null,
+      "range": null,
+      "note": "Bear-only 8-second cooldown and off-GCD. Engine models debuff, not proof of target threat behaviour.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "lacerate",
+      "id": 1328617,
+      "source_line": 1498,
+      "tags": [
+        "offensive",
+        "debuff",
+        "dot",
+        "threat"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 0,
+      "resource_type": "rage",
+      "spend_literal": null,
+      "range": null,
+      "note": "Requires Feral tree talent Lacerate rank1 and Bear Form; source cost is max(0,15 - Improved Shred rank). Level boundary remains important.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "maul",
+      "id": 6807,
+      "source_line": 1552,
+      "tags": [
+        "offensive",
+        "threat",
+        "melee"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "off",
+      "cooldown_seconds": 0,
+      "resource_type": "rage",
+      "spend_literal": null,
+      "range": null,
+      "note": "Off-GCD queued next melee swing, resource reserve and time-to-swing essential; high-Rage positive proof still blocked.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "swipe_bear",
+      "id": 779,
+      "source_line": 1985,
+      "tags": [
+        "offensive",
+        "aoe",
+        "threat",
+        "melee"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 0,
+      "resource_type": "rage",
+      "spend_literal": null,
+      "range": null,
+      "note": "This class pack's exact action key is swipe_bear, not swipe. Costs Rage, requires Bear Form; manual/observable target-count rules apply.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "primal_bite",
+      "id": 407995,
+      "source_line": 1712,
+      "tags": [
+        "offensive",
+        "melee",
+        "threat"
+      ],
+      "suggested_apl_lane": "General",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": null,
+      "resource_type": "rage",
+      "spend_literal": null,
+      "range": null,
+      "note": "Forever Bear ability. Berserk removes the normally 6s cooldown while active, with dynamic 20 minus Ferocity cost.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "challenging_roar",
+      "id": 5209,
+      "source_line": 1042,
+      "tags": [
+        "utility",
+        "taunt",
+        "threat",
+        "aoe"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "spell",
+      "cooldown_seconds": 600,
+      "resource_type": "rage",
+      "spend_literal": 15,
+      "range": null,
+      "note": "Bear-only, 600-second cooldown, 15 Rage. Explicit situational threat logic required.",
+      "classification_grade": "Supported"
+    },
+    {
+      "key": "feral_charge",
+      "id": 1238122,
+      "source_line": 1234,
+      "tags": [
+        "utility",
+        "movement",
+        "control"
+      ],
+      "suggested_apl_lane": "Utility",
+      "native_toggle": null,
+      "gcd": "off",
+      "cooldown_seconds": 15,
+      "resource_type": "rage",
+      "spend_literal": null,
+      "range": null,
+      "note": "Bear-only and off-GCD with 15s cooldown; actual range, facing and hostile movement safety require verification.",
+      "classification_grade": "Supported"
+    }
+  ],
+  "talents": [
+    {
+      "key": "improved_wrath",
+      "tree": 1,
+      "spell_id": 16814,
+      "max_rank": 5,
+      "source_line": 363,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "genesis",
+      "tree": 1,
+      "spell_id": 1223081,
+      "max_rank": 5,
+      "source_line": 364,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "moonglow",
+      "tree": 1,
+      "spell_id": 16845,
+      "max_rank": 3,
+      "source_line": 365,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_moonfire",
+      "tree": 1,
+      "spell_id": 16821,
+      "max_rank": 2,
+      "source_line": 366,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natures_majesty",
+      "tree": 1,
+      "spell_id": 1223082,
+      "max_rank": 2,
+      "source_line": 367,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natures_reach",
+      "tree": 1,
+      "spell_id": 16819,
+      "max_rank": 2,
+      "source_line": 368,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_entangling_roots",
+      "tree": 1,
+      "spell_id": 16918,
+      "max_rank": 3,
+      "source_line": 369,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natures_splendor",
+      "tree": 1,
+      "spell_id": 1223083,
+      "max_rank": 1,
+      "source_line": 370,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "insect_swarm",
+      "tree": 1,
+      "spell_id": 5570,
+      "max_rank": 1,
+      "source_line": 371,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "vengeance",
+      "tree": 1,
+      "spell_id": 16909,
+      "max_rank": 5,
+      "source_line": 372,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_starfire",
+      "tree": 1,
+      "spell_id": 16850,
+      "max_rank": 5,
+      "source_line": 373,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_natures_grasp",
+      "tree": 1,
+      "spell_id": 17245,
+      "max_rank": 2,
+      "source_line": 374,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natures_grace",
+      "tree": 1,
+      "spell_id": 16880,
+      "max_rank": 1,
+      "source_line": 375,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "eclipse",
+      "tree": 1,
+      "spell_id": 408248,
+      "max_rank": 3,
+      "source_line": 376,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "moonfury",
+      "tree": 1,
+      "spell_id": 16896,
+      "max_rank": 5,
+      "source_line": 377,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "moonkin_form",
+      "tree": 1,
+      "spell_id": 24858,
+      "max_rank": 1,
+      "source_line": 378,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "ferocity",
+      "tree": 2,
+      "spell_id": 16934,
+      "max_rank": 5,
+      "source_line": 380,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Class pack reduces Maul, Swipe Bear and Primal Bite costs by talent rank."
+    },
+    {
+      "key": "furor",
+      "tree": 2,
+      "spell_id": 17056,
+      "max_rank": 5,
+      "source_line": 381,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "feline_swiftness",
+      "tree": 2,
+      "spell_id": 17002,
+      "max_rank": 2,
+      "source_line": 382,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "feral_instinct",
+      "tree": 2,
+      "spell_id": 16947,
+      "max_rank": 3,
+      "source_line": 383,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "brutal_impact",
+      "tree": 2,
+      "spell_id": 16940,
+      "max_rank": 2,
+      "source_line": 384,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Class pack reduces Bash cooldown by 15s per rank."
+    },
+    {
+      "key": "thick_hide",
+      "tree": 2,
+      "spell_id": 16929,
+      "max_rank": 3,
+      "source_line": 385,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Guardian selector chooses Guardian with Feral dominance and Thick Hide 3/3; not a blanket level unlock."
+    },
+    {
+      "key": "improved_shred",
+      "tree": 2,
+      "spell_id": 16966,
+      "max_rank": 3,
+      "source_line": 386,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Class pack applies -1 Rage cost per rank to Lacerate."
+    },
+    {
+      "key": "savage_fury",
+      "tree": 2,
+      "spell_id": 16998,
+      "max_rank": 2,
+      "source_line": 387,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "feral_charge",
+      "tree": 2,
+      "spell_id": 1238122,
+      "max_rank": 1,
+      "source_line": 388,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Feral Charge is a registered Feral Combat talent; still verify level/rank availability."
+    },
+    {
+      "key": "sharpened_claws",
+      "tree": 2,
+      "spell_id": 16942,
+      "max_rank": 2,
+      "source_line": 389,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "predatory_strikes",
+      "tree": 2,
+      "spell_id": 16972,
+      "max_rank": 3,
+      "source_line": 390,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "lacerate",
+      "tree": 2,
+      "spell_id": 1328617,
+      "max_rank": 1,
+      "source_line": 391,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Talent rank1 spell 1328617; its learned rank boundary and later spell ranks require separate tests."
+    },
+    {
+      "key": "predatory_discipline",
+      "tree": 2,
+      "spell_id": 1328613,
+      "max_rank": 1,
+      "source_line": 392,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "primal_fury",
+      "tree": 2,
+      "spell_id": 16958,
+      "max_rank": 2,
+      "source_line": 393,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "leader_of_the_pack",
+      "tree": 2,
+      "spell_id": 17007,
+      "max_rank": 1,
+      "source_line": 394,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natural_instinct",
+      "tree": 2,
+      "spell_id": 1223242,
+      "max_rank": 2,
+      "source_line": 395,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "rend_and_tear",
+      "tree": 2,
+      "spell_id": 1223246,
+      "max_rank": 5,
+      "source_line": 396,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natural_reaction",
+      "tree": 2,
+      "spell_id": 417051,
+      "max_rank": 5,
+      "source_line": 397,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "primal_bite",
+      "tree": 2,
+      "spell_id": 407995,
+      "max_rank": 1,
+      "source_line": 398,
+      "mechanics_reviewed": true,
+      "reviewed_note": "Talent gates the Forever Bear Primal Bite ability."
+    },
+    {
+      "key": "shifting_power",
+      "tree": 2,
+      "spell_id": 1322605,
+      "max_rank": 1,
+      "source_line": 399,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natures_focus",
+      "tree": 3,
+      "spell_id": 17063,
+      "max_rank": 5,
+      "source_line": 401,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "heart_of_the_wild",
+      "tree": 3,
+      "spell_id": 17003,
+      "max_rank": 5,
+      "source_line": 402,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_healing_touch",
+      "tree": 3,
+      "spell_id": 17069,
+      "max_rank": 5,
+      "source_line": 403,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "reflection",
+      "tree": 3,
+      "spell_id": 17106,
+      "max_rank": 3,
+      "source_line": 404,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natural_shapeshifter",
+      "tree": 3,
+      "spell_id": 16833,
+      "max_rank": 3,
+      "source_line": 405,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "subtlety",
+      "tree": 3,
+      "spell_id": 17118,
+      "max_rank": 3,
+      "source_line": 406,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "gift_of_nature",
+      "tree": 3,
+      "spell_id": 17104,
+      "max_rank": 5,
+      "source_line": 407,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "bloom",
+      "tree": 3,
+      "spell_id": 1328621,
+      "max_rank": 1,
+      "source_line": 408,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "tranquil_spirit",
+      "tree": 3,
+      "spell_id": 24968,
+      "max_rank": 5,
+      "source_line": 409,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_rejuvenation",
+      "tree": 3,
+      "spell_id": 17111,
+      "max_rank": 3,
+      "source_line": 410,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "swiftmend",
+      "tree": 3,
+      "spell_id": 18562,
+      "max_rank": 1,
+      "source_line": 411,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "natures_swiftness",
+      "tree": 3,
+      "spell_id": 17116,
+      "max_rank": 1,
+      "source_line": 412,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "living_spirit",
+      "tree": 3,
+      "spell_id": 1309631,
+      "max_rank": 3,
+      "source_line": 413,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_tranquility",
+      "tree": 3,
+      "spell_id": 17123,
+      "max_rank": 2,
+      "source_line": 414,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "improved_regrowth",
+      "tree": 3,
+      "spell_id": 17074,
+      "max_rank": 5,
+      "source_line": 415,
+      "mechanics_reviewed": false
+    },
+    {
+      "key": "wild_growth",
+      "tree": 3,
+      "spell_id": 408120,
+      "max_rank": 1,
+      "source_line": 416,
+      "mechanics_reviewed": false
+    }
+  ]
+}
