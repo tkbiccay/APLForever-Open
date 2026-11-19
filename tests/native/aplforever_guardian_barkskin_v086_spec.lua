@@ -37,7 +37,8 @@ local function profiles()
             out[#out + 1] = { name = e.revision, entry = e }
         end
     end
-    assert.are.equal(4, #out, "expected shipped + Guardian v1.0, v1.1 and v1.2")
+    assert.are.equal(5, #out, "expected shipped + Guardian v1.0, v1.1, v1.2 and v1.3")
+    assert.are.equal("v1.3", out[5].name)
     out[#out + 1] = { name = "v1.1-test-only-barkskin", entry = out[3].entry, experimental = true }
     assert.are.equal("v1.1", out[3].name)
     assert.are.equal("v1.2", out[4].name)
@@ -132,7 +133,7 @@ local function examine(profile, level, on)
     if not on or level < 44 then
         assert.are.equal(0, barkskin, "Barkskin must obey Defensives and source unlock")
     end
-    if (profile.experimental or profile.name == "v1.2") and on and level >= 44 then
+    if (profile.experimental or profile.name == "v1.2" or profile.name == "v1.3") and on and level >= 44 then
         assert.is_true(barkskin >= 1, "new branch never cast known ready Barkskin with Defensives ON")
         assert.is_true(roar >= 1, "Barkskin must not silently eliminate actual Roar upkeep")
     end
@@ -150,12 +151,12 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
     end
     for _, level in ipairs({ 43, 44 }) do
         it("test-only branch real Barkskin unlock level " .. level, function()
-            examine(p[5], level, true)
+            examine(p[6], level, true)
         end)
     end
     it("exact v1.2 standalone matches the in-memory v1.1+branch action counts", function()
         local actual = examine(p[4], 60, true)
-        local proposed = examine(p[5], 60, true)
+        local proposed = examine(p[6], 60, true)
         assert.are.same(proposed, actual)
     end)
 end)
