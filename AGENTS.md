@@ -31,6 +31,10 @@ For each bounded change: start from the latest `main`, create **one short-lived 
 
 **Never conflate three statuses:** latest *published* upstream version; latest *source-tested* version in a bounded scope; and an individual APL's **in-game proven** state. Source patch availability or a future unpublished commit is not a released guarantee. Under a new release, review Guardian Tank and Hunter BM equally first, then Feral DPS and risk-ranked remainder; genuine broad engine change justifies a whole-role gate. Source-native failures from inherited APLs are tracked and cannot be silenced to claim success.
 
+## CI observability vertical slice and truthful role evidence (19 Nov 2026)
+
+New [static headless-validation evidence gate](docs/HEADLESS_VALIDATION.md) scans **every** immutable catalogue APL revision against confirmed Hekili Forever v0.10.0 hidden/fixed-state expression families. It resolves basic action-list reachability (including precombat-only lists), keeps known historical debt pinned to exact APL path/SHA/rule/count, and fails **new** secret/fixed-state usages without rewriting protected references or treating known debt as safe. The [generated per-role evidence matrix](.github/workflows/validate.yml) appears in required `validate` job summary/artifact and labels only scoped runs whose pins and outcomes are recorded. A clean static scan **never** means imported, castable, free of dead branches, full v0.10.0 compatible or Approved. Build common native tests from existing fixtures for Guardian and Hunter BM first; no unnecessary generic simulator.
+
 ## Evidence and approvals
 
 1. Verify latest tagged **Hekili Forever** release/commit and source documentation; validate version-specific syntax, IDs, real resources, observation/Belief limitations, shipped kit and defaults. Check credible Forever-relevant independent guides; don't import Retail/Classic/SoD or synthetic oracle claims as live truth.
