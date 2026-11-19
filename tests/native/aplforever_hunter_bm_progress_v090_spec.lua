@@ -173,3 +173,103 @@ describe("Hunter BM v0.9.0 source-native combat and Major toggle", function()
         end
     end
 end)
+
+
+-- Natural long-fight Mana exhaustion. This is deliberately NOT synthetic
+-- low-resource injection: the exact v0.9.0 world pays ranks from its own
+-- source, regenerates by the published five-second rule and fires Auto Shots.
+-- Sample a true world advancement, not three recommendation UI polls.
+local function naturalManaTail(profile)
+    local L = loop.new(C)
+    local H = L.us
+    assert.are.same({}, H.loadErrors)
+    install(H, profile)
+    H.Hekili.DB.profile.toggles.cooldowns.value = false
+    H.Hekili.DB.profile.toggles.defensives.value = false
+    H.Hekili.DB.profile.toggles.movement.value = false
+
+    local lowThreshold = 200 -- 6% of the exact 3330 starting Mana; Aimed Shot > this cost.
+    local samples, acceptedAfterLow = {}, {}
+    local firstLowTick, firstLowTime, minMana = nil, nil, math.huge
+    local lastSampleTime, lastEventCount = -math.huge, -1
+    local realWorldAdvances = 0
+    local run = loop.run(L, 30417, {
+        duration = 175,
+        on = function(r, _, t)
+            if r.combat <= 0 then return end
+            local mana = r.us.power
+            if mana < minMana then minMana = mana end
+            if mana > lowThreshold then return end
+            if not firstLowTick then
+                firstLowTick, firstLowTime = r.combat, t
+            end
+            local accepted = r.pressed[r.combat]
+            if accepted then
+                acceptedAfterLow[accepted] = (acceptedAfterLow[accepted] or 0) + 1
+            end
+            -- #W.truth counts actual processed source-world events (casts,
+            -- auto-shots, auras, mob swings). Distinct events + >=0.8s time
+            -- prove actual combat advancement, not identical display polls.
+            local events = #r.W.truth
+            if events > lastEventCount and t - lastSampleTime >= 0.8
+                and #samples < 3 then
+                local output = H.Hekili.Engine.Output.Primary
+                local rec = output and output.recs[1]
+                local first = r.ours[r.combat] or "NO_ACTION"
+                samples[#samples + 1] = {
+                    t = t, first = first, wait = rec and rec.wait or nil,
+                    mana = mana, accepted = accepted, events = events,
+                }
+                if lastEventCount >= 0 then realWorldAdvances = realWorldAdvances + 1 end
+                lastEventCount, lastSampleTime = events, t
+            end
+        end,
+    }, { { H = H } })
+
+    print("BM_V090_NATURAL_TAIL " .. profile.name .. " " .. pretty.write({
+        minimumMana = minMana, lowThreshold = lowThreshold,
+        firstLowTime = firstLowTime, firstLowTick = firstLowTick,
+        accepted = run.pressedBy, acceptedAfterLow = acceptedAfterLow,
+        samples = samples, advancedWorldEvents = realWorldAdvances,
+        rawRefused = run.refused, errors = run.errors, raises = run.raises,
+    }, ""))
+
+    assert.are.equal(0, run.errors, "source world error during natural exhaustion")
+    assert.are.equal(0, run.raises, "source engine raised during natural exhaustion")
+    assert.are.same({}, run.refused,
+        "a cast/refusal during low Mana is a real failure requiring diagnosis")
+    assert.is_true(run.presses >= 3, "non-vacuous actual casts before exhaustion")
+    assert.is_true((run.pressedBy.serpent_sting or 0) > 0,
+        "no source-accepted Serpent Sting upkeep before low-Mana tail")
+    assert.is_not_nil(firstLowTick, "natural world never reached the defined low-Mana band")
+    assert.are.equal(3, #samples,
+        "need three genuinely event-advanced low-Mana checkpoints")
+    assert.is_true(realWorldAdvances >= 2,
+        "three low-Mana recommendations were not separated by source events")
+
+    local a, b, c = samples[1], samples[2], samples[3]
+    assert.is_true(a.events < b.events and b.events < c.events
+        and a.t < b.t and b.t < c.t,
+        "tail must represent three DIFFERENT world states")
+    local first = a.first
+    local immediateRepeat = first ~= "NO_ACTION"
+        and b.first == first and c.first == first
+        and (a.wait or 0) <= 0.05 and (b.wait or 0) <= 0.05
+        and (c.wait or 0) <= 0.05
+    if immediateRepeat then
+        local acceptedOfFirst = 0
+        for i = firstLowTick, run.combat do
+            if run.pressed[i] == first then acceptedOfFirst = acceptedOfFirst + 1 end
+        end
+        assert.is_true(acceptedOfFirst > 0,
+            "same ready first icon repeats after real state advances without a single accepted press")
+    end
+end
+
+describe("Hunter BM v0.9.0 natural sub-200 Mana tail / repeated fallback", function()
+    for _, profile in ipairs(profiles) do
+        it(profile.name .. " advances through three true low-Mana checkpoints", function()
+            naturalManaTail(profile)
+        end)
+    end
+end)
