@@ -53,7 +53,7 @@ See our [project priorities](docs/PROJECT_PRIORITIES.md) and [AI-first working m
 | [Knowledge](knowledge/) | Research once → Preserve → Reuse, source-pinned mechanics and limits |
 | [Tests](tests/) | Headless regression tests and pinned source evidence |
 
-**Workflow:** make a short-lived review/CI branch → check hashes, import and relevant source-native tests → merge safe work (including **unselected Draft Candidates**) into protected `main` → delete the merged branch. Promoting a Candidate into `Current` or `Approved` is an entirely separate, explicit evidence-backed action. Never do routine development on historical merged branches.
+**Workflow:** make a short-lived review/CI branch → check hashes, import and relevant source-native tests → merge safe work (including **unselected Draft Candidates**) into protected `main` → [automatic safe cleanup of merged branches](.github/workflows/safe-merged-branch-cleanup.yml). Promoting a Candidate into `Current` or `Approved` is an entirely separate, explicit evidence-backed action. Never do routine development on historical merged branches.
 
 ## Development and approval
 
