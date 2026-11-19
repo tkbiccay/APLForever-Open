@@ -28,13 +28,12 @@
 
 **Approval is a separate gate:** verified in-game gameplay evidence, no significant safety/regression failures, a fair default + last-working comparison and explicit maintainer acceptance. When in doubt, keep `Current` unchanged. Never merge known failing critical code just to tidy branches.
 
-## GitHub branch housekeeping (one-time and ongoing)
+## Automated branch housekeeping
 
-With repository owner access:
+[Safely clean merged PR branches](../.github/workflows/safe-merged-branch-cleanup.yml) runs on **every push to protected `main`**, plus weekly and manually from the [Actions page](https://github.com/tkbiccay/APLForever-Open/actions/workflows/safe-merged-branch-cleanup.yml). Its first merged-main push also performs the one-time historical branch reconciliation. **No further manual clicks or personal access token are required** if GitHub honours the workflow's declared token permissions.
 
-- Open [Settings → General](https://github.com/tkbiccay/APLForever-Open/settings) → **Pull Requests** → tick **Automatically delete head branches** (the current repository setting was **disabled on 19 Nov 2026**). This uses GitHub's own cleanup; **do not add a bot or bypass the main ruleset**.
-- Open [Branches](https://github.com/tkbiccay/APLForever-Open/branches) and filter **Merged**. Delete **only** the head branches of PRs confirmed merged; never `main`, never an unmerged experimental branch.
-- Historical PRs and squash-merge commits remain searchable even after branch deletion. This is safe **only when all wanted bytes are on main and CI is green**; review any branch that has non-merged changes before deleting it.
-- After deleting prior merged branch refs, the normal steady state is **one visible permanent branch: `main`**. A single PR branch can exist while new work is being validated.
+Before deletion, it verifies **a merged PR from this same repository**, its **exact matching final head SHA**, **no still-open PR** using the branch, and **no branch protection**. It re-reads the live branch and raw Git ref before deletion. It refuses `main`, forks, unmerged work, changed heads, unusual ref names and API failures. It never checks out untrusted PR code or alters `roles/`, catalogue selection, releases, hashes or approval status.
+
+This is a narrowly scoped, in-repository GitHub Actions alternative because the connected GitHub integration cannot enable the platform's native **Automatically delete head branches** setting. You can enable that GitHub setting later if you prefer; the workflow is idempotent. The script has a **read-only default**: `python3 scripts/cleanup_merged_branches.py` previews eligible branches when provided a GitHub token, and only the trusted main workflow invokes `--apply`.
 
 **Current project priorities:** Guardian/Feral Tank and Hunter BM equally first; then Feral DPS. Research once → Preserve → Reuse, and keep full standalone role APLs.

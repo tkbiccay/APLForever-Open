@@ -1,0 +1,35 @@
+name: Safely clean merged PR branches
+
+# Run trusted code from main only, never checkout a PR head.
+# A normal merge pushes to main; first integration also cleans historical heads.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 4 * * 1" # Weekly fallback in UTC
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: safe-merged-branch-cleanup
+  cancel-in-progress: false
+
+jobs:
+  prune-merged:
+    name: prune-merged
+    if: github.ref == 'refs/heads/main' && github.repository == 'tkbiccay/APLForever-Open'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout trusted main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Delete only verified merged, untouched, unprotected head branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/cleanup_merged_branches.py --apply
