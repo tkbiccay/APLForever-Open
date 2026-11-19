@@ -33,6 +33,14 @@ local function first(mode, state)
     -- for this controlled CLIENT usability test only, NOT a low-level assertion.
     character.known[#character.known + 1] = 883
     character.known[#character.known + 1] = 982
+    if state.loneWolf then
+        -- Source-registered Marksmanship Lone Wolf talent 415370; this is a
+        -- controlled cross-tree client-state gate, not a natural BM build.
+        local talents = {}
+        for id, rank in pairs(character.talents or {}) do talents[id] = rank end
+        talents[415370] = 1
+        character.talents = talents
+    end
 
     local H = headless.new({ character = character, pack = C.PACK })
     assert.are.same({}, H.loadErrors)
@@ -106,6 +114,12 @@ describe("BM v0.9.0 Turret main-pet client recommendation (NOT cast success)", f
         for _, mode in ipairs({ "shipped", "archived", "candidate" }) do
             assert.is_true(noRecovery(first(mode, state)), mode)
         end
+    end)
+
+    it("Lone Wolf suppresses Call Pet even when the absent pet is otherwise callable", function()
+        local state = { label = "lone-wolf", out = false, dead = false, loneWolf = true }
+        assert.is_true(noRecovery(first("shipped", state)))
+        assert.is_true(noRecovery(first("candidate", state)))
     end)
 
     it("missing pet but Call Pet unusable does not suggest recovery", function()
