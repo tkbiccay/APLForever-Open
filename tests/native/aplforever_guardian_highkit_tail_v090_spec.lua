@@ -1,6 +1,6 @@
 -- Issue #30: high-kit Guardian v0.9.0 post-setup natural low-Rage tail.
--- Compare the exact reported-working Current, separate Draft Candidate and
--- untouched shipped pack. No synthetic combat resource drain or fake buffs.
+-- Compare shipped, exact reported-working v1.0 and both Drafts (v1.1,
+-- v1.2 Barkskin Candidates). No synthetic combat resource drain or fake buffs.
 -- The source world has unmeasured incoming-damage Rage and mitigation, so
 -- this is a bounded castability/wait test, not tank survival or DPS proof.
 local loop = require("Game.harness.loop")
@@ -18,14 +18,25 @@ local seed = 30417
 local function profiles()
     local out = { { name = "shipped" } }
     for _, e in ipairs(manifest) do
-        -- Keep historical v1.0/v1.1 comparators: the new v1.2 is checked
-        -- separately in its own released-v0.8.6 focused workflow.
+        -- Every protected Guardian revision is included: the explicit
+        -- v1.2 Candidates file is NOT the current/working selection, but
+        -- must receive the SAME natural-Rage, unlock and fallback checks.
         if e.apl_name == "Druid_Guardian" and
-            (e.revision == "v1.0" or e.revision == "v1.1") then
+            (e.revision == "v1.0" or e.revision == "v1.1"
+                or e.revision == "v1.2") then
             out[#out + 1] = { name = e.revision, entry = e }
         end
     end
-    assert.are.equal(3, #out)
+    assert.are.equal(4, #out, "shipped + all 3 source-compatible Guardian revisions")
+    assert.are.equal("v1.0", out[2].name)
+    assert.are.equal("v1.1", out[3].name)
+    assert.are.equal("v1.2", out[4].name)
+    assert.are.equal(
+        "roles/Druid/Candidates/APL_Druid_Guardian_v1.2_Draft.txt",
+        out[4].entry.apl_file, "Guardian v1.2 must remain the unselected Candidate")
+    assert.are.equal(
+        "da358b7c04b47732966c47a91b7f6f5d32410f9077aabe2aac39252139a47b76",
+        out[4].entry.sha256, "Guardian candidate content pin unexpectedly changed")
     return out
 end
 
