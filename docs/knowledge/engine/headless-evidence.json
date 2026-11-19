@@ -10,21 +10,24 @@
       "result": "Scoped native PASS",
       "run_url": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44558486270",
       "description": "Guardian Barkskin plus natural Rage, unlock and fallback fixtures passed before red all-role step",
-      "unverified": "high-Rage positive Maul and in-game mitigation"
+      "unverified": "high-Rage positive Maul and in-game mitigation",
+      "apl_sha256": "da358b7c04b47732966c47a91b7f6f5d32410f9077aabe2aac39252139a47b76"
     },
     "Hunter_BeastMastery": {
       "revision": "v1.2",
       "result": "Scoped native PASS",
       "run_url": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44558486270",
       "description": "BM pet first-icon and ranged/Hawk/fallback progression passed before red all-role step",
-      "unverified": "accepted Call/Revive pet arrival and post-cast state transitions"
+      "unverified": "accepted Call/Revive pet arrival and post-cast state transitions",
+      "apl_sha256": "6abe7e0ff17ff3bfadf9dd8fe234399457127c3535272447b355120f2f5325cd"
     },
     "Druid_Feral": {
       "revision": "v1.2",
       "result": "Scoped native PASS",
       "run_url": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44574486358",
       "description": "3/3 source-native checks, 24 accepted actions/0 refused per Defensives setting on unselected Draft",
-      "unverified": "Barkskin mitigation and full 1-60/2+ targets"
+      "unverified": "Barkskin mitigation and full 1-60/2+ targets",
+      "apl_sha256": "52568f2d069699c5b453aaa98515c3c2096594f4b790ba0e8591c417bcdb95c9"
     }
   }
 }

@@ -97,6 +97,14 @@ class ObservabilityTests(unittest.TestCase):
     def test_matrix_never_turns_unrun_source_into_approval(self):
         rows, flagged = audit.analyse(ROOT)
         evidence = json.loads((ROOT / audit.EVIDENCE).read_text())
+        pin = json.loads((ROOT / "docs/knowledge/engine/current-release.json").read_text())
+        audit.validate_evidence(rows, evidence, pin)
+        with self.assertRaises(ValueError):
+            audit.validate_evidence(rows, {**evidence, "source_release": "v0.11.0"}, pin)
+        bad = copy.deepcopy(evidence)
+        bad["role_scopes"]["Druid_Guardian"]["apl_sha256"] = "0" * 64
+        with self.assertRaises(ValueError):
+            audit.validate_evidence(rows, bad, pin)
         result = audit.report(rows, flagged, evidence, [])
         self.assertIn("Druid_Guardian", result)
         self.assertIn("Hunter_BeastMastery", result)

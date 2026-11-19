@@ -162,6 +162,24 @@ def compare_baseline(flagged: list[dict], baseline: dict) -> list[str]:
     return problems
 
 
+def validate_evidence(rows: list[dict], evidence: dict, current_pin: dict) -> None:
+    if evidence.get("schema_version") != 1:
+        raise ValueError("unknown headless-evidence schema")
+    if (evidence.get("source_release") != current_pin.get("release_tag")
+            or evidence.get("upstream_sha") != current_pin.get("release_commit")):
+        raise ValueError("headless evidence release pin is stale versus current-release.json")
+    index = {(row["role"], row["revision"]): row for row in rows}
+    for role, proof in evidence["role_scopes"].items():
+        item = index.get((role, proof["revision"]))
+        if item is None or item["sha256"] != proof.get("apl_sha256"):
+            raise ValueError("headless run cites unknown/changed APL revision: " + role)
+        if proof.get("result") != "Scoped native PASS":
+            raise ValueError("unrecognised evidence status for " + role)
+        if not proof.get("run_url", "").startswith(
+                "https://github.com/tkbiccay/APLForever-Open/actions/runs/"):
+            raise ValueError("role evidence must link to a public executed run: " + role)
+
+
 def report(rows: list[dict], flagged: list[dict], evidence: dict,
            problems: list[str]) -> str:
     per_role: dict[str, list[dict]] = collections.defaultdict(list)
@@ -228,6 +246,8 @@ def main() -> int:
     rows, flagged = analyse(ROOT)
     baseline = json.loads((ROOT / BASELINE).read_text(encoding="utf-8"))
     evidence = json.loads((ROOT / EVIDENCE).read_text(encoding="utf-8"))
+    current_pin = json.loads((ROOT / "docs/knowledge/engine/current-release.json").read_text(encoding="utf-8"))
+    validate_evidence(rows, evidence, current_pin)
     issues = compare_baseline(flagged, baseline)
     content = report(rows, flagged, evidence, issues)
     if args.report:
