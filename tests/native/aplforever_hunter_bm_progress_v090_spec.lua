@@ -31,6 +31,7 @@ local profiles = {
     { name = "shipped" },
     { name = "archived-v1.0", path = "roles/Hunter/Archive/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt" },
     { name = "draft-v1.1", path = draft().apl_file },
+    { name = "candidate-v1.2", path = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt" },
 }
 
 local function install(H, profile)
@@ -305,7 +306,37 @@ local function sourceDeadZone(profile)
     H.Hekili.DB.profile.toggles.defensives.value = false
     H.Hekili.DB.profile.toggles.movement.value = false
 
-    local run = loop.run(L, 30417, { duration = 22 }, { { H = H } })
+    -- The source Belief registers a modelled two-slot 18s Hawk guardian,
+    -- not a directly observed pet. Verify the installed candidate uses
+    -- that actual model without accepting a cast while both slots are up.
+    local checkGuardians = profile.name == "candidate-v1.2" or profile.testOnlySixYardHawk
+    local pet = checkGuardians and H.Hekili.Class.pets.hawk or nil
+    if checkGuardians then
+        assert.is_not_nil(pet, "released pet model missing")
+        assert.are.equal(2, pet.cap, "v0.9.0 registered Hawk cap changed")
+        assert.is_true(type(pet.slot) == "number" and pet.slot >= 6)
+    end
+    local maxGuardians, hawkPresses = 0, {}
+    local run = loop.run(L, 30417, {
+        duration = 22,
+        on = function(r, _, t)
+            if not checkGuardians or r.combat <= 0 then return end
+            local live = 0
+            for slot = pet.slot, pet.slot + pet.cap - 1 do
+                local key, _, duration, expires = H.ns.VirtualState.Guardian(slot)
+                assert.are.equal("hawk", key)
+                if duration > 0 and expires > H.ctl.now then
+                    live = live + 1
+                end
+            end
+            if live > maxGuardians then maxGuardians = live end
+            if r.pressed[r.combat] == "summon_hawk" then
+                hawkPresses[#hawkPresses + 1] = { t = t, modelled_live_before_feed = live }
+                assert.is_true(live < 2,
+                    "accepted Hawk while TWO source-modelled guardians already active")
+            end
+        end,
+    }, { { H = H } })
     local pressed = run.pressedBy or {}
     local outOfBand = {
         "arcane_shot", "aimed_shot", "serpent_sting", "multi_shot",
@@ -319,6 +350,7 @@ local function sourceDeadZone(profile)
         distance = run.W.distance, accepted = pressed, firstThree = firstThree,
         rawRefused = run.refused, worldEvents = #run.W.truth,
         errors = run.errors, raises = run.raises,
+        hawkPresses = hawkPresses, maxModelledGuardians = maxGuardians,
     }, ""))
 
     assert.are.equal(6, run.W.distance,
@@ -345,9 +377,11 @@ local function sourceDeadZone(profile)
         assert.are.same({}, run.refused,
             "custom six-yard range/facing/resource refusal: FAIL")
     end
-    if profile.testOnlySixYardHawk then
+    if checkGuardians then
         assert.is_true((pressed.summon_hawk or 0) >= 1,
-            "test-only independently ranged Hawk was never source-accepted")
+            "verified-range Hawk was never source-accepted")
+        assert.is_true(#hawkPresses >= 1 and maxGuardians == 2,
+            "source guardian Belief must actually reach two tracked hawks")
     end
     for _, key in ipairs(outOfBand) do
         assert.are.equal(0, pressed[key] or 0,

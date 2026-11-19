@@ -127,14 +127,21 @@ def _lifecycle_folder(role: dict[str, Any], revision: dict[str, Any]) -> str:
     """The selected testing profile is Current, not necessarily Approved."""
     selected = role.get("preferred_apl")
     if selected is None:
-        latest = role.get("latest_revision")
-        selected = next(
-            (item.get("apl_file") for item in role.get("revisions", [])
-             if item.get("revision") == latest),
-            None,
-        )
+        # latest_revision is provenance, NOT an implicit Current promotion.
+        # Without an explicit preferred APL, the sole file physically under
+        # Current is the source-native test reference. A newer Draft under
+        # Candidates must never become Current just by incrementing the
+        # revision number (Hunter BM v1.2 protective regression).
+        current = [
+            item.get("apl_file") for item in role.get("revisions", [])
+            if isinstance(item, dict)
+            and "Current" in Path(str(item.get("apl_file", ""))).parts
+        ]
+        selected = current[0] if len(current) == 1 else None
     if revision.get("apl_file") == selected:
         return "Current"
+    if "Candidates" in Path(str(revision.get("apl_file", ""))).parts:
+        return "Candidates"
     if (revision.get("apl_file") == role.get("last_working_apl")
             or revision.get("status") in {"ReportedWorking", "Approved"}):
         return "Checkpoints"

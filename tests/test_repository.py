@@ -59,6 +59,20 @@ class RepositoryValidationTests(unittest.TestCase):
         ))
         self.assertEqual(self.errors(), [])
 
+    def test_unselected_newer_hunter_candidate_keeps_current_lifecycle(self) -> None:
+        # Regression: latest_revision must be a history/version pointer,
+        # NEVER a hidden approval or implicit Current selector.
+        import copy
+        data = json.loads((ROOT / "catalogue" / "roles.json").read_text(encoding="utf-8-sig"))
+        hunter = copy.deepcopy(next(r for r in data["roles"] if r["apl_name"] == "Hunter_BeastMastery"))
+        current = next(item for item in hunter["revisions"] if "/Current/" in item["apl_file"])
+        candidate = next(item for item in hunter["revisions"] if "/Candidates/" in item["apl_file"])
+        self.assertIsNone(hunter["preferred_apl"])
+        self.assertEqual("v1.2", hunter["latest_revision"])
+        self.assertEqual("Current", validator._lifecycle_folder(hunter, current))
+        self.assertEqual("Candidates", validator._lifecycle_folder(hunter, candidate))
+        self.assertEqual("Archive", validator._lifecycle_folder(hunter, hunter["revisions"][0]))
+
     def test_real_repository_enforces_class_lifecycle_layout(self) -> None:
         failures, _ = validator.validate_repository(ROOT, check_git=False)
         self.assertEqual(failures, [])
