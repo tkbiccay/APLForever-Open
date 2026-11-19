@@ -1,6 +1,24 @@
-> **PUBLIC CURRENT RELEASE ADDENDUM (18 Nov 2026):** Hekili Forever officially published **v0.9.0** at 13:10 UTC, tagged `8f95f2ea0a45428554c1e938ed7357b870030514` (https://github.com/zmsl/hekili/releases/tag/v0.9.0). This public repository has **NOT YET** completed its own v0.9.0 source-native import/progression/Belief regression gate. The older v0.8.6 green results recorded below are historical private-reference evidence only, not replicated public CI. Preserve all current APL/last-working rollbacks until public source-native plus live validation. See [v0.9.0 review](v090-release-review.md).
-
 # Hekili Forever — release compatibility and capability ledger
+
+## Live published-release baseline — 19 November 2026
+
+**Critical ownership boundary:** [Hekili Forever](https://github.com/zmsl/hekili) is **external software**, not a product we own or modify. We maintain APLForever's original self-contained APLs, not the Hekili Forever addon. We must check and adapt to the **latest officially published release**. No invented features, no automatic copy of new shipped priorities and no unverified wholesale APL migration.
+
+| Distinct fact | Verified value | Meaning |
+| --- | --- | --- |
+| **Latest published Forever** | **v0.10.0** · 19 Nov 2026 14:04 UTC · `3c2cf3e32472cc807b1ba29d992fc13a273da8ee` | [Official release](https://github.com/zmsl/hekili/releases/tag/v0.10.0); source/engine contract to assess |
+| **Last fully passing bounded historical source gate** | **v0.9.0** · `8f95f2ea0a45428554c1e938ed7357b870030514` | [Native PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/44558486051); **not** proof of live gameplay or future release |
+| **v0.10.0 full release compatibility** | **Partial / Needs Retest** | [Draft PR #13](https://github.com/tkbiccay/APLForever-Open/pull/13) ran released source, P0 Guardian/Hunter focused checks passed, full 23-role compatibility **FAILED** due to old Feral health-based defensives and a phase-agnostic Arms precombat warning. No green all-role claim |
+| **Feral v1.2 v0.10.0 Candidate** | **Source-native Draft only** | [Focused native PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/44574486358), unchanged preferred Feral v1.0; positive threat/Barkskin effectiveness **not proved** |
+| **Current APL gameplay approval** | **No new Approved roles** | Reported-working Guardian and Demonology rollbacks protected; BM and Feral Candidates remain unselected |
+
+**Single current-version record:** [current-release.json](current-release.json) is the review-pinned source for a cheap [daily release monitor](../../../.github/workflows/monitor-forever-release.yml). On a newer stable release it opens **one issue only** (no changes to APLs, catalogue, compatibility state or test lane). On actual release review: resolve immutable tag/SHA, compare shipped/default plus class kit/Belief/API, run focused source-native castability/toggles/level/resource/final and **repeated-fallback** checks, then risk-based all-role validation only if warranted. Classify failures as APL versus engine/API versus fixture; preserve rollback and negative evidence. Only create new complete standalone Candidates for confirmed needed changes. Live gameplay proof and owner approval are separate. Never mark v0.10.0 fully compatible while PR #13's real failures are unresolved.
+
+**Open release blockers:** [Feral issue #14](https://github.com/tkbiccay/APLForever-Open/issues/14) — three in-combat `health.pct` defensive branches in older protected Feral Drafts; [Arms issue #15](https://github.com/tkbiccay/APLForever-Open/issues/15) — precombat health warning likely false positive because health is visible out of combat, scanner ignores phase. Do not suppress these warnings globally or replace an original APL without evidence. [Guardian high-Rage Maul experiment #3](https://github.com/tkbiccay/APLForever-Open/issues/3) remains separately blocked.
+
+## Historical release research, retained unchanged
+
+> **HISTORICAL PUBLIC RELEASE CHECKPOINT (18 Nov 2026):** Hekili Forever officially published **v0.9.0** at 13:10 UTC, tagged `8f95f2ea0a45428554c1e938ed7357b870030514` (https://github.com/zmsl/hekili/releases/tag/v0.9.0). This public repository has **NOT YET** completed its own v0.9.0 source-native import/progression/Belief regression gate. The older v0.8.6 green results recorded below are historical private-reference evidence only, not replicated public CI. Preserve all current APL/last-working rollbacks until public source-native plus live validation. See [v0.9.0 review](v090-release-review.md).
 
 **Updated:** 17 November 2026. The upstream addon `zmsl/hekili` is **externally developed**. APLForever does not control releases or modify upstream production. The goal is to keep our original custom APLs usable on the **current released version**, while benefiting from newly available abilities, condition options and better state estimates. New release ≠ automatic APL failure, rewrite or approval.
 

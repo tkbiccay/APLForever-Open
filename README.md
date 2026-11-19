@@ -32,6 +32,14 @@ Our source-pinned [class mechanics knowledge base](knowledge/README.md) records 
 
 **Every** research/testing/bugfix/CI task checks prior evidence, preserves a reproducible lesson, and transfers only what's verified for the next spec. It must never create shared APL runtime dependencies, replace the last-working rollback, or use green CI as an in-game approval.
 
+## Independent of Hekili Forever — always target its latest release
+
+[Hekili Forever](https://github.com/zmsl/hekili) is **someone else's addon**; we do not control its development, engine, patches or release schedule. We control only the research, source-native tests and **our own independently authored, complete APL files** in this repository. Whenever upstream publishes a new version, our job is to reassess compatibility, fix source-confirmed APL faults in **new standalone Draft Candidates**, and keep every reported-working rollback until genuinely better gameplay is demonstrated. An unchanged APL that still works does not need a rewrite.
+
+Our [current published release and compatibility status](docs/knowledge/engine/current-release.json) is source-pinned in the [release ledger](docs/knowledge/engine/RELEASE_LEDGER.md). A [lightweight daily GitHub Action](.github/workflows/monitor-forever-release.yml) checks for newer **published** Forever versions and opens a single review issue if needed; it never edits APLs, triggers expensive simulations, adopts an upstream default, or marks a role Approved. Latest published, bounded headless-tested and in-game validated are **different** facts.
+
+**19 November 2026:** upstream **v0.10.0** is published. Its full 23-role compatibility remains **Partial / Needs Retest**, with [Draft PR #13](https://github.com/tkbiccay/APLForever-Open/pull/13) blocked by documented inherited Feral in-combat health conditions and an Arms precombat warning. The newly published [Feral v1.2 Candidate](roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt) passed narrow native tests but remains **unselected**. Guardian and Hunter BM stay our co-equal P0 priorities.
+
 ## Mission
 
 Develop one complete, independently importable and reliably castable APL for each supported Hekili Forever class/spec/role. Cover levelling 1–60 and appropriate PvE situations without inventing combat state the addon cannot observe.
