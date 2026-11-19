@@ -63,6 +63,10 @@ See our [project priorities](docs/PROJECT_PRIORITIES.md) and [AI-first working m
 
 **Workflow:** make a short-lived review/CI branch → check hashes, import and relevant source-native tests → merge safe work (including **unselected Draft Candidates**) into protected `main` → [automatic safe cleanup of merged branches](.github/workflows/safe-merged-branch-cleanup.yml). Promoting a Candidate into `Current` or `Approved` is an entirely separate, explicit evidence-backed action. Never do routine development on historical merged branches.
 
+## Headless-first evidence, without pretend approvals
+
+The [static observability audit and per-role evidence matrix](docs/HEADLESS_VALIDATION.md) runs on every PR as part of public repository validation, covering **all 34 protected APL revisions**. It fails new secret/fixed-state APL conditions while keeping exact known historical issues visible (not silently accepted). The matrix is generated from the catalogue and dated native-test evidence; see the `per-role-headless-evidence` artifact and job summary in [Validate public repository](https://github.com/tkbiccay/APLForever-Open/actions/workflows/validate.yml). The underlying **source-native** tests still determine castability and repeated-fallback safety; a static clean scan does not prove either. Guardian and Hunter BM remain equal first priorities.
+
 ## Development and approval
 
 - **Current** means the selected test/import revision, **not automatically Approved**.
