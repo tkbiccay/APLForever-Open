@@ -27,6 +27,19 @@ local function contentFor(entry)
     if entry.class == "Warrior" and entry.spec == "Arms" then
         return byClass
     end
+    -- Exact published v0.9.0 retired BM/MM weave worlds and ships only
+    -- BeastMasteryTurret / MarksmanshipTurret. Older pinned v0.8.x
+    -- workflows must retain their original BeastMastery / Marksmanship
+    -- fixtures, not silently compare unlike reference builds.
+    if entry.class == "Hunter"
+        and (entry.spec == "BeastMastery" or entry.spec == "Marksmanship") then
+        if os.getenv("APLFOREVER_SOURCE_RELEASE") == "v0.9.0" then
+            return assert(byClass[entry.spec .. "Turret"],
+                "v0.9.0 source lacks retired Hunter replacement world for " .. entry.apl_name)
+        end
+        return assert(byClass[entry.spec],
+            "legacy source lacks Hunter world for " .. entry.apl_name)
+    end
     return assert(byClass[entry.spec], "no source fixture for " .. entry.apl_name)
 end
 

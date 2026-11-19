@@ -1,0 +1,144 @@
+name: Hekili Forever v0.9.0 source-native compatibility
+
+# Canonical PUBLIC v0.9.0 pinned-source gate; no private CI dependency.
+# Run on APL/native source changes, not unrelated documentation.
+# A native pass is not in-game Approved or numerical DPS evidence.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/native-v090-compat.yml"
+      - "catalogue/**"
+      - "roles/**"
+      - "tests/native/**"
+      - "scripts/build_native_manifest.py"
+      - "scripts/wiki_release_diff.py"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-v090-compat-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-native-v090:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      APLFOREVER_SOURCE_RELEASE: v0.9.0
+    steps:
+      - name: Check out exact APLForever PR branch
+        uses: actions/checkout@v4
+        with:
+          path: aplforever
+          persist-credentials: false
+
+      - name: Check out exact published Hekili Forever v0.9.0 source
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 8f95f2ea0a45428554c1e938ed7357b870030514
+          path: upstream/hekili
+          persist-credentials: false
+
+      - name: Verify exact source commit
+        working-directory: upstream/hekili
+        run: test "$(git rev-parse HEAD)" = "8f95f2ea0a45428554c1e938ed7357b870030514"
+
+      - name: Set up Python for released source bootstrap
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify all immutable APL hashes and manifest selection
+        working-directory: aplforever
+        run: |
+          python scripts/build_native_manifest.py --output "$RUNNER_TEMP/aplforever-native-manifest.lua" --source-release v0.9.0
+          {
+            echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/aplforever"
+            echo "APLFOREVER_NATIVE_MANIFEST=$RUNNER_TEMP/aplforever-native-manifest.lua"
+          } >> "$GITHUB_ENV"
+
+      - name: Audit v0.9.0 reserved windows list collision in existing APLs
+        working-directory: aplforever
+        run: |
+          python - <<'PY'
+          import json, pathlib, re
+          root = pathlib.Path(".")
+          data = json.loads((root / "catalogue/roles.json").read_text(encoding="utf-8-sig"))
+          rows = [(role["apl_name"], rev["revision"], rev["apl_file"])
+                  for role in data["roles"] for rev in role["revisions"]]
+          bad = [(role, rev, path) for role, rev, path in rows
+                 if re.search(r"^actions\.windows\+?=", (root / path).read_text(encoding="utf-8"), re.M)]
+          assert not bad, "legacy windows list conflicts with v0.9.0 reserved list: " + repr(bad)
+          print(f"v0.9.0 reserved-name safety: {len(rows)} immutable revisions inspected, no legacy actions.windows")
+          PY
+
+      - name: Compare official release wiki v0.8.6 against v0.9.0
+        working-directory: upstream/hekili
+        run: |
+          git fetch --no-tags --depth=1 origin refs/tags/v0.8.6:refs/tags/v0.8.6
+          python "$GITHUB_WORKSPACE/aplforever/scripts/wiki_release_diff.py" --repo . --old v0.8.6 --new HEAD | tee "$RUNNER_TEMP/wiki-v086-v090.md"
+
+      - name: Upload exact v0.9.0 wiki diff
+        uses: actions/upload-artifact@v4
+        with:
+          name: HekiliForever-WikiDiff-v086-v090
+          path: ${{ runner.temp }}/wiki-v086-v090.md
+          if-no-files-found: error
+
+      - name: Bootstrap published v0.9.0 Lua runtime
+        working-directory: upstream/hekili
+        run: make bootstrap
+
+      - name: Verify native runtime
+        working-directory: upstream/hekili
+        run: |
+          git rev-parse HEAD
+          .lua/bin/lua -v
+          .lua/bin/busted --version
+
+      - name: Focused v0.9.0 Guardian L30 negative and L31 positive source unlock
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="progresses through level 30" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="progresses through level 31" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+      - name: Verify retired Hunter BM/MM world keys before all-role source import
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_hunter_fixture_v090_spec.lua" tests/Forever/aplforever_hunter_fixture_v090_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_hunter_fixture_v090_spec.lua
+
+      - name: Import and source-advance every supported APL and protected pilot revision
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_import_spec.lua" tests/Forever/aplforever_import_spec.lua
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_progress_spec.lua" tests/Forever/aplforever_progress_spec.lua
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_warlock_lifetap_model.lua" tests/Forever/aplforever_warlock_lifetap_model.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_import_spec.lua tests/Forever/aplforever_progress_spec.lua
+
+      - name: Guardian source mitigation and high-kit safety (experimental high-Rage Maul separate)
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_barkskin_v086_spec.lua" tests/Forever/aplforever_guardian_barkskin_v086_spec.lua
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_guardian_highkit_tail_v090_spec.lua" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_barkskin_v086_spec.lua
+          .lua/bin/busted --verbose --filter="advances three real" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="records real Rage" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="progresses through level" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+          .lua/bin/busted --verbose --filter="safely follows caster" tests/Forever/aplforever_guardian_highkit_tail_v090_spec.lua
+
+      - name: Feral v1.0 Current and v1.1 Draft natural resource source gate
+        working-directory: upstream/hekili
+        run: |
+          # Historical native fixture exercised under current released source;
+          # no private Feral v1.2 production candidate is imported here.
+          cp "$GITHUB_WORKSPACE/aplforever/tests/native/aplforever_feral_dps_baseline_v085_spec.lua" tests/Forever/aplforever_feral_dps_baseline_v085_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_feral_dps_baseline_v085_spec.lua
+
+      - name: New released Feral refunds Bear resources Hunter pack changes and windows
+        working-directory: upstream/hekili
+        run: |
+          .lua/bin/busted --verbose tests/Forever/druid_spec.lua tests/Forever/loop_druid_spec.lua tests/Forever/hunter_spec.lua tests/Forever/creature_type_spec.lua tests/Forever/item_restores_spec.lua tests/Forever/windows_apl_spec.lua tests/Forever/windows_spec.lua tests/Forever/simc_options_spec.lua tests/Forever/toggle_event_spec.lua tests/Forever/recommendation_listener_spec.lua
