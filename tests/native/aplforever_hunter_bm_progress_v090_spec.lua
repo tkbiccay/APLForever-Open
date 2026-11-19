@@ -316,10 +316,10 @@ local function sourceDeadZone(profile)
         assert.are.equal(2, pet.cap, "v0.9.0 registered Hawk cap changed")
         assert.is_true(type(pet.slot) == "number" and pet.slot >= 6)
     end
-    local maxGuardians, hawkPresses = 0, {}
+    local maxGuardians, hawkPresses, tickSamples = 0, {}, {}
     local run = loop.run(L, 30417, {
         duration = 22,
-        on = function(r, _, t)
+        on = function(r, steps, t)
             if not checkGuardians or r.combat <= 0 then return end
             local live = 0
             for slot = pet.slot, pet.slot + pet.cap - 1 do
@@ -330,8 +330,19 @@ local function sourceDeadZone(profile)
                 end
             end
             if live > maxGuardians then maxGuardians = live end
-            if r.pressed[r.combat] == "summon_hawk" then
-                hawkPresses[#hawkPresses + 1] = { t = t, modelled_live_before_feed = live }
+            -- The recommendation is sampled BEFORE this tick's press.
+            -- Preserve both the accepted press and the next independently
+            -- evaluated icon; firstThree alone is not a post-cast trace.
+            local n = r.combat
+            tickSamples[n] = {
+                t = t, first = r.ours[n] or "NO_ACTION",
+                accepted = r.pressed[n], events = #r.W.truth,
+                live = live, wait = steps[1].q.time[1],
+            }
+            if r.pressed[n] == "summon_hawk" then
+                hawkPresses[#hawkPresses + 1] = {
+                    t = t, tick = n, modelled_live_before_feed = live,
+                }
                 assert.is_true(live < 2,
                     "accepted Hawk while TWO source-modelled guardians already active")
             end
@@ -346,11 +357,36 @@ local function sourceDeadZone(profile)
     for i = 1, math.min(3, run.combat) do
         firstThree[#firstThree + 1] = run.ours[i] or "NO_ACTION"
     end
+    -- NEW: real acceptance -> subsequent source tick -> fresh recommendation.
+    -- Unlike three early UI samples, these rows can only exist following a
+    -- source-accepted Hawk press. Do not assume different icons: casting a
+    -- second Hawk is legitimate while the modelled two-slot cap permits it.
+    local postAcceptedHawk = {}
+    if checkGuardians then
+        for _, accepted in ipairs(hawkPresses) do
+            local before = assert(tickSamples[accepted.tick], "missing accepted Hawk tick")
+            local after = assert(tickSamples[accepted.tick + 1],
+                "accepted Hawk had no subsequent recommendation update")
+            assert.are.equal("summon_hawk", before.accepted)
+            assert.are.equal("summon_hawk", before.first)
+            assert.is_true(after.t > before.t and after.events >= before.events,
+                "post-cast sample did not advance actual source time/events")
+            assert.is_false(after.live >= pet.cap and after.first == "summon_hawk"
+                and (after.wait or 0) <= 0.05,
+                "immediately ready Hawk suggested despite full modelled guardian cap")
+            postAcceptedHawk[#postAcceptedHawk + 1] = {
+                accepted_at = before.t, next_at = after.t,
+                next_icon = after.first, next_wait = after.wait,
+                modelled_hawks = after.live, events_after = after.events,
+            }
+        end
+    end
     print("BM_V090_SIX_YARD " .. profile.name .. " " .. pretty.write({
         distance = run.W.distance, accepted = pressed, firstThree = firstThree,
         rawRefused = run.refused, worldEvents = #run.W.truth,
         errors = run.errors, raises = run.raises,
         hawkPresses = hawkPresses, maxModelledGuardians = maxGuardians,
+        postAcceptedHawk = postAcceptedHawk,
     }, ""))
 
     assert.are.equal(6, run.W.distance,
@@ -382,6 +418,12 @@ local function sourceDeadZone(profile)
             "verified-range Hawk was never source-accepted")
         assert.is_true(#hawkPresses >= 1 and maxGuardians == 2,
             "source guardian Belief must actually reach two tracked hawks")
+        assert.are.equal(#hawkPresses, #postAcceptedHawk,
+            "each accepted Hawk needs a distinct subsequent source recommendation")
+        if profile.name == "candidate-v1.2" then
+            assert.is_true(#postAcceptedHawk >= 3,
+                "v1.2 needs three accepted Hawk -> next-state recommendation transitions")
+        end
     end
     for _, key in ipairs(outOfBand) do
         assert.are.equal(0, pressed[key] or 0,
