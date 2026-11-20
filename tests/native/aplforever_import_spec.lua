@@ -123,7 +123,9 @@ local function importAndEvaluate(entry, H, content)
         failures[#failures + 1] = string.format("%s %s native script compilation: %s",
             entry.apl_name, entry.apl_file, table.concat(H.errors, "; "))
     end
-    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+    -- The display is subscribed ONCE per headless role below. In v0.9.0,
+    -- Engine.Subscribe has four external slots per display; requesting one
+    -- per APL revision leaks listeners and falsely fails a fifth revision.
 
     H.ctl.inRange.target, H.ctl.level.target = true, 60
     H.Fire("PLAYER_TARGET_CHANGED")
@@ -165,6 +167,12 @@ local function verifyNativeRole(aplName)
     local H = headless.new({ character = character, pack = content.PACK })
     assert.are.same({}, H.loadErrors, aplName .. ": headless Hekili did not initialize")
     assert.are.same({}, H.Hekili.Class.loadErrors or {}, aplName .. ": Hekili class kit did not load")
+    -- This single subscriber remains active for all immutable revisions
+    -- imported into this role's one source engine. Each different role
+    -- receives its own isolated headless engine and subscriber.
+    local primarySubscriber = function() end
+    assert.is_true(H.Hekili.Engine.Subscribe("Primary", primarySubscriber),
+        aplName .. ": real released engine could not subscribe Primary")
     for _, revision in ipairs(rows) do
         local ok, err = pcall(importAndEvaluate, revision, H, content)
         if not ok then
