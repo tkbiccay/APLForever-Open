@@ -8,6 +8,7 @@ on:
     paths:
       - ".github/workflows/guardian-rolefree-roar-v010-experiment.yml"
       - "experiments/native/aplforever_guardian_rolefree_roar_v010_spec.lua"
+      - "experiments/native/aplforever_guardian_aggro_gate_v010_spec.lua"
 permissions:
   contents: read
 concurrency:
@@ -44,3 +45,8 @@ jobs:
         run: |
           cp "$GITHUB_WORKSPACE/aplforever/experiments/native/aplforever_guardian_rolefree_roar_v010_spec.lua" tests/Forever/aplforever_guardian_rolefree_roar_v010_spec.lua
           .lua/bin/busted --verbose tests/Forever/aplforever_guardian_rolefree_roar_v010_spec.lua
+      - name: Compare reported group threat with both client pseudo-specialisation roles
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/experiments/native/aplforever_guardian_aggro_gate_v010_spec.lua" tests/Forever/aplforever_guardian_aggro_gate_v010_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_aggro_gate_v010_spec.lua
