@@ -1,0 +1,5 @@
+# Limitations — Guardian v1.5
+
+**Unselected source-native Draft, not Approved.** The client-reported `UnitThreatSituation("player")>1` / `aggro` can be hidden or false in dungeons/raids; a conservative gate then may miss Roar. A group member without reported aggro will not spend Roar even if the debuff could benefit the party. The source-world role/threat values are deliberately controlled at client initialization; not a real player or dungeon combat log. The engine's boss, group, target range and Rage Belief are imperfect. No claim of improved survival, threat or DPS from source-accepted counts.
+
+Critical test gaps: level 1–60 unlocks and cost bounds, default vs user reported-working real gameplay, actual in-game role and threat read, three following real recommendations, repeat after accepted Roar, Barkskin threat/Defensives off-switch safety, high-Rage Maul positive and any hidden range/facing. Last-working v1.0 is **Reported Working / Needs Retest**, not Approved; preserve it and every earlier candidate exactly. Do not merge/reselect v1.5 on source-only proof.

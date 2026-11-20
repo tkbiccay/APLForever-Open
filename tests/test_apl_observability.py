@@ -13,9 +13,9 @@ import audit_apl_observability as audit
 
 
 class ObservabilityTests(unittest.TestCase):
-    def test_exact_catalogue_35_revisions_and_historical_debt(self):
+    def test_exact_catalogue_38_revisions_and_historical_debt(self):
         all_rows, flagged = audit.analyse(ROOT)
-        self.assertEqual(35, len(all_rows))
+        self.assertEqual(38, len(all_rows))
         self.assertEqual(4, len(flagged))
         self.assertEqual(18, sum(len(x["findings"]) for x in flagged))
         self.assertEqual(
@@ -26,7 +26,7 @@ class ObservabilityTests(unittest.TestCase):
         self.assertEqual([], audit.compare_baseline(flagged, baseline))
         p0 = [x for x in all_rows if x["role"] in
               {"Druid_Guardian", "Hunter_BeastMastery"}]
-        self.assertEqual(6, len(p0))
+        self.assertEqual(9, len(p0))
         self.assertTrue(all(not x["findings"] for x in p0))
 
     def test_combat_hidden_health_through_nested_action_calls(self):
@@ -105,11 +105,25 @@ class ObservabilityTests(unittest.TestCase):
         bad["role_scopes"]["Druid_Guardian"]["apl_sha256"] = "0" * 64
         with self.assertRaises(ValueError):
             audit.validate_evidence(rows, bad, pin)
-        result = audit.report(rows, flagged, evidence, [])
+        result = audit.report(rows, flagged, evidence, [], pin)
         self.assertIn("Druid_Guardian", result)
         self.assertIn("Hunter_BeastMastery", result)
         self.assertIn("Warlock_Demonology", result)
-        self.assertIn("Not individually established on v0.10.0", result)
+        self.assertIn("Not individually established on " + pin["release_tag"], result)
+        if pin["release_tag"] != evidence["source_release"]:
+            self.assertIn("Historical " + evidence["source_release"] +
+                          " Scoped native PASS only", result)
+            self.assertIn("full all-role release compatibility: Not established", result)
+            self.assertNotIn("full all-role release compatibility: Scoped native PASS", result)
+        bad_pin = copy.deepcopy(pin)
+        bad_pin["historical_evidence_pins"] = []
+        if pin["release_tag"] != evidence["source_release"]:
+            with self.assertRaises(ValueError):
+                audit.validate_evidence(rows, evidence, bad_pin)
+        forged = copy.deepcopy(evidence)
+        forged["upstream_sha"] = "0" * 40
+        with self.assertRaises(ValueError):
+            audit.validate_evidence(rows, forged, pin)
         self.assertIn("Partial / Blocked", result)
         self.assertIn("not proven", result.lower())
 

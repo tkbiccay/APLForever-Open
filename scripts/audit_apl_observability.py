@@ -165,9 +165,17 @@ def compare_baseline(flagged: list[dict], baseline: dict) -> list[str]:
 def validate_evidence(rows: list[dict], evidence: dict, current_pin: dict) -> None:
     if evidence.get("schema_version") != 1:
         raise ValueError("unknown headless-evidence schema")
-    if (evidence.get("source_release") != current_pin.get("release_tag")
-            or evidence.get("upstream_sha") != current_pin.get("release_commit")):
-        raise ValueError("headless evidence release pin is stale versus current-release.json")
+    source = (evidence.get("source_release"), evidence.get("upstream_sha"))
+    current = (current_pin.get("release_tag"), current_pin.get("release_commit"))
+    if source != current:
+        # Source-native runs do not become newer-release evidence on an upstream
+        # version bump. Explicit historical pins allow retention, not promotion.
+        historical = current_pin.get("historical_evidence_pins", [])
+        if (source[0] == current[0] or not isinstance(historical, list)
+                or not any(isinstance(p, dict)
+                           and source == (p.get("release_tag"), p.get("release_commit"))
+                           for p in historical)):
+            raise ValueError("unrecognised source-native evidence pin (current or historical)")
     index = {(row["role"], row["revision"]): row for row in rows}
     for role, proof in evidence["role_scopes"].items():
         item = index.get((role, proof["revision"]))
@@ -181,11 +189,17 @@ def validate_evidence(rows: list[dict], evidence: dict, current_pin: dict) -> No
 
 
 def report(rows: list[dict], flagged: list[dict], evidence: dict,
-           problems: list[str]) -> str:
+           problems: list[str], current_pin: dict) -> str:
     per_role: dict[str, list[dict]] = collections.defaultdict(list)
     for row in rows:
         per_role[row["role"]].append(row)
-    version, scopes = evidence["source_release"], evidence["role_scopes"]
+    version, scopes = current_pin["release_tag"], evidence["role_scopes"]
+    historical_version = evidence["source_release"]
+    is_current_proof = version == historical_version
+    release_status = (evidence["full_release_status"] + " (" + evidence["full_release_run"] + ")"
+                      if is_current_proof else
+                      "Not established; historical " + historical_version + " " +
+                      evidence["full_release_status"] + " (" + evidence["full_release_run"] + ")")
     lines = [
         "# Generated headless evidence matrix",
         "",
@@ -197,7 +211,9 @@ def report(rows: list[dict], flagged: list[dict], evidence: dict,
         str(sum(len(item["findings"]) for item in flagged)) + " expression occurrences",
         f"- New/changed findings: {len(problems)} (nonzero fails CI)",
         f"- Latest published: {version}; full all-role release compatibility: " +
-        "Partial / Blocked (" + evidence["full_release_run"] + ")",
+        release_status,
+        f"- Source-native role evidence pin: {historical_version} " +
+        ("(current source)" if is_current_proof else "(historical only; not current-source proof)"),
         "",
         "| Role | Latest | Preferred | Static historical findings | Latest-release native |",
         "| --- | --- | --- | --- | --- |",
@@ -207,9 +223,14 @@ def report(rows: list[dict], flagged: list[dict], evidence: dict,
         preferred = next((x["revision"] for x in rr if x["selected"]), "none")
         issues = sum(len(x["findings"]) for x in rr)
         scope = scopes.get(name)
-        native = (scope["result"] + " (" + scope["revision"] +
-                  "; " + scope["run_url"] + ")" if scope else
-                  "Not individually established on " + version)
+        if scope and is_current_proof:
+            native = scope["result"] + " (" + scope["revision"] + "; " + scope["run_url"] + ")"
+        elif scope:
+            native = ("Historical " + historical_version + " " + scope["result"] +
+                      " only (" + scope["revision"] + "; " + scope["run_url"] +
+                      "); Not individually established on " + version)
+        else:
+            native = "Not individually established on " + version
         lines.append(f"| {name} | {latest['revision']} | {preferred} | "
                      f"{issues} known findings | {native} |")
     lines += [
@@ -249,7 +270,7 @@ def main() -> int:
     current_pin = json.loads((ROOT / "docs/knowledge/engine/current-release.json").read_text(encoding="utf-8"))
     validate_evidence(rows, evidence, current_pin)
     issues = compare_baseline(flagged, baseline)
-    content = report(rows, flagged, evidence, issues)
+    content = report(rows, flagged, evidence, issues, current_pin)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(content, encoding="utf-8")

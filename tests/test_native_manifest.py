@@ -31,17 +31,19 @@ class NativeManifestTests(unittest.TestCase):
         self.assertEqual(len(names), 23)
         self.assertEqual(verified, self.expected_protected_revision_count())
         self.assertEqual(
-            [entry["apl_name"] for entry in entries[:6]],
+            [entry["apl_name"] for entry in entries[:8]],
             [
                 "Warrior_Protection", "Druid_Guardian", "Druid_Guardian",
-                "Druid_Guardian", "Warlock_Demonology", "Warlock_Demonology",
+                "Druid_Guardian", "Druid_Guardian", "Druid_Guardian", "Warlock_Demonology", "Warlock_Demonology",
             ],
         )
-        self.assertTrue(all(entry["pilot"] for entry in entries[:6]))
+        self.assertTrue(all(entry["pilot"] for entry in entries[:8]))
         self.assertEqual(entries[0]["revision"], "v1.0")
         self.assertEqual(entries[1]["revision"], "v1.0")
         self.assertEqual(entries[2]["revision"], "v1.1")
         self.assertEqual(entries[3]["revision"], "v1.2")
+        self.assertEqual(entries[4]["revision"], "v1.3")
+        self.assertEqual(entries[5]["revision"], "v1.4")
         ret = [entry for entry in entries if entry["apl_name"] == "Paladin_Retribution"]
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0]["revision"], "v1.2")
