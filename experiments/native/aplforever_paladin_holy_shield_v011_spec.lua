@@ -17,10 +17,13 @@ local at = assert(original:find(prior,1,true))
 assert.is_nil(original:find(prior,at+#prior,true))
 assert.are.equal(original:sub(1,at-1)..guard..original:sub(at+#prior),candidate,
     "new full candidate differs outside one verified Holy Shield line")
-local function run(profile, threat, group, seconds, defend)
+local function run(profile, threat, group, seconds, defend, lowMana)
     local content = setmetatable({
         WORLD = setmetatable({distance=4,attackers=group and 2 or 1,
-            mobHealth=1e9,targetLevel=60},{__index=stock.WORLD}),
+            mobHealth=1e9,targetLevel=60,
+            power=lowMana and stock.WORLD.max*0.55 or stock.WORLD.power,
+            mobPeriod=lowMana and 2.0 or stock.WORLD.mobPeriod,
+        },{__index=stock.WORLD}),
     },{__index=stock})
     local saved = fake.new
     fake.new = function(...)
@@ -56,7 +59,26 @@ local function run(profile, threat, group, seconds, defend)
     H.Hekili.DB.profile.toggles.cooldowns.value=false
     H.Hekili.DB.profile.toggles.defensives.value=defend
     H.Hekili.DB.profile.toggles.movement.value=false
-    local rr=loop.run(L,30417,{duration=seconds},{{H=H}})
+    local low = {first=nil, samples=0, accepted=0}
+    local cursor=0
+    local rr=loop.run(L,30417,{
+        duration=seconds,
+        on=function(r,_,t)
+            if not lowMana or r.combat<=0 then return end
+            local fresh=false
+            for i=cursor+1,#r.W.truth do
+                local ev=r.W.truth[i]
+                if ev.kind=="swing" and ev.src and ev.src.kind=="mob"
+                    and ev.dst and ev.dst.guid==r.us.guid then fresh=true end
+            end
+            cursor=#r.W.truth
+            if r.us.power<=r.us.powerMax*0.25 then
+                low.first=low.first or t
+                if r.pressed[r.combat] then low.accepted=low.accepted+1 end
+                if fresh and low.samples<3 then low.samples=low.samples+1 end
+            end
+        end
+    },{{H=H}})
     local n=(rr.pressedBy or {}).holy_shield or 0
     local auraID=H.Hekili.Class.auras.holy_shield.id
     local aura=0
@@ -87,6 +109,12 @@ local function run(profile, threat, group, seconds, defend)
     assert.are.equal(0,rr.errors)
     assert.are.equal(0,rr.raises)
     assert.are.same({},rr.refused)
+    if lowMana then
+        print(("PROT_LOW_MANA_V011 profile=%s first=%s swing_samples=%d accepted_after_low=%d end_mana=%.1f"):format(
+            profile,tostring(low.first),low.samples,low.accepted,rr.us.power))
+        assert.is_truthy(low.first,"natural 55% start never reached <=25% mana")
+        assert.are.equal(3,low.samples,"no three true enemy swing checkpoints at <=25% mana")
+    end
     if n>0 then
         assert.is_true(aura>=1,"no source-true Holy Shield aura")
         assert.are.equal(3,post,"missing three subsequent actual accepted actions")
@@ -112,4 +140,12 @@ describe("Protection Paladin routine Holy Shield v0.11.0",function()
     it("short solo mob: avoids early shield",function()
         assert.are.equal(0,run("v1.1",true,false,8,false))
     end)
+    it("long solo with actual threat can sustain shield after ten seconds",function()
+        assert.is_true(run("v1.1",true,false,23,false)>=1)
+    end)
+    for _,profile in ipairs({"shipped","v1.0","v1.1"}) do
+        it(profile.." real low-mana 95s with three true enemy swing checkpoints",function()
+            run(profile,true,true,95,false,true)
+        end)
+    end
 end)
