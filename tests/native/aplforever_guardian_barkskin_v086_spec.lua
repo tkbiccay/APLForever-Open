@@ -37,10 +37,17 @@ local function profiles()
             out[#out + 1] = { name = e.revision, entry = e }
         end
     end
-    assert.are.equal(7, #out, "expected shipped + Guardian v1.0 through v1.5")
+    -- The published v0.9.0 manifest correctly EXCLUDES v1.5 because
+    -- catalogue.min_source_release=v0.10.0. Do not load a future APL in a
+    -- historical source harness merely to satisfy a hardcoded count.
+    local release = os.getenv("APLFOREVER_SOURCE_RELEASE") or "v0.9.0"
+    assert.are.equal(release == "v0.10.0" and 7 or 6,#out,
+        "published-source-compatible Guardian revision count changed")
     assert.are.equal("v1.3", out[5].name)
     assert.are.equal("v1.4", out[6].name)
-    assert.are.equal("v1.5", out[7].name)
+    if release == "v0.10.0" then
+        assert.are.equal("v1.5", out[7].name)
+    end
     out[#out + 1] = { name = "v1.1-test-only-barkskin", entry = out[3].entry, experimental = true }
     assert.are.equal("v1.1", out[3].name)
     assert.are.equal("v1.2", out[4].name)
@@ -183,7 +190,7 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
     end
     for _, level in ipairs({ 43, 44 }) do
         it("test-only branch real Barkskin unlock level " .. level, function()
-            examine(p[8], level, true)
+            examine(p[#p], level, true)
         end)
     end
     it("v1.3 OFF toggle with explicit Roar setting ON accepts upkeep while v1.2 stays OFF", function()
@@ -224,18 +231,20 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
             assert.are.equal(0, result.barkskin)
         end)
     end
-    it("v1.5 remains standalone and no checkbox-gated Roar on fake client without aggro", function()
-        local src = importedSource(p[7].entry)
-        assert.is_nil(src:find("settings.maintain_demoralizing_roar", 1, true))
-        assert.is_truthy(src:find("aggro&((group&time>=5)", 1, true))
-        assert.is_nil(src:find("group&tanking", 1, true))
-        local value = examine(p[7],60,false,false)
-        assert.are.equal(0,value.roar, "must not Roar with absent client aggro")
-        assert.are.equal(0,value.barkskin, "Defensives OFF")
-    end)
+    if os.getenv("APLFOREVER_SOURCE_RELEASE") == "v0.10.0" then
+        it("v1.5 remains standalone and no checkbox-gated Roar on fake client without aggro", function()
+            local src = importedSource(p[7].entry)
+            assert.is_nil(src:find("settings.maintain_demoralizing_roar", 1, true))
+            assert.is_truthy(src:find("aggro&((group&time>=5)", 1, true))
+            assert.is_nil(src:find("group&tanking", 1, true))
+            local value = examine(p[7],60,false,false)
+            assert.are.equal(0,value.roar, "must not Roar with absent client aggro")
+            assert.are.equal(0,value.barkskin, "Defensives OFF")
+        end)
+    end
     it("exact v1.2 standalone matches the in-memory v1.1+branch action counts", function()
         local actual = examine(p[4], 60, true)
-        local proposed = examine(p[8], 60, true)
+        local proposed = examine(p[#p], 60, true)
         assert.are.same(proposed, actual)
     end)
 end)
