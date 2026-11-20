@@ -135,4 +135,8 @@ Both findings are pinned source-world evidence, **not live DPS/survival/gameplay
 
 ## PET-011 — unobservable pet-health threshold (v0.11.0 source)
 
+**Static prevention:** `scripts/audit_apl_observability.py` now flags `pet.health.pct`, `pet.health.current`, `pet.health.max` and related `pet.health` expressions in all phases; the source-backed distinction remains pet *existence/death* versus **unobservable HP**. No old APL bytes or baselines are silently rewritten. Tests require new unsafe usage to fail the baseline gate.
+
+
+
 **Confirmed source, not in-game:** [Player.lua](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili/Game/State/Families/Player.lua) `VS.Health(unit, now)` returns default full-health belief for units other than the player and target, **including pet**; [Pets.lua](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili/Game/State/Families/Pets.lua) observes pet existence/death/power, not pet health. Hunter's [Mend Pet](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili_Hunter/Hunter.lua) is a 5-second Mana-consuming channel. **Do not add an unobservable `pet.health.pct` healing guard** to a standalone APL and claim automated triage, or substitute blind periodic healing; such logic can be unreachable or wasteful. Main-pet `pet_out` and temporary `pet.hawk.count` are different states, neither health. BM v1.1/v1.2 APLs stay exact; manual Mend Pet = Engine Limitation, not a routine checkbox. Transfer the **source-state audit and negative-test method** to Hunter Marksmanship/Survival or other pet-dependent roles only after checking their own source/engine expression; **no shared runtime APL code or cross-spec assumed spell**. Actual Call/Revive Pet cast and arrival still need in-game proof.
