@@ -26,11 +26,22 @@ local after = "&combat>0&aggro&target.within5&(group|active_enemies>=2)&!buff.ba
 
 local function profile(which)
     if which == "feral-v1.2" then return source end
-    assert.is_true(which == "aggro-hypothesis" or which == "aggro-linecd-hypothesis",
+    assert.is_true(which == "aggro-hypothesis" or which == "aggro-linecd-hypothesis"
+        or which == "aggro-gcd-hypothesis",
         "unregistered in-memory Feral experiment")
     local start = assert(source:find(before, 1, true), "Feral v1.2 Barkskin anchor changed")
     assert.is_nil(source:find(before, start + #before, true), "ambiguous substitution")
     local altered = source:sub(1, start - 1) .. after .. source:sub(start + #before)
+    if which == "aggro-gcd-hypothesis" then
+        -- Explicit *now* GCD guard from the published expression reference.
+        -- If the source engine still forecasts through it, this proposal
+        -- FAILS. Do not use use_off_gcd=1 to bypass a real spell GCD.
+        local anchor = "&!buff.barkskin.up"
+        local at = assert(altered:find(anchor, 1, true))
+        assert.is_nil(altered:find(anchor, at + #anchor, 1))
+        altered = altered:sub(1, at + #anchor - 1)
+            .. "&gcd.remains<=0" .. altered:sub(at + #anchor)
+    end
     if which == "aggro-linecd-hypothesis" then
         -- Released Forever APL line_cd is an after-CAST line refractory,
         -- not a fake cooldown, hidden-health approximation or new checkbox.
@@ -132,7 +143,8 @@ local function scenario(name, threat, defensives, group)
     }, ""))
     assert.are.equal(0, run.raises)
     assert.are.equal(0, run.errors)
-    if name == "aggro-hypothesis" and threat and defensives and group then
+    if (name == "aggro-hypothesis" or name == "aggro-linecd-hypothesis")
+        and threat and defensives and group then
         -- The first trace was a LOSING design: after its real accepted
         -- Barkskin, the source suggested it once again during GCD.
         -- Preserve this exact red comparator; never classify it as safe.
@@ -178,20 +190,26 @@ describe("Feral DPS controlled source-native aggro and Barkskin v0.10.0", functi
             "rejected aggro-only hypothesis's historical outcome changed")
         -- Scenario also asserts exactly one GCD refusal, explicitly REJECT.
     end)
-    it("line_cd=2 must avoid duplicate action after ONE accepted Barkskin", function()
+    it("line_cd=2 records a known unsafe GCD refusal (not a fix)", function()
         local alternative = scenario("aggro-linecd-hypothesis", true, true, true)
+        assert.are.equal(1, alternative.cast)
+        assert.are.equal(1, alternative.aura)
+        -- The scenario explicitly expects { gcd = 1 }, so no one can
+        -- call line_cd safe just because the diagnostic test is green.
+    end)
+    it("gcd.remains guard must make one legal Barkskin with NO refused press", function()
+        local alternative = scenario("aggro-gcd-hypothesis", true, true, true)
         assert.are.equal(1, alternative.cast,
-            "role-free timed line did not produce one accepted Barkskin")
-        assert.are.equal(1, alternative.aura,
-            "source-world did not record a real Barkskin aura application")
+            "documented gcd.remains guard starved the needed Barkskin")
+        assert.are.equal(1, alternative.aura)
     end)
     it("observed group threat but Defensives OFF suppresses Barkskin", function()
-        assert.are.equal(0, scenario("aggro-linecd-hypothesis", true, false, true).cast)
+        assert.are.equal(0, scenario("aggro-gcd-hypothesis", true, false, true).cast)
     end)
     it("no observed threat never triggers Barkskin", function()
-        assert.are.equal(0, scenario("aggro-linecd-hypothesis", false, true, true).cast)
+        assert.are.equal(0, scenario("aggro-gcd-hypothesis", false, true, true).cast)
     end)
     it("solo single-target observed threat does not waste Barkskin", function()
-        assert.are.equal(0, scenario("aggro-linecd-hypothesis", true, true, false).cast)
+        assert.are.equal(0, scenario("aggro-gcd-hypothesis", true, true, false).cast)
     end)
 end)
