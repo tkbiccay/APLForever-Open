@@ -26,10 +26,21 @@ local after = "&combat>0&aggro&target.within5&(group|active_enemies>=2)&!buff.ba
 
 local function profile(which)
     if which == "feral-v1.2" then return source end
-    assert.are.equal("aggro-hypothesis", which)
+    assert.is_true(which == "aggro-hypothesis" or which == "aggro-linecd-hypothesis",
+        "unregistered in-memory Feral experiment")
     local start = assert(source:find(before, 1, true), "Feral v1.2 Barkskin anchor changed")
     assert.is_nil(source:find(before, start + #before, true), "ambiguous substitution")
-    return source:sub(1, start - 1) .. after .. source:sub(start + #before)
+    local altered = source:sub(1, start - 1) .. after .. source:sub(start + #before)
+    if which == "aggro-linecd-hypothesis" then
+        -- Released Forever APL line_cd is an after-CAST line refractory,
+        -- not a fake cooldown, hidden-health approximation or new checkbox.
+        local exact = "actions.defensives=barkskin,if="
+        local prefix = "actions.defensives=barkskin,line_cd=2,if="
+        local first = assert(altered:find(exact, 1, true))
+        assert.is_nil(altered:find(exact, first + #exact, true))
+        altered = altered:sub(1, first - 1) .. prefix .. altered:sub(first + #exact)
+    end
+    return altered
 end
 
 -- Development fixture extension is source-grounded, NOT a combat-survival
@@ -121,7 +132,16 @@ local function scenario(name, threat, defensives, group)
     }, ""))
     assert.are.equal(0, run.raises)
     assert.are.equal(0, run.errors)
-    assert.are.same({}, run.refused)
+    if name == "aggro-hypothesis" and threat and defensives and group then
+        -- The first trace was a LOSING design: after its real accepted
+        -- Barkskin, the source suggested it once again during GCD.
+        -- Preserve this exact red comparator; never classify it as safe.
+        assert.are.same({ gcd = 1 }, run.refused,
+            "historical aggro-only repeat/refusal changed; re-evaluate hypothesis")
+    else
+        assert.are.same({}, run.refused,
+            "new/refined design must never produce a refused press")
+    end
     assert.is_true(run.presses >= 3, "must advance real accepted attacks")
     assert.is_true(#run.W.truth >= 3, "world must advance real events")
     local barkskin = (run.pressedBy or {}).barkskin or 0
@@ -149,23 +169,29 @@ describe("Feral DPS controlled source-native aggro and Barkskin v0.10.0", functi
         assert.is_nil(source:find("settings.", 1, true))
         assert.is_truthy(source:find(before, 1, true))
     end)
-    it("same observed group threat; v1.2 tanking versus role-free aggro", function()
+    it("original tanking comparator and rejected aggro-only repeat-refusal", function()
         local existing = scenario("feral-v1.2", true, true, true)
-        local alternative = scenario("aggro-hypothesis", true, true, true)
+        local unsafe = scenario("aggro-hypothesis", true, true, true)
         assert.are.equal(0, existing.cast,
             "published client role changed, reassess before selecting any design")
-        assert.is_true(alternative.cast >= 1,
-            "role-free threat policy never made one source-accepted Barkskin")
-        assert.is_true(alternative.cast <= 1,
-            "Feral should not waste more than one 60s Barkskin in 38s")
+        assert.are.equal(1, unsafe.cast,
+            "rejected aggro-only hypothesis's historical outcome changed")
+        -- Scenario also asserts exactly one GCD refusal, explicitly REJECT.
+    end)
+    it("line_cd=2 must avoid duplicate action after ONE accepted Barkskin", function()
+        local alternative = scenario("aggro-linecd-hypothesis", true, true, true)
+        assert.are.equal(1, alternative.cast,
+            "role-free timed line did not produce one accepted Barkskin")
+        assert.are.equal(1, alternative.aura,
+            "source-world did not record a real Barkskin aura application")
     end)
     it("observed group threat but Defensives OFF suppresses Barkskin", function()
-        assert.are.equal(0, scenario("aggro-hypothesis", true, false, true).cast)
+        assert.are.equal(0, scenario("aggro-linecd-hypothesis", true, false, true).cast)
     end)
     it("no observed threat never triggers Barkskin", function()
-        assert.are.equal(0, scenario("aggro-hypothesis", false, true, true).cast)
+        assert.are.equal(0, scenario("aggro-linecd-hypothesis", false, true, true).cast)
     end)
     it("solo single-target observed threat does not waste Barkskin", function()
-        assert.are.equal(0, scenario("aggro-hypothesis", true, true, false).cast)
+        assert.are.equal(0, scenario("aggro-linecd-hypothesis", true, true, false).cast)
     end)
 end)
