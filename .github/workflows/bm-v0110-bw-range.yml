@@ -1,0 +1,41 @@
+name: Hunter BM v0.11.0 source-native independent pet cooldown
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/bm-v0110-bw-range.yml"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt"
+      - "experiments/native/aplforever_bm_bestial_range_v011_spec.lua"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hunter-bm-v0110-bw-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-native:
+    name: Forever v0.11.0 exact BM v1.2 vs v1.3 six/twelve yard
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Validate source pin and all catalogue/rollback SHA256
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap official source-native Lua
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Compare four real 6/12-yard scenarios versus protected v1.2
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_bm_bestial_range_v011_spec.lua" tests/Forever/aplforever_bm_bestial_range_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose tests/Forever/aplforever_bm_bestial_range_v011_spec.lua

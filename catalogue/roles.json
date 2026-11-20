@@ -331,10 +331,11 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.2",
+      "latest_revision": "v1.3",
       "limitations": [
         "Archived Hunter BM ranged/melee actions may represent a valid DPS weave; verify talent, pet, range, swing timing, safety and benefit before promotion.",
-        "v1.2 under Candidates is not selected, preferred, reported-working or Approved; source world can test accepted Hawk casts but cannot prove real pet damage or live cooldown-manager observation."
+        "v1.2 under Candidates is not selected, preferred, reported-working or Approved; source world can test accepted Hawk casts but cannot prove real pet damage or live cooldown-manager observation.",
+        "Hunter BM v1.3 pet Bestial Wrath source-range correction is an unselected experiment; cannot prove real pet DPS, optional cooldown intent or in-game safety until tested."
       ],
       "revisions": [
         {
@@ -397,6 +398,32 @@
           "settings": null,
           "caveat": "UNSELECTED Draft Candidate only; pet/hawk survival and in-game damage are unverified. In-game validation and separate confirmed current/working selection required.",
           "purity_review": "Complete standalone Hunter BM priority. Only one evidence-backed guard changed from v1.1: Summon Hawk independently checks its registered 0-35 yard range and pet.hawk.count<2, rather than requiring all Hunter ranged shots' minimum 8 yards."
+        },
+        {
+          "revision": "v1.3",
+          "apl_file": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt",
+          "status": "Draft",
+          "sha256": "cae9e9dc333ae4c487982d385e2e6bf6d2b248e771765212be90a457d9e726fd",
+          "min_source_release": "v0.11.0",
+          "evidence": [
+            "Hekili Forever v0.11.0 source @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b Hunter.lua + source BM Turret kit; Bestial Wrath self/pet cooldown is not ranged 8-yard limited",
+            "Public v0.11.0 native run https://github.com/tkbiccay/APLForever-Open/actions/runs/44808310285: exact full v1.2 vs v1.3 6/12 yards, Major ON/OFF; 4/4 PASS"
+          ],
+          "test_results": [
+            {
+              "kind": "source_native_p0_ranged_boundary",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44808310285",
+              "result": "PASS: 4/4 scenarios, 0 refusals, 0 errors; six-yard Major ON Bestial Wrath 0→1 with Hawks 5→5; 12-yard Major ON BW 1→1 and Hawks 4→4; Major OFF BW always 0; 3 post-BW accepted actions; no DPS or in-game proof"
+            }
+          ],
+          "rollback_reference": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No new manual settings. Native Major toggle still respected.",
+          "caveat": "UNSELECTED Draft; source-native castability v0.11.0 PASS with 6–12yd and Major toggles; actual pet damage, 1–60, live cooldown behaviour and real-game proof unverified."
         }
       ],
       "apl_name": "Hunter_BeastMastery"

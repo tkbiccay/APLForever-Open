@@ -26,7 +26,7 @@ class ObservabilityTests(unittest.TestCase):
         self.assertEqual([], audit.compare_baseline(flagged, baseline))
         p0 = [x for x in all_rows if x["role"] in
               {"Druid_Guardian", "Hunter_BeastMastery"}]
-        self.assertEqual(9, len(p0))
+        self.assertEqual(10, len(p0))
         self.assertTrue(all(not x["findings"] for x in p0))
 
     def test_combat_hidden_health_through_nested_action_calls(self):
