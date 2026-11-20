@@ -1,0 +1,17 @@
+actions.precombat=righteous_fury,if=!buff.righteous_fury.up
+actions.precombat+=/seal_of_fury,if=action.seal_of_fury.known&!buff.seal_of_fury.up
+actions.precombat+=/seal_of_righteousness,if=!action.seal_of_fury.known&!buff.seal_of_righteousness.up
+
+actions=righteous_fury,if=!buff.righteous_fury.up
+actions+=/seal_of_fury,if=action.seal_of_fury.known&!buff.seal_of_fury.up
+actions+=/seal_of_righteousness,if=!action.seal_of_fury.known&!buff.seal_of_righteousness.up
+actions+=/stoneform,if=toggle.defensives
+actions+=/judgement,use_off_gcd=1
+actions+=/swift_judgement,use_off_gcd=1,if=toggle.cooldowns
+actions+=/consecration,if=active_enemies>=2
+actions+=/holy_shield,if=action.holy_shield.known&combat>0&aggro&!buff.holy_shield.up&mana.lo>=action.holy_shield.cost&gcd.remains<=0&(group|active_enemies>=2|target.is_boss|time>=10)
+actions+=/holy_strike,if=talent.shieldsworn.enabled|talent.iron_creed.enabled
+actions+=/holy_shock,if=(!talent.consecrated_ground.enabled|debuff.consecrated_ground.up)
+actions+=/holy_strike
+actions+=/consecration
+actions+=/exorcism

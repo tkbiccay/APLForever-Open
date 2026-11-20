@@ -619,8 +619,10 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
-      "limitations": [],
+      "latest_revision": "v1.1",
+      "limitations": [
+        "Unselected Protection v1.1 Holy Shield standalone experiment: pending source-native and real-client testing; player aggro and Mana belief uncertain, current v1.0 unchanged."
+      ],
       "revisions": [
         {
           "revision": "v1.0",
@@ -641,6 +643,27 @@
           "caveat": "Archived development draft only: not a working, preferred or Approved APL",
           "legacy_filename": true,
           "relocated_from": "roles/APL_Paladin_Protection_Tank_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Paladin/Candidates/APL_Paladin_Protection_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "4d6e30ad15f9c2a51b0722988f893ae7d1e3724035526348b5765c56b27a873d",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b; original and shipped full-comparator experiment; issue #28; pinned native CI to run"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Paladin/Current/APL_Paladin_Protection_Tank_v1.0_Draft.txt",
+          "min_source_release": "v0.11.0",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No required manual Defensives switch for routine Holy Shield; respect native Ability Require Toggle/user off-switches.",
+          "caveat": "Experimental source-native Draft: full independent v1.1 condition only; source client aggro, conservative Mana, cooldown model and live block/threat unverified; no gameplay validation or promotion."
         }
       ],
       "apl_name": "Paladin_Protection"
