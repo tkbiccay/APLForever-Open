@@ -34,6 +34,11 @@ end
 local function contentAt(c)
     local w = ws.content(stock, {
         pack = stock.PACK, level = c.level, learn = learn,
+        -- The Guardian wowsims Bear-only stock fixture omits both caster
+        -- spells. A pre-Bear level-9 scenario must explicitly include the
+        -- REAL Druid-registered Wrath/Moonfire (normal level/rank filtering
+        -- still applies), or its zero-attack result is a fixture artefact.
+        kit = c.level < 10 and { "wrath", "moonfire" } or nil,
         talents = ws.header("druid_guardian").talents,
         race = ws.race("druid_guardian"),
         gear = c.level == 60 and ws.gear("druid_guardian") or nil,
@@ -87,6 +92,10 @@ local function run(c, which)
     }
     assert.are.equal(c.level >= 10, known.bear,
         "released source's Bear Form unlock boundary changed")
+    if c.level < 10 then
+        assert.is_true(known.wrath,
+            "level-9 registered Wrath must be learned for a meaningful pre-Bear test")
+    end
     local rr = loop.run(L, 30417, { duration = 36 }, { { H = H } })
     local by = rr.pressedBy or {}
     local first = {}
