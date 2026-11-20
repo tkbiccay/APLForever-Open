@@ -26,6 +26,10 @@ RULES = {
     "player_health": re.compile(
         r"(?<![\w.])health(?:\.(?:pct|percent|current|actual|deficit)\b|\b(?![\w.]))"
     ),
+    # v0.11.0 Player.lua returns default otherHealth for pet, not real HP.
+    "pet_health": re.compile(
+        r"(?<![\w.])pet\.health(?:\.(?:pct|percent|current|actual|deficit|max)\b|_(?:pct|percent|current)\b|\b(?![\w.]))"
+    ),
     "target_health": re.compile(
         r"(?<![\w.])target\.health(?:\.(?:pct|percent|current|actual)\b|_(?:pct|percent|current)\b)"
     ),

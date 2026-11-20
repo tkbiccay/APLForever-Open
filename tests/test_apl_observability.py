@@ -52,12 +52,13 @@ class ObservabilityTests(unittest.TestCase):
         found = audit.scan_apl(source)
         self.assertEqual("combat", found[0]["phase"])
 
-    def test_apl_health_tokens_ignore_pet_max_and_identifiers(self):
+    def test_pet_health_is_observability_debt_not_ignored(self):
         source = (
             "actions=wrath,if=pet.health.pct<20&health.max>0&healthstone.known&"
             "target.health.max>1&rage.lo>12\n"
         )
-        self.assertEqual([], audit.scan_apl(source))
+        self.assertEqual([("pet_health", "combat")],
+                         [(x["rule"], x["phase"]) for x in audit.scan_apl(source)])
         source = (
             "actions=wrath,if=health<50&target.health.pct<=20&"
             "incoming_magic_damage_5s>200&at_risk>0&fight_remains<8&"
@@ -69,6 +70,20 @@ class ObservabilityTests(unittest.TestCase):
              "group_health", "fixed_fight_time"}, {x["rule"] for x in found}
         )
         self.assertEqual(6, len(found))
+
+    def test_pet_health_unobservable_even_before_combat(self):
+        source = (
+            "actions.precombat=mend_pet,if=pet.health.current<50\n"
+            "actions=call_action_list,name=pet_care\n"
+            "actions.pet_care=mend_pet,if=pet.health.pct<60\n"
+        )
+        found = audit.scan_apl(source)
+        self.assertEqual(
+            [("pet_health", "precombat"), ("pet_health", "combat")],
+            [(x["rule"], x["phase"]) for x in found])
+        self.assertEqual(
+            {"pet_health:combat": 1, "pet_health:precombat": 1},
+            audit.signatures(found))
 
     def test_unreachable_lists_not_mistaken_for_castability_proof(self):
         rows = audit.action_lines(
@@ -87,6 +102,10 @@ class ObservabilityTests(unittest.TestCase):
             "signatures": {"player_health:combat": 1},
             "findings": [{"token": "health.pct"}]
         })
+        self.assertTrue(any("NEW source-state exposure" in msg for msg in
+                            audit.compare_baseline(fake, baseline)))
+        # Existing baseline cannot silently exempt a new dead pet-health guard.
+        fake[-1]["signatures"] = {"pet_health:combat": 1}
         self.assertTrue(any("NEW source-state exposure" in msg for msg in
                             audit.compare_baseline(fake, baseline)))
         broken = copy.deepcopy(flagged)
