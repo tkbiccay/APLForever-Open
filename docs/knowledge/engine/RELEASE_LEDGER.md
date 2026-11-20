@@ -1,5 +1,18 @@
 # Hekili Forever — release compatibility and capability ledger
 
+## Latest published release triage — 20 November 2026: v0.11.0 (P0 compatibility pending)
+
+**External upstream, not our source code:** Hekili Forever **v0.11.0**, published **20 November 2026, 14:59:13 UTC**, immutable source commit `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. [Official release](https://github.com/zmsl/hekili/releases/tag/v0.11.0) | [Upstream comparison v0.10.0...v0.11.0](https://github.com/zmsl/hekili/compare/v0.10.0...v0.11.0) | [automatic review issue #26](https://github.com/tkbiccay/APLForever-Open/issues/26).
+
+**Preliminary source diff:** 110 changed files / 74 commits. No changes to `src/Hekili_Druid/Druid.lua` or `src/Hekili_Hunter/Hunter.lua` mechanics, but **shared** `State.lua`, `Game/Events/Tickets.lua`, `Game/Events/Kinds.lua`, `Game/State/Families/Resources.lua`, `Sim/Targets.lua` and `tests/Game/harness/replay.lua` changed. The resource forecast now uses a swing gain interval (most relevant to Warrior Unbridled Wrath); secret DoT-tick attribution and replay form-rank mapping changed (risk to Guardian/Feral spells, DoTs and test fidelity). Unknown target time-to-health-percent now answers **3600** instead of **2520**. The main release adds German, Spanish and French translations plus option editor changes. Known Mage Fire/Frostfire tick-crit issue remains upstream.
+
+**Decision:** latest release pin recorded in this **Draft release review branch only** as `Reviewing`; **no claim** of v0.11.0 P0 source-native compatibility, general 23-role compatibility, real-game success or Approved state until checks are read. Maintain **Guardian Tank and Hunter BM equal P0**, Feral DPS next; protect the exact v1.0 Guardian reported-working rollback, unchanged BM v1.1/v1.2 and unselected Guardian v1.5. Run one focused v0.11.0 source-native job using pinned exact candidates from Draft PRs #22 and #24, not a fresh large matrix. **Do not re-run or silently waive v0.10.0 all-role red Feral combat-health and Arms precombat-warning evidence.** No automatic merge or APL change.
+
+**Scope limitations:** this review checks source and static repo history, not a changed game client state. The v0.11.0 class pack may retain abilities but changed Belief can change actual recommendations; only real client observation can validate grouped tanking threat, mitigation, Call/Revive Pet and post-cast real icon progression. Any source-native failure is to be classified as changed engine or fixture before proposing a new APL.
+
+See [detailed source risk and tests](v0110-release-review.md). The following earlier v0.10.0 ledger section is preserved as history.
+
+
 ## Live published-release baseline — 19 November 2026
 
 **Critical ownership boundary:** [Hekili Forever](https://github.com/zmsl/hekili) is **external software**, not a product we own or modify. We maintain APLForever's original self-contained APLs, not the Hekili Forever addon. We must check and adapt to the **latest officially published release**. No invented features, no automatic copy of new shipped priorities and no unverified wholesale APL migration.
