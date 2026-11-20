@@ -35,13 +35,20 @@ The source-world's automatically advanced events also fell from **489 to 285** a
 
 The shipped Turret's specific six-yard refusal remains a separate historical *negative comparator*; do not claim this experiment fixes its engine or proves in-game damage/uptime. Guardian and BM remain equal first priority.
 
-## Follow-up range-aware hybrid (experimental, not validated until latest CI)
+## Follow-up range-aware hybrid (source-native tested; benefit INCONCLUSIVE)
 
 Source-supported input `action.arcane_shot.in_range` can distinguish whether to follow the registered HHA window or use the source-accepted independent Hawk cap. The third in-memory variant, `hha-range-hybrid`, keeps native HHA coordination at legal ranged distances but permits an independent Hawk when Arcane Shot is **observed out of range**. Both versions still require `action.summon_hawk.in_range` and `pet.hawk.count<2`, and use exactly the same full imported v1.2 source plus only two condition substitutions. No `settings.*` or user checkbox is added.
 
 **Hypothesis:** retain the baseline's repeated legal Hawks across the six-yard dead zone without losing normal-range HHA's sequencing; test actual source-accepted Hawk/Arcane and refusals at both distances before considering any code. `action.<spell>.in_range` is a client range check but does not guarantee the same accuracy under all instanced/hidden conditions, so an observed source-world result is not the full gameplay gate.
 
-The baseline and pure-HHA source outcomes above remain valid historical evidence; results for the **new hybrid** must be read from the *latest* workflow run, not assumed.
+The full 3-profile focused [v0.10.0 native run 44702973404](https://github.com/tkbiccay/APLForever-Open/actions/runs/44702973404) **PASSED 2/2 checks**; no refused casts, source errors or raises in any tested scenario. In matched seed 30417, 42s, Major OFF:
+
+| Source-world distance | Baseline v1.2 | Pure HHA gate | Range-aware hybrid | Decision |
+| --- | --- | --- | --- | --- |
+| **12 yd** | 13 accepted, Hawk 4, Arcane 3 | 13 accepted, Hawk 5, Arcane 2 | **13 accepted, Hawk 5, Arcane 2** | Hybrid behaves as HHA when Arcane is in range; **no accepted-count gain**, damage not measured |
+| **6 yd** | 7 accepted, Hawk 5, Arcane 0 | **4 accepted, Hawk 2**, stalls after 2 Hawk casts | **7 accepted, Hawk 5, Arcane 0** | Hybrid preserves baseline's real source-accepted six-yard upkeep and tail |
+
+**Decision: hybrid is Source-Native Supported for these narrow ranges, but `Experimental / Not Promoted` overall.** There is no demonstrated DPS/output improvement or evidence for raid/group, AoE, Major ON, long resource-exhaustion, different gear/talents, other distances, pet recovery or live Auto Shot timing. Preserve v1.2 exactly and defer further hybrid refinement until targeted gameplay or damage evidence establishes meaningful upside. If advanced syntax creates only an equivalent recommendation with more complexity, default to simpler last-working/candidate architecture.
 
 ## Evidence and costs
 
