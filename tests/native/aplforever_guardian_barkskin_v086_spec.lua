@@ -37,8 +37,9 @@ local function profiles()
             out[#out + 1] = { name = e.revision, entry = e }
         end
     end
-    assert.are.equal(5, #out, "expected shipped + Guardian v1.0, v1.1, v1.2 and v1.3")
+    assert.are.equal(6, #out, "expected shipped + Guardian v1.0 through v1.4")
     assert.are.equal("v1.3", out[5].name)
+    assert.are.equal("v1.4", out[6].name)
     out[#out + 1] = { name = "v1.1-test-only-barkskin", entry = out[3].entry, experimental = true }
     assert.are.equal("v1.1", out[3].name)
     assert.are.equal("v1.2", out[4].name)
@@ -63,7 +64,7 @@ local function importedSource(e, experimental)
     return source
 end
 
-local function examine(profile, level, on, maintainRoar)
+local function examine(profile, level, on, maintainRoar, worldNormalTarget, seconds)
     local content = ws.content(stock, {
         pack = stock.PACK, level = level, learn = learn,
         talents = ws.header("druid_guardian").talents,
@@ -81,6 +82,12 @@ local function examine(profile, level, on, maintainRoar)
     end
     content.WORLD.attackers = 2
     content.WORLD.mobHealth = 1000000000
+    if worldNormalTarget then
+        -- Source-world normal same-level mob, not an imaginary dungeon boss.
+        -- Changing the real world target-level knob is permitted; NO
+        -- synthetic health, Rage, threat or accepted casts are injected.
+        content.WORLD.targetLevel = level
+    end
     local L = loop.new(content)
     local H = L.us
     assert.are.same({}, H.loadErrors)
@@ -118,7 +125,7 @@ local function examine(profile, level, on, maintainRoar)
     local applied = 0
     local acceptedTotal, acceptedRoar = 0, 0
     local run = loop.run(L, 30417, {
-        duration = 38,
+        duration = seconds or 38,
         on = function(r)
             if r.pressed[r.combat] then acceptedTotal = acceptedTotal + 1 end
         end,
@@ -132,8 +139,9 @@ local function examine(profile, level, on, maintainRoar)
     end
     local barkskin = (run.pressedBy or {}).barkskin or 0
     local roar = (run.pressedBy or {}).demoralizing_roar or 0
-    print(("GUARDIAN_BARKSKIN_V086 profile=%s level=%d defensives=%s barkskin=%d aura=%d roar=%d accepted=%d"):format(
-        profile.name, level, tostring(on), barkskin, applied, roar, acceptedTotal))
+    print(("GUARDIAN_BARKSKIN_V086 profile=%s level=%d defensives=%s normal=%s maintenance=%s duration=%s barkskin=%d aura=%d roar=%d accepted=%d"):format(
+        profile.name, level, tostring(on), tostring(worldNormalTarget == true),
+        tostring(maintainRoar), tostring(seconds or 38), barkskin, applied, roar, acceptedTotal))
     assert.are.equal(0, run.errors, "source engine errors")
     assert.are.equal(0, run.raises, "source engine raises")
     assert.are.same({}, run.refused, "source refused an actual recommended action")
@@ -142,9 +150,9 @@ local function examine(profile, level, on, maintainRoar)
     if not on or level < 44 then
         assert.are.equal(0, barkskin, "Barkskin must obey Defensives and source unlock")
     end
-    if (profile.experimental or profile.name == "v1.2" or profile.name == "v1.3") and on and level >= 44 then
+    if (profile.experimental or profile.name == "v1.2" or profile.name == "v1.3" or profile.name == "v1.4") and on and level >= 44 then
         assert.is_true(barkskin >= 1, "new branch never cast known ready Barkskin with Defensives ON")
-        if maintainRoar ~= false then
+        if maintainRoar ~= false and not worldNormalTarget and (seconds or 38) >= 38 then
             assert.is_true(roar >= 1, "Barkskin must not silently eliminate enabled Roar upkeep")
         end
     end
@@ -174,7 +182,7 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
     end
     for _, level in ipairs({ 43, 44 }) do
         it("test-only branch real Barkskin unlock level " .. level, function()
-            examine(p[6], level, true)
+            examine(p[7], level, true)
         end)
     end
     it("v1.3 OFF toggle with explicit Roar setting ON accepts upkeep while v1.2 stays OFF", function()
@@ -190,9 +198,34 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
             assert.are.equal(0, result.roar)
         end)
     end
+    it("v1.4 full source removes the special Roar setting as an APL requirement", function()
+        local src = importedSource(p[6].entry)
+        assert.is_nil(src:find("settings.maintain_demoralizing_roar", 1, true))
+        assert.is_truthy(src:find("group&tanking", 1, true))
+        assert.is_truthy(src:find("target.is_boss", 1, true))
+    end)
+    it("v1.4 recognised boss uses source-accepted Roar with maintenance setting OFF or ON", function()
+        local off = examine(p[6], 60, false, false)
+        local on = examine(p[6], 60, false, true)
+        assert.is_true(off.roar >= 1,
+            "self-managed boss Roar never became an accepted source-world cast")
+        assert.are.equal(off.roar, on.roar,
+            "v1.4 must not depend on maintain_demoralizing_roar")
+        assert.are.equal(off.acceptedTotal, on.acceptedTotal,
+            "setting changed independent APL's source-accepted progression")
+        assert.are.equal(0, off.barkskin, "explicit Defensives OFF remains Barkskin off-switch")
+    end)
+    for _, maintenance in ipairs({ false, true }) do
+        it("v1.4 short solo nonboss skips Roar regardless of old setting " .. tostring(maintenance), function()
+            local result = examine(p[6], 60, false, maintenance, true, 9)
+            assert.are.equal(0, result.roar,
+                "ordinary solo short fight should not waste a 10-Rage GCD on Roar")
+            assert.are.equal(0, result.barkskin)
+        end)
+    end
     it("exact v1.2 standalone matches the in-memory v1.1+branch action counts", function()
         local actual = examine(p[4], 60, true)
-        local proposed = examine(p[6], 60, true)
+        local proposed = examine(p[7], 60, true)
         assert.are.same(proposed, actual)
     end)
 end)
