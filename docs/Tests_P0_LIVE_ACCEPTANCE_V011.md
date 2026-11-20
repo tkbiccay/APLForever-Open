@@ -1,0 +1,39 @@
+# P0 Forever v0.11.0 — smallest in-game checks
+
+**20 Nov 2026.** Source pin: **Hekili Forever v0.11.0**, immutable `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. Check the actually installed version before attributing a mismatch. These are **separate complete, standalone unselected Drafts**. No source-native result equals in-game approval; do not replace a reported-working pack. **Guardian Tank and Hunter BM are equal first priority; Feral DPS next.** Other tank controls below are optional.
+
+## Test files and exact checkpoints
+
+| Role | Copy entire test-only APL | Protected prior comparator / rollback |
+| --- | --- | --- |
+| **Guardian Tank** | [v1.5 full Draft](../roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt) SHA256 `75de4388516e3e70cd77f292901c1205f1176dc3561ac9b54dac8fef6c2abcc2` | [v1.0 Reported Working / Needs Retest](../roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt), SHA `f386e158a5e262e309dac7d0fd2929fb8e16e02b1378d71b5956c1bf6b99a786` |
+| **Hunter BM** | [v1.3 full Draft](../roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt), SHA `cae9e9dc333ae4c487982d385e2e6bf6d2b248e771765212be90a457d9e726fd` | [v1.1 Current Draft](../roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt), SHA `a9d752c5e6cdc11fc369fcb6627b73686cc52b5139ed2df4c6628db6c7826d96`; **no confirmed working BM/Approved pack** |
+| **Feral DPS** | [v1.3 full Draft](../roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt), SHA `f235f9c0512a8ceab0ec46daadc2de6b7b497e85de1ad116459aa874f93a9450` | [v1.0 Current Draft](../roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt), **not reported working** |
+| **Warrior Prot**, later | [v1.1 full Draft](../roles/Warrior/Candidates/APL_Warrior_Protection_v1.1_Draft.txt), SHA `f72eac84e6b377b7da80d87532ab090559f9ed6611a40771a9a21ad0603232a1` | [v1.0 Current Pending In-Game](../roles/Warrior/Current/APL_Warrior_Protection_Tank_v1.0_PendingInGame.txt) |
+| **Paladin Prot**, later | [v1.1 full Draft](../roles/Paladin/Candidates/APL_Paladin_Protection_v1.1_Draft.txt), SHA `4d6e30ad15f9c2a51b0722988f893ae7d1e3724035526348b5765c56b27a873d` | [v1.0 Current Draft](../roles/Paladin/Current/APL_Paladin_Protection_Tank_v1.0_Draft.txt) |
+
+## Safe import, same method for all roles
+
+Record installed Forever addon version, character level, learned rank/talents, gear (for shield, stance/pet tests), existing active pack, native toggle states and game context. Preserve the prior pack **exactly**. Type `/hekili` → **Priorities**, enter a **new Priority Name**, choose the exact specialisation, **Create New Pack**; open its **Source** tab, paste the **entire APL** into *Priority (SimulationCraft Action Priority List)*, click **Import**, inspect all warnings, then set **Active** on this test pack only. Abort on unknown action/expression or disabled essential line. Restore the prior pack afterwards. Source: [official v0.11 custom priority tutorial](https://github.com/zmsl/hekili/blob/v0.11.0/docs/wiki/APL-Tutorial-Your-First-Custom-Priority.md). Do **not** enable custom per-spec checkboxes to make regular upkeep work; respect deliberately disabled native cooldown/defensive off-switches.
+
+Use safe, level-appropriate **open-world enemies**, not non-existent Forever target dummies. Capture **first icon → actual accepted cast → next three actual accepted actions**. Repeated identical recommendations are not automatically failures if a real legal cast occurred or an intentional wait applies; repeated *ready but unusable/no progress* icons are regressions. Never assume hidden HP, pet health, target count, aggro or range is observable.
+
+## Equal P0: Guardian Tank v1.5
+
+In Bear Form, with Demoralising Roar learned and a safe, naturally grouped target where you actually have threat, observe **aggro, 5+ seconds combat, enough Rage to pay 10 + reserve, target near and debuff down**. It should recommend and successfully cast Roar at most when useful, then continue with **three actual legal attacks**, not a stuck repeat. In a short ~9-second solo fight it should not spend the costly Roar prematurely. Use a separate safe test for native Defensives ON/OFF: Barkskin respects the user off-switch while ordinary Roar upkeep should not demand an extra settings checkbox. Do not disable an important defensive in a dangerous pull. If client `aggro` or debuff/range cannot be read, record **Engine Limitation**, not a fabricated success or unjustified APL failure. Source-natural v0.11 [Maul reorder test](https://github.com/tkbiccay/APLForever-Open/actions/runs/44810733710) never reached 35 lower-bound Rage, so **high-kit Maul remains unproven**; observe real high Rage and queue/strike when it naturally occurs, do not force a hazardous pack change.
+
+## Equal P0: Hunter BM v1.3
+
+With a naturally absent living pet and Call Pet learned/usable, observe **recommended Call Pet → actual successful arrival → recovery icon disappears → three later legal casts**. If a pet **naturally dies**, repeat with Revive Pet only when safe; **do not kill it just to test**. The addon knows pet presence/death, not pet HP, so keep Mend Pet manual. In naturally safe **6–8-yard** spacing, Summon Hawk can be legal while Aimed/Arcane/Serpent or Rapid Fire may be out of range; expect no repeatedly *uncastable* ranged shot. With native Major Cooldowns deliberately **ON**, talented Bestial Wrath may be cast in close proximity when the real pet is alive; it must respect its long cooldown. **OFF** must suppress it. No requirement to wait two minutes solely for testing. [v0.11 six-yard experiment](https://github.com/tkbiccay/APLForever-Open/actions/runs/44809978166) measured two legal 145s modelled Wrath casts t=3/123, **not actual game uptime**. Aimed/Auto Shot clipping is not faithfully source-modelled; do not infer damage from action counts.
+
+## Feral DPS next; other tanks only if convenient
+
+Feral v1.3: in safely grouped combat when the client actually reports aggro, check learned Barkskin is suggested **only if** native Defensives is ON and GCD eligibility allows; OFF or no threat should not generate emergency false positives. Follow with three legal ordinary actions; do not assume actual player HP thresholds work.
+
+Warrior Protection v1.1: at level 16+ with a shield and source-legal Defensive Stance, a safe tanking pull with actual aggro should allow **routine, Rage-reserved Shield Block even with optional Defensives OFF**, without starving Revenge or repeatedly showing an uncastable action. Shield Block is an off-GCD, on-cooldown action; **legal repetition after its cooldown is not spam**.
+
+Paladin Protection v1.1: when Holy Shield is talented, enough actual Mana and observed aggro are present, check its **buff appears after an accepted cast** without a custom Defensives checkbox, and the next three ordinary casts remain legal. Check no-aggro or very short solo negatives. These tanks are **Draft tests**, not validated replacements.
+
+## Capture and rollback
+
+For any wrong icon, use `/hek snap` (or `/hekili snapshot`) **while the problem is shown**; then `/hekili` → **Snapshots (Troubleshooting)** → latest → Ctrl+A/Ctrl+C complete snapshot, plus warnings and errors. Official [v0.11 reporting instructions](https://github.com/zmsl/hekili/blob/v0.11.0/docs/wiki/Reporting-A-Problem.md). Record **role, game/addon build, level, talents, gear, APL revision/hash, toggles, target, expected icon, actual icon, whether actually cast, next three actual accepted actions, repeated behaviour, and full snapshot**. Restore old active pack immediately on any meaningful regression. Result labels: **Pass / Fail & Rollback / Inconclusive / Not Applicable (unlearned) / Engine Limitation**. Only after genuine practical evidence, fair default/working comparisons and no critical issues can a role progress towards In-Game Validated or Approved.
