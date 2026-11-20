@@ -13,9 +13,9 @@ import audit_apl_observability as audit
 
 
 class ObservabilityTests(unittest.TestCase):
-    def test_exact_catalogue_35_revisions_and_historical_debt(self):
+    def test_exact_catalogue_36_revisions_and_historical_debt(self):
         all_rows, flagged = audit.analyse(ROOT)
-        self.assertEqual(35, len(all_rows))
+        self.assertEqual(36, len(all_rows))
         self.assertEqual(4, len(flagged))
         self.assertEqual(18, sum(len(x["findings"]) for x in flagged))
         self.assertEqual(
@@ -26,7 +26,7 @@ class ObservabilityTests(unittest.TestCase):
         self.assertEqual([], audit.compare_baseline(flagged, baseline))
         p0 = [x for x in all_rows if x["role"] in
               {"Druid_Guardian", "Hunter_BeastMastery"}]
-        self.assertEqual(7, len(p0))
+        self.assertEqual(8, len(p0))
         self.assertTrue(all(not x["findings"] for x in p0))
 
     def test_combat_hidden_health_through_nested_action_calls(self):
