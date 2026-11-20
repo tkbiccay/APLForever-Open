@@ -37,7 +37,17 @@ local function profiles()
             out[#out + 1] = { name = e.revision, entry = e }
         end
     end
-    assert.are.equal(4, #out, "expected shipped + Guardian v1.0, v1.1 and v1.2")
+    -- The published v0.9.0 manifest correctly EXCLUDES v1.5 because
+    -- catalogue.min_source_release=v0.10.0. Do not load a future APL in a
+    -- historical source harness merely to satisfy a hardcoded count.
+    local release = os.getenv("APLFOREVER_SOURCE_RELEASE") or "v0.9.0"
+    assert.are.equal(release == "v0.10.0" and 7 or 6,#out,
+        "published-source-compatible Guardian revision count changed")
+    assert.are.equal("v1.3", out[5].name)
+    assert.are.equal("v1.4", out[6].name)
+    if release == "v0.10.0" then
+        assert.are.equal("v1.5", out[7].name)
+    end
     out[#out + 1] = { name = "v1.1-test-only-barkskin", entry = out[3].entry, experimental = true }
     assert.are.equal("v1.1", out[3].name)
     assert.are.equal("v1.2", out[4].name)
@@ -62,7 +72,7 @@ local function importedSource(e, experimental)
     return source
 end
 
-local function examine(profile, level, on)
+local function examine(profile, level, on, maintainRoar, worldNormalTarget, seconds)
     local content = ws.content(stock, {
         pack = stock.PACK, level = level, learn = learn,
         talents = ws.header("druid_guardian").talents,
@@ -80,6 +90,12 @@ local function examine(profile, level, on)
     end
     content.WORLD.attackers = 2
     content.WORLD.mobHealth = 1000000000
+    if worldNormalTarget then
+        -- Source-world normal same-level mob, not an imaginary dungeon boss.
+        -- Changing the real world target-level knob is permitted; NO
+        -- synthetic health, Rage, threat or accepted casts are injected.
+        content.WORLD.targetLevel = level
+    end
     local L = loop.new(content)
     local H = L.us
     assert.are.same({}, H.loadErrors)
@@ -102,13 +118,22 @@ local function examine(profile, level, on)
     toggles.defensives.value = on
     toggles.cooldowns.value = false
     toggles.movement.value = false
+    if maintainRoar ~= nil then
+        -- Real registered setting, not a fabricated tank/group API. The
+        -- source harness defaults this ON under scenario=sim (raid boss),
+        -- whereas in-game it defaults OFF. Override explicitly here.
+        local spec = assert(H.Hekili.Engine.settings.specs[H.Hekili.State.spec.id])
+        assert.is_table(spec.settings)
+        spec.settings.maintain_demoralizing_roar = maintainRoar
+        H.Hekili:SettingsChanged()
+    end
     assert.are.equal(level >= 44, H.Hekili.State:IsKnown("barkskin"),
         "real source trainer-level Barkskin unlock")
     local barkskinAura = assert(H.Hekili.Class.auras.barkskin).id
     local applied = 0
     local acceptedTotal, acceptedRoar = 0, 0
     local run = loop.run(L, 30417, {
-        duration = 38,
+        duration = seconds or 38,
         on = function(r)
             if r.pressed[r.combat] then acceptedTotal = acceptedTotal + 1 end
         end,
@@ -122,8 +147,9 @@ local function examine(profile, level, on)
     end
     local barkskin = (run.pressedBy or {}).barkskin or 0
     local roar = (run.pressedBy or {}).demoralizing_roar or 0
-    print(("GUARDIAN_BARKSKIN_V086 profile=%s level=%d defensives=%s barkskin=%d aura=%d roar=%d accepted=%d"):format(
-        profile.name, level, tostring(on), barkskin, applied, roar, acceptedTotal))
+    print(("GUARDIAN_BARKSKIN_V086 profile=%s level=%d defensives=%s normal=%s maintenance=%s duration=%s barkskin=%d aura=%d roar=%d accepted=%d"):format(
+        profile.name, level, tostring(on), tostring(worldNormalTarget == true),
+        tostring(maintainRoar), tostring(seconds or 38), barkskin, applied, roar, acceptedTotal))
     assert.are.equal(0, run.errors, "source engine errors")
     assert.are.equal(0, run.raises, "source engine raises")
     assert.are.same({}, run.refused, "source refused an actual recommended action")
@@ -132,9 +158,23 @@ local function examine(profile, level, on)
     if not on or level < 44 then
         assert.are.equal(0, barkskin, "Barkskin must obey Defensives and source unlock")
     end
-    if (profile.experimental or profile.name == "v1.2") and on and level >= 44 then
+    if (profile.experimental or profile.name == "v1.2" or profile.name == "v1.3" or profile.name == "v1.4" or profile.name == "v1.5") and on and level >= 44 then
         assert.is_true(barkskin >= 1, "new branch never cast known ready Barkskin with Defensives ON")
-        assert.is_true(roar >= 1, "Barkskin must not silently eliminate actual Roar upkeep")
+        if profile.name ~= "v1.5" and maintainRoar ~= false and not worldNormalTarget and (seconds or 38) >= 38 then
+            assert.is_true(roar >= 1, "Barkskin must not silently eliminate enabled Roar upkeep")
+        end
+    end
+    if maintainRoar ~= nil then
+        if profile.name == "v1.3" and maintainRoar == false then
+            -- This fixture is solo and has no verified active-tank status.
+            -- It does NOT exercise the separate group&tanking auto branch.
+            assert.are.equal(0, roar, "solo maintenance OFF must not spend Rage on Roar")
+        elseif profile.name == "v1.3" and maintainRoar == true then
+            assert.is_true(roar >= 1,
+                "explicit Guardian maintenance ON must source-cast Roar despite Defensives OFF")
+        elseif profile.name == "v1.2" and not on then
+            assert.are.equal(0, roar, "v1.2 remains gated by Defensives")
+        end
     end
     return { barkskin = barkskin, roar = roar, applied = applied, acceptedTotal = acceptedTotal }
 end
@@ -150,12 +190,61 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
     end
     for _, level in ipairs({ 43, 44 }) do
         it("test-only branch real Barkskin unlock level " .. level, function()
-            examine(p[5], level, true)
+            examine(p[#p], level, true)
+        end)
+    end
+    it("v1.3 OFF toggle with explicit Roar setting ON accepts upkeep while v1.2 stays OFF", function()
+        local old = examine(p[4], 60, false, true)
+        local upgraded = examine(p[5], 60, false, true)
+        assert.are.equal(0, old.roar)
+        assert.is_true(upgraded.roar >= 1)
+        assert.are.equal(0, upgraded.barkskin)
+    end)
+    for _, on in ipairs({false, true}) do
+        it("v1.3 solo maintenance OFF avoids Roar under Defensives " .. tostring(on), function()
+            local result = examine(p[5], 60, on, false)
+            assert.are.equal(0, result.roar)
+        end)
+    end
+    it("v1.4 full source removes the special Roar setting as an APL requirement", function()
+        local src = importedSource(p[6].entry)
+        assert.is_nil(src:find("settings.maintain_demoralizing_roar", 1, true))
+        assert.is_truthy(src:find("group&tanking", 1, true))
+        assert.is_truthy(src:find("target.is_boss", 1, true))
+    end)
+    it("v1.4 recognised boss uses source-accepted Roar with maintenance setting OFF or ON", function()
+        local off = examine(p[6], 60, false, false)
+        local on = examine(p[6], 60, false, true)
+        assert.is_true(off.roar >= 1,
+            "self-managed boss Roar never became an accepted source-world cast")
+        assert.are.equal(off.roar, on.roar,
+            "v1.4 must not depend on maintain_demoralizing_roar")
+        assert.are.equal(off.acceptedTotal, on.acceptedTotal,
+            "setting changed independent APL's source-accepted progression")
+        assert.are.equal(0, off.barkskin, "explicit Defensives OFF remains Barkskin off-switch")
+    end)
+    for _, maintenance in ipairs({ false, true }) do
+        it("v1.4 short solo nonboss skips Roar regardless of old setting " .. tostring(maintenance), function()
+            local result = examine(p[6], 60, false, maintenance, true, 9)
+            assert.are.equal(0, result.roar,
+                "ordinary solo short fight should not waste a 10-Rage GCD on Roar")
+            assert.are.equal(0, result.barkskin)
+        end)
+    end
+    if os.getenv("APLFOREVER_SOURCE_RELEASE") == "v0.10.0" then
+        it("v1.5 remains standalone and no checkbox-gated Roar on fake client without aggro", function()
+            local src = importedSource(p[7].entry)
+            assert.is_nil(src:find("settings.maintain_demoralizing_roar", 1, true))
+            assert.is_truthy(src:find("aggro&((group&time>=5)", 1, true))
+            assert.is_nil(src:find("group&tanking", 1, true))
+            local value = examine(p[7],60,false,false)
+            assert.are.equal(0,value.roar, "must not Roar with absent client aggro")
+            assert.are.equal(0,value.barkskin, "Defensives OFF")
         end)
     end
     it("exact v1.2 standalone matches the in-memory v1.1+branch action counts", function()
         local actual = examine(p[4], 60, true)
-        local proposed = examine(p[5], 60, true)
+        local proposed = examine(p[#p], 60, true)
         assert.are.same(proposed, actual)
     end)
 end)
