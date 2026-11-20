@@ -13,6 +13,16 @@ local files = {
     ["current-v1.1"] = "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
     ["candidate-v1.2"] = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt",
 }
+local function sortedCounts(counts)
+    local keys={}
+    for k in pairs(counts or {}) do keys[#keys+1]=k end
+    table.sort(keys)
+    local parts={}
+    for _,k in ipairs(keys) do
+        parts[#parts+1]=k.."="..tostring(counts[k])
+    end
+    return table.concat(parts,",")
+end
 local function read(path)
     local f=assert(io.open(root.."/"..path,"rb"))
     local data=assert(f:read("*a"));f:close()
@@ -59,10 +69,10 @@ local function run(profile)
         local pressed=result.pressedBy or {}
         local hawk=pressed.summon_hawk or 0
         local arcane=pressed.arcane_shot or 0
-        print(("BM_3FIGHTS_V011 profile=%s fight=%d hawk=%d arcane=%d accepted=%d refused=%s errors=%d raises=%d post_hawk=%s world_t=%.2f"):format(
+        print(("BM_3FIGHTS_V011 profile=%s fight=%d hawk=%d arcane=%d accepted=%d refused=%s errors=%d raises=%d post_hawk=%s world_t=%.2f counts=%s mana_end=%.2f"):format(
             profile,fight,hawk,arcane,result.presses,
             tostring(next(result.refused)~=nil),result.errors,result.raises,
-            table.concat(tail,","),result.W.t))
+            table.concat(tail,","),result.W.t,sortedCounts(pressed),result.us.power))
         assert.are.equal(0,result.errors,"source world errors")
         assert.are.equal(0,result.raises,"Lua engine raises")
         assert.are.same({},result.refused,"source refused a recommendation after session reset")
