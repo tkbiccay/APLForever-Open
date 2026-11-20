@@ -89,3 +89,67 @@ describe("Hunter BM v0.11.0 independent Bestial Wrath across 3 successive six-ya
         end
     end)
 end)
+
+-- Unlike the three-pull world (which resets fake Mana and spell cooldown
+-- on every loop.run), this ONE uninterrupted fight tests a true elapsed
+-- cooldown interval in the published v0.11.0 source engine.
+local function continuous(profile)
+    local content=setmetatable({
+        WORLD=setmetatable({distance=6,mobHealth=1000000000},
+            {__index=stock.WORLD}),
+    },{__index=stock})
+    local L=loop.new(content)
+    local H=L.us
+    assert.are.same({},H.loadErrors)
+    local parsed,warnings=H.Hekili:ImportSimcAPL(
+        "Hunter_BeastMastery","APLForever-145s-BW-Cooldown",read(paths[profile]),content.PACK)
+    assert.is_table(parsed);assert.is_table(parsed.default)
+    assert.is_falsy((warnings or ""):find("Unsupported action",1,true))
+    assert.is_falsy((warnings or ""):find("Unknown key",1,true))
+    H.Hekili.DB.profile.packs[content.PACK].lists=parsed
+    H.Hekili:LoadScripts();H.Hekili:ReviewPacks()
+    assert.are.same({},H.errors)
+    H.Hekili.DB.profile.toggles.cooldowns.value=true
+    H.Hekili.DB.profile.toggles.defensives.value=false
+    H.Hekili.DB.profile.toggles.movement.value=false
+    local times={}
+    local rr=loop.run(L,30417,{
+        duration=145,
+        on=function(r,_,t)
+            if r.combat>0 and r.pressed[r.combat]=="bestial_wrath" then
+                times[#times+1]=t
+            end
+        end,
+    },{{H=H}})
+    local cast=rr.pressedBy or {}
+    local bw=cast.bestial_wrath or 0
+    print(("BM_V13_6YD_CONTINUOUS profile=%s duration=145 accepted=%d bw=%d bw_times=%s hawks=%d rapid=%d mana_final=%.2f source_events=%d refused=%s"):format(
+        profile,rr.presses,bw,table.concat(times,","),
+        cast.summon_hawk or 0,cast.rapid_fire or 0,
+        rr.us.power,#rr.W.truth,tostring(next(rr.refused)~=nil)))
+    assert.are.equal(0,rr.errors)
+    assert.are.equal(0,rr.raises)
+    assert.are.same({},rr.refused)
+    assert.are.equal(bw,#times,"off-GCD BW presses missing from source clock")
+    assert.is_true(rr.presses>=6 and (cast.summon_hawk or 0)>=4,
+        "no source-accepted long-fight Hawk/resource progression")
+    for _,key in ipairs({"serpent_sting","arcane_shot","aimed_shot","multi_shot","rapid_fire"}) do
+        assert.are.equal(0,cast[key] or 0,"unusable ranged spell accepted at six yards")
+    end
+    for i=2,#times do
+        assert.is_true(times[i]-times[i-1]>=119.9,
+            "Bestial Wrath repeated before its actual source 120s cooldown")
+    end
+    return {bw=bw,times=times,hawk=cast.summon_hawk or 0,accepted=rr.presses}
+end
+describe("BM source cooldown durability across one continuous real 145-second 6yd fight",function()
+    it("restored Bestial Wrath respects its 120s CD and does not harm Hawk progression",function()
+        local baseline=continuous("v1.2")
+        local candidate=continuous("v1.3")
+        assert.are.equal(0,baseline.bw,"old 6yd range block disappeared")
+        assert.is_true(candidate.bw>=1 and candidate.bw<=2,
+            "source cooldown omitted or repeated too often")
+        assert.is_true(candidate.hawk>=baseline.hawk,
+            "candidate loses source-accepted Hawks in natural long fight")
+    end)
+end)
