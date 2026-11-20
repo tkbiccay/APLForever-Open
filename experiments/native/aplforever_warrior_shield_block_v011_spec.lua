@@ -12,8 +12,8 @@ local to="actions+=/call_action_list,name=survival,if=combat>0&aggro&(group|acti
 local pos=assert(old:find(from,1,true))
 assert.is_nil(old:find(from,pos+#from,true))
 local alternative=old:sub(1,pos-1)..to..old:sub(pos+#from)
-local function case(profile,defend,threat,group,seconds)
-    local C=protection.content(60)
+local function case(profile,defend,threat,group,seconds,level)
+    local C=protection.content(level or 60)
     C.WORLD=setmetatable({
         mobHealth=1000000000,attackers=group and 2 or 1,
         mobDamage={2,3},mobPeriod=2,
@@ -58,6 +58,14 @@ local function case(profile,defend,threat,group,seconds)
     H.Hekili.DB.profile.toggles.movement.value=false
     local rr=loop.run(L,30417,{duration=seconds},{{H=H}})
     local n=(rr.pressedBy or {}).shield_block or 0
+    local revenge=(rr.pressedBy or {}).revenge or 0
+    local minRage,maxRage=math.huge,-math.huge
+    for _,e in ipairs(rr.W.truth) do
+        if e.src==rr.us and e.kind=="cast" and e.cost then
+            minRage=math.min(minRage,rr.us.power)
+            maxRage=math.max(maxRage,rr.us.power)
+        end
+    end
     local id=H.Hekili.Class.auras.shield_block.id
     local aura,swing,post=0,0,0
     local casts={}
@@ -98,9 +106,9 @@ local function case(profile,defend,threat,group,seconds)
         end
         assert.is_true(post>=3,"no three accepted subsequent actions")
     end
-    print(("WARRIOR_BLOCK_V011 profile=%s threat=%s group=%s defend=%s accepted_block=%d aura=%d swings=%d presses=%d refused=%s rage_end=%.1f"):format(
-        profile,tostring(threat),tostring(group),tostring(defend),
-        n,aura,swing,rr.presses,tostring(next(rr.refused)~=nil),rr.us.power))
+    print(("WARRIOR_BLOCK_V011 profile=%s level=%d threat=%s group=%s defend=%s accepted_block=%d revenge=%d aura=%d swings=%d presses=%d refused=%s rage_end=%.1f"):format(
+        profile,level or 60,tostring(threat),tostring(group),tostring(defend),
+        n,revenge,aura,swing,rr.presses,tostring(next(rr.refused)~=nil),rr.us.power))
     assert.are.equal(0,rr.errors)
     assert.are.equal(0,rr.raises)
     assert.are.same({},rr.refused,"material source refusal")
@@ -129,4 +137,14 @@ describe("Warrior Protection v0.11.0 full APL Shield Block autonomy hypothesis",
     it("short solo source threat does not waste pre-10-second Shield Block",function()
         assert.are.equal(0,case("counterfactual",false,true,false,8))
     end)
+    it("long solo threat allows a real Shield Block if source Rage permits",function()
+        local n=case("counterfactual",false,true,false,48)
+        print("WARRIOR_BLOCK_V011 long_solo_source_accepted="..n)
+    end)
+    for _,level in ipairs({16,30}) do
+        it("level "..level.." two attackers with source-known abilities and zero refusals",function()
+            local n=case("counterfactual",false,true,true,48,level)
+            print("WARRIOR_BLOCK_V011 lower_level="..level.." accepted_block="..n)
+        end)
+    end
 end)
