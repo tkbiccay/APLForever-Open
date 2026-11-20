@@ -59,6 +59,10 @@ Primary official references:
 
 **Operator support:** `&` AND, `|` OR, `!` NOT, `=`/ `==`, `!=`, `>`, `>=`, `<`, `<=`, `^` XOR, `+`, `-`, `*`, `/`, `%`, parentheses, `min()`, `max()`, `floor()`, `ceil()`, `abs()`; SimC import rewrites `%` to division and `%%` or `//` to remainder. Avoid division by zero.
 
+## Fresh-profile toggle defaults (critical no-checkbox design check)
+
+**Verified source:** [Hekili Forever v0.10.0 Options.lua, default profile lines 320–387](https://github.com/zmsl/hekili/blob/v0.10.0/src/Hekili/Options/Options.lua#L320-L387). `cooldowns=true`, `minor_cooldowns=true`, `defensives=true`, `interrupts=true`, `movement=true`; **`potions=false`, `custom1=false`, `custom2=false`**. Default Display Mode = `automatic`; note mode/count observability limits in instances. Existing user profiles may have different saved values. For our "import/activate and play" target, using a **standard toggled category** with its native ON default is compatible with no checkbox micromanagement; deliberately switching it OFF is still a user opt-out. **Do not** design core maintenance, pets, interrupts or ordinary fillers under Potions or Custom #1/#2 (which are OFF without user setup). Consumables must remain elective due real inventory/cost. Verify exact ability's own native `Require Toggle` on source and preserve safe fallback when player disables it.
+
 ## Fixed/hidden-state traps — must not drive supposed automatic policies
 
 - `fight_remains`, `time_to_die`, `target.time_to_die` are **fixed unknown ~3600 s**, not a real time-to-death. `target.time_to_pct_<N>` is fixed unknown ~2520 s.
