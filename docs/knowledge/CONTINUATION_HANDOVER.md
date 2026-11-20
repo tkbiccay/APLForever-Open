@@ -1,5 +1,13 @@
 # APLForever-Open — canonical continuation handover
 
+## Lean operation and historical CI closure — 20 November 2026
+
+**Confirmed CI completion (previously pending):** [historical v0.9.0 full native run 44761625290](https://github.com/tkbiccay/APLForever-Open/actions/runs/44761625290) completed **SUCCESS** at Guardian [PR #22](https://github.com/tkbiccay/APLForever-Open/pull/22) head `a6085d43566c8fa507d2f57e748cf3de426235f3`. The version-aware source manifest correctly excludes Guardian v1.5 (`min_source_release=v0.10.0`) from the v0.9.0 import. All stages, including Guardian mitigation, Feral natural resources and published source mechanics, completed green. This **does not** assert the separate selected-all-role v0.10.0 gate is green, or provide in-game approval. Later docs/test commits on PR #22 remain separately subject to their own branch checks.
+
+**Efficiency policy now pinned** in [`docs/APL_AUTONOMY_STANDARD.md`](../../APL_AUTONOMY_STANDARD.md): one bounded decision, re-use pins/fixtures, targeted source-native tests first, avoid continuous Actions polling, consolidate GitHub writes, verify commits before retrying after delivery timeouts, no speculative infrastructure churn, Codex only for meaningful isolated tasks. Record pending runs without keeping chat open. User's strategic order remains **Guardian Tank = Hunter BM** first, **Feral DPS** next, then other supported roles; APL correctness and default/last-working regression protection override performance guesses.
+
+**Current practical blocker:** Guardian v1.5 has source-native group/aggro and real accepted post-Roar checks but no verified *live* client threat/role; BM v1.2 has source-native pet state guards but no actual accepted Call/Revive arrival. Next efficient step is short in-game validation when available; do not build more artificial pet or threat tests just to make checkmarks.
+
 ## Continuation 11 — 20 November 2026: two P0 source-native advances, no gameplay promotion
 
 **Canonical public source:** `tkbiccay/APLForever-Open`. **Published Forever:** v0.10.0 (19 Nov 2026), `3c2cf3e32472cc807b1ba29d992fc13a273da8ee`. Protected `main` unmodified. All PRs remain Draft; no APL Approved. P0 remains Guardian/Feral Tank **equal** Hunter BM; Feral DPS next.

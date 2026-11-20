@@ -37,6 +37,20 @@ Before an APL uses `tanking` as a necessary condition for a **routine tank/debuf
 
 **Compare actual game defaults**, not just harness `sim` defaults. Forever's registered `settings.maintain_demoralizing_roar` is `false` normally but `sim=true` to represent a raid tank in the simulator. [Four-profile experiment 44713464837](https://github.com/tkbiccay/APLForever-Open/actions/runs/44713464837) proves this can reverse shipped/default Roar counts without changing the APL. Reproduce both configurations explicitly where relevant, and never promote an alternative merely for extra accepted casts without real threat/mitigation/output evidence.
 
+## Lean execution and message delivery
+
+**Operating principle:** maximise proof per GitHub/ChatGPT operation; improving original, standalone APL gameplay takes priority over maintaining CI machinery.
+
+1. **One bounded engineering decision per interaction:** inspect latest pinned source, protected catalogue and handover, choose Guardian Tank / Hunter BM (equal P0) before Feral DPS; define one hypothesis, acceptance and rollback. Stop if a source/engine/gameplay gate is already decisive.
+2. **Re-use existing evidence:** cache release pins, fixture quirks, known failures and cross-spec lessons. Do not reread every guide, role or source file for a narrowly verified fix. Research broadly only for a new spec, major upstream revision or real mechanical disagreement.
+3. **Narrow tests before broad CI:** run the smallest source-native regression that tests both positive and negative branches; retain exact real accepted actions, refusals, toggles and fallback coverage. Run a broader suite only at a candidate/release boundary or when a shared harness/data/engine change creates meaningful cross-role risk. Never claim an unfinished run green.
+4. **No repeated polling:** dispatch once, record SHA and Actions URL, check status once when useful. If still running, mark **Pending** and continue on the next interaction; do not keep the ChatGPT response open just to watch CI. Recheck already completed runs before dispatching duplicates.
+5. **Atomic, low-churn GitHub writes:** combine related changes into one reviewable Draft commit when practical; use exact branch-head and file/hash preconditions, protect every existing APL and rollback. Avoid multiple comments/docs edits that restate identical evidence. Never silently merge, select, approve or overwrite the user's working APL.
+6. **Delivery resilience:** provide concise results and links; for large work, share a durable result as soon as supported. After a response or tool timeout, first inspect GitHub commit and run state before retrying—successful writes may already exist. Keep complete APL code in source files and supply its entire copy-ready text when delivering the APL.
+7. **Codex only when justified:** delegate distinct, sufficiently complex tasks with a concrete acceptance test that cannot efficiently be done in the current workflow. No delegation for ordinary status checks, single-line docs, routine fixture diagnosis or repeated broad scans.
+
+**Status labels and stop rule:** Static / Source-Native / In-Game are different evidence grades; no real-client proof means no Approved status. If only the player can verify pet arrival, threat/role or a hidden-state behaviour, provide the smallest safe gameplay check and stop inventing headless equivalents. Protect last-working behaviour even when a simulation looks attractive.
+
 ## Mandatory all-role audit and promotion gates
 
 - The repository's `scripts/audit_apl_controls.py` scans **every catalogue revision**, not just the newest, for `settings.*` and `toggle.*`. All previously reported uses are tied to **exact protected path and SHA-256**; a brand-new unreviewed `settings.*` dependency fails the static guard. Historical baseline exemption is *not* a certificate of autonomously correct behaviour. Toggle occurrences are **review findings**, not automatic defects; classify each ability and call-site by role/function.
