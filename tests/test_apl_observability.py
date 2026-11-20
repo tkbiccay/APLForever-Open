@@ -105,11 +105,25 @@ class ObservabilityTests(unittest.TestCase):
         bad["role_scopes"]["Druid_Guardian"]["apl_sha256"] = "0" * 64
         with self.assertRaises(ValueError):
             audit.validate_evidence(rows, bad, pin)
-        result = audit.report(rows, flagged, evidence, [])
+        result = audit.report(rows, flagged, evidence, [], pin)
         self.assertIn("Druid_Guardian", result)
         self.assertIn("Hunter_BeastMastery", result)
         self.assertIn("Warlock_Demonology", result)
-        self.assertIn("Not individually established on v0.10.0", result)
+        self.assertIn("Not individually established on " + pin["release_tag"], result)
+        if pin["release_tag"] != evidence["source_release"]:
+            self.assertIn("Historical " + evidence["source_release"] +
+                          " Scoped native PASS only", result)
+            self.assertIn("full all-role release compatibility: Not established", result)
+            self.assertNotIn("full all-role release compatibility: Scoped native PASS", result)
+        bad_pin = copy.deepcopy(pin)
+        bad_pin["historical_evidence_pins"] = []
+        if pin["release_tag"] != evidence["source_release"]:
+            with self.assertRaises(ValueError):
+                audit.validate_evidence(rows, evidence, bad_pin)
+        forged = copy.deepcopy(evidence)
+        forged["upstream_sha"] = "0" * 40
+        with self.assertRaises(ValueError):
+            audit.validate_evidence(rows, forged, pin)
         self.assertIn("Partial / Blocked", result)
         self.assertIn("not proven", result.lower())
 

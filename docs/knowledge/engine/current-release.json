@@ -5,8 +5,8 @@
   "release_commit": "86b739cbc4e6afbcbc693c3790ee81197fc6234b",
   "published_at_utc": "2026-11-20T14:59:13Z",
   "recorded_on": "2026-11-20",
-  "compatibility_status": "Reviewing / P0 Targeted Native Pending; Full All-Role Unverified",
-  "compatibility_notes": "Published v0.11.0 reviewed against v0.10.0: 110 changed files, Druid/Hunter class rotation Lua unchanged; core Belief/resources/tick attribution, replay form rank, target time-to-percent and options change. Focused Guardian v1.5 + BM v1.1/v1.2 tests dispatched only through Draft release PR; real client tests still pending. Full v0.10.0 selected all-role compatibility remained Partial for Feral in-combat hidden health and Arms precombat warning, so v0.11.0 must not be labelled fully compatible.",
+  "compatibility_status": "Partial / Focused P0 Native PASS; Full All-Role Unverified",
+  "compatibility_notes": "Published v0.11.0 source reviewed. Focused Guardian v1.5 and BM v1.1/v1.2 native run 44771820185 PASSED; standalone APL selection and in-game castability still unproven. Historical v0.10.0 role-evidence remains pinned to its old source SHA, not transposed to v0.11.0. Full v0.10.0 all-role gate stayed Partial/red (Feral in-combat hidden health and Arms phase-agnostic precombat warning); v0.11.0 full all-role compatibility is UNVERIFIED.",
   "latest_passing_historical_native_release": {
     "tag": "v0.9.0",
     "commit": "8f95f2ea0a45428554c1e938ed7357b870030514",
@@ -18,5 +18,12 @@
     15
   ],
   "draft_compatibility_pr": null,
-  "source_release_url": "https://github.com/zmsl/hekili/releases/tag/v0.11.0"
+  "source_release_url": "https://github.com/zmsl/hekili/releases/tag/v0.11.0",
+  "historical_evidence_pins": [
+    {
+      "release_tag": "v0.10.0",
+      "release_commit": "3c2cf3e32472cc807b1ba29d992fc13a273da8ee",
+      "scope": "Explicit historical native evidence only; no v0.11.0 compatibility claim"
+    }
+  ]
 }
