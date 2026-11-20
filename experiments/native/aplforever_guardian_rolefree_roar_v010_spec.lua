@@ -17,10 +17,19 @@ local function read()
     return s
 end
 local source = read()
+local function readReportedWorking()
+    local filePath = "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
+    local f = assert(io.open(root .. "/" .. filePath, "rb"))
+    local s = assert(f:read("*a"))
+    f:close()
+    return s
+end
 local from = "((group&tanking&time>=5)|(target.is_boss&time>=4)|(solo&tanking&time>=12))"
 local to = "((group&time>=5)|(target.is_boss&time>=4)|(solo&time>=12))"
 
 local function variant(which)
+    if which == "shipped" then return nil end
+    if which == "reported-v1.0" then return readReportedWorking() end
     if which == "baseline-v1.4" then return source end
     assert.are.equal("role-free-hypothesis", which)
     local at = assert(source:find(from, 1, true),
@@ -60,7 +69,8 @@ local function scenario(which,group,seconds)
     local L = loop.new(content)
     local H = L.us
     assert.are.same({},H.loadErrors)
-    import(H,variant(which))
+    local proposed = variant(which)
+    if proposed then import(H,proposed) end
     H.ctl.groupMembers = group and 2 or 0
     H.ctl.inGroup = group
     H.Hekili.DB.profile.toggles.cooldowns.value = false
@@ -99,8 +109,13 @@ end
 
 describe("Guardian independent source-native Roar role requirement hypothesis",function()
     it("non-boss grouped encounter: old role-gated branch versus role-free alternative",function()
+        local shipped=scenario("shipped",true,38)
+        local working=scenario("reported-v1.0",true,38)
         local current=scenario("baseline-v1.4",true,38)
         local alternative=scenario("role-free-hypothesis",true,38)
+        print(("GUARDIAN_ROLE_FREE_COMPARATORS shipped_roar=%d reported_working_roar=%d v14_roar=%d experimental_roar=%d shipped_accepted=%d working_accepted=%d v14_accepted=%d alternative_accepted=%d"):format(
+            shipped.roar,working.roar,current.roar,alternative.roar,
+            shipped.accepted,working.accepted,current.accepted,alternative.accepted))
         assert.are.equal(0,current.roar,
             "the published fake client now supplies actual tank-role eligibility, reassess")
         assert.is_true(alternative.roar>=1,
