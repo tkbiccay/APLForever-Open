@@ -1,0 +1,3 @@
+# Limitations — Hunter BM v1.3 independent Bestial Wrath
+
+Published source tests use a living pet, fake six/twelve-yard target distances and modeled class ability costs, not player-observed damage or actual pet attack. BW range independence is source-backed, but if the pet is not in combat or target pathing is poor the cooldown may be wasted. Pet health remains unreadable; Mend Pet stays manual, Call/Revive actual effects and real pet arrival not source-world proven. APL cannot override user-disabled native Cooldowns Require Toggle. Three-press tests are required for repeated fallback and six-yard ranged refusal. Status Draft; original Current v1.1 and Candidate v1.2 remain exact.

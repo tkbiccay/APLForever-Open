@@ -1,0 +1,5 @@
+# Tests — BM v1.3 independent pet Bestial Wrath
+
+Pinned Forever v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b`; exact complete APL equality checked against a two-line transformation of v1.2. Native fixture `experiments/native/aplforever_bm_bestial_range_v011_spec.lua` (a) six-yard Major ON: old missed and new accepted BW, legal Hawks without out-of-range presses; (b) twelve-yard Major ON: both accept BW; (c,d) Major OFF at six/twelve yards: no forced cooldown and safe comparable Hawk cadence. Require zero source refused casts, errors/raises and 3 accepted post-BW actions.
+
+**Unrun at creation; read actual GitHub Actions logs before asserting success.** No WoWSims damage, live pet aura, 1–60 unlock, threat, movement, repeated fights or real-world pet death were measured in these tests. In-game minimal future test: safely use pet with target at 6–8yd, Major ON (ordinary native setting), accept BW and next three actions; repeat OFF and outside 8yd. Use `/hek snap` and record native Ability Require Toggle and client pet. Reject/rollback if improper cooldown use or repeated recommendation.

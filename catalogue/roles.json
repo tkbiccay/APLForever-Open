@@ -331,10 +331,11 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.2",
+      "latest_revision": "v1.3",
       "limitations": [
         "Archived Hunter BM ranged/melee actions may represent a valid DPS weave; verify talent, pet, range, swing timing, safety and benefit before promotion.",
-        "v1.2 under Candidates is not selected, preferred, reported-working or Approved; source world can test accepted Hawk casts but cannot prove real pet damage or live cooldown-manager observation."
+        "v1.2 under Candidates is not selected, preferred, reported-working or Approved; source world can test accepted Hawk casts but cannot prove real pet damage or live cooldown-manager observation.",
+        "Hunter BM v1.3 pet Bestial Wrath source-range correction is an unselected experiment; cannot prove real pet DPS, optional cooldown intent or in-game safety until tested."
       ],
       "revisions": [
         {
@@ -397,6 +398,24 @@
           "settings": null,
           "caveat": "UNSELECTED Draft Candidate only; pet/hawk survival and in-game damage are unverified. In-game validation and separate confirmed current/working selection required.",
           "purity_review": "Complete standalone Hunter BM priority. Only one evidence-backed guard changed from v1.1: Summon Hawk independently checks its registered 0-35 yard range and pet.hawk.count<2, rather than requiring all Hunter ranged shots' minimum 8 yards."
+        },
+        {
+          "revision": "v1.3",
+          "apl_file": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt",
+          "status": "Draft",
+          "sha256": "cae9e9dc333ae4c487982d385e2e6bf6d2b248e771765212be90a457d9e726fd",
+          "min_source_release": "v0.11.0",
+          "evidence": [
+            "Hekili Forever v0.11.0 86b739cbc4e6afbcbc693c3790ee81197fc6234b, Bestial Wrath pet buff, 8yd ranged attack dead zone; source-native tests pending"
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No new manual settings. Native Major toggle still respected.",
+          "caveat": "Independent original v1.3 Draft unselected; release-native Bestial Wrath six-yard proof pending, pet damage and gameplay unverified."
         }
       ],
       "apl_name": "Hunter_BeastMastery"
