@@ -1,0 +1,74 @@
+name: Forever v0.11.0 — focused Guardian and BM source-native compatibility
+
+# Release-source smoke only. No all-roles gate, APL changes, selections,
+# simulated pet arrival or real game claims. Immutable PR heads pinned.
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/v0110-p0-native.yml"
+      - "docs/knowledge/engine/v0110-release-review.md"
+      - "docs/knowledge/engine/current-release.json"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: forever-v0110-p0-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-native-p0:
+    name: v0.11.0 exact-source Guardian v1.5 and Hunter BM v1.1/v1.2
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Check out current release-review branch
+        uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - name: Check out immutable Guardian v1.5 Draft branch commit
+        uses: actions/checkout@v4
+        with:
+          repository: tkbiccay/APLForever-Open
+          ref: a6085d43566c8fa507d2f57e748cf3de426235f3
+          path: guardian
+          persist-credentials: false
+      - name: Check out immutable Hunter BM HHA/pet-test Draft commit
+        uses: actions/checkout@v4
+        with:
+          repository: tkbiccay/APLForever-Open
+          ref: 17ac200a8eee46a28b8a33ebd81c3af8fa517245
+          path: hunter
+          persist-credentials: false
+      - name: Check out published Forever v0.11.0 source
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify immutable repository and source pins
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          test "$(git -C guardian rev-parse HEAD)" = "a6085d43566c8fa507d2f57e748cf3de426235f3"
+          test "$(git -C hunter rev-parse HEAD)" = "17ac200a8eee46a28b8a33ebd81c3af8fa517245"
+          python project/scripts/validate_repository.py
+          python guardian/scripts/validate_repository.py
+          python hunter/scripts/validate_repository.py
+      - name: Bootstrap exact v0.11.0 released Lua source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Guardian complete v1.5 source castability and group aggro safety
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/guardian/experiments/native/aplforever_guardian_aggro_gate_v010_spec.lua" tests/Forever/aplforever_guardian_aggro_gate_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/guardian" .lua/bin/busted --verbose tests/Forever/aplforever_guardian_aggro_gate_v011_spec.lua
+      - name: Hunter BM complete source pet-state and stale-usability fallback guards
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/hunter/experiments/native/aplforever_bm_pet_reaction_v010_spec.lua" tests/Forever/aplforever_bm_pet_reaction_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/hunter" .lua/bin/busted --verbose tests/Forever/aplforever_bm_pet_reaction_v011_spec.lua
+      - name: Hunter BM HHA range-awareness and source-accepted actions
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/hunter/experiments/native/aplforever_bm_hha_v010_spec.lua" tests/Forever/aplforever_bm_hha_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/hunter" .lua/bin/busted --verbose tests/Forever/aplforever_bm_hha_v011_spec.lua
