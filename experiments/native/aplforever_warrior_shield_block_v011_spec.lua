@@ -59,13 +59,6 @@ local function case(profile,defend,threat,group,seconds,level)
     local rr=loop.run(L,30417,{duration=seconds},{{H=H}})
     local n=(rr.pressedBy or {}).shield_block or 0
     local revenge=(rr.pressedBy or {}).revenge or 0
-    local minRage,maxRage=math.huge,-math.huge
-    for _,e in ipairs(rr.W.truth) do
-        if e.src==rr.us and e.kind=="cast" and e.cost then
-            minRage=math.min(minRage,rr.us.power)
-            maxRage=math.max(maxRage,rr.us.power)
-        end
-    end
     local id=H.Hekili.Class.auras.shield_block.id
     local aura,swing,post=0,0,0
     local casts={}
@@ -92,13 +85,11 @@ local function case(profile,defend,threat,group,seconds,level)
         assert.is_truthy(first,"actual Shield Block press missing")
         for i=first+1,rr.combat do
             if rr.pressed[i] then
-                if rr.pressed[i]=="shield_block" then
-                    -- Shipped default can legally cast a 5s off-GCD Shield
-                    -- Block twice before three other GCD presses. The source
-                    -- cooldown-spacing invariant above catches actual spam.
-                    assert.are.equal("shipped",profile,
-                        "new custom Shield Block repeated before 3 other casts")
-                else
+                -- Off-GCD Shield Block can legally recur after its true
+                -- 5-second cooldown before 3 other GCDs at every level,
+                -- not only in shipped. Exact source cast interval above is
+                -- the real anti-spam gate, rather than a GCD-count proxy.
+                if rr.pressed[i]~="shield_block" then
                     post=post+1
                     if post==3 then break end
                 end
