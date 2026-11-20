@@ -50,6 +50,21 @@ The full 3-profile focused [v0.10.0 native run 44702973404](https://github.com/t
 
 **Decision: hybrid is Source-Native Supported for these narrow ranges, but `Experimental / Not Promoted` overall.** There is no demonstrated DPS/output improvement or evidence for raid/group, AoE, Major ON, long resource-exhaustion, different gear/talents, other distances, pet recovery or live Auto Shot timing. Preserve v1.2 exactly and defer further hybrid refinement until targeted gameplay or damage evidence establishes meaningful upside. If advanced syntax creates only an equivalent recommendation with more complexity, default to simpler last-working/candidate architecture.
 
+## Controlled BM pet-recovery state transition, same source pin — 20 November 2026
+
+To push headless validation as far as the *actual released engine* permits, this PR also includes the focused diagnostic `experiments/native/aplforever_bm_pet_reaction_v010_spec.lua`. It tests **both full original BM v1.1 and v1.2 imports** under actual Hekili v0.10.0 Lua evaluation with source-registered spell IDs `Call Pet=883` and `Revive Pet=982`. See [focused native job 44706899530](https://github.com/tkbiccay/APLForever-Open/actions/runs/44706899530): **4 successes, 0 failures, 0 errors**.
+
+| Profile | Before reported arrival | First after arrival | Next two recommendations |
+| --- | --- | --- | --- |
+| BM v1.1 / absent pet | `call_pet` | `aspect_of_the_hawk` | `aspect_of_the_hawk` / `aspect_of_the_hawk` |
+| BM v1.1 / dead pet | `revive_pet` | `aspect_of_the_hawk` | `aspect_of_the_hawk` / `aspect_of_the_hawk` |
+| BM v1.2 / absent pet | `call_pet` | `aspect_of_the_hawk` | `aspect_of_the_hawk` / `aspect_of_the_hawk` |
+| BM v1.2 / dead pet | `revive_pet` | `aspect_of_the_hawk` | `aspect_of_the_hawk` / `aspect_of_the_hawk` |
+
+The test deliberately supplies **client-visible healthy pet** `UnitExists("pet")=true`, `UnitIsDead("pet")=false`, native `IsSpellUsable` false for both recovery spells, and fires `UNIT_PET` / `SPELL_UPDATE_USABLE`. It then tests three subsequent source-native evaluations. **This is NOT a world-accepted Call/Revive spell, pet creation, successful 10-second revive cast, or in-game evidence.** The source Hunter class explicitly states these abilities do not create a forecast pet, and the built-in Hunter combat world starts with a living pet, so a claimed natural cast/arrival here would be fabricated. We have proved only the APL reacts correctly *after* the real game reports an alive pet. If the pet never arrives, no native result here proves a safe repeated-recommendation solution.
+
+**Decision:** evidence grade `Confirmed — controlled source-native client-state transition`; actual pet summon/revive/arrival and post-press progression still `Needs In-Game Validation / Engine Fixture Limitation`. Existing BM v1.1/v1.2 APL bytes, counts, hashes and unselected status remain intact. The experiment does not justify a new APL version or a damage gain claim.
+
 ## Evidence and costs
 
 No test results before the CI finishes; tests only establish world-cast correctness and a comparative trace. Known benchmark defect: shipped Turret repeatedly recommends 8–35yd Serpent Sting at 6yd, yielding 109 real range refusals on pinned v0.9.0; **our baseline must not inherit this**. Synthetic Auto Shot at 6yd is not reliable for white-attack clipping.
