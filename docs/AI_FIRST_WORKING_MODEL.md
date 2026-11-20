@@ -37,6 +37,8 @@ Run broad multi-role native gates for upstream releases, source-shared changes o
 
 ## Ability intent, real toggles and standalone architecture (19 November 2026)
 
+**20 November cross-role autonomy amendment:** no checkbox or per-spec option should be required to make a new role APL's **ordinary** rotation work. Its routine upkeep, pet/form/resource/debuff policies belong in its own APL; optional player OFF switches and the engine's native Require Toggle limitations remain real and must not be bypassed or misrepresented. Existing settings-bearing Guardian/Demonology rollbacks are preserved, not compliant by declaration. See [APL Autonomy Standard](APL_AUTONOMY_STANDARD.md). Audit new `settings.*` uses via `scripts/audit_apl_controls.py`; review `toggle.*` uses semantically, not with a blanket ban. Successful static scans cannot prove castability or game-side activation.
+
 Treat **ability role** and **addon registration toggle** as distinct facts. Research the exact released class/race/item registration before deciding that a spell belongs in the APL's `general_rotation`, `major_cooldowns`, `minor_cooldowns`, `defensives`, `interrupts`, `potions` or utility/upkeep. List names are conceptual and **not automatically verified import syntax**. One full standalone import may contain its own internal lists; no second APL or external helper is required.
 
 - **General rotation:** ordinary builders, spenders, DoTs/debuffs, target-adaptive fillers, resource-safe waits, forms/pets and upkeep even if some have a short cooldown. Do **not** hide regular throughput behind a cooldown toggle merely because it has a cooldown.
