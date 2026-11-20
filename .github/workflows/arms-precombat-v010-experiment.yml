@@ -8,6 +8,7 @@ on:
     paths:
       - ".github/workflows/arms-precombat-v010-experiment.yml"
       - "experiments/native/aplforever_arms_precombat_phase_v010_spec.lua"
+      - "experiments/native/aplforever_druid_role_tanking_v010_spec.lua"
 permissions:
   contents: read
 concurrency:
@@ -48,3 +49,8 @@ jobs:
         run: |
           cp "$GITHUB_WORKSPACE/aplforever/experiments/native/aplforever_arms_precombat_phase_v010_spec.lua" tests/Forever/aplforever_arms_precombat_phase_v010_spec.lua
           .lua/bin/busted --verbose tests/Forever/aplforever_arms_precombat_phase_v010_spec.lua
+      - name: Verify Feral and Guardian selected specs do not override client role
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/experiments/native/aplforever_druid_role_tanking_v010_spec.lua" tests/Forever/aplforever_druid_role_tanking_v010_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_druid_role_tanking_v010_spec.lua
