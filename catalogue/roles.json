@@ -1308,8 +1308,10 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
-      "limitations": [],
+      "latest_revision": "v1.1",
+      "limitations": [
+        "v1.1 unselected Shield Block standalone experiment needs current-source full import plus real-client observed aggro, Rage and Revenge proof; original v1.0 PendingInGame still present."
+      ],
       "revisions": [
         {
           "revision": "v1.0",
@@ -1330,6 +1332,27 @@
           "caveat": "Archival v1.0 migration only; no new validation, default comparison or gameplay proof",
           "legacy_filename": true,
           "relocated_from": "roles/APL_Warrior_Protection_Tank_v1.0_PendingInGame.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Warrior/Candidates/APL_Warrior_Protection_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "f72eac84e6b377b7da80d87532ab090559f9ed6611a40771a9a21ad0603232a1",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Published Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b; protected v1.0 vs shipped vs one-line source-native hypothesis 9/9 PASS (Actions 44806551742); full candidate import pending"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Warrior/Current/APL_Warrior_Protection_Tank_v1.0_PendingInGame.txt",
+          "min_source_release": "v0.11.0",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "Routine Shield Block uses APL with no required Defensives checkbox, while optional Major Cooldowns and user's native Require Toggle off-switches remain respected.",
+          "caveat": "Complete independent source-preserving Draft. No in-game proof, real client aggro/threat, full 1–60, sustained Rage/revenge advantage, DPS/TPS or survivability result. Protect legacy v1.0 PendingInGame and all rollbacks."
         }
       ],
       "apl_name": "Warrior_Protection"
