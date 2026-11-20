@@ -88,11 +88,70 @@ local function check(profile, mode)
         profile.name, mode, before, after1, after2, after3))
 end
 
+-- Independent fail-closed cases: a stale usable flag when the pet is
+-- already alive should NOT force a duplicate Call/Revive, while unavailable
+-- recovery spells must not trap the final fallback. This is only published
+-- client-state/source evaluation. Nothing is asserted about actual casts.
+local function checkGuards(profile, state)
+    local c = C.character()
+    c.known[#c.known + 1] = 883
+    c.known[#c.known + 1] = 982
+    local H = headless.new({ character = c, pack = C.PACK })
+    assert.are.same({}, H.loadErrors)
+    local imported, warnings = H.Hekili:ImportSimcAPL(
+        "Hunter_BeastMastery", "APLForever-Pet-Guards",
+        read(profile.path), C.PACK)
+    assert.is_table(imported)
+    assert.is_table(imported.precombat)
+    assert.is_table(imported.default)
+    assert.is_falsy((warnings or ""):find("Unsupported action", 1, true))
+    H.Hekili.DB.profile.packs[C.PACK].lists = imported
+    H.Hekili:LoadScripts()
+    H.Hekili:ReviewPacks()
+    assert.are.same({}, H.errors)
+    assert.is_true(H.Hekili:IsListActive(C.PACK, "default"))
+    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+
+    if state == "alive-usable" then
+        -- Intentionally inconsistent usability = stale client value.
+        -- The APL must use actual pet_out/dead guard independently.
+        H.ctl.exists.pet, H.ctl.dead.pet = true, false
+        H.ctl.usable[883], H.ctl.usable[982] = { true, false }, { true, false }
+    elseif state == "absent-unusable" then
+        H.ctl.exists.pet, H.ctl.dead.pet = false, false
+        H.ctl.usable[883], H.ctl.usable[982] = { false, false }, { false, false }
+    elseif state == "dead-unusable" then
+        H.ctl.exists.pet, H.ctl.dead.pet = true, true
+        H.ctl.usable[883], H.ctl.usable[982] = { false, false }, { false, false }
+    else
+        error("unregistered source client pet condition: " .. tostring(state))
+    end
+    H.ctl.inRange.target = true
+    H.ctl.level.target = 60
+    H.Fire("PLAYER_TARGET_CHANGED")
+    local first = advance(H, 0.2)
+    local second = advance(H, 1.6)
+    local third = advance(H, 1.6)
+    for _, action in ipairs({first, second, third}) do
+        assert.is_true(action ~= "call_pet" and action ~= "revive_pet",
+            "pet recovery suggested without valid client state/usability")
+    end
+    -- If positive filler is unavailable, NO_ACTION is a genuine engine
+    -- limitation. Do not invent a cast or hide it behind a fabricated pet.
+    print(("BM_PET_V010_GUARDS profile=%s state=%s first=%s next=%s third=%s actual_pet_cast=NOT_TESTED"):format(
+        profile.name,state,first,second,third))
+end
+
 describe("Hunter BM v0.10.0 APL reaction to source-readable pet unit state", function()
     for _, profile in ipairs(paths) do
         for _, state in ipairs({ "absent", "dead" }) do
             it(profile.name .. " changes " .. state .. " recovery icon after healthy-pet state", function()
                 check(profile, state)
+            end)
+        end
+        for _, state in ipairs({ "alive-usable", "absent-unusable", "dead-unusable" }) do
+            it(profile.name .. " prevents unreachable recovery at " .. state, function()
+                checkGuards(profile, state)
             end)
         end
     end
