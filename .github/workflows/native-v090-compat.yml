@@ -1,15 +1,18 @@
 name: Hekili Forever v0.9.0 source-native compatibility
 
 # Canonical PUBLIC v0.9.0 pinned-source gate; no private CI dependency.
-# Run on APL/native source changes, not unrelated documentation.
-# A native pass is not in-game Approved or numerical DPS evidence.
+# Historical v0.9.0 full suite: run only for its own fixture/manifests,
+# changes to Current/Checkpoints/Archive protected APLs, or manual dispatch.
+# Candidate-only current-release changes require their OWN pinned source-native
+# gate; repository validation of exact hashes continues on ALL pull requests.
+# See issue #30. A native pass is not in-game approval or DPS evidence.
 on:
   workflow_dispatch:
   pull_request:
     paths:
       - ".github/workflows/native-v090-compat.yml"
-      - "catalogue/**"
       - "roles/**"
+      - "!roles/**/Candidates/**"
       - "tests/native/**"
       - "scripts/build_native_manifest.py"
       - "scripts/wiki_release_diff.py"
