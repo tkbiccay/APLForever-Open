@@ -1,0 +1,39 @@
+name: Hunter BM v0.11.0 Aimed clipping research — source Auto Shot cast truth and observer limit
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/bm-v0110-aimed-autoshot.yml"
+      - "experiments/native/aplforever_bm_aimed_autoshot_v011_spec.lua"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: bm-v0110-aimed-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify pinned source and all protected APL hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap published native source world
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Compare actual Auto Shot casts and identify missing ranged-swing observer rows
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_bm_aimed_autoshot_v011_spec.lua" tests/Forever/aplforever_bm_aimed_autoshot_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose tests/Forever/aplforever_bm_aimed_autoshot_v011_spec.lua
