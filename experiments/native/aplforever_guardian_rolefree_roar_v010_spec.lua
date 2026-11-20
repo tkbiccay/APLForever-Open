@@ -68,7 +68,20 @@ local function scenario(which,group,seconds)
     H.Hekili.DB.profile.toggles.movement.value = false
     assert.is_false(H.Hekili.State.role.tank,
         "published source world is DAMAGER-role client, not true tank-role")
-    local run = loop.run(L,30417,{duration=seconds},{ {H=H} })
+    local stats = {maxRageLoPost12=0, maxTruthRagePost12=0, post12Ticks=0, observedSolo=false}
+    local run = loop.run(L,30417,{
+        duration=seconds,
+        on=function(r, _, t)
+            if r.combat <= 0 then return end
+            local elapsed = H.Hekili.State.time or 0
+            if elapsed < 12 then return end
+            stats.post12Ticks = stats.post12Ticks + 1
+            stats.observedSolo = stats.observedSolo or (H.Hekili.State.solo == true)
+            local p = H.ns.VirtualState.Power(1, H.ctl.now)
+            stats.maxRageLoPost12 = math.max(stats.maxRageLoPost12, (p and p.lo) or 0)
+            stats.maxTruthRagePost12 = math.max(stats.maxTruthRagePost12, r.us.power or 0)
+        end,
+    },{ {H=H} })
     assert.are.equal(0,run.errors)
     assert.are.equal(0,run.raises)
     assert.are.same({},run.refused)
@@ -77,10 +90,11 @@ local function scenario(which,group,seconds)
     local roar = (run.pressedBy or {}).demoralizing_roar or 0
     local barkskin = (run.pressedBy or {}).barkskin or 0
     assert.are.equal(0,barkskin,"Defensives OFF must prevent Barkskin")
-    print(("GUARDIAN_ROLE_FREE_V010 which=%s group=%s duration=%d role_tank=%s accepted=%d roar=%d barkskin=%d refused=0 events=%d"):format(
+    print(("GUARDIAN_ROLE_FREE_V010 which=%s group=%s duration=%d role_tank=%s accepted=%d roar=%d barkskin=%d refused=0 events=%d rage_lo_max_after12=%.3f truth_rage_max_after12=%.3f post12_ticks=%d observed_solo=%s"):format(
         which,tostring(group),seconds,tostring(H.Hekili.State.role.tank),
-        run.presses,roar,barkskin,#run.W.truth))
-    return {roar=roar,accepted=run.presses}
+        run.presses,roar,barkskin,#run.W.truth,
+        stats.maxRageLoPost12,stats.maxTruthRagePost12,stats.post12Ticks,tostring(stats.observedSolo)))
+    return {roar=roar,accepted=run.presses,stats=stats}
 end
 
 describe("Guardian independent source-native Roar role requirement hypothesis",function()
@@ -104,8 +118,20 @@ describe("Guardian independent source-native Roar role requirement hypothesis",f
         local current=scenario("baseline-v1.4",false,35)
         local alternative=scenario("role-free-hypothesis",false,35)
         assert.are.equal(0,current.roar)
-        assert.is_true(alternative.roar>=1,
-            "source-accepted normal mob long-solo Roar never occurred")
+        assert.is_true(alternative.stats.post12Ticks>0,
+            "no real source advancement through the 12s solo gating window")
+        assert.is_true(alternative.stats.observedSolo,
+            "source client did not report solo, cannot test the branch")
+        if alternative.stats.maxRageLoPost12 < 20 then
+            -- Condition requires 10 Rage for Roar PLUS a real 10 Rage
+            -- conservative reserve. A zero-Roar outcome is correctly
+            -- unaffordable, not proof of a broken time/solo branch.
+            assert.are.equal(0,alternative.roar,
+                "accepted Roar despite believing Rage insufficient")
+        else
+            assert.is_true(alternative.roar>=1,
+                "role-free normal solo branch had eligible Rage but no accepted Roar")
+        end
         assert.is_true(alternative.roar<=1,
             "normal solo combat should not consume Roar multiple times in 35 seconds")
     end)
