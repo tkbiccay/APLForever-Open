@@ -331,11 +331,12 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.3",
+      "latest_revision": "v1.4",
       "limitations": [
         "Archived Hunter BM ranged/melee actions may represent a valid DPS weave; verify talent, pet, range, swing timing, safety and benefit before promotion.",
         "v1.2 under Candidates is not selected, preferred, reported-working or Approved; source world can test accepted Hawk casts but cannot prove real pet damage or live cooldown-manager observation.",
-        "Hunter BM v1.3 pet Bestial Wrath source-range correction is an unselected experiment; cannot prove real pet DPS, optional cooldown intent or in-game safety until tested."
+        "Hunter BM v1.3 pet Bestial Wrath source-range correction is an unselected experiment; cannot prove real pet DPS, optional cooldown intent or in-game safety until tested.",
+        "BM v1.4 Lone Wolf/Revive correction is unselected and needs full-file source-native and real-game validation; main pet actual revive/arrival and player intent unobservable in existing headless world."
       ],
       "revisions": [
         {
@@ -424,6 +425,32 @@
           "gear": null,
           "settings": "No new manual settings. Native Major toggle still respected.",
           "caveat": "UNSELECTED Draft; source-native castability v0.11.0 PASS with 6–12yd and Major toggles; actual pet damage, 1–60, live cooldown behaviour and real-game proof unverified."
+        },
+        {
+          "revision": "v1.4",
+          "apl_file": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt",
+          "status": "Draft",
+          "sha256": "718182dca05bbb926652a8b824127a212651bcbdf930d820c5afd726b613aae5",
+          "min_source_release": "v0.11.0",
+          "evidence": [
+            "Source-native in-memory A/B full-BM v1.3 vs 51-point BM+Lone Wolf exact two-Revive-guard transform, v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b: https://github.com/tkbiccay/APLForever-Open/actions/runs/44812216114 (6/6 PASS, first three repeated icons); full v1.4 source-native CI pending",
+            "Full stored-source native 10/10 test PASS https://github.com/tkbiccay/APLForever-Open/actions/runs/44812780314: v1.4 byte-match to original verified in-memory conditional change, six Lone Wolf/on-off pet reactions and four matched normal BM source-world legal cast comparisons."
+          ],
+          "test_results": [
+            {
+              "kind": "source_native_v011_lonewolf_guard_and_normal_combat",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44812780314",
+              "result": "PASS 10/10 native cases, zero errors/refusals: 6 real talent/pet client state first-3-icon tests and 4 matched full v1.3/v1.4 6/12yd Major ON/OFF source accepted-cast regressions; all normal BM action counts and final Mana identical. Actual Call/Revive casts, arrival and player DPS NOT TESTED."
+            }
+          ],
+          "rollback_reference": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No manual setting dependency; native Major Cooldowns and Ability Require Toggle remain respected.",
+          "caveat": "UNSELECTED Draft only. Full v0.11.0 source-native PASS 10/10 for 51-point Lone Wolf pet-state icon logic and no-Lone-Wolf 6/12yd on/off accepted casts; actual pet revival/arrival, real DPS/1–60 and live client proof pending."
         }
       ],
       "apl_name": "Hunter_BeastMastery"
