@@ -27,13 +27,18 @@ end
 
 local function sourceFor(mode)
     local src = read()
-    if mode == "hha-gated" then
-        -- Independent, IN-MEMORY architectural hypothesis only. This variant
-        -- follows the source-registered HHA sequence, and preserves the
-        -- entire remainder of the existing v1.2 APL without rewriting it.
+    if mode == "hha-gated" or mode == "hha-range-hybrid" then
+        -- Two IN-MEMORY architecture hypotheses; no file is written.
+        -- Pure HHA can freeze at its Arcane step in the 5-8yd dead zone.
+        -- A hybrid deliberately bypasses HHA only when the game reports
+        -- Arcane Shot out of range, retaining the source-registered
+        -- zero-settings/Hawk-count priority for that tactical gap.
+        local hawkPolicy = mode == "hha-gated"
+            and "window.hha.next.summon_hawk"
+            or "(!action.arcane_shot.in_range|window.hha.next.summon_hawk)"
         src = swapExactlyOnce(src,
             "actions+=/summon_hawk,if=action.summon_hawk.in_range&pet.hawk.count<2",
-            "actions+=/summon_hawk,if=window.hha.next.summon_hawk&action.summon_hawk.in_range&pet.hawk.count<2")
+            "actions+=/summon_hawk,if=action.summon_hawk.in_range&pet.hawk.count<2&" .. hawkPolicy)
         src = swapExactlyOnce(src,
             "actions+=/arcane_shot,if=target.outside8&action.arcane_shot.in_range",
             "actions+=/arcane_shot,if=window.hha.next.arcane_shot&target.outside8&action.arcane_shot.in_range")
@@ -129,16 +134,20 @@ describe("Hunter BM v0.10.0 source-native HHA capability and dead-zone risk", fu
     it("12 yd baseline vs HHA condition on fully imported independent v1.2", function()
         local baseline = scenario("candidate-v1.2", 12)
         local hha = scenario("hha-gated", 12)
-        -- This test is a capability comparison, not a speed/DPS ranking.
-        assert.is_true(baseline.accepted >= 3 and hha.accepted >= 3)
-        print(string.format("HHA_V010_12Y_DIFFERENCE hawk_delta=%d arcane_delta=%d accepted_delta=%d",
+        local hybrid = scenario("hha-range-hybrid", 12)
+        -- These are capability comparisons, not speed/DPS rankings.
+        assert.is_true(baseline.accepted >= 3 and hha.accepted >= 3 and hybrid.accepted >= 3)
+        print(string.format("HHA_V010_12Y_DIFFERENCE hawk_delta=%d arcane_delta=%d accepted_delta=%d hybrid_hawk_delta=%d hybrid_arcane_delta=%d hybrid_accepted_delta=%d",
             hha.hawks - baseline.hawks, hha.arcane - baseline.arcane,
-            hha.accepted - baseline.accepted))
+            hha.accepted - baseline.accepted,
+            hybrid.hawks - baseline.hawks, hybrid.arcane - baseline.arcane,
+            hybrid.accepted - baseline.accepted))
     end)
 
     it("6 yd confirms or rejects HHA full-sequence gating without a rejected shot", function()
         local baseline = scenario("candidate-v1.2", 6)
         local hha = scenario("hha-gated", 6)
+        local hybrid = scenario("hha-range-hybrid", 6)
         -- The baseline v1.2 can safely use Hawk in the 5-8 yard ranged/melee
         -- dead zone; an HHA sequence's Arcane Shot step CANNOT be cast there.
         -- Record whether HHA holds at the Arcane step and costs future Hawks.
@@ -146,7 +155,13 @@ describe("Hunter BM v0.10.0 source-native HHA capability and dead-zone risk", fu
         print(string.format("HHA_V010_6Y_RISK hawk_delta=%d accepted_delta=%d baseline_tail=%d hha_tail=%d",
             hha.hawks - baseline.hawks, hha.accepted - baseline.accepted,
             #baseline.tail, #hha.tail))
+        print(string.format("HHA_V010_6Y_HYBRID hawk_delta=%d accepted_delta=%d hybrid_tail=%d",
+            hybrid.hawks - baseline.hawks, hybrid.accepted - baseline.accepted,
+            #hybrid.tail))
         assert.is_true(baseline.hawks >= 1, "existing six-yard castability lost")
+        -- This hypothesis is tested without forcing a pass on equivalence;
+        -- acceptance or rejection requires inspecting the actual cast counts.
+        assert.is_true(hybrid.hawks >= 1, "hybrid removed all source-accepted Hawk casts")
         -- SOURCE-PINNED negative comparator: the pure HHA-gated experiment
         -- currently loses three source-accepted Hawks and three total presses
         -- by blocking at its uncastable Arcane step. Keep this regression
