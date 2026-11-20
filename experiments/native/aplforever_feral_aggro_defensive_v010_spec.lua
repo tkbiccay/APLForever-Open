@@ -11,6 +11,7 @@
 -- Hekili's Facade captures that API. It is not observed live threat.
 local loop = require("Game.harness.loop")
 local fake = require("Game.State.helpers.fake_api")
+local pretty = require("pl.pretty")
 local druid = require("Forever.helpers.druid_loop_world")
 local stock = assert(druid.Feral)
 local root = assert(os.getenv("APLFOREVER_ROOT"))
@@ -106,6 +107,18 @@ local function scenario(name, threat, defensives, group)
     H.Hekili.DB.profile.toggles.defensives.value = defensives
     H.Hekili.DB.profile.toggles.movement.value = false
     local run = loop.run(L, 30417, { duration = 38 }, { { H = H } })
+    -- Print diagnostics even for a losing experimental branch. A red GCD
+    -- refusal is evidence; never waive it or claim DPS/castability improvement.
+    local acceptedHead = {}
+    for i = 1, math.min(run.combat or 0, 16) do
+        acceptedHead[#acceptedHead + 1] = run.ours[i] or "NO_ACTION"
+    end
+    print("FERAL_AGGRO_DIAGNOSTIC " .. pretty.write({
+        profile=name, clientRole=H.ctl.role, threat=threat,
+        defensives=defensives, group=group, pressed=run.pressedBy,
+        refused=run.refused, acceptedHead=acceptedHead,
+        attempts=run.attempts, worldEvents=#run.W.truth,
+    }, ""))
     assert.are.equal(0, run.raises)
     assert.are.equal(0, run.errors)
     assert.are.same({}, run.refused)
