@@ -38,12 +38,16 @@ jobs:
           fi
       - name: Audit immutable APLs for newly introduced secret/fixed state
         run: python scripts/audit_apl_observability.py --check --report "$RUNNER_TEMP/headless-matrix.md"
+      - name: Guard new checkbox-dependent APL references and inventory existing controls
+        run: python scripts/audit_apl_controls.py --check --report "$RUNNER_TEMP/apl-control-inventory.md"
       - name: Attach per-role static and source-evidence matrix
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: per-role-headless-evidence
-          path: ${{ runner.temp }}/headless-matrix.md
+          path: |
+            ${{ runner.temp }}/headless-matrix.md
+            ${{ runner.temp }}/apl-control-inventory.md
           if-no-files-found: warn
           retention-days: 14
       - name: Public source-native compatibility scope
