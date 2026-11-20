@@ -98,18 +98,30 @@ local function run(name, role, threat, group, seconds)
     assert.are.equal(0,(rr.pressedBy or {}).barkskin or 0,
         "OFF Defensives must prevent source Barkskin")
     if ((rr.pressedBy or {}).demoralizing_roar or 0) > 0 then
-        local casts = assert(rr.combatCasts, "missing actual accepted combat history")
+        -- The published loop.run provides a per-combat-tick `pressed`
+        -- record (nil when no accepted press), NOT `combatCasts`.
+        -- Scan indices rather than ipairs because skipped ticks can be nil.
         local first
-        for i, action in ipairs(casts) do
-            if action == "demoralizing_roar" then first = i; break end
+        for i=1,rr.combat do
+            if rr.pressed[i] == "demoralizing_roar" then first=i; break end
         end
-        assert.is_truthy(first, "Roar was not in accepted source actions")
-        assert.is_true(#casts >= first+3,
-            "need three real accepted post-Roar actions, not merely a first icon")
-        for i=1,3 do
-            assert.is_true(casts[first+i] ~= "demoralizing_roar",
-                "repeated Roar immediately after an accepted cast")
+        assert.is_truthy(first, "source-accepted Roar not recorded in per-tick presses")
+        local following = {}
+        for i=first+1,rr.combat do
+            local action = rr.pressed[i]
+            if type(action) == "string" then
+                following[#following+1] = action
+                if #following == 3 then break end
+            end
         end
+        assert.are.equal(3, #following,
+            "need three ACTUALLY ACCEPTED actions after Roar")
+        for _,action in ipairs(following) do
+            assert.is_true(action ~= "demoralizing_roar",
+                "repeated Roar during first three real accepted post-upkeep casts")
+        end
+        print(("GUARDIAN_V15_POST_ROAR role=%s first_tick=%d next=%s,%s,%s"):format(
+            role,first,following[1],following[2],following[3]))
     end
     local n=(rr.pressedBy or {}).demoralizing_roar or 0
     print(("GUARDIAN_THREAT_V010 profile=%s role=%s group=%s source_client_aggro=%s tanking=%s accepted=%d roar=%d refused=0 source_events=%d"):format(
