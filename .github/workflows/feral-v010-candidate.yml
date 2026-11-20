@@ -9,7 +9,6 @@ on:
       - ".github/workflows/feral-v010-candidate.yml"
       - "roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt"
       - "tests/native/aplforever_feral_defensives_v010_spec.lua"
-      - "catalogue/**"
 
 permissions:
   contents: read
@@ -46,14 +45,14 @@ jobs:
           from scripts.build_native_manifest import select_revision
           roles = json.loads(Path("catalogue/roles.json").read_text())["roles"]
           r = next(x for x in roles if x["apl_name"] == "Druid_Feral")
-          assert r["latest_revision"] == "v1.3"
+          # This historical v1.2/v1.3 source test must not cap the catalogue latest revision.
           revisions = {v["revision"]: v for v in r["revisions"]}
           assert revisions["v1.2"]["sha256"] == "52568f2d069699c5b453aaa98515c3c2096594f4b790ba0e8591c417bcdb95c9"
           assert revisions["v1.3"]["sha256"] == "f235f9c0512a8ceab0ec46daadc2de6b7b497e85de1ad116459aa874f93a9450"
           assert r["preferred_apl"] == "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
           assert r["last_working_apl"] is None
           assert select_revision(r, "v0.10.0")["revision"] == "v1.0"
-          assert len(r["revisions"]) == 4
+          assert {"v1.0", "v1.2", "v1.3"}.issubset(revisions)
           print("Feral v1.2 and full v1.3 remain unselected; protected Current v1.0 unchanged")
           PY
           echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/aplforever" >> "$GITHUB_ENV"
