@@ -52,20 +52,35 @@ local function trial(mode,combat,moving)
     assert.is_true(H.Hekili.Engine.Subscribe("Primary",function() end))
     local at=H.ctl.now
     cycle(H,at+0.2)
-    if moving then H.Fire("PLAYER_STARTED_MOVING") end
+    if moving then
+        H.ctl.moving=true -- source client truth, before movement event
+        H.Fire("PLAYER_STARTED_MOVING")
+    end
     if combat then
         H.ctl.combat=true
         H.Fire("PLAYER_REGEN_DISABLED")
     end
-    local action=cycle(H,at+1.8)
+    -- Inspect SOURCE CLIENT AURA before Engine.Update forecasts its first
+    -- recommended cast. Post-update state can already have simulated Hawk.
     local S=H.Hekili.State
-    print(("BM_CHEETAH_V011 mode=%s combat=%s moving=%s client_auras=%d cheetah_up=%s hawk_up=%s first=%s"):format(
-        mode,tostring(combat),tostring(moving),#H.ctl.auras.player.HELPFUL,
-        tostring(S.buff.aspect_of_the_cheetah.up),tostring(S.buff.aspect_of_the_hawk.up),action))
-    assert.is_true(S.buff.aspect_of_the_cheetah.up,
-        "source does not believe client Cheetah aura; test inconclusive")
-    assert.is_false(S.buff.aspect_of_the_hawk.up,
-        "client already in Hawk; cannot test Cheetah transition")
+    local cheetahBefore=S.buff.aspect_of_the_cheetah.up
+    local hawkBefore=S.buff.aspect_of_the_hawk.up
+    local movementBefore=H.ns.VirtualState.Moving()
+    local action=cycle(H,at+1.8)
+    local movementAfter=H.ns.VirtualState.Moving()
+    print(("BM_CHEETAH_V011 mode=%s combat=%s moving_requested=%s movement_before=%s movement_after=%s cheetah_before=%s hawk_before=%s first=%s forecast_cheetah=%s forecast_hawk=%s"):format(
+        mode,tostring(combat),tostring(moving),tostring(movementBefore),
+        tostring(movementAfter),tostring(cheetahBefore),tostring(hawkBefore),
+        action,tostring(S.buff.aspect_of_the_cheetah.up),
+        tostring(S.buff.aspect_of_the_hawk.up)))
+    assert.is_true(cheetahBefore,
+        "source did not observe pre-recommendation Cheetah aura; fixture inconclusive")
+    assert.is_false(hawkBefore,
+        "source already had Hawk before recommendation; invalid comparison")
+    if moving then
+        assert.is_true(movementAfter,
+            "movement event not observed; do not mistake fixture for an APL failure")
+    end
     return action
 end
 describe("Hunter BM Cheetah combat/travel guard hypothesis on published Forever v0.11",function()
