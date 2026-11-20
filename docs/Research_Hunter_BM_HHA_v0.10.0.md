@@ -65,6 +65,20 @@ The test deliberately supplies **client-visible healthy pet** `UnitExists("pet")
 
 **Decision:** evidence grade `Confirmed — controlled source-native client-state transition`; actual pet summon/revive/arrival and post-press progression still `Needs In-Game Validation / Engine Fixture Limitation`. Existing BM v1.1/v1.2 APL bytes, counts, hashes and unselected status remain intact. The experiment does not justify a new APL version or a damage gain claim.
 
+## Additional pet guard and final-fallback negative cases — 20 November 2026
+
+[Published-source focused run 44757152467](https://github.com/tkbiccay/APLForever-Open/actions/runs/44757152467) **PASSED 12/12 combined tests**: two HHA range cases and **10 pet observation/guard cases**; zero Lua test errors. The unchanged full original BM v1.1 Current Draft and BM v1.2 Candidate were imported individually. In addition to the previous 4 transitions, each APL passed **3 further client-state guards**:
+
+| Controlled source client state | Call Pet usability | Revive Pet usability | First and following 2 source-native recommendations |
+| --- | --- | --- | --- |
+| Main pet is **alive** but spell usability incorrectly still `true` | true | true | `aspect_of_the_hawk` × 3; no redundant recovery |
+| Main pet absent, **Call Pet not usable** | false | false | `aspect_of_the_hawk` × 3; no impossible Call Pet |
+| Main pet dead, **Revive Pet not usable** | false | false | `aspect_of_the_hawk` × 3; no impossible Revive Pet |
+
+Each row ran with **both full v1.1 and full v1.2**. The standalone condition `!pet_out&!pet.dead&!talent.lone_wolf.enabled` independently protects against stale Call Pet usability when a live pet is reported, rather than relying on the engine merely rejecting unavailable spells. When no recovery is usable, the priority safely continues to the ordinary buff upkeep rather than trapping the first icon. These tests are **three successive evaluations, not three actual source-accepted casts**. We do not claim that repeated Aspect icons would be correct after a real accepted Aspect cast: that is outside this stationary source client-state fixture.
+
+**Critical limit:** the initial fake-client pet state and usability flags were explicitly controlled; *no* actual Call/Revive/Aspect world press, actual pet arrival, or 10-second Revive cast was simulated. This is a **Confirmed source-native recommendation-state/fallback** result, **not** a complete repeated post-cast nor in-game proof. All BM APL files, hashes, catalogue and `preferred_apl=null` unchanged. No v1.3 BM Candidate justified; HHA unconditional remains rejected and hybrid remains output-inconclusive.
+
 ## Evidence and costs
 
 No test results before the CI finishes; tests only establish world-cast correctness and a comparative trace. Known benchmark defect: shipped Turret repeatedly recommends 8–35yd Serpent Sting at 6yd, yielding 109 real range refusals on pinned v0.9.0; **our baseline must not inherit this**. Synthetic Auto Shot at 6yd is not reliable for white-attack clipping.
