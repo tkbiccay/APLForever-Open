@@ -60,11 +60,21 @@ local function case(profile,defend,threat,group,seconds)
     local n=(rr.pressedBy or {}).shield_block or 0
     local id=H.Hekili.Class.auras.shield_block.id
     local aura,swing,post=0,0,0
+    local casts={}
+    local shieldID=H.ns.VirtualState.KnownID(H.Hekili.Class.abilities.shield_block.id)
     for _,e in ipairs(rr.W.truth) do
         if e.kind=="aura" and e.aura==id and e.dst==rr.us and
             (e.stacks or 0)>0 then aura=aura+1 end
         if e.kind=="swing" and e.src and e.src.kind=="mob" and
             e.dst==rr.us then swing=swing+1 end
+        if e.kind=="cast" and e.src==rr.us and e.spell==shieldID then
+            casts[#casts+1]=e.t
+        end
+    end
+    assert.are.equal(n,#casts,"count every source-true Shield Block cast")
+    for i=2,#casts do
+        assert.is_true(casts[i]-casts[i-1]>=4.95,
+            "actual Shield Block was re-cast before source 5s cooldown")
     end
     if n>0 then
         local first
@@ -74,10 +84,16 @@ local function case(profile,defend,threat,group,seconds)
         assert.is_truthy(first,"actual Shield Block press missing")
         for i=first+1,rr.combat do
             if rr.pressed[i] then
-                assert.is_true(rr.pressed[i]~="shield_block",
-                    "repeat Shield Block before three other accepted actions")
-                post=post+1
-                if post==3 then break end
+                if rr.pressed[i]=="shield_block" then
+                    -- Shipped default can legally cast a 5s off-GCD Shield
+                    -- Block twice before three other GCD presses. The source
+                    -- cooldown-spacing invariant above catches actual spam.
+                    assert.are.equal("shipped",profile,
+                        "new custom Shield Block repeated before 3 other casts")
+                else
+                    post=post+1
+                    if post==3 then break end
+                end
             end
         end
         assert.is_true(post>=3,"no three accepted subsequent actions")
@@ -88,6 +104,8 @@ local function case(profile,defend,threat,group,seconds)
     assert.are.equal(0,rr.errors)
     assert.are.equal(0,rr.raises)
     assert.are.same({},rr.refused,"material source refusal")
+    -- Accepted post-block presses are a stricter *custom* criterion; source
+    -- timing and mana/rage, not identical GCD counts, adjudicate shipped.
     assert.is_true(swing>=3,"no genuinely advanced enemy swings")
     if n>0 then assert.is_true(aura>0,"block cast did not create source aura") end
     return n
