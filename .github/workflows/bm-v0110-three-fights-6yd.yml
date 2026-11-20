@@ -1,0 +1,41 @@
+name: Hunter BM v0.11.0 repeated six-yard pet cooldown regression
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/bm-v0110-three-fights-6yd.yml"
+      - "experiments/native/aplforever_bm_v13_three_fights_6yd_v011_spec.lua"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hunter-bm-v0110-6yd-multifight-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-native:
+    name: Exact v0.11.0 BM v1.2 vs v1.3 three 6yd fights, no reload
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify source pin and full immutable catalogue
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap exact Hekili Forever source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Exercise three native 6yd source-world pulls with no addon reload
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_bm_v13_three_fights_6yd_v011_spec.lua" tests/Forever/aplforever_bm_v13_three_fights_6yd_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose tests/Forever/aplforever_bm_v13_three_fights_6yd_v011_spec.lua
