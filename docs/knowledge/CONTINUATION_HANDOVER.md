@@ -1,5 +1,15 @@
 # APLForever-Open — canonical continuation handover
 
+## Continuation 10 — 20 November 2026: Feral DSP v1.3 headless improvement (unselected)
+
+**As of the current public PR branch:** [Feral Draft PR #25](https://github.com/tkbiccay/APLForever-Open/pull/25) commits a **complete standalone Feral DPS v1.3** (59 lines) in `roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt`, SHA256 `f235f9c0512a8ceab0ec46daadc2de6b7b497e85de1ad116459aa874f93a9450`. Prior Feral v1.0/v1.1/v1.2 exact byte hashes and preferred v1.0 remain **UNCHANGED**, last working **none**. Source pinned to Hekili Forever v0.10.0 `3c2cf3e32472cc807b1ba29d992fc13a273da8ee`.
+
+**Evidence:** [direct full v1.3 source-native run 44737792288](https://github.com/tkbiccay/APLForever-Open/actions/runs/44737792288) **7/7 success**, byte-exact equality to independently tested in-memory architecture; a controlled client-reported group threat produced **1 accepted Barkskin + corresponding aura, 0 refusals**; Defensives OFF, no threat, solo ST each 0. `aggro` without GCD guard, and `aggro+line_cd=2`, were **REJECTED** due to 1 actual GCD refusal each; `gcd.remains<=0` resolved it in the matched test. Old v1.2 native check, repository hashes pass. Historical v0.9.0 broad regression check on the latest PR head may be running; **do not infer completion** until inspected.
+
+**Limits:** The game threat API is mocked at client initialization for this test only, and Barkskin is added using published source data to the stock Feral development-world kit. Does not prove live instance threat observability, lvl1–60, DPS, survival or genuine player health. Candidate remains **Draft / UNSELECTED** until practical proof and a fair shipped/selected comparison. The complete selected-v1.0 v0.10.0 release gate remains **Partial/red** because of the known real combat-health issue, not silently fixed by an unselected candidate.
+
+**P0 remains:** Guardian/Feral Tank and Hunter BM **EQUAL first**; no in-game approval for either. Guardian PR #22 source-native and BM PR #24 focused native are green, but actual Guardian role/group Roar and real Hunter pet arrival remain gameplay-only blockers. Next best use of engineering credit is a targeted real-client session or a new independently testable failure, NOT rerunning large suites or adding cosmetic syntax. Proposed Feral v1.3 branch is separate from PR #23's policy branch; do not claim it merged. All public PRs remain Draft under the sole maintainer's control.
+
 ## Continuation 9 — 20 November 2026: capability-first APLs, source-native wins and honest rejects
 
 **User's active objective:** each supported Forever role should have an **original, optimised, complete APL that needs no class/spec checkbox configuration for routine play**. Legitimate native `toggle.*` user off-switches remain allowed; avoid `settings.*` per-spec dependencies for routine logic. Respect engine Require Toggle; do not claim it can be overridden from APL conditions. Guardian Tank and Hunter BM remain **equal P0**, then Feral DPS. Default is a reference, not an architectural ceiling.
