@@ -4,7 +4,7 @@ on:
     paths:
       - ".github/workflows/paladin-holy-shield-v0110.yml"
       - "experiments/native/aplforever_paladin_holy_shield_v011_spec.lua"
-      - "roles/Paladin/Candidates/APL_Paladin_Protection_Tank_v1.1_Draft.txt"
+      - "roles/Paladin/Candidates/APL_Paladin_Protection_v1.1_Draft.txt"
   workflow_dispatch:
 permissions:
   contents: read

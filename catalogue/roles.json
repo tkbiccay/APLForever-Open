@@ -646,7 +646,7 @@
         },
         {
           "revision": "v1.1",
-          "apl_file": "roles/Paladin/Candidates/APL_Paladin_Protection_Tank_v1.1_Draft.txt",
+          "apl_file": "roles/Paladin/Candidates/APL_Paladin_Protection_v1.1_Draft.txt",
           "status": "Draft",
           "sha256": "4d6e30ad15f9c2a51b0722988f893ae7d1e3724035526348b5765c56b27a873d",
           "evidence": [

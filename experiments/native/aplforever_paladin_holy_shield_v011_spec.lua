@@ -10,7 +10,7 @@ local function read(p)
     return s
 end
 local original = read("roles/Paladin/Current/APL_Paladin_Protection_Tank_v1.0_Draft.txt")
-local candidate = read("roles/Paladin/Candidates/APL_Paladin_Protection_Tank_v1.1_Draft.txt")
+local candidate = read("roles/Paladin/Candidates/APL_Paladin_Protection_v1.1_Draft.txt")
 local prior = "actions+=/holy_shield,if=toggle.defensives&!buff.holy_shield.up"
 local guard = "actions+=/holy_shield,if=action.holy_shield.known&combat>0&aggro&!buff.holy_shield.up&mana.lo>=action.holy_shield.cost&gcd.remains<=0&(group|active_enemies>=2|target.is_boss|time>=10)"
 local at = assert(original:find(prior,1,true))
