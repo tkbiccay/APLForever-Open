@@ -147,5 +147,13 @@ describe("Hunter BM v0.10.0 source-native HHA capability and dead-zone risk", fu
             hha.hawks - baseline.hawks, hha.accepted - baseline.accepted,
             #baseline.tail, #hha.tail))
         assert.is_true(baseline.hawks >= 1, "existing six-yard castability lost")
+        -- SOURCE-PINNED negative comparator: the pure HHA-gated experiment
+        -- currently loses three source-accepted Hawks and three total presses
+        -- by blocking at its uncastable Arcane step. Keep this regression
+        -- explicit and fail for re-review if the actual native result changes.
+        assert.is_true(hha.hawks < baseline.hawks,
+            "HHA no longer loses Hawk upkeep in the six-yard gap; re-evaluate design")
+        assert.is_true(hha.accepted < baseline.accepted,
+            "HHA no longer loses accepted casts in the six-yard gap; re-evaluate design")
     end)
 end)
