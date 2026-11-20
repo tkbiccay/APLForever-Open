@@ -20,6 +20,21 @@ Released [Hekili Forever v0.10.0 Hunter.lua](https://github.com/zmsl/hekili/blob
 - If an experimental option fails at import/compile, record true warning and source/fixture cause; do not promote.
 - If HHA is useful only in bounded range, consider a **carefully tested hybrid** that preserves independent 6yd Hawk support, not a setting, new addon checkbox or forced global sequence.
 
+## Native outcome — 20 November 2026, released v0.10.0
+
+**Focused CI PASS:** [run 44702212894](https://github.com/tkbiccay/APLForever-Open/actions/runs/44702212894), `2 successes / 0 failures / 0 errors / 0 pending`, seed **30417**, source-world combat **42s**, Major OFF. The two profiles here were compared by accepted **cast counts**, not numerical DPS:
+
+| Distance | Full v1.2 Candidate | In-memory pure HHA gate | Outcome |
+| --- | --- | --- | --- |
+| 12 yards | 13 accepted; Hawk **4**, Arcane **3**; 0 refusals | 13 accepted; Hawk **5**, Arcane **2**; 0 refusals | Different priority, **no total accepted-cast gain**, no DPS proof |
+| 6 yards | 7 accepted; Hawk **5**, Arcane **0**; 0 refusals | 4 accepted; Hawk **2**, Arcane **0**; 0 refusals | **HHA gets stuck after its two Hawks at an uncastable Arcane step**; accepted actions and upkeep degrade |
+
+The source-world's automatically advanced events also fell from **489 to 285** at 6yd for the HHA-gated profile, and its last observed accepted-icon samples were empty. This is consistent with a blocked HHA window, not a usable third step. The source-world's synthetic ranged Auto Shot at 6yd remains an acknowledged fixture limitation; the above *on-demand Hawk/Arcane cast* range checks are still source-grounded.
+
+**Architecture decision: REJECT pure unconditional HHA gating.** A focused native suite being green means its checks were executed successfully, **not** that its tested hypothesis won. Keep v1.2 byte-for-byte. A *bounded hybrid* may later be investigated, but **only** if it preserves 6yd accepted Hawk behaviour, avoids repeated-fallback refusal or no-action tails, and proves meaningful benefit at legal ranged distances against default **and** existing v1.2. Do not add a new setting or manual toggle to work around an APL design mistake.
+
+The shipped Turret's specific six-yard refusal remains a separate historical *negative comparator*; do not claim this experiment fixes its engine or proves in-game damage/uptime. Guardian and BM remain equal first priority.
+
 ## Evidence and costs
 
 No test results before the CI finishes; tests only establish world-cast correctness and a comparative trace. Known benchmark defect: shipped Turret repeatedly recommends 8–35yd Serpent Sting at 6yd, yielding 109 real range refusals on pinned v0.9.0; **our baseline must not inherit this**. Synthetic Auto Shot at 6yd is not reliable for white-attack clipping.
