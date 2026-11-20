@@ -1,0 +1,36 @@
+name: Warrior Protection v0.11.0 Shield Block routine-autonomy experiment
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/warrior-prot-shield-block-v0110.yml"
+      - "experiments/native/aplforever_warrior_shield_block_v011_spec.lua"
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Exact source pin and immutable original 38 APLs
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap published engine
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Full shipped/current/alternative native accepted-cast comparison
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_warrior_shield_block_v011_spec.lua" tests/Forever/aplforever_warrior_shield_block_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose tests/Forever/aplforever_warrior_shield_block_v011_spec.lua
