@@ -139,7 +139,7 @@
       "last_working_apl": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.3",
+      "latest_revision": "v1.4",
       "limitations": [],
       "revisions": [
         {
@@ -232,11 +232,32 @@
           "gear": null,
           "settings": "Routine Roar: explicit maintain_demoralizing_roar setting or group&tanking after 5 seconds with 10 Rage reserve; Defensives continues to control Barkskin. Solo default setting OFF; sim fixture defaults differ.",
           "caveat": "Entire standalone v1.2-derived experimental Roar upkeep Draft. Not source-native/in-game validated or selected. Group+tanking threat signal and range estimator still need practical validation; no survival, TPS, DPS, high-Rage Maul positive or hidden-health proof. Protect v1.0 Reported Working and v1.2 Draft."
+        },
+        {
+          "revision": "v1.4",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Guardian_v1.4_Draft.txt",
+          "status": "Draft",
+          "sha256": "03cc2ef5df2ed18228e8437adf9218ea59f9e2e816243978bee9c68aa501c464",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Hekili Forever v0.10.0 pinned source and conditions support group/tanking/solo/target.is_boss/time, 10-Rage 30-second Demoralizing Roar; branch PR #22 native and live proof pending; see Research_Druid_Guardian_v1.4.md"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
+          "game_build": null,
+          "addon_version": "v0.10.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No dedicated Maintain Demoralizing Roar addon setting required; APL independently evaluates observed group+tanking, target.is_boss, or sustained solo+tanking, conservative Rage. Major Cooldowns and Defensives toggles retained solely as explicit user off-switches for discretionary CDs, not for routine Roar.",
+          "caveat": "Separate v1.3-derived full Draft: Roar is self-contained; late solo and boss timing are hypotheses, group+tanking positive still needs live proof, target.within5 estimated/unknown. No hidden HP or time-to-die. Preserve v1.0 Reported Working and v1.1–v1.3 source/rollback; not selected or Approved."
         }
       ],
       "notes": [
         "Guardian historical reported-working rollback; Demoralizing Roar setting dependency remains unverified",
-        "v1.3 Draft: auto group+tanking Roar path separated from Defensives; requires source-native positive and in-game verification; v1.0 remains reported-working preferred."
+        "v1.3 Draft: auto group+tanking Roar path separated from Defensives; requires source-native positive and in-game verification; v1.0 remains reported-working preferred.",
+        "Guardian v1.4 Draft: Roar no longer requires addon maintenance option; conservative automatic policy pending source-native and live checks, including final fallback."
       ],
       "apl_name": "Druid_Guardian"
     },
