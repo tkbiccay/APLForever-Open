@@ -1,0 +1,17 @@
+# Hunter MM and Survival cross-spec pet-recovery hypothesis — 20 Nov 2026
+
+**Context:** Hunter BM standalone v1.4 corrects source-native Lone Wolf dead-pet Revive inconsistency, fully validated in 10 pinned v0.11 native tests. **Do not blindly copy runtime code.** Inspect both separate supported role APLs and source/defaults first.
+
+**Exact pinned source:** [Hekili Forever v0.11.0](https://github.com/zmsl/hekili/tree/v0.11.0), source commit `86b739cbc4e6afbcbc693c3790ee81197fc6234b`, [Hunter.lua](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili_Hunter/Hunter.lua) pet_out, pet-dead, Revive Pet 10s/100% base Mana. [Shipped MM Turret](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili_Hunter/APLs/Marksmanship%20Turret%20(wowsims.com).simc) and [Survival Melee](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili_Hunter/APLs/Survival%20Melee%20(wowsims.com).simc) currently Call Pet if absent/no Lone Wolf then Revive Pet if dead without Lone Wolf guard; the latter repeats the BM Lone Wolf asymmetry, so it is a benchmark, not something to copy literally. WoWSims source `ab0f00e4fc83`.
+
+**Independent role coverage:** [Icy Veins Forever Marksmanship talents](https://www.icy-veins.com/wow-forever/marksmanship-hunter-ranged-dps-pve-spec-builds-talents) describes normal Lone Wolf petless MM and alternative non-Lone-Wolf pet builds. [Forever Survival guide](https://www.icy-veins.com/wow-forever/survival-hunter-melee-dps-pve-guide/) covers pet-assisted melee; [Wowhead Forever Survival guide](https://www.wowhead.com/forever/guide/classes/hunter/survival/overview-pve-dps) also notes with/without-pet options. No Retail substitution. Maxroll/Method/Mobalytics role-specific applicable coverage not verified in this experiment; do not claim 3-way consensus.
+
+**Source kit check:** WoWSims-native Marksmanship Turret has 51 talents with **Lone Wolf rank1**; remove that point and spend it on Efficiency (rank4→5) to create a 51-point no-Lone-Wolf MM character. Published Survival Melee has 51 and **no Lone Wolf**; add it from BM Endurance Training rank3→2 while MM already has 10 prereq points, retaining Survival-dominant points. These are source-syntactic counterfactuals to evaluate talent branches, *not recommended levelling specs*. Original complete APLs:
+- `roles/Hunter/Current/APL_Hunter_Marksmanship_DPS_v1.0_Draft.txt`
+- `roles/Hunter/Current/APL_Hunter_Survival_DPS_v1.0_Draft.txt`
+
+Neither contains Call Pet or Revive Pet. In a no-Lone-Wolf build with absent/dead pet this is a self-contained upkeep gap if source confirms the client state and character actually benefits from a pet. Proposed test-only full in-memory APL prepends verified source Call/Revive to precombat/default, each conditional on `!talent.lone_wolf.enabled`, without altering existing spells, toggles, cooldowns, final fallback or rank guards.
+
+**Predefined gate:** for EACH class, original has no recovery at absent/dead, candidate should suggest Call or Revive with **no Lone Wolf**, never request pet with Lone Wolf, and published normal alive-pet source world must accept identical actual spells, source Mana, no refusals. Actual Call/Revive successful casts and subsequent pet arrival are **not** implemented in that source world; icon-only results cannot be mislabelled as castability proof. Keep exact protected v1.0 and catalogue until source experiment green and risks understood. No new APL selected/approved.
+
+**Status at authoring:** unrun source experiment; no claim of successful validation.
