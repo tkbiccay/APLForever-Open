@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - "experiments/native/aplforever_bm_hha_v010_spec.lua"
+      - "experiments/native/aplforever_bm_pet_reaction_v010_spec.lua"
       - ".github/workflows/bm-hha-v010-experiment.yml"
       - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt"
 permissions:
@@ -48,3 +49,8 @@ jobs:
         run: |
           cp "$GITHUB_WORKSPACE/aplforever/experiments/native/aplforever_bm_hha_v010_spec.lua" tests/Forever/aplforever_bm_hha_v010_spec.lua
           .lua/bin/busted --verbose tests/Forever/aplforever_bm_hha_v010_spec.lua
+      - name: Controlled pet unit arrival observation (not successful cast proof)
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/experiments/native/aplforever_bm_pet_reaction_v010_spec.lua" tests/Forever/aplforever_bm_pet_reaction_v010_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_bm_pet_reaction_v010_spec.lua
