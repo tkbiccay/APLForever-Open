@@ -1,0 +1,9 @@
+# Tests — Hunter BM v1.4 full standalone Lone Wolf guard
+
+Date 20 Nov 2026. Source Hekili Forever v0.11.0 exact commit `86b739cbc4e6afbcbc693c3790ee81197fc6234b`.
+
+**Previous completed experiment:** [44812216114](https://github.com/tkbiccay/APLForever-Open/actions/runs/44812216114) **6/6 PASS**, actual source-read talent/pet client-state recommendations (not accepted revive casts), with real 51-point BM-primary Lone Wolf talent change. Dead pet with Lone Wolf old v1.3 Revive×3, guarded no pet recovery; absent with Lone Wolf no recovery; standard dead/absent positive remains Revive/Call. All source imports and three-icon checks passed.
+
+**New file-specific release-native tests to run:** `experiments/native/aplforever_bm_lone_wolf_v14_spec.lua` demands byte-identical **complete stored** v1.4 vs published-source in-memory exact two-line hypothesis and six matched client pet states. `experiments/native/aplforever_bm_lone_wolf_v14_combat_spec.lua` compares full v1.3 vs v1.4 on 6yd and 12yd, Major ON/OFF, no Lone Wolf, natural 42-second source-world true presses, Hawk + three accepted follow-ons, no refusals/errors, out-of-range shot negatives, exact accepted spells and Mana equality. Both run on pinned v0.11.0 `hunter.BeastMasteryTurret`. **Unrun at authoring**; inspect actual workflow logs and record failures before claiming pass.
+
+**Not proven:** spell Revive actually succeeds, pet arrives or gains health, player is safe to channel during combat, numerical pet/DPS, 1–60 boundary, player client talent/spec selection, cross-fight real Mana. Required last checkpoint **Final Fallback / Repeated Recommendation**: Lone Wolf dead pet should not repeatedly recommend Revive; no Lone Wolf dead pet repeats Revive until a source client arrival (no artificial casts), and ordinary six/twelve yard live next three must cast legally. Keep exact Previous v1.3 rollback, `preferred_apl=null`, no Approved.
