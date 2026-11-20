@@ -3,6 +3,7 @@
 -- combat transition. A source-native accepted cast is NOT evidence that the
 -- addon can infer the player's intention to flee or that the change is safe.
 local loop = require("Game.harness.loop")
+local fake = require("Game.State.helpers.fake_api")
 local druid = require("Forever.helpers.druid_loop_world")
 local stock = assert(druid.Feral)
 local root = assert(os.getenv("APLFOREVER_ROOT"))
@@ -17,7 +18,7 @@ end
 local v13 = read("roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt")
 local current = read("roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt")
 local old = "actions+=/cat_form,if=action.cat_form.known&!buff.cat_form.up&!buff.bear_form.up&!buff.travel_form.up&!buff.aquatic_form.up&!buff.moonkin_form.up"
-local proposed = "actions+=/cat_form,if=action.cat_form.known&!buff.cat_form.up&!buff.bear_form.up&!buff.aquatic_form.up&!buff.moonkin_form.up&(!buff.travel_form.up|combat>0&target.within5)"
+local proposed = "actions+=/cat_form,if=action.cat_form.known&!buff.cat_form.up&!buff.bear_form.up&!buff.aquatic_form.up&!buff.moonkin_form.up&(!buff.travel_form.up|combat>0&target.within5&!moving)"
 local first = assert(v13:find(old, 1, true), "protected form anchor changed")
 assert.is_nil(v13:find(old, first + #old, true), "ambiguous source replacement")
 local experiment = v13:sub(1, first - 1) .. proposed .. v13:sub(first + #old)
@@ -66,9 +67,24 @@ local function newContent(form)
     return setmetatable(C, { __index = stock })
 end
 
-local function scenario(name, form, seconds)
+local function scenario(name, form, seconds, moving)
     local C = newContent(form)
-    local L = loop.new(C)
+    -- The released engine snapshots the facade's GetUnitSpeed when the client
+    -- is initialised. Install the controlled client response BEFORE loop.new,
+    -- not by patching an already-booted Hekili. Never synthesise rage/energy.
+    local realNew = fake.new
+    fake.new = function(...)
+        local api, ctl = realNew(...)
+        local realSpeed = api.GetUnitSpeed
+        api.GetUnitSpeed = function(unit)
+            if unit == "player" then return moving and 7 or 0 end
+            return realSpeed(unit)
+        end
+        return api, ctl
+    end
+    local ok, L = pcall(loop.new, C)
+    fake.new = realNew
+    assert.is_true(ok, tostring(L))
     local H = L.us
     assert.are.same({}, H.loadErrors)
     assert.are.same({}, H.Hekili.Class.loadErrors or {})
@@ -80,7 +96,7 @@ local function scenario(name, form, seconds)
     H.Hekili.DB.profile.toggles.defensives.value = false
     H.Hekili.DB.profile.toggles.movement.value = false
 
-    local stats = { inCombatTicks = 0, formTicks = 0, startedTravel = false, everObservedTravel = false }
+    local stats = { inCombatTicks = 0, formTicks = 0, everObservedTravel = false, playerMovingTicks = 0 }
     local run = loop.run(L, 30417, {
         duration = seconds,
         on = function(r)
@@ -88,6 +104,7 @@ local function scenario(name, form, seconds)
             if r.combat > 0 then
                 stats.inCombatTicks = stats.inCombatTicks + 1
                 if state.buff.travel_form.up then stats.everObservedTravel = true end
+                if state.moving then stats.playerMovingTicks = stats.playerMovingTicks + 1 end
                 if state.buff.cat_form.up then stats.formTicks = stats.formTicks + 1 end
             end
         end,
@@ -100,9 +117,9 @@ local function scenario(name, form, seconds)
         + (presses.ferocious_bite or 0)
     local refusals = 0
     for _, n in pairs(run.refused or {}) do refusals = refusals + n end
-    print(("FERAL_TRAVEL_V011 profile=%s source_form=%s accepted=%d cat_form=%d attack=%d refuses=%d errors=%d raises=%d combat_ticks=%d cat_ticks=%d saw_travel=%s truth=%d"):format(
-        name, form, run.presses, cats, attacks, refusals, run.errors, run.raises,
-        stats.inCombatTicks, stats.formTicks, tostring(stats.everObservedTravel),
+    print(("FERAL_TRAVEL_V011 profile=%s source_form=%s moving=%s accepted=%d cat_form=%d attack=%d refuses=%d errors=%d raises=%d combat_ticks=%d cat_ticks=%d moving_ticks=%d saw_travel=%s truth=%d"):format(
+        name, form, tostring(moving == true), run.presses, cats, attacks, refusals, run.errors, run.raises,
+        stats.inCombatTicks, stats.formTicks, stats.playerMovingTicks, tostring(stats.everObservedTravel),
         #run.W.truth))
     assert.are.equal(0, run.errors)
     assert.are.equal(0, run.raises)
@@ -116,7 +133,7 @@ describe("Feral v0.11 source-native Travel Form final fallback, no APL promotion
         assert.is_truthy(current:find("!buff.travel_form.up", 1, true))
         assert.is_nil(v13:find("settings.", 1, true))
         assert.is_truthy(experiment:find(proposed, 1, true))
-        assert.is_truthy(proposed:find("combat>0&target.within5", 1, true))
+        assert.is_truthy(proposed:find("combat>0&target.within5&!moving", 1, true))
         assert.is_truthy(proposed:find("!buff.aquatic_form.up&!buff.moonkin_form.up", 1, true))
     end)
 
@@ -136,6 +153,7 @@ describe("Feral v0.11 source-native Travel Form final fallback, no APL promotion
         local shipped = scenario("shipped", "travel", 38)
         local base = scenario("v13", "travel", 38)
         local alternative = scenario("hypothesis", "travel", 38)
+        assert.are.equal(0, alternative.stats.playerMovingTicks, "stationary test reports moving")
         assert.is_true(base.stats.inCombatTicks > 0,
             "cannot claim combat-form issue if the source world never entered combat")
         assert.is_true(base.stats.everObservedTravel,
@@ -150,5 +168,19 @@ describe("Feral v0.11 source-native Travel Form final fallback, no APL promotion
         -- No mandatory positive proof here: whether a safe switch can be
         -- triggered without losing travel/escape intent is a separate human
         -- decision. Report the native facts, not an unearned approval.
+    end)
+
+    it("actual source client movement signal prevents involuntary escape-form cancellation", function()
+        local movingBase = scenario("v13", "travel", 20, true)
+        local movingAlternative = scenario("hypothesis", "travel", 20, true)
+        assert.is_true(movingBase.stats.inCombatTicks > 0, "source did not enter combat")
+        assert.is_true(movingAlternative.stats.playerMovingTicks > 0,
+            "controlled GetUnitSpeed did not reach released-state moving expression")
+        assert.is_true(movingAlternative.stats.everObservedTravel,
+            "source did not observe the intended Travel Form")
+        assert.are.equal(0, movingAlternative.cats,
+            "moving player MUST NOT be urged to leave escape-oriented Travel Form")
+        assert.are.equal(0, movingAlternative.refuses)
+        assert.are.equal(0, movingBase.cats)
     end)
 end)
