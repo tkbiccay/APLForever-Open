@@ -34,8 +34,15 @@ Maintain lean Research_, Tests_, Changelog_, Limitations_ and catalogue records 
 
 ### 4. Human direction, genuinely useful AI assistance
 
-The sole maintainer and ChatGPT lead priorities, source research, original design, triage, available validation and decisions. **Call Codex only for a specifically delegated, bounded engineering task** that benefits from its strengths; it reports evidence and stops. No autonomous code churn, surprise sprints or automatic APL promotions. We openly credit AI development and human validation, do not pretend AI is infallible, and welcome reproducible community criticism and GPLv3 contributions.
+The sole maintainer and ChatGPT lead priorities, source research, original design, triage, available validation and decisions. **Call Codex only for a specifically delegated, bounded engineering task** that benefits from its strengths; it reports evidence and stops. No autonomous code churn outside a maintainer-authorised AI Sprint, no surprise unrequested sprints or automatic gameplay APL promotions. We openly credit AI development and human validation, do not pretend AI is infallible, and welcome reproducible community criticism and GPLv3 contributions.
 
+### AI Sprint — maintainer-authorised autonomous development (20 November 2026)
+
+When the maintainer explicitly says **"AI Sprint"**, ChatGPT has permission during that conversation to research, invent complete standalone candidates, run scoped CI, investigate failures, manage feature PRs and **merge passing non-promotional Draft work without routine approval pauses**. This permission does not authorise overwriting original working APLs, selecting a different preferred/production APL or labelling a role Approved without repeatable real-game proof. Respect native player off-switches and any actual safety/engine limitations.
+
+**Evidence not iteration count:** each autonomous action should resolve a source-grounded hypothesis, demonstrate a meaningful castability/safety improvement, or record negative proof. Protect every prior APL checksum and working rollback; keep source pins, original defaults and failed experiments reproducible; no invented gain, pet health, threat or cast. Abort changes on real regression and don't waive tests to force a merge. Only delegate specifically bounded work to Codex when it adds value, rather than generating churn.
+
+An AI Sprint is active work in the current conversation, **not** a claim of unattended background work or a guaranteed timed hour after the response ends. The maintainer may interrupt, redirect or end it at any point. On a true game-only uncertainty, record the smallest useful in-game check and stop speculative candidate polish.
 ### 5. Rollbacks, integrity, scope and a sustainable hobby
 
 Immutable Current/Checkpoint/Archive/Candidate history, SHA-256 checks, protected public main, owner-only merges, attribution, security/privacy screening and safe public GitHub-hosted CI protect the work. Old private APLForever is **read-only reference** with no automatic mirroring or future development. Never run untrusted public fork PRs on a private home/Hyper-V machine.
