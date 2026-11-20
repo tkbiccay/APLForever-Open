@@ -13,9 +13,9 @@ import audit_apl_observability as audit
 
 
 class ObservabilityTests(unittest.TestCase):
-    def test_exact_catalogue_34_revisions_and_historical_debt(self):
+    def test_exact_catalogue_35_revisions_and_historical_debt(self):
         all_rows, flagged = audit.analyse(ROOT)
-        self.assertEqual(34, len(all_rows))
+        self.assertEqual(35, len(all_rows))
         self.assertEqual(4, len(flagged))
         self.assertEqual(18, sum(len(x["findings"]) for x in flagged))
         self.assertEqual(

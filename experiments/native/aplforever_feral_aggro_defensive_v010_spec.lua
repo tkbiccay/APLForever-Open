@@ -26,6 +26,14 @@ local after = "&combat>0&aggro&target.within5&(group|active_enemies>=2)&!buff.ba
 
 local function profile(which)
     if which == "feral-v1.2" then return source end
+    if which == "feral-v1.3" then
+        local c = assert(io.open(root .. "/roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt", "rb"))
+        local full = assert(c:read("*a"))
+        c:close()
+        assert.are.equal(profile("aggro-gcd-hypothesis"), full,
+            "catalogued full v1.3 differs from source-accepted one-line hypothesis")
+        return full
+    end
     assert.is_true(which == "aggro-hypothesis" or which == "aggro-linecd-hypothesis"
         or which == "aggro-gcd-hypothesis",
         "unregistered in-memory Feral experiment")
@@ -197,19 +205,19 @@ describe("Feral DPS controlled source-native aggro and Barkskin v0.10.0", functi
         -- The scenario explicitly expects { gcd = 1 }, so no one can
         -- call line_cd safe just because the diagnostic test is green.
     end)
-    it("gcd.remains guard must make one legal Barkskin with NO refused press", function()
-        local alternative = scenario("aggro-gcd-hypothesis", true, true, true)
+    it("entire v1.3 Candidate must make one legal Barkskin with NO refused press", function()
+        local alternative = scenario("feral-v1.3", true, true, true)
         assert.are.equal(1, alternative.cast,
             "documented gcd.remains guard starved the needed Barkskin")
         assert.are.equal(1, alternative.aura)
     end)
     it("observed group threat but Defensives OFF suppresses Barkskin", function()
-        assert.are.equal(0, scenario("aggro-gcd-hypothesis", true, false, true).cast)
+        assert.are.equal(0, scenario("feral-v1.3", true, false, true).cast)
     end)
     it("no observed threat never triggers Barkskin", function()
-        assert.are.equal(0, scenario("aggro-gcd-hypothesis", false, true, true).cast)
+        assert.are.equal(0, scenario("feral-v1.3", false, true, true).cast)
     end)
     it("solo single-target observed threat does not waste Barkskin", function()
-        assert.are.equal(0, scenario("aggro-gcd-hypothesis", true, true, false).cast)
+        assert.are.equal(0, scenario("feral-v1.3", true, true, false).cast)
     end)
 end)

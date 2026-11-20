@@ -7,6 +7,7 @@ on:
     paths:
       - ".github/workflows/feral-aggro-defensive-v010-experiment.yml"
       - "experiments/native/aplforever_feral_aggro_defensive_v010_spec.lua"
+      - "roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt"
 permissions:
   contents: read
 concurrency:
