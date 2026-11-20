@@ -40,7 +40,7 @@ local function profile(profile,distance)
     H.Hekili.DB.profile.toggles.cooldowns.value=false
     H.Hekili.DB.profile.toggles.defensives.value=false
     H.Hekili.DB.profile.toggles.movement.value=false
-    local total={aimed=0,auto=0,arcane=0,serpent=0,hawks=0,pressed=0,manaEnd=0}
+    local total={aimed=0,auto=0,autoCasts=0,arcane=0,serpent=0,hawks=0,pressed=0,manaEnd=0}
     for fight=1,3 do
         local rr=loop.run(L,30417+fight,{duration=35},{{H=H}})
         local m=rr.pressedBy or {}
@@ -61,6 +61,7 @@ local function profile(profile,distance)
         local hawks=m.summon_hawk or 0
         total.aimed=total.aimed+aimed
         total.auto=total.auto+autoSwing
+        total.autoCasts=total.autoCasts+autoCasts
         total.arcane=total.arcane+arcane
         total.serpent=total.serpent+serpent
         total.hawks=total.hawks+hawks
@@ -77,9 +78,19 @@ local function profile(profile,distance)
         -- World truth: the ranged hand on a legal 12-yard profile must actually
         -- fire; without it there is no source evidence about clip/throughput.
         if distance==12 then
-            assert.is_true(autoSwing>0,"no actual source ranged auto-swings: cannot compare clipping")
-            assert.are.equal(autoSwing,autoCasts,
-                "source Auto Shot cast truth and ranged swing truth disagree")
+            -- Published world W.startRanged emits true Auto Shot cast events,
+            -- but a PLAYER_SWING row only when its optional o.swing is true.
+            -- The BM Turret world does not supply that option; this is a
+            -- source-visibility limitation, not proof of missing Auto Shot.
+            assert.is_true(autoCasts>0,
+                "no source Auto Shot casts: cannot compare ranged activity")
+            if autoSwing>0 then
+                assert.are.equal(autoSwing,autoCasts,
+                    "source Auto Shot cast and ranged swing truth diverged")
+            else
+                print(("BM_AIMED_V011_ENGINE_LIMIT profile=%s fight=%d ranged_swing_events=ABSENT auto_shot_casts=%d auto_shot_clipping=UNMODELLED"):format(
+                    profile,fight,autoCasts))
+            end
         elseif distance==6 then
             for _,key in ipairs({"arcane_shot","aimed_shot","serpent_sting","multi_shot"}) do
                 assert.are.equal(0,m[key] or 0,
@@ -87,8 +98,8 @@ local function profile(profile,distance)
             end
         end
     end
-    print(("BM_AIMED_V011_TOTAL profile=%s distance=%d swings=%d aimed=%d arcane=%d serpent=%d hawks=%d actions=%d mana_end=%.1f"):format(
-        profile,distance,total.auto,total.aimed,total.arcane,
+    print(("BM_AIMED_V011_TOTAL profile=%s distance=%d swing_rows=%d autoshot_casts=%d aimed=%d arcane=%d serpent=%d hawks=%d actions=%d mana_end=%.1f"):format(
+        profile,distance,total.auto,total.autoCasts,total.aimed,total.arcane,
         total.serpent,total.hawks,total.pressed,total.manaEnd))
     return total
 end
