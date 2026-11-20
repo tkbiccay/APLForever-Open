@@ -174,12 +174,14 @@ local function scenario(name, threat, defensives, group)
         end
     end
     assert.are.equal(barkskin, auraCount, "accepted cast did not apply modelled aura")
+    local totalRefusals = 0
+    for _, n in pairs(run.refused or {}) do totalRefusals = totalRefusals + n end
     print(string.format(
-        "FERAL_AGGRO_V010 profile=%s client_role=%s group=%s api_threat=%s defensives=%s tanking=%s aggro=%s accepted=%d barkskin=%d aura=%d refusals=0 events=%d",
+        "FERAL_AGGRO_V010 profile=%s client_role=%s group=%s api_threat=%s defensives=%s tanking=%s aggro=%s accepted=%d barkskin=%d aura=%d refusals=%d events=%d",
         name, H.ctl.role, tostring(group), tostring(threat),
         tostring(defensives), tostring(H.Hekili.State.tanking),
         tostring(H.Hekili.State.aggro), run.presses,
-        barkskin, auraCount, #run.W.truth))
+        barkskin, auraCount, totalRefusals, #run.W.truth))
     return { cast = barkskin, total = run.presses, aura = auraCount }
 end
 

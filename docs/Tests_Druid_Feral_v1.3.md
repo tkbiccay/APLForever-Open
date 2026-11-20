@@ -1,6 +1,6 @@
 # Tests — Druid Feral DPS v1.3 (20 November 2026)
 
-**Test level:** Source-native / Controlled client threat. Published `zmsl/hekili@v0.10.0` `3c2cf3e32472cc807b1ba29d992fc13a273da8ee`; source simulator, seed 30417, level 60, 38s, two controlled attackers, 4D published world, exact full v1.2 versus in-memory alternatives and full v1.3. Test location `experiments/native/aplforever_feral_aggro_defensive_v010_spec.lua`. Full run [44736361462](https://github.com/tkbiccay/APLForever-Open/actions/runs/44736361462) **7 successes, 0 failures, 0 errors** for in-memory equivalent; the latest candidate-file equivalence test must also pass after v1.3 is added.
+**Test level:** Source-native / Controlled client threat. Published `zmsl/hekili@v0.10.0` `3c2cf3e32472cc807b1ba29d992fc13a273da8ee`; source simulator, seed 30417, level 60, 38s, two controlled attackers, 4D published world, exact full v1.2 versus in-memory alternatives and full v1.3. Test location `experiments/native/aplforever_feral_aggro_defensive_v010_spec.lua`. Full run [44736361462](https://github.com/tkbiccay/APLForever-Open/actions/runs/44736361462) **7 successes, 0 failures, 0 errors** for in-memory equivalent; the final entire-byte-candidate equivalence and actual full v1.3 native re-import [run 44737792288](https://github.com/tkbiccay/APLForever-Open/actions/runs/44737792288) **PASSED 7/7, 0 failures/errors**. All full v1.3 source bytes must remain SHA-256 protected.
 
 | Profile and client state | Accepted Barkskin | Refused world actions | Assessment |
 | --- | ---: | ---: | --- |
