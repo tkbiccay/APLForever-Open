@@ -66,11 +66,18 @@ class RepositoryValidationTests(unittest.TestCase):
         data = json.loads((ROOT / "catalogue" / "roles.json").read_text(encoding="utf-8-sig"))
         hunter = copy.deepcopy(next(r for r in data["roles"] if r["apl_name"] == "Hunter_BeastMastery"))
         current = next(item for item in hunter["revisions"] if "/Current/" in item["apl_file"])
-        candidate = next(item for item in hunter["revisions"] if "/Candidates/" in item["apl_file"])
+        candidates = [item for item in hunter["revisions"] if "/Candidates/" in item["apl_file"]]
+        latest = max(
+            hunter["revisions"],
+            key=lambda item: tuple(int(n) for n in item["revision"][1:].split(".")),
+        )
         self.assertIsNone(hunter["preferred_apl"])
-        self.assertEqual("v1.2", hunter["latest_revision"])
+        self.assertEqual(latest["revision"], hunter["latest_revision"])
+        self.assertIn(latest, candidates)
+        self.assertGreaterEqual(len(candidates), 1)
         self.assertEqual("Current", validator._lifecycle_folder(hunter, current))
-        self.assertEqual("Candidates", validator._lifecycle_folder(hunter, candidate))
+        for candidate in candidates:
+            self.assertEqual("Candidates", validator._lifecycle_folder(hunter, candidate))
         self.assertEqual("Archive", validator._lifecycle_folder(hunter, hunter["revisions"][0]))
 
     def test_real_repository_enforces_class_lifecycle_layout(self) -> None:
