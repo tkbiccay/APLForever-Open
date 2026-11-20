@@ -6,6 +6,8 @@
 
 The intended experience is **import, select and play**. Each supported, approved APL must make its own *routine* recommendations from the available source-verified Hekili Forever/Belief observations. The player should not need to visit class/spec pages or tick boxes to enable upkeep, curse/seal/poison/imbue choice, normal damage, pet recovery, forms/stances, threat/mitigation maintenance, safe resource conversion, target-mode choice or final fallback. These decisions belong in that role's complete standalone priority — no shared Lua files, cross-APL helpers or custom runtime add-ons.
 
+**Source-pinned APL language reference:** [Hekili Forever v0.10.0 expressions, line options, local windows, pure variables, sequences and limitations](knowledge/engine/FOREVER_APL_SYNTAX_v0.10.0.md). Reuse verified cross-role syntax without re-searching, and recheck after release changes.
+
 **Important distinction:** Hekili's generic toggles can be *user off-switches*, not a hidden prerequisite to a functioning rotation. The upstream [v0.10.0 Toggles documentation](https://github.com/zmsl/hekili/blob/v0.10.0/docs/wiki/Toggles.md) states an ability's **Require Toggle** assignment makes it unusable whenever that toggle is OFF, even if an APL line has no `if=toggle.*`. A pure APL **cannot override this engine contract**. Therefore respect a deliberate player OFF, use source-registered categories honestly and document an unavoidable engine restriction; do **not** promise all Major/Minor/Defensive/Interrupt/Potion abilities will trigger with their off-switches OFF.
 
 ## Design rules
