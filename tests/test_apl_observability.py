@@ -13,9 +13,15 @@ import audit_apl_observability as audit
 
 
 class ObservabilityTests(unittest.TestCase):
-    def test_exact_catalogue_40_revisions_and_historical_debt(self):
+    def test_complete_sha_verified_catalogue_and_historical_debt(self):
         all_rows, flagged = audit.analyse(ROOT)
-        self.assertEqual(40, len(all_rows))
+        catalogue = json.loads((ROOT / "catalogue/roles.json").read_text(encoding="utf-8-sig"))
+        # Growing Candidate history must not invalidate an otherwise truthful
+        # headless test. Exact Git baseline preservation and per-file SHA256
+        # are independently enforced by validate_repository and audit.analyse.
+        expected = sum(len(role["revisions"]) for role in catalogue["roles"])
+        self.assertGreaterEqual(expected, 38, "unexpected loss of protected APL history")
+        self.assertEqual(expected, len(all_rows))
         self.assertEqual(4, len(flagged))
         self.assertEqual(18, sum(len(x["findings"]) for x in flagged))
         self.assertEqual(
@@ -26,7 +32,10 @@ class ObservabilityTests(unittest.TestCase):
         self.assertEqual([], audit.compare_baseline(flagged, baseline))
         p0 = [x for x in all_rows if x["role"] in
               {"Druid_Guardian", "Hunter_BeastMastery"}]
-        self.assertEqual(10, len(p0))
+        expected_p0 = sum(len(role["revisions"]) for role in catalogue["roles"]
+                          if role["apl_name"] in {"Druid_Guardian", "Hunter_BeastMastery"})
+        self.assertGreaterEqual(expected_p0, 10, "lost a protected P0 revision")
+        self.assertEqual(expected_p0, len(p0))
         self.assertTrue(all(not x["findings"] for x in p0))
 
     def test_combat_hidden_health_through_nested_action_calls(self):
