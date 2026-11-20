@@ -140,3 +140,13 @@ Both findings are pinned source-world evidence, **not live DPS/survival/gameplay
 
 
 **Confirmed source, not in-game:** [Player.lua](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili/Game/State/Families/Player.lua) `VS.Health(unit, now)` returns default full-health belief for units other than the player and target, **including pet**; [Pets.lua](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili/Game/State/Families/Pets.lua) observes pet existence/death/power, not pet health. Hunter's [Mend Pet](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili_Hunter/Hunter.lua) is a 5-second Mana-consuming channel. **Do not add an unobservable `pet.health.pct` healing guard** to a standalone APL and claim automated triage, or substitute blind periodic healing; such logic can be unreachable or wasteful. Main-pet `pet_out` and temporary `pet.hawk.count` are different states, neither health. BM v1.1/v1.2 APLs stay exact; manual Mend Pet = Engine Limitation, not a routine checkbox. Transfer the **source-state audit and negative-test method** to Hunter Marksmanship/Survival or other pet-dependent roles only after checking their own source/engine expression; **no shared runtime APL code or cross-spec assumed spell**. Actual Call/Revive Pet cast and arrival still need in-game proof.
+
+
+## RANGED-011 — Auto Shot source-event limitation and clipping-claim guard
+
+**Confirmed on 20 November 2026 with published Hekili Forever v0.11.0:** [world.lua W.startRanged](https://github.com/zmsl/hekili/blob/v0.11.0/tests/Game/harness/world.lua) emits periodic Auto Shot kind=cast; ranged-hand kind=swing/hand=3 only appears if an optional scenario swing flag is enabled. Stock BM Turret did not enable that flag.
+
+[Three-pull native test 44809911177](https://github.com/tkbiccay/APLForever-Open/actions/runs/44809911177) observed 60 periodic Auto Shot cast events and zero ranged-hand swing rows per three fights in shipped, v1.3, and one-line relaxed Aimed. Relaxed Aimed accepted 10 vs v1.3's four Aimed; remaining Mana fell from ~1597 to ~60. The source fixture did not demonstrate clipping, so these action counts cannot justify a damage, mana-efficiency or DPS promotion.
+
+The first negative test [44809596783](https://github.com/tkbiccay/APLForever-Open/actions/runs/44809596783) correctly revealed the missing ranged-swing events. Reuse this cross-role source event-emission audit before claiming any cast-versus-auto DPS comparison. Do NOT invent source swing rows, assume Auto Shot timing is faithful during hardcasts, or copy BM priority into Marksmanship/Survival. Keep protected BM APL unchanged until more faithful model or live client proof.
+
