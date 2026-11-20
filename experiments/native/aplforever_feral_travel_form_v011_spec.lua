@@ -22,6 +22,8 @@ local proposed = "actions+=/cat_form,if=action.cat_form.known&!buff.cat_form.up&
 local first = assert(v13:find(old, 1, true), "protected form anchor changed")
 assert.is_nil(v13:find(old, first + #old, true), "ambiguous source replacement")
 local experiment = v13:sub(1, first - 1) .. proposed .. v13:sub(first + #old)
+local v14 = read("roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt")
+assert.are.equal(experiment, v14, "Complete stored v1.4 differs from independently tested one-line hypothesis")
 
 local function import(H, source, pack)
     local lists, warnings = H.Hekili:ImportSimcAPL(
@@ -89,7 +91,7 @@ local function scenario(name, form, seconds, moving)
     assert.are.same({}, H.loadErrors)
     assert.are.same({}, H.Hekili.Class.loadErrors or {})
     if name ~= "shipped" then
-        import(H, name == "v13" and v13 or experiment, C.PACK)
+        import(H, name == "v13" and v13 or name == "v14" and v14 or experiment, C.PACK)
     end
     H.Hekili.DB.profile.toggles.cooldowns.value = false
     H.Hekili.DB.profile.toggles.minor_cooldowns.value = false
@@ -140,6 +142,10 @@ describe("Feral v0.11 source-native Travel Form final fallback, no APL promotion
     it("normal Cat baseline remains source-accepted with the in-memory change", function()
         local base = scenario("v13", "cat", 30)
         local alternative = scenario("hypothesis", "cat", 30)
+        local stored = scenario("v14", "cat", 30)
+        assert.are.equal(alternative.attacks, stored.attacks)
+        assert.are.equal(alternative.cats, stored.cats)
+        assert.are.equal(0, stored.refuses)
         assert.are.equal(0, base.refuses)
         assert.are.equal(0, alternative.refuses)
         assert.is_true(base.attacks >= 3, "source control must perform several actual attacks")
@@ -153,6 +159,10 @@ describe("Feral v0.11 source-native Travel Form final fallback, no APL promotion
         local shipped = scenario("shipped", "travel", 38)
         local base = scenario("v13", "travel", 38)
         local alternative = scenario("hypothesis", "travel", 38)
+        local stored = scenario("v14", "travel", 38)
+        assert.are.equal(alternative.attacks, stored.attacks)
+        assert.are.equal(alternative.cats, stored.cats)
+        assert.are.equal(alternative.refuses, stored.refuses)
         assert.are.equal(0, alternative.stats.playerMovingTicks, "stationary test reports moving")
         assert.is_true(base.stats.inCombatTicks > 0,
             "cannot claim combat-form issue if the source world never entered combat")
@@ -173,6 +183,10 @@ describe("Feral v0.11 source-native Travel Form final fallback, no APL promotion
     it("actual source client movement signal prevents involuntary escape-form cancellation", function()
         local movingBase = scenario("v13", "travel", 20, true)
         local movingAlternative = scenario("hypothesis", "travel", 20, true)
+        local movingStored = scenario("v14", "travel", 20, true)
+        assert.are.equal(movingAlternative.cats, movingStored.cats)
+        assert.are.equal(movingAlternative.attacks, movingStored.attacks)
+        assert.is_true(movingStored.stats.playerMovingTicks > 0)
         assert.is_true(movingBase.stats.inCombatTicks > 0, "source did not enter combat")
         assert.is_true(movingAlternative.stats.playerMovingTicks > 0,
             "controlled GetUnitSpeed did not reach released-state moving expression")
