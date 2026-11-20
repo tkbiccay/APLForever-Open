@@ -465,9 +465,10 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [
-        "Archived Marksmanship ranged/melee branch may form a valid DPS weave; verify swing-clock/auto-shot clipping, talent unlocks and stable ranged damage."
+        "Archived Marksmanship ranged/melee branch may form a valid DPS weave; verify swing-clock/auto-shot clipping, talent unlocks and stable ranged damage.",
+        "New unselected v1.1 pet upkeep candidate: actual successful Call/Revive and arrival still require in-game proof, source-world first-three icons are not accepted casts."
       ],
       "revisions": [
         {
@@ -492,6 +493,32 @@
           "legacy_filename": true,
           "purity_review": "Review pending: Marksmanship weave is a legitimate possible DPS style; verify source support, timing and gameplay before promoting.",
           "relocated_from": "roles/APL_Hunter_Marksmanship_DPS_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Hunter/Candidates/APL_Hunter_Marksmanship_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "fa434dbcfaf802ff1fbfc2d5f667b67aa840dc4603825018aeb2026aad8be007",
+          "min_source_release": "v0.11.0",
+          "evidence": [
+            "Published Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b with separate Hunter_Marksmanship source client/world: https://github.com/tkbiccay/APLForever-Open/actions/runs/44813605413, 8/8 cross-spec in-memory native tests PASS; complete stored APL source-native test pending",
+            "Exact full source-native stored-candidate tests 8/8 PASS, run https://github.com/tkbiccay/APLForever-Open/actions/runs/44814291357, no source-refused casts; normal published source world unchanged"
+          ],
+          "test_results": [
+            {
+              "kind": "native_full_apl_pet_state_and_combat",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44814291357",
+              "result": "PASS 8/8 shared separately class-imported checks, zero errors/refusals: pet client absent/dead without Lone Wolf now Call/Revive, with Lone Wolf no pet recovery (3 repeated icon checks), normal source-world 16 accepted actions and identical Mana 1279.55 vs protected v1.0. Actual Call/Revive successful casts and pet arrival NOT TESTED."
+            }
+          ],
+          "rollback_reference": "roles/Hunter/Current/APL_Hunter_Marksmanship_DPS_v1.0_Draft.txt",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "Standalone class-verified pet upkeep. No required manual Hekili settings; honour actual Lone Wolf talent and native Ability Require Toggle.",
+          "caveat": "Unselected Draft. Full v0.11.0 native source tests 8/8 PASS across MM and SV in source pet-client-state and accepted normal-combat modes. No actual accepted pet summon/revive, arrival, pet damage, level 1–60, DPS or in-game validation."
         }
       ],
       "apl_name": "Hunter_Marksmanship"
@@ -506,9 +533,10 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [
-        "Archived Survival ranged branch may be part of a legitimate melee-weave build; evaluate full-melee versus weaving by talents, swing timing and user intent."
+        "Archived Survival ranged branch may be part of a legitimate melee-weave build; evaluate full-melee versus weaving by talents, swing timing and user intent.",
+        "New unselected v1.1 pet upkeep candidate: actual successful Call/Revive and arrival still require in-game proof, source-world first-three icons are not accepted casts."
       ],
       "revisions": [
         {
@@ -533,6 +561,32 @@
           "legacy_filename": true,
           "purity_review": "Review pending: both melee and ranged/melee Survival builds exist; evaluate archived hybrid against alternatives, not an automatic design failure.",
           "relocated_from": "roles/APL_Hunter_Survival_DPS_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Hunter/Candidates/APL_Hunter_Survival_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "34e47115c07fff0234ce03520d480ad3d035753cec38e1968d6557671b2df43f",
+          "min_source_release": "v0.11.0",
+          "evidence": [
+            "Published Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b with separate Hunter_Survival source client/world: https://github.com/tkbiccay/APLForever-Open/actions/runs/44813605413, 8/8 cross-spec in-memory native tests PASS; complete stored APL source-native test pending",
+            "Exact full source-native stored-candidate tests 8/8 PASS, run https://github.com/tkbiccay/APLForever-Open/actions/runs/44814291357, no source-refused casts; normal published source world unchanged"
+          ],
+          "test_results": [
+            {
+              "kind": "native_full_apl_pet_state_and_combat",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44814291357",
+              "result": "PASS 8/8 shared separately class-imported checks, zero errors/refusals: pet client absent/dead without Lone Wolf now Call/Revive, with Lone Wolf no pet recovery (3 repeated icon checks), normal source-world 18 accepted actions and identical Mana 1976.05 vs protected v1.0. Actual Call/Revive successful casts and pet arrival NOT TESTED."
+            }
+          ],
+          "rollback_reference": "roles/Hunter/Current/APL_Hunter_Survival_DPS_v1.0_Draft.txt",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "Standalone class-verified pet upkeep. No required manual Hekili settings; honour actual Lone Wolf talent and native Ability Require Toggle.",
+          "caveat": "Unselected Draft. Full v0.11.0 native source tests 8/8 PASS across MM and SV in source pet-client-state and accepted normal-combat modes. No actual accepted pet summon/revive, arrival, pet damage, level 1–60, DPS or in-game validation."
         }
       ],
       "apl_name": "Hunter_Survival"
