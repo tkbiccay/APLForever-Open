@@ -35,6 +35,14 @@ The source-world's automatically advanced events also fell from **489 to 285** a
 
 The shipped Turret's specific six-yard refusal remains a separate historical *negative comparator*; do not claim this experiment fixes its engine or proves in-game damage/uptime. Guardian and BM remain equal first priority.
 
+## Follow-up range-aware hybrid (experimental, not validated until latest CI)
+
+Source-supported input `action.arcane_shot.in_range` can distinguish whether to follow the registered HHA window or use the source-accepted independent Hawk cap. The third in-memory variant, `hha-range-hybrid`, keeps native HHA coordination at legal ranged distances but permits an independent Hawk when Arcane Shot is **observed out of range**. Both versions still require `action.summon_hawk.in_range` and `pet.hawk.count<2`, and use exactly the same full imported v1.2 source plus only two condition substitutions. No `settings.*` or user checkbox is added.
+
+**Hypothesis:** retain the baseline's repeated legal Hawks across the six-yard dead zone without losing normal-range HHA's sequencing; test actual source-accepted Hawk/Arcane and refusals at both distances before considering any code. `action.<spell>.in_range` is a client range check but does not guarantee the same accuracy under all instanced/hidden conditions, so an observed source-world result is not the full gameplay gate.
+
+The baseline and pure-HHA source outcomes above remain valid historical evidence; results for the **new hybrid** must be read from the *latest* workflow run, not assumed.
+
 ## Evidence and costs
 
 No test results before the CI finishes; tests only establish world-cast correctness and a comparative trace. Known benchmark defect: shipped Turret repeatedly recommends 8–35yd Serpent Sting at 6yd, yielding 109 real range refusals on pinned v0.9.0; **our baseline must not inherit this**. Synthetic Auto Shot at 6yd is not reliable for white-attack clipping.
