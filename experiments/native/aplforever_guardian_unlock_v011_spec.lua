@@ -90,8 +90,11 @@ local function run(c, which)
     local rr = loop.run(L, 30417, { duration = 36 }, { { H = H } })
     local by = rr.pressedBy or {}
     local first = {}
-    for i = 1, math.min(rr.combat or 0, 5) do
-        if rr.pressed[i] then first[#first+1] = rr.pressed[i] end
+    for i = 1, (rr.combat or 0) do
+        if rr.pressed[i] then
+            first[#first+1] = rr.pressed[i]
+            if #first >= 5 then break end
+        end
     end
     local bad, n = {}, 0
     for reason, count in pairs(rr.refused or {}) do
