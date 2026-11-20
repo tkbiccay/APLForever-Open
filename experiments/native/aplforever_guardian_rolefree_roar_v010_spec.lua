@@ -55,12 +55,15 @@ local function import(H, text)
     assert.are.same({},H.errors,"source script must compile without warning")
 end
 
-local function scenario(which,group,seconds)
+local function scenario(which,group,seconds,profileMode)
     -- The Guardian fixture's published Rage model, hostile attacks and
     -- returned pressed actions remain authoritative. Only client-reported
     -- group size and the source-world enemy's 4yd/normal-level geometry
     -- are controlled. NO synthetic Rage, aggression, HP or DPS.
     local content = setmetatable({
+        -- The published Druid maintenance setting uses game default
+        -- FALSE but simulator baseline TRUE. Test both intentionally.
+        SCENARIO = profileMode == "game" and "game" or "sim",
         WORLD = setmetatable({
             distance = 4, targetLevel = 60, attackers = 2,
             mobHealth = 1000000000,
@@ -100,29 +103,31 @@ local function scenario(which,group,seconds)
     local roar = (run.pressedBy or {}).demoralizing_roar or 0
     local barkskin = (run.pressedBy or {}).barkskin or 0
     assert.are.equal(0,barkskin,"Defensives OFF must prevent Barkskin")
-    print(("GUARDIAN_ROLE_FREE_V010 which=%s group=%s duration=%d role_tank=%s accepted=%d roar=%d barkskin=%d refused=0 events=%d rage_lo_max_after12=%.3f truth_rage_max_after12=%.3f post12_ticks=%d observed_solo=%s"):format(
-        which,tostring(group),seconds,tostring(H.Hekili.State.role.tank),
+    print(("GUARDIAN_ROLE_FREE_V010 which=%s group=%s duration=%d profile=%s role_tank=%s accepted=%d roar=%d barkskin=%d refused=0 events=%d rage_lo_max_after12=%.3f truth_rage_max_after12=%.3f post12_ticks=%d observed_solo=%s"):format(
+        which,tostring(group),seconds,profileMode or "sim",tostring(H.Hekili.State.role.tank),
         run.presses,roar,barkskin,#run.W.truth,
         stats.maxRageLoPost12,stats.maxTruthRagePost12,stats.post12Ticks,tostring(stats.observedSolo)))
     return {roar=roar,accepted=run.presses,stats=stats}
 end
 
 describe("Guardian independent source-native Roar role requirement hypothesis",function()
-    it("non-boss grouped encounter: old role-gated branch versus role-free alternative",function()
-        local shipped=scenario("shipped",true,38)
-        local working=scenario("reported-v1.0",true,38)
-        local current=scenario("baseline-v1.4",true,38)
-        local alternative=scenario("role-free-hypothesis",true,38)
-        print(("GUARDIAN_ROLE_FREE_COMPARATORS shipped_roar=%d reported_working_roar=%d v14_roar=%d experimental_roar=%d shipped_accepted=%d working_accepted=%d v14_accepted=%d alternative_accepted=%d"):format(
-            shipped.roar,working.roar,current.roar,alternative.roar,
-            shipped.accepted,working.accepted,current.accepted,alternative.accepted))
+    for _, profile in ipairs({"game","sim"}) do
+        it("non-boss grouped encounter shipped/working/v1.4/role-free at profile " .. profile,function()
+            local shipped=scenario("shipped",true,38,profile)
+            local working=scenario("reported-v1.0",true,38,profile)
+            local current=scenario("baseline-v1.4",true,38,profile)
+            local alternative=scenario("role-free-hypothesis",true,38,profile)
+            print(("GUARDIAN_ROLE_FREE_COMPARATORS profile=%s shipped_roar=%d reported_working_roar=%d v14_roar=%d experimental_roar=%d shipped_accepted=%d working_accepted=%d v14_accepted=%d alternative_accepted=%d"):format(
+                profile,shipped.roar,working.roar,current.roar,alternative.roar,
+                shipped.accepted,working.accepted,current.accepted,alternative.accepted))
         assert.are.equal(0,current.roar,
             "the published fake client now supplies actual tank-role eligibility, reassess")
         assert.is_true(alternative.roar>=1,
             "role-free branch did not produce a real accepted Roar at normal range")
-        assert.is_true(alternative.roar<=2,
-            "more than two 30-second Roars in 38 seconds implies waste or repeated upkeep")
-    end)
+            assert.is_true(alternative.roar<=2,
+                "more than two 30-second Roars in 38 seconds implies waste or repeated upkeep")
+        end)
+    end
     it("short solo mob: role-free variant does not use Roar prematurely",function()
         local current=scenario("baseline-v1.4",false,9)
         local alternative=scenario("role-free-hypothesis",false,9)
