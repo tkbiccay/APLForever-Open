@@ -90,6 +90,8 @@ local function one(name,seed)
     assert.is_not_nil(firstLow,"test failed to reach naturally low Mana")
     assert.are.equal(3,#samples,
         "low-Mana final fallback was not checked on 3 event-advanced world states")
+    assert.is_true(lowPresses>=3,
+        "the world must actually accept at least 3 legal later actions after entering low Mana")
     assert.is_true(samples[1].t<samples[2].t and samples[2].t<samples[3].t)
     assert.is_true(samples[1].events<samples[2].events
         and samples[2].events<samples[3].events)
@@ -109,7 +111,7 @@ local function one(name,seed)
         minTrueMana=minTrueMana,samples=samples,acceptedAfterLow=lowPresses}
 end
 describe("BM v0.11.0 natural 210-second full final/fallback tail",function()
-    for _,seed in ipairs({30417}) do
+    for _,seed in ipairs({30417,30418,30419}) do
         it("seed "..seed.." shipped vs v1.1 vs full v1.4",function()
             local shipped=one("shipped",seed)
             local old=one("working_ref",seed)
