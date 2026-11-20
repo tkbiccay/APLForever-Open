@@ -1,0 +1,46 @@
+name: Feral DPS v0.10.0 observed-aggro Barkskin experiment
+
+# Scoped source-native A/B; in-memory only, never a selected APL or green 23-role verdict.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/feral-aggro-defensive-v010-experiment.yml"
+      - "experiments/native/aplforever_feral_aggro_defensive_v010_spec.lua"
+      - "roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt"
+permissions:
+  contents: read
+concurrency:
+  group: feral-aggro-v010-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  feral-aggro-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout APLForever experiment without credentials
+        uses: actions/checkout@v4
+        with:
+          path: aplforever
+          persist-credentials: false
+      - name: Checkout exact released Hekili Forever v0.10.0
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 3c2cf3e32472cc807b1ba29d992fc13a273da8ee
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Preserve protected APL hashes and verify upstream pin
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "3c2cf3e32472cc807b1ba29d992fc13a273da8ee"
+          cd aplforever
+          python scripts/validate_repository.py
+          echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/aplforever" >> "$GITHUB_ENV"
+      - name: Bootstrap published Lua source-native runtime
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Compare entire Feral v1.2 against observed-aggro Barkskin in memory
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/experiments/native/aplforever_feral_aggro_defensive_v010_spec.lua" tests/Forever/aplforever_feral_aggro_defensive_v010_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_feral_aggro_defensive_v010_spec.lua
