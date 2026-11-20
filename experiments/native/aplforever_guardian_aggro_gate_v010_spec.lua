@@ -19,6 +19,14 @@ local unguarded = "((group&time>=5)|(target.is_boss&time>=4)|(solo&time>=12))"
 local guarded = "aggro&((group&time>=5)|(target.is_boss&time>=4)|(solo&time>=12))"
 local function variant(name)
     if name == "v1.4" then return source end
+    if name == "v1.5" then
+        local f = assert(io.open(root .. "/roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt", "rb"))
+        local full = assert(f:read("*a"))
+        f:close()
+        assert.are.equal(variant("aggro-guard"), full,
+            "stored standalone v1.5 != exact source-native experimental design")
+        return full
+    end
     local result = name == "role-free" and unguarded or guarded
     assert.is_true(name == "role-free" or name == "aggro-guard")
     local at = assert(source:find(original, 1, true))
@@ -89,6 +97,20 @@ local function run(name, role, threat, group, seconds)
     assert.are.equal(role == "TANK" and threat,H.Hekili.State.tanking)
     assert.are.equal(0,(rr.pressedBy or {}).barkskin or 0,
         "OFF Defensives must prevent source Barkskin")
+    if ((rr.pressedBy or {}).demoralizing_roar or 0) > 0 then
+        local casts = assert(rr.combatCasts, "missing actual accepted combat history")
+        local first
+        for i, action in ipairs(casts) do
+            if action == "demoralizing_roar" then first = i; break end
+        end
+        assert.is_truthy(first, "Roar was not in accepted source actions")
+        assert.is_true(#casts >= first+3,
+            "need three real accepted post-Roar actions, not merely a first icon")
+        for i=1,3 do
+            assert.is_true(casts[first+i] ~= "demoralizing_roar",
+                "repeated Roar immediately after an accepted cast")
+        end
+    end
     local n=(rr.pressedBy or {}).demoralizing_roar or 0
     print(("GUARDIAN_THREAT_V010 profile=%s role=%s group=%s source_client_aggro=%s tanking=%s accepted=%d roar=%d refused=0 source_events=%d"):format(
         name,role,tostring(group),tostring(threat),
@@ -100,7 +122,7 @@ describe("Guardian v0.10.0 controlled-role and source-visible threat safety", fu
     it("DAMAGER client, group, no observed threat: role-free unsafe Roar, aggro guard abstains",function()
         local prev=run("v1.4","DAMAGER",false,true,38)
         local unguarded=run("role-free","DAMAGER",false,true,38)
-        local guarded=run("aggro-guard","DAMAGER",false,true,38)
+        local guarded=run("v1.5","DAMAGER",false,true,38)
         assert.are.equal(0,prev.roar)
         assert.is_true(unguarded.roar>=1,
             "old role-free comparator changed, re-evaluate false-positive")
@@ -109,14 +131,14 @@ describe("Guardian v0.10.0 controlled-role and source-visible threat safety", fu
     end)
     it("DAMAGER client, group, observed threat: aggro guard restores one legal Roar",function()
         local baseline=run("v1.4","DAMAGER",true,true,38)
-        local guarded=run("aggro-guard","DAMAGER",true,true,38)
+        local guarded=run("v1.5","DAMAGER",true,true,38)
         assert.are.equal(0,baseline.roar)
         assert.is_true(guarded.roar>=1)
         assert.is_true(guarded.roar<=2,"inappropriate repeated Roar in 38s")
     end)
     it("TANK-role client with threat: original v1.4 and aggro guard both reach Roar",function()
         local baseline=run("v1.4","TANK",true,true,38)
-        local guarded=run("aggro-guard","TANK",true,true,38)
+        local guarded=run("v1.5","TANK",true,true,38)
         assert.is_true(baseline.roar>=1,
             "source fake client role TANK still cannot satisfy original tanking")
         assert.is_true(guarded.roar>=1)
@@ -124,9 +146,9 @@ describe("Guardian v0.10.0 controlled-role and source-visible threat safety", fu
     end)
     it("TANK-role client without threat must not maintain Roar",function()
         assert.are.equal(0,run("v1.4","TANK",false,true,38).roar)
-        assert.are.equal(0,run("aggro-guard","TANK",false,true,38).roar)
+        assert.are.equal(0,run("v1.5","TANK",false,true,38).roar)
     end)
     it("short solo with threat: role-independent aggro guard avoids Roar",function()
-        assert.are.equal(0,run("aggro-guard","DAMAGER",true,false,9).roar)
+        assert.are.equal(0,run("v1.5","DAMAGER",true,false,9).roar)
     end)
 end)

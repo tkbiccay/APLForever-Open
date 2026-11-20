@@ -139,8 +139,10 @@
       "last_working_apl": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.4",
-      "limitations": [],
+      "latest_revision": "v1.5",
+      "limitations": [
+        "Guardian v1.5 aggro-driven Roar can under-maintain debuff when threat is hidden. Source-native tests control the client aggro response; no real threat, output, in-game or high-Rage Maul proof."
+      ],
       "revisions": [
         {
           "revision": "v1.0",
@@ -252,6 +254,27 @@
           "gear": null,
           "settings": "No dedicated Maintain Demoralizing Roar addon setting required; APL independently evaluates observed group+tanking, target.is_boss, or sustained solo+tanking, conservative Rage. Major Cooldowns and Defensives toggles retained solely as explicit user off-switches for discretionary CDs, not for routine Roar.",
           "caveat": "Separate v1.3-derived full Draft: Roar is self-contained; late solo and boss timing are hypotheses, group+tanking positive still needs live proof, target.within5 estimated/unknown. No hidden HP or time-to-die. Preserve v1.0 Reported Working and v1.1–v1.3 source/rollback; not selected or Approved."
+        },
+        {
+          "revision": "v1.5",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt",
+          "status": "Draft",
+          "sha256": "75de4388516e3e70cd77f292901c1205f1176dc3561ac9b54dac8fef6c2abcc2",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Hekili Forever v0.10.0 3c2cf3e32472cc807b1ba29d992fc13a273da8ee; source-native Guardian role/aggro comparison 44756795738 5/5, full v1.5 source equivalence pending; see Research_Druid_Guardian_v1.5.md"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
+          "min_source_release": "v0.10.0",
+          "game_build": null,
+          "addon_version": "v0.10.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No required per-spec Roar setting. Source-readable aggro plus group/boss/solo timing; Bear Form, known, 5yd range, debuff and 10 Rage reserve. Defensives remains native Barkskin off-switch.",
+          "caveat": "Unselected source-native Draft. Client role may report DAMAGER; group without aggro no longer wastes Roar, but threat may be hidden in dungeons. Real client role/threat, survival, DPS, unlocks and Maul final tail unverified. Protect exact v1.0 Reported Working / Needs Retest rollback."
         }
       ],
       "notes": [

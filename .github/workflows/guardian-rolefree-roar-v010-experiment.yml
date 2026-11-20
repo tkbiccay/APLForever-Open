@@ -9,6 +9,7 @@ on:
       - ".github/workflows/guardian-rolefree-roar-v010-experiment.yml"
       - "experiments/native/aplforever_guardian_rolefree_roar_v010_spec.lua"
       - "experiments/native/aplforever_guardian_aggro_gate_v010_spec.lua"
+      - "roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt"
 permissions:
   contents: read
 concurrency:
