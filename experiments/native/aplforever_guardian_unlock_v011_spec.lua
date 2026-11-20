@@ -34,11 +34,6 @@ end
 local function contentAt(c)
     local w = ws.content(stock, {
         pack = stock.PACK, level = c.level, learn = learn,
-        -- The Guardian wowsims Bear-only stock fixture omits both caster
-        -- spells. A pre-Bear level-9 scenario must explicitly include the
-        -- REAL Druid-registered Wrath/Moonfire (normal level/rank filtering
-        -- still applies), or its zero-attack result is a fixture artefact.
-        kit = c.level < 10 and { "wrath", "moonfire" } or nil,
         talents = ws.header("druid_guardian").talents,
         race = ws.race("druid_guardian"),
         gear = c.level == 60 and ws.gear("druid_guardian") or nil,
@@ -93,8 +88,12 @@ local function run(c, which)
     assert.are.equal(c.level >= 10, known.bear,
         "released source's Bear Form unlock boundary changed")
     if c.level < 10 then
-        assert.is_true(known.wrath,
-            "level-9 registered Wrath must be learned for a meaningful pre-Bear test")
+        -- The published Guardian Bear-only world omits Wrath/Moonfire and
+        -- has no secondary Mana resource. Both a stock run and a controlled
+        -- spellbook-only addition failed to give valid caster combat. Do not
+        -- infer source-native pre-Bear correctness from a zero-action trace.
+        assert.is_false(known.wrath,
+            "source Guardian world gained a real caster kit: re-evaluate blocked level-9 scope")
     end
     local rr = loop.run(L, 30417, { duration = 36 }, { { H = H } })
     local by = rr.pressedBy or {}
@@ -122,12 +121,15 @@ local function run(c, which)
     if which == "candidate" then
         assert.are.same({},rr.refused,
             "new Guardian v1.5 has a source-refused levelling recommendation")
-        assert.is_true(rr.presses >= 3,
-            "no three accepted casts/queue actions by the source-world level gate")
-        assert.is_true(#first >= 3,
-            "test cannot establish three state-advanced accepted actions")
-        assert.is_true(#rr.W.truth >= 3,
-            "fake world never advanced legitimate combat events")
+        if c.level >= 10 then
+            assert.is_true(rr.presses >= 3,
+                "fewer than three source-accepted presses at a tested Bear level")
+            assert.is_true(#first >= 3,
+                "fewer than three real, state-advanced accepted Bear actions")
+            assert.is_true(#rr.W.truth >= 3, "no source-world combat events")
+        else
+            print("GUARDIAN_LEVEL_BLOCKED level=9 reason=stock-guardian-no-caster-kit-or-mana positive-combat=NOT_PROVEN")
+        end
     end
     if not known.bear then
         assert.are.equal(0,by.bear_form or 0,
@@ -137,16 +139,32 @@ local function run(c, which)
     end
     if not known.lacerate then assert.are.equal(0,by.lacerate or 0) end
     if not known.bite then assert.are.equal(0,by.primal_bite or 0) end
+    if which == "candidate" and (by.maul or 0) > 0 then
+        -- A recommendation/queue alone does not land a paid next swing.
+        -- Respect source-registered spell rank and the world's actual events.
+        local maulID = H.ns.VirtualState.KnownID(H.Hekili.Class.abilities.maul.id)
+        local queues, strikes = 0, 0
+        for _,ev in ipairs(rr.W.truth) do
+            if ev.src == rr.us and ev.spell == maulID then
+                if ev.kind == "queue" then queues=queues+1 end
+                if ev.kind == "strike" then strikes=strikes+1 end
+            end
+        end
+        print(("GUARDIAN_LEVEL_MAUL level=%d accepted=%d queued=%d strikes=%d"):format(
+            c.level,by.maul,queues,strikes))
+        assert.is_true(queues >= strikes and strikes >= 1,
+            "source-accepted Maul recommendations never produced actual next-swing strikes")
+    end
     return {accepted=rr.presses,refused=n,by=by,known=known}
 end
 
-describe("Guardian v0.11.0 source-native level 9/10/20/31/34/60 and post-setup tail", function()
+describe("Guardian v0.11.0 five Bear levelling gates; pre-Bear level 9 source-fixture BLOCKED", function()
     for _,c in ipairs(cases) do
         it(c.label..": shipped, exact working rollback, full v1.5",function()
             local shipped=run(c,"shipped")
             local working=run(c,"working")
             local candidate=run(c,"candidate")
-            assert.is_true(candidate.accepted>=3)
+            if c.level >= 10 then assert.is_true(candidate.accepted>=3) end
             -- No damage/TPS ranking: source valid cast sequences differ.
             print(("GUARDIAN_LEVEL_COMPARISON level=%d shipped=%d working=%d v15=%d shippedRefused=%d workingRefused=%d v15Refused=%d"):format(
                 c.level,shipped.accepted,working.accepted,candidate.accepted,
