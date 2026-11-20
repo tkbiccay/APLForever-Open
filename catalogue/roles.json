@@ -49,12 +49,13 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.3",
+      "latest_revision": "v1.4",
       "limitations": [
         "Archived Cat/Bear/caster branches require evidence-based review: distinguish legitimate pre-unlock and defensive shifts from sustained off-role rotation. Preserve original APL unchanged.",
         "Unpromoted Feral DPS v1.1 Candidate must prove Shred/Claw castability by position and resolve combo-point and Shifting Power observability. Current v1.0 remains a Draft, not proven working.",
         "v0.10.0: Current v1.0 and older v1.1 Candidate have three unreachable in-combat health.pct defensive thresholds; v1.2 removes them as a Draft but is not preferred or gameplay validated.",
-        "Unselected Feral v1.3 Barkskin source-native candidate: gated by client aggro and group/visible AoE; controlled-threat world cast safe after explicit gcd.remains<=0, but real instance threat observability and mitigation value remain unverified. In-game proof and fair default comparison still required."
+        "Unselected Feral v1.3 Barkskin source-native candidate: gated by client aggro and group/visible AoE; controlled-threat world cast safe after explicit gcd.remains<=0, but real instance threat observability and mitigation value remain unverified. In-game proof and fair default comparison still required.",
+        "Feral v1.4 Draft: accepts source-native Cat transition from stationary engaged Travel Form; player-moving travel escape should stay untouched. Native movement is readable in v0.11 source but real-client intent/latency and actual 1–60 form coverage remain unverified. Never promote from source-only equality."
       ],
       "revisions": [
         {
@@ -143,6 +144,27 @@
           "gear": null,
           "settings": "No required Feral spec setting. Barkskin under native Defensives toggle; source-observable aggro and group/AoE, while actually in melee and GCD ready. Player health not read.",
           "caveat": "Source-native Draft ONLY. Source World uses a controlled client threat read and explicitly modelled learned Barkskin; real instance threat, target count, player HP, damage/mitigation, and in-game DPS unproven. No promotion; existing Current v1.0 Draft and complete v1.2 Candidate are exact protected comparators."
+        },
+        {
+          "revision": "v1.4",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt",
+          "status": "Draft",
+          "sha256": "3ccb818012c29e5972ee4788b2613631103b028755cf5f9a34767ffaaeca85b4",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Hekili Forever v0.11.0 86b739cbc4e6afbcbc693c3790ee81197fc6234b; 20 Nov 2026 native Travel Form original v1.3 zero accepted actions, test-only guarded shift 16 accepted/0 refused; movement guard positive/negative proof. Stored-file confirmation pending; PR #52"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt",
+          "min_source_release": "v0.11.0",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No required spec setting. Retains native optional cooldown and Defensive off-switches; uses source-reported combat, target within 5yd and !moving.",
+          "caveat": "Unselected fully standalone Draft: stationary Travel Form combat form-recovery only; source-native in-memory comparison passed, full stored-file native run and live intent/escape safety remain to be proven. Intent, movement update timing, Cat Form rank/unlock and low-level Bear fallback are not universally proven. Current v1.0 Draft, earlier v1.3, shipped reference remain exact."
         }
       ],
       "apl_name": "Druid_Feral"
