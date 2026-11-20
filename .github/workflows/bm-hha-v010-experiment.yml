@@ -1,0 +1,50 @@
+name: Hunter BM HHA window v0.10.0 experiment
+
+# Diagnostic-only architectural comparison; no APL candidate selection.
+# Keep CI narrowly scoped: no 23-role full compatibility re-run.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "experiments/native/aplforever_bm_hha_v010_spec.lua"
+      - ".github/workflows/bm-hha-v010-experiment.yml"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt"
+permissions:
+  contents: read
+concurrency:
+  group: bm-hha-v010-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  bm-hha-source-native:
+    name: BM source-native HHA vs v1.2
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      APLFOREVER_SOURCE_RELEASE: v0.10.0
+    steps:
+      - name: Checkout public APLForever revision (without write credentials)
+        uses: actions/checkout@v4
+        with:
+          path: aplforever
+          persist-credentials: false
+      - name: Checkout exact Hekili Forever published source
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 3c2cf3e32472cc807b1ba29d992fc13a273da8ee
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify release pin and unchanged catalogue hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "3c2cf3e32472cc807b1ba29d992fc13a273da8ee"
+          cd aplforever
+          python scripts/validate_repository.py
+          echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/aplforever" >> "$GITHUB_ENV"
+      - name: Bootstrap published v0.10.0 native Lua test harness
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Independent HHA vs v1.2 cast/refusal and 6yd dead-zone comparison
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/aplforever/experiments/native/aplforever_bm_hha_v010_spec.lua" tests/Forever/aplforever_bm_hha_v010_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_bm_hha_v010_spec.lua
