@@ -37,9 +37,10 @@ local function profiles()
             out[#out + 1] = { name = e.revision, entry = e }
         end
     end
-    assert.are.equal(6, #out, "expected shipped + Guardian v1.0 through v1.4")
+    assert.are.equal(7, #out, "expected shipped + Guardian v1.0 through v1.5")
     assert.are.equal("v1.3", out[5].name)
     assert.are.equal("v1.4", out[6].name)
+    assert.are.equal("v1.5", out[7].name)
     out[#out + 1] = { name = "v1.1-test-only-barkskin", entry = out[3].entry, experimental = true }
     assert.are.equal("v1.1", out[3].name)
     assert.are.equal("v1.2", out[4].name)
@@ -150,9 +151,9 @@ local function examine(profile, level, on, maintainRoar, worldNormalTarget, seco
     if not on or level < 44 then
         assert.are.equal(0, barkskin, "Barkskin must obey Defensives and source unlock")
     end
-    if (profile.experimental or profile.name == "v1.2" or profile.name == "v1.3" or profile.name == "v1.4") and on and level >= 44 then
+    if (profile.experimental or profile.name == "v1.2" or profile.name == "v1.3" or profile.name == "v1.4" or profile.name == "v1.5") and on and level >= 44 then
         assert.is_true(barkskin >= 1, "new branch never cast known ready Barkskin with Defensives ON")
-        if maintainRoar ~= false and not worldNormalTarget and (seconds or 38) >= 38 then
+        if profile.name ~= "v1.5" and maintainRoar ~= false and not worldNormalTarget and (seconds or 38) >= 38 then
             assert.is_true(roar >= 1, "Barkskin must not silently eliminate enabled Roar upkeep")
         end
     end
@@ -182,7 +183,7 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
     end
     for _, level in ipairs({ 43, 44 }) do
         it("test-only branch real Barkskin unlock level " .. level, function()
-            examine(p[7], level, true)
+            examine(p[8], level, true)
         end)
     end
     it("v1.3 OFF toggle with explicit Roar setting ON accepts upkeep while v1.2 stays OFF", function()
@@ -223,9 +224,18 @@ describe("Guardian Barkskin APL-first source coverage at v0.8.6", function()
             assert.are.equal(0, result.barkskin)
         end)
     end
+    it("v1.5 remains standalone and no checkbox-gated Roar on fake client without aggro", function()
+        local src = importedSource(p[7].entry)
+        assert.is_nil(src:find("settings.maintain_demoralizing_roar", 1, true))
+        assert.is_truthy(src:find("aggro&((group&time>=5)", 1, true))
+        assert.is_nil(src:find("group&tanking", 1, true))
+        local value = examine(p[7],60,false,false)
+        assert.are.equal(0,value.roar, "must not Roar with absent client aggro")
+        assert.are.equal(0,value.barkskin, "Defensives OFF")
+    end)
     it("exact v1.2 standalone matches the in-memory v1.1+branch action counts", function()
         local actual = examine(p[4], 60, true)
-        local proposed = examine(p[7], 60, true)
+        local proposed = examine(p[8], 60, true)
         assert.are.same(proposed, actual)
     end)
 end)
