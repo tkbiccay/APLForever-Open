@@ -1,0 +1,43 @@
+name: Guardian v0.11 — native Barkskin cooldown and OFF/ON test-only source kit
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/guardian-v011-barkskin.yml"
+      - "experiments/native/aplforever_guardian_barkskin_v011_spec.lua"
+      - "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
+      - "roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt"
+      - "roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  guardian-barkskin:
+    name: Released-class Barkskin actual buff/cooldown/off-switch and fallback
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout public project PR
+        uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - name: Checkout exact released Hekili Forever source
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify source pin and complete protected APL hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+          echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/project" >> "$GITHUB_ENV"
+      - name: Bootstrap source-native Lua
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Test complete shipped/current/v1.5 with test-only verified Barkskin adapter
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_guardian_barkskin_v011_spec.lua" tests/Forever/aplforever_guardian_barkskin_v011_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_barkskin_v011_spec.lua
