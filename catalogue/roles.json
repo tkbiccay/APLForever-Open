@@ -201,7 +201,7 @@
       "limitations": [
         "Guardian v1.5 aggro-driven Roar can under-maintain debuff when threat is hidden. Source-native tests control the client aggro response; no real threat, output, in-game or high-Rage Maul proof.",
         "21 Nov 2026 v0.11 source-native long-fight verified Guardian v1.5 landed Roar 30s expiry and safe resist retry, but source kit omits Barkskin so Defensives ON behaviour and real mitigation remain untested. Roar accepted presses may resist and are not equal to debuff auras; prior false-positive red checks preserved. No promotion.",
-        "v1.5 newly source-tested with class-backed TEST-ONLY Guardian Barkskin: Defensives ON at 4yd caused 3 repeated ready-but-GCD-refused Barkskin first icons (source 44943855823). v1.6 unselected Draft adds strictly verified gcd.remains=0 to complete Barkskin line; bounded 5/5 in-memory source proof zero refusals. Real tank damage prevention and client threat still unmeasured; preserve reported-working v1.0."
+        "v1.5 newly source-tested with class-backed TEST-ONLY Guardian Barkskin: Defensives ON at 4yd caused 3 repeated ready-but-GCD-refused Barkskin first icons (source 44943855823). v1.6 unselected Draft adds strictly verified gcd.remains=0 to complete Barkskin line; bounded 5/5 in-memory AND STORED full-file source proof 44945344925 zero refusals. Real tank damage prevention and client threat still unmeasured; preserve reported-working v1.0."
       ],
       "revisions": [
         {
@@ -372,6 +372,12 @@
               "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
               "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44944331232",
               "result": "5/5 PASS source class-backed test-only Barkskin kit, 20 full profile-source scenarios: shipped, exact v1.0, exact v1.5, FULL in-memory v1.5 with sole &gcd.remains=0 guard. This confirmed original v1.5 had 3 GCD refusals at seed30417, guarded full APL 0 refusals, same 2 real Barkskin casts and 15s auras, native Defensives OFF 0, range 6yd 0, 3 subsequent accepted actions. Stored v1.6 file exact-byte source CI is still required; no game/tank mitigation proof."
+            },
+            {
+              "kind": "source_native_v011_guardian_barkskin_stored_full_5case",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44945344925",
+              "result": "STORED full Guardian v1.6 independent file 5/5 PASS, 0 test errors, 20 full-source worlds x 4 original shipped/working v1.0/v1.5/v1.6 across 2 seeds true-threat 4yd Def ON, OFF 4yd, 6yd ON, synthetic no-threat 4yd ON. v1.5 source-refused 3 GCD at 61.8/62.0/62.2 seed30417; v1.6 0 refusals, same 34 accepted and two actual 15s Barkskin buffs at 1.8/62.4, 60s CD; seed30418 v1.5/v1.6 both 42 accepted 0 refused 2 Barkskin at1.8/61.8. 0 Barkskin with Def OFF or 6yd, 3 accepted subsequent actions; native class-backed source-only test adapter, NO true mitigation/damage or gameplay proof. v1.6 unselected Draft; working v1.0 exact rollback preserved."
             }
           ],
           "rollback_reference": "roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt",
