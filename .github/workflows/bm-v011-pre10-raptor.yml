@@ -1,0 +1,42 @@
+name: BM v0.11 — level-one Raptor source kit and next-swing proof
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/bm-v011-pre10-raptor.yml"
+      - "experiments/native/aplforever_bm_pre10_raptor_v011_spec.lua"
+      - "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bm-pre10-raptor:
+    name: Exact v0.11 Raptor rank-one and next-swing cast proof
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout public project branch
+        uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - name: Checkout exact Hekili Forever release
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify published source and protected APL checksums
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+          echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/project" >> "$GITHUB_ENV"
+      - name: Bootstrap source-native Lua
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Execute test-only Raptor kit on genuine hunter source worlds
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_bm_pre10_raptor_v011_spec.lua" tests/Forever/aplforever_bm_pre10_raptor_v011_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_bm_pre10_raptor_v011_spec.lua
