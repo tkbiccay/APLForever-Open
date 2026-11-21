@@ -471,6 +471,12 @@
               "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
               "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44812780314",
               "result": "PASS 10/10 native cases, zero errors/refusals: 6 real talent/pet client state first-3-icon tests and 4 matched full v1.3/v1.4 6/12yd Major ON/OFF source accepted-cast regressions; all normal BM action counts and final Mana identical. Actual Call/Revive casts, arrival and player DPS NOT TESTED."
+            },
+            {
+              "kind": "source_native_v011_hawk_guardian_model_cap",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44897656979",
+              "result": "PASS 4/4 source-native matched cases, 12 full-profile executions (2 seeds x 6/12yd x shipped/Current v1.1/v1.4). Exact source model registers 18s cap-two Hawk expiries; complete v1.4 source count matched expiry slots and had zero early third accepted Hawk casts, zero refusals, normal 12yd progression matched Current exactly. Shipped 12yd showed 4 model-early replacements per seed; shipped 6yd 359 refused ranged presses. Modelled guardians are unobserved in real game; Hawk damage, actual spawn, real pet and DPS NOT TESTED. Unselected Draft, Current v1.1 unchanged."
             }
           ],
           "rollback_reference": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt",
