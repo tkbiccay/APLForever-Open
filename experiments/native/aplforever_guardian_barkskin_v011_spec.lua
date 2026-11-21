@@ -11,7 +11,8 @@ local stock=assert(helper.Guardian)
 local root=assert(os.getenv("APLFOREVER_ROOT"))
 local paths={
   working="roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
-  candidate="roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt"
+  candidate="roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt",
+  v16="roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt"
 }
 local BARKSKIN_ID=22812
 local function read(path)
@@ -42,16 +43,11 @@ local function worldFor(threat,distance)
 end
 local function install(H,C,name)
   if name=="shipped" then return end
-  local original=read(paths[name] or paths.candidate)
-  if name=="guarded" then
-    -- Test-only alternate complete APL, one verified in-memory condition.
-    -- Preserve every actual Candidate byte: only test whether the released
-    -- gcd.remains field can prevent repeated Barkskin GCD refusals.
-    local changed,n=original:gsub(
-      "actions%.defensive_cooldowns=barkskin,if=[^\n]+",
-      function(line) return line.."&gcd.remains=0" end)
-    assert.are.equal(1,n,"source v1.5 Barkskin fallback line changed")
-    original=changed
+  local original=read(assert(paths[name],"missing exact protected full profile"))
+  if name=="v16" then
+    assert.is_truthy(original:find(
+      "actions.defensive_cooldowns=barkskin,if=toggle.defensives&action.barkskin.known&action.barkskin.ready&buff.bear_form.up&!buff.barkskin.up&target.within5&gcd.remains=0",
+      1,true),"actual saved v1.6 full file lost verified Barkskin GCD guard")
   end
   local lists,warnings=H.Hekili:ImportSimcAPL(
     "Druid_Guardian","APLForever-Guardian-Barkskin-Source-Only",
@@ -180,7 +176,7 @@ local function one(profile,seed,threat,distance,defensives,seconds)
     assert.is_true(#press>=1,
       "defensive toggle ON, actual source-native Guardian never cast")
   end
-  if (profile=="candidate" or profile=="guarded") and threat and distance<=5 and defensives then
+  if (profile=="candidate" or profile=="v16") and threat and distance<=5 and defensives then
     -- Really advance beyond an actual Barkskin cast. An off-GCD icon
     -- standing still is not a verified ongoing combat rotation.
     local tail={}
@@ -219,7 +215,7 @@ local function one(profile,seed,threat,distance,defensives,seconds)
     -- assertion is NOT a passing candidate castability/safety verdict.
     assert.are.equal(3,rr.refused.gcd or 0,
       "full original v1.5 GCD failure signature changed")
-  elseif profile=="candidate" or profile=="guarded" then
+  elseif profile=="candidate" or profile=="v16" then
     assert.are.same({},rr.refused,
       "source-refused full stored Candidate / test-only guard variant")
   end
@@ -230,15 +226,15 @@ local function compare(seed,threat,distance,defensives,seconds)
   local shipped=one("shipped",seed,threat,distance,defensives,seconds)
   local working=one("working",seed,threat,distance,defensives,seconds)
   local candidate=one("candidate",seed,threat,distance,defensives,seconds)
-  local guarded=one("guarded",seed,threat,distance,defensives,seconds)
-  print(("GUARDIAN_BARKSKIN_COMPARE seed=%d threat=%s yd=%d toggle=%s shipped=%d/%d/%d working=%d/%d/%d v15=%d/%d/%d inMemoryGcd=%d/%d/%d"):format(
+  local v16=one("v16",seed,threat,distance,defensives,seconds)
+  print(("GUARDIAN_BARKSKIN_COMPARE seed=%d threat=%s yd=%d toggle=%s shipped=%d/%d/%d working=%d/%d/%d v15=%d/%d/%d v16=%d/%d/%d"):format(
     seed,tostring(threat),distance,tostring(defensives),
     shipped.accepted,shipped.refused,shipped.casts,
     working.accepted,working.refused,working.casts,
     candidate.accepted,candidate.refused,candidate.casts,
-    guarded.accepted,guarded.refused,guarded.casts))
+    v16.accepted,v16.refused,v16.casts))
   if defensives and distance==4 and threat then
-    assert.is_true(guarded.casts>=1,
+    assert.is_true(v16.casts>=1,
       "in-memory guard must still produce real source Barkskin casts")
   end
   return candidate,working,shipped,guarded
