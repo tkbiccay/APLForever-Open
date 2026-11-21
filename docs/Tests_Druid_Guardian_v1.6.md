@@ -1,0 +1,25 @@
+# Tests — Guardian v1.6, source-native Barkskin readiness
+
+**21 November 2026.** Published Hekili Forever v0.11.0 at zmsl/hekili commit 86b739cbc4e6afbcbc693c3790ee81197fc6234b. New full standalone [v1.6 Draft](../roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt), SHA256 **c9eaeca6f10bc89bb28cc6db11394324ce1125c0b9e58430ebf96d6e9118f6f0**. Exact archived v1.5 SHA256 75de4388516e3e70cd77f292901c1205f1176dc3561ac9b54dac8fef6c2abcc2. Reported-working preferred v1.0 SHA256 f386e158a5e262e309dac7d0fd2929fb8e16e02b1378d71b5956c1bf6b99a786. **Neither Draft is selected or Approved.**
+
+## Fidelity boundary
+
+The [native test](../experiments/native/aplforever_guardian_barkskin_v011_spec.lua) uses real registered Druid Barkskin spell ID22812, native 60s cooldown, spell GCD, 15s aura, source-known ranks and player Defensive toggle. As the released WoWSims Guardian [test world](https://github.com/zmsl/hekili/blob/v0.11.0/tests/Forever/helpers/druid_loop_world.lua) omits it from the kit and helper mapping, the test temporarily supplies only the registered action and its source W.applyAura self-buff mapping. This is **test infrastructure**, not an addon patch, a new spell, a guessed cost, or a damage-reduction model. The test restores its mapping after each run. Natural source Rage, accepted/refused cast events, true world GCD time, buff application and expiry are observed.
+
+[**Source 5/5 PASS, in-memory whole-APL comparison 44944331232**](https://github.com/tkbiccay/APLForever-Open/actions/runs/44944331232): 20 full independently executed source profiles: shipped default, exact preferred working v1.0, full v1.5, full v1.5 with a single test-only strict GCD guard (now independently saved as v1.6). Client pseudo-role DAMAGER and UnitThreatSituation, group and range inputs controlled. **A separate full stored v1.6 CI is required before claiming file-level validation.**
+
+| Released source-world case | Shipped accepted / refused / Barkskin | Working v1.0 | Original v1.5 | Strict guarded full APL |
+| --- | --- | --- | --- | --- |
+| 83s, 4yd, true client aggro, Def ON, seed 30417 | 35 / 0 / 0 | 30 / 0 / 0 | **34 / 3 / 2** | **34 / 0 / 2** |
+| 83s, 4yd, true client aggro, Def ON, seed 30418 | 42 / 0 / 0 | 30 / 0 / 0 | 42 / 0 / 2 | **42 / 0 / 2** |
+| 83s, 4yd, aggro, Def OFF, seed 30417 | 35 / 0 / 0 | 30 / 0 / 0 | 38 / 0 / 0 | **38 / 0 / 0** |
+| 47s, 6yd, aggro, Def ON | 1 / 0 / 0 | 3 / 0 / 0 | 3 / 0 / 0 | **3 / 0 / 0** |
+| 38s, 4yd, client no-aggro, Def ON | 18 / 0 / 0 | 13 / 0 / 0 | 18 / 0 / 1 | **18 / 0 / 1** |
+
+**Preserved diagnostic negatives:** [44943640179 red](https://github.com/tkbiccay/APLForever-Open/actions/runs/44943640179) first found three full-v1.5 GCD refusals. [44943855823 red](https://github.com/tkbiccay/APLForever-Open/actions/runs/44943855823) identified Barkskin icons at 61.8/62.0/62.2s with recommended wait ZERO but true world GCD remaining 0.5/0.3/0.1s, before the valid 62.4s cast. [44944114070 red](https://github.com/tkbiccay/APLForever-Open/actions/runs/44944114070) tested GCD remains <=0.05: 3-to-1 refused. Strict **gcd.remains=0** reduced **three to zero** in [44944331232](https://github.com/tkbiccay/APLForever-Open/actions/runs/44944331232), retaining two legal successful Barkskin self-buffs on each true-threat seed, correct 15s aura durations, >=60s cooldown spacing and three genuine accepted following actions.
+
+**Final fallback / repeat:** Both guarded full-source positive cases continued with three accepted non-Barkskin actions after the first cast. Native Defensive OFF and 6yd source range suppressed Barkskin, with zero refused actions. The 6yd world only accepted 1–3 total actions, therefore it did NOT establish legal three-press melee progress at 6yd. Shipped and working profiles have no automatic Barkskin branch, so their zero-Barkskin results are expected, not evidence of equivalent protection.
+
+**Unresolved synthetic no-aggro state:** v1.6 still spends Barkskin at 1.8s with Defensives ON and synthetic UnitThreatSituation=0. Two actual source attackers still attack the character, so we CANNOT conclude the player was safe or damage-free. This is a potential timing/waste trade-off, NOT a proven dangerous cast nor an optimisation. Real mitigation, incoming damage, enemy selection, client threat and health visibility, levelling rank/unlock, AoE, DPS/TPS, high-Rage Maul, and all practical defence need separate genuine player proof.
+
+**Gate:** No source test alone approves or replaces the reported-working current v1.0. Preserve all exact rollback files and hashes. Player validates actual next three icons, Defensive ON/OFF, low threat and natural eligible incoming damage, source versus current versus candidate. Use /hek snap on repeated or rejected recommendations. Full supporting [Research](Research_Druid_Guardian_v1.6.md), [Changelog](Changelog_Druid_Guardian_v1.6.md), [Limitations](Limitations_Druid_Guardian_v1.6.md), and [PR #65](https://github.com/tkbiccay/APLForever-Open/pull/65).
