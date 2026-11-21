@@ -125,6 +125,23 @@ local function one(profile,seed,threat,distance,seconds)
     assert.is_true(mobs>=3,"source world did not actually swing at Bear")
     assert.are.equal(threat,H.Hekili.State.aggro)
     local n=rr.pressedBy or {}
+    local auraID=H.Hekili.Class.auras.demoralizing_roar.id
+    local applicationTimes={}
+    local expirationTimes={}
+    for _,e in ipairs(rr.W.truth) do
+        if e.kind=="aura" and e.aura==auraID then
+            if (e.stacks or 0)>0 then
+                applicationTimes[#applicationTimes+1]=e.t
+            elseif e.stacks==0 then
+                expirationTimes[#expirationTimes+1]=e.t
+            end
+        end
+    end
+    local ts={}
+    for _,v in ipairs(applicationTimes) do ts[#ts+1]=("%.3f"):format(v) end
+    print(("GUARDIAN_ROAR_TRUTH_V011 profile=%s seed=%d threat=%s yd=%d actualAuras=%d applications=%s expires=%d acceptedRoars=%d"):format(
+        profile,seed,tostring(threat),distance,#applicationTimes,
+        table.concat(ts,","),#expirationTimes,n.demoralizing_roar or 0))
     if profile=="candidate" then
         assert.are.same({},rr.refused,
             "full candidate source-refused a ranged/cost action")
