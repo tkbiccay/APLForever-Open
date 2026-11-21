@@ -310,7 +310,14 @@
               "reference": "Hekili Forever v0.10.0 3c2cf3e32472cc807b1ba29d992fc13a273da8ee; source-native Guardian role/aggro comparison 44756795738 5/5, full v1.5 source equivalence pending; see Research_Druid_Guardian_v1.5.md"
             }
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "kind": "source_native_v011_guardian_aggression_roar_full_apl",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44891425933",
+              "result": "5/5 published-source tests PASS: full shipped/default, exact reported-working v1.0 and complete unselected v1.5, 15 matched source-world profile executions, zero source-refused casts. Synthetic plain client role and observed threat controls: v1.5 grouped true aggro, either DAMAGER or TANK client role, one accepted Demoralising Roar + three subsequent Primal Bite/Lacerate/Primal Bite casts. False aggro and short solo: no wasted Roar; native Defensives OFF no Barkskin. Actual player threat, group context, Rage, AoE target coverage and DPS/TPS/survival NOT proven."
+            }
+          ],
           "rollback_reference": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
           "min_source_release": "v0.10.0",
           "game_build": null,
@@ -318,7 +325,7 @@
           "talents": null,
           "gear": null,
           "settings": "No required per-spec Roar setting. Source-readable aggro plus group/boss/solo timing; Bear Form, known, 5yd range, debuff and 10 Rage reserve. Defensives remains native Barkskin off-switch.",
-          "caveat": "Unselected source-native Draft. Client role may report DAMAGER; group without aggro no longer wastes Roar, but threat may be hidden in dungeons. Real client role/threat, survival, DPS, unlocks and Maul final tail unverified. Protect exact v1.0 Reported Working / Needs Retest rollback."
+          "caveat": "v0.11.0 source-native 5/5 role/aggro/Roar PASS only under explicit synthetic client threat with natural Rage and real source-world presses; unselected Draft, no game/raid proof. Native Require Toggle and high-Rage Maul still unproven. Preserve exact reported-working v1.0/Needs Retest rollback."
         }
       ],
       "notes": [
