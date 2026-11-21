@@ -102,9 +102,20 @@ local function run(profile,distance,seed)
     for _,n in pairs(rr.refused or {}) do refused=refused+n end
     local by=rr.pressedBy or {}
     local expired=table.concat(seen.expiryExamples,";")
-    print(("BM_HAWK_V011 profile=%s distance=%d seed=%d accepted=%d refused=%d hawk=%d maxCount=%d atCapTicks=%d countMismatch=%d zeroAfterActive=%d samples=%d manaEnd=%.1f hawkPresses=%s expiry=%s events=%d"):format(
+    local early,earlySamples=0,{}
+    for i=3,#seen.hawks do
+        local dt=seen.hawks[i]-seen.hawks[i-2]
+        if dt<17.8 then
+            early=early+1
+            if #earlySamples<4 then
+                earlySamples[#earlySamples+1]=
+                    ("new=%.1f since-oldest=%.1f"):format(seen.hawks[i],dt)
+            end
+        end
+    end
+    print(("BM_HAWK_V011 profile=%s distance=%d seed=%d accepted=%d refused=%d hawk=%d earlyReplacements=%d earlySamples=%s maxCount=%d atCapTicks=%d countMismatch=%d zeroAfterActive=%d samples=%d manaEnd=%.1f hawkPresses=%s expiry=%s events=%d"):format(
         profile,distance,seed,rr.presses,refused,by.summon_hawk or 0,
-        seen.max,seen.atCap,seen.countMismatch,seen.seenZeroAfter,
+        early,table.concat(earlySamples,"|"),seen.max,seen.atCap,seen.countMismatch,seen.seenZeroAfter,
         seen.sample,rr.us.power or -1,table.concat(seen.countAtCast,"|"),
         expired,#rr.W.truth))
     assert.are.equal(0,rr.errors)
@@ -121,14 +132,13 @@ local function run(profile,distance,seed)
         -- A third cast while two guardians are still inside their native 18s
         -- lifetime replaces a guardian early. Compare true accepted cast times,
         -- not icon polls (the world does not model guardian attacks).
-        for i=3,#seen.hawks do
-            assert.is_true(seen.hawks[i]-seen.hawks[i-2]>=17.8,
-                "third accepted Summon Hawk inside two existing 18s lifetimes")
-        end
+        assert.are.equal(0,early,
+            "candidate replaced still-live source-model guardian before 18s expiry")
         assert.is_true(seen.max>=2 and seen.atCap>=2,
             "source model never reached a positive two-guardian capped period")
     end
-    return {by=by,accepted=rr.presses,refused=refused,seen=seen}
+    return {by=by,accepted=rr.presses,refused=refused,
+        early=early,seen=seen}
 end
 
 describe("Hunter BM v0.11 registered 18s/cap2 Hawk guardian / repeated cast",function()
@@ -148,6 +158,10 @@ describe("Hunter BM v0.11 registered 18s/cap2 Hawk guardian / repeated cast",fun
                             "candidate accepted 8-35yd shot at 6yd: "..key)
                     end
                 else
+                    assert.is_true(shipped.early>=1,
+                        "published shipped HHA no longer replaces an unexpired modelled Hawk: re-evaluate baseline")
+                    assert.are.equal(0,current.early)
+                    assert.are.equal(0,candidate.early)
                     assert.are.same(current.by,candidate.by,
                         "v1.4 changed the whole normal 12yd full-file rotation")
                     assert.are.equal(current.accepted,candidate.accepted)
