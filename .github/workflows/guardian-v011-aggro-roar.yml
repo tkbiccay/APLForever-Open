@@ -1,0 +1,45 @@
+name: Guardian v0.11 — observed-aggro Roar and fallback
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/guardian-v011-aggro-roar.yml"
+      - "experiments/native/aplforever_guardian_aggro_v011_spec.lua"
+      - "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
+      - "roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guardian-aggro-roar:
+    name: v0.11 actual Guardian casts vs controlled client aggro
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact public project PR
+        uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - name: Checkout exact published Hekili Forever release
+        uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Enforce exact upstream SHA and all 45 historical full APL bytes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+          echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/project" >> "$GITHUB_ENV"
+      - name: Bootstrap released native Lua runtime
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Compare shipped, exact working and unselected full Guardian candidate
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_guardian_aggro_v011_spec.lua" tests/Forever/aplforever_guardian_aggro_v011_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_aggro_v011_spec.lua
