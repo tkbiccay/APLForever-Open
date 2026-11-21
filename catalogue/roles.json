@@ -380,7 +380,8 @@
           "talents": null,
           "gear": null,
           "settings": "No per-spec settings required. Source-tested self-contained upkeep; respects Major and Defensive optional native OFF; GCD guard on Barkskin, no custom addon checkboxes.",
-          "caveat": "Full independently stored, unselected Guardian v1.6 Draft. Strict gcd.remains=0 guard avoids v1.5's 3 source-refused GCD presses in matched class-backed test fixture, without changing accepted Barkskin behaviour. Source helper must be extended with test-only native Barkskin MAP+kit; no damage reduction, client threat validity, actual raid/player safety, 1–60, high-Rage Maul or in-game proof. Barkskin also used under synthetic no-threat client reading; whether practical resource waste unresolved. Working v1.0 ReportedWorking preferred/last working remains untouched; v1.5 source rollback retained. Not Approved."
+          "caveat": "Full independently stored, unselected Guardian v1.6 Draft. Strict gcd.remains=0 guard avoids v1.5's 3 source-refused GCD presses in matched class-backed test fixture, without changing accepted Barkskin behaviour. Source helper must be extended with test-only native Barkskin MAP+kit; no damage reduction, client threat validity, actual raid/player safety, 1–60, high-Rage Maul or in-game proof. Barkskin also used under synthetic no-threat client reading; whether practical resource waste unresolved. Working v1.0 ReportedWorking preferred/last working remains untouched; v1.5 source rollback retained. Not Approved.",
+          "min_source_release": "v0.11.0"
         }
       ],
       "notes": [
