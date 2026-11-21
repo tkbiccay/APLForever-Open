@@ -149,25 +149,46 @@ local function one(profile,seed,threat,distance,seconds)
             "native Defensives OFF should never call Barkskin")
         assert.are.equal(0,n.elunes_light or 0,
             "native Major OFF should never call Elune's Light")
-        local last=-1e10
-        for index,time in ipairs(foundRoarTimes) do
-            local dt=time-last
-            if index>1 then
-                print(("GUARDIAN_ROAR_INTERVAL_V011 profile=%s seed=%d threat=%s yd=%d previous=%.3f latest=%.3f delta=%.3f"):format(
-                    profile,seed,tostring(threat),distance,last,time,dt))
-            end
+        -- Accepted presses are NOT all landed debuffs: published Roar has
+        -- OUTCOMES="spell" and can RESIST. The first red source run assumed
+        -- all accepted casts landed and falsely flagged a proper retry.
+        -- Truth aura application events are the authoritative landing.
+        for i=2,#applicationTimes do
+            local dt=applicationTimes[i]-applicationTimes[i-1]
+            print(("GUARDIAN_ROAR_LANDED_INTERVAL_V011 seed=%d previous=%.3f latest=%.3f delta=%.3f"):format(
+                seed,applicationTimes[i-1],applicationTimes[i],dt))
             assert.is_true(dt>=29.0,
-                "Demoralising Roar source-accepted before own 30s debuff expires")
-            last=time
+                "actual landed Roar overwritten before its source 30s debuff expiry")
+        end
+        for index=2,#foundRoarTimes do
+            local previous,now=foundRoarTimes[index-1],foundRoarTimes[index]
+            local dt=now-previous
+            local previousLanded=false
+            for _,appliedAt in ipairs(applicationTimes) do
+                if math.abs(appliedAt-previous)<0.21 then
+                    previousLanded=true
+                    break
+                end
+            end
+            print(("GUARDIAN_ROAR_PRESS_INTERVAL_V011 seed=%d prior=%.3f next=%.3f delta=%.3f priorLanded=%s"):format(
+                seed,previous,now,dt,tostring(previousLanded)))
+            if dt<29.0 then
+                assert.is_false(previousLanded,
+                    "early Roar re-cast after actual landed 30s aura")
+            end
         end
         if threat and distance<=5 then
-            assert.is_true(#foundRoarTimes>=2,
-                "full v1.5 never refreshed a naturally expired 30s Roar")
+            assert.is_true(#applicationTimes>=2,
+                "full v1.5 did not actually reapply the natural 30s debuff")
+            assert.is_true(#foundRoarTimes>=#applicationTimes,
+                "source landed more Roar debuffs than actual accepted casts")
             assert.is_true(sawAuraGone,
-                "the released source never observed an expiry window")
+                "released aura never observed an expiry window")
         else
             assert.are.equal(0,#foundRoarTimes,
                 "candidate Roar without threat or outside melee reach")
+            assert.are.equal(0,#applicationTimes,
+                "source applied Roar despite 0 legitimate accepted casts")
         end
     end
     local follow={}
