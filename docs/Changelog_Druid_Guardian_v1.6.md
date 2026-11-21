@@ -1,0 +1,11 @@
+# Changelog — Guardian v1.6
+
+**21 November 2026 · New fully self-contained Guardian Tank Draft, UNSELECTED.** Published Hekili Forever v0.11.0 at zmsl/hekili commit 86b739cbc4e6afbcbc693c3790ee81197fc6234b. Full v1.6 APL file [here](../roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt), SHA256 **c9eaeca6f10bc89bb28cc6db11394324ce1125c0b9e58430ebf96d6e9118f6f0**.
+
+**Exactly one complete-APL change from immutable v1.5:** appended **&gcd.remains=0** to the existing native-toggle-controlled Barkskin action. The verified expression prevents v1.5 from being recommended three times while a source-world GCD is still running. Previous partial experimental guard (<=0.05) only reduced three GCD refusals to one and was **rejected**, not shipped.
+
+All other actions remain byte-for-byte the same: precombat, form, no-settings-dependent automatic Demoralising Roar with real aggro/Rage reserve, optional cooldowns, full single-target/AoE, natural Lacerate/Faerie Fire, queued Maul guards, OFF toggles and complete final rage-dump chain. No new settings, fake HP, action IDs, shared APL runtime file or user checklist dependencies.
+
+**Source validation:** [strict 5/5 in-memory full-APL source run 44944331232](https://github.com/tkbiccay/APLForever-Open/actions/runs/44944331232), 20 source worlds, native Barkskin ON/OFF, 4/6yd and controlled client threat, zero rejected guarded Barkskin, correct two real 15s buffs / 60s cooldown when eligible, three genuinely accepted following actions. Exact stored v1.6 file rerun and full repository validator are mandatory before merge. Unvalidated mitigation, true gameplay damage, level1–60, high Rage and no-aggro defensive strategy remain open.
+
+**Protection and rollout:** Older Guardian v1.5 remains a full independent unselected Draft and exact comparator; **v1.0 Reported Working / Needs Retest** remains the preferred live pack and last-working rollback. Source pass is NOT permission to replace it. This is a new Candidate/experiment, not Approved. Research, Tests, limitations, catalogue and transfer lesson are independently archived.
