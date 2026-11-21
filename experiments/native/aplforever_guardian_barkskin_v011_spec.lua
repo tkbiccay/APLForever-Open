@@ -169,7 +169,7 @@ local function one(profile,seed,threat,distance,defensives,seconds)
     assert.is_true(expire[i]>=apply[i]+14.9,
       "Barkskin buff expired before native class duration")
   end
-  if not defensives or distance>5 or (profile~="candidate" and profile~="guarded") then
+  if not defensives or distance>5 or (profile~="candidate" and profile~="v16") then
     assert.are.equal(0,#press,
       "disabled/out-of-range or no Barkskin APL must not cast")
   elseif threat then
@@ -237,7 +237,7 @@ local function compare(seed,threat,distance,defensives,seconds)
     assert.is_true(v16.casts>=1,
       "in-memory guard must still produce real source Barkskin casts")
   end
-  return candidate,working,shipped,guarded
+  return candidate,working,shipped,v16
 end
 describe("Guardian v0.11 class-backed test-only Barkskin native toggle and fallback",function()
   before_each(adaptKit)
