@@ -379,7 +379,8 @@
         "Archived Hunter BM ranged/melee actions may represent a valid DPS weave; verify talent, pet, range, swing timing, safety and benefit before promotion.",
         "v1.2 under Candidates is not selected, preferred, reported-working or Approved; source world can test accepted Hawk casts but cannot prove real pet damage or live cooldown-manager observation.",
         "Hunter BM v1.3 pet Bestial Wrath source-range correction is an unselected experiment; cannot prove real pet DPS, optional cooldown intent or in-game safety until tested.",
-        "BM v1.4 Lone Wolf/Revive correction is unselected and needs full-file source-native and real-game validation; main pet actual revive/arrival and player intent unobservable in existing headless world."
+        "BM v1.4 Lone Wolf/Revive correction is unselected and needs full-file source-native and real-game validation; main pet actual revive/arrival and player intent unobservable in existing headless world.",
+        "Pre10 v0.11 native 12/12 PASS rank/range negative check; released BM Turret fixture lacks level-1 Raptor Strike and Auto Shot; 4/6yd only source setup action and no three real combat presses. Needs genuine low-level kit fixture or player gameplay; not Approved or source proof of full level1–9 rotation."
       ],
       "revisions": [
         {
@@ -491,6 +492,12 @@
               "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
               "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44897656979",
               "result": "PASS 4/4 source-native matched cases, 12 full-profile executions (2 seeds x 6/12yd x shipped/Current v1.1/v1.4). Exact source model registers 18s cap-two Hawk expiries; complete v1.4 source count matched expiry slots and had zero early third accepted Hawk casts, zero refusals, normal 12yd progression matched Current exactly. Shipped 12yd showed 4 model-early replacements per seed; shipped 6yd 359 refused ranged presses. Modelled guardians are unobserved in real game; Hawk damage, actual spawn, real pet and DPS NOT TESTED. Unselected Draft, Current v1.1 unchanged."
+            },
+            {
+              "kind": "source_native_v011_hunter_bm_pre10_unlock_and_mortal_deadzone",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44925682804",
+              "result": "PASS 12/12 level 1/4/6/9 × 4/6/12yd scenarios, 36 full shipped/Current v1.1/Candidate v1.4 world executions. At 12yd lvl4 source-accepted 4 Serpent Stings; lvl6/9 accepted 7 Arcane and 3 Sting, zero refusals. At 4/6yd both full customs only 1 setup action, NO combat follow-on; shipped 211 source-refused presses per lvl4/6/9 at short range. Source BM Turret fixture omits level1 Raptor Strike, modelled Auto Shot and pet acquisition, starts with pet and 3750 Mana at all levels: UNVALIDATED pre10 melee/auto/playability; no 3-press or gameplay/efficiency claims, candidate unselected."
             }
           ],
           "rollback_reference": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt",
