@@ -6,6 +6,7 @@ on:
       - "experiments/native/aplforever_guardian_barkskin_v011_spec.lua"
       - "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
       - "roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt"
+      - "roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt"
   workflow_dispatch:
 permissions:
   contents: read
