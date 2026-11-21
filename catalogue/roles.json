@@ -751,7 +751,7 @@
       "shipped_default_apl": null,
       "latest_revision": "v1.1",
       "limitations": [
-        "Unselected Protection v1.1 Holy Shield standalone experiment: pending source-native and real-client testing; player aggro and Mana belief uncertain, current v1.0 unchanged."
+        "Protection v1.1 Holy Shield 10/10 published-source native PASS but synthetic threat and unmeasured Mana; pending real-player aggro, low-Mana, Require Toggle, 3 post-cast actions; Current v1.0 Draft unchanged."
       ],
       "revisions": [
         {
@@ -782,10 +782,17 @@
           "evidence": [
             {
               "kind": "source",
-              "reference": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b; original and shipped full-comparator experiment; issue #28; pinned native CI to run"
+              "reference": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b; source-grounded full shipped/Current v1.0/Candidate v1.1 comparison; issue #28; published source-native run 44888362860."
             }
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "kind": "source_native_v011_full_apl_holy_shield_toggle_threat_lowmana",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44888362860",
+              "result": "PASS 10/10 on exact pinned v0.11 source: shipped 3 accepted Holy Shields and full v1.1 4 (Current v1.0 0) in 38s with native Defensives OFF, real shield aura events, 3 post-cast actions, zero refusal; absent aggro and short solo guarded; 3 real enemy-swing low-Mana checkpoints show no 3 ready-but-unaccepted repeated recommendations. Synthetic threat state, 6000 unmeasured Mana, real tank mitigation/pet/level/gameplay NOT PROVEN. Complete v1.1 remains unselected Draft."
+            }
+          ],
           "rollback_reference": "roles/Paladin/Current/APL_Paladin_Protection_Tank_v1.0_Draft.txt",
           "min_source_release": "v0.11.0",
           "game_build": null,
@@ -793,7 +800,7 @@
           "talents": null,
           "gear": null,
           "settings": "No required manual Defensives switch for routine Holy Shield; respect native Ability Require Toggle/user off-switches.",
-          "caveat": "Experimental source-native Draft: full independent v1.1 condition only; source client aggro, conservative Mana, cooldown model and live block/threat unverified; no gameplay validation or promotion."
+          "caveat": "Unselected full-source-native PASS Draft: actual client threat, Mana belief, low-level ability/rank gating, ability Require Toggle, numerical mitigation/TPS and player gameplay unverified; no in-game validation or promotion."
         }
       ],
       "apl_name": "Paladin_Protection"

@@ -59,7 +59,7 @@ local function run(profile, threat, group, seconds, defend, lowMana)
     H.Hekili.DB.profile.toggles.cooldowns.value=false
     H.Hekili.DB.profile.toggles.defensives.value=defend
     H.Hekili.DB.profile.toggles.movement.value=false
-    local low = {first=nil, samples=0, accepted=0}
+    local low = {first=nil, samples=0, accepted=0, checkpoints={}}
     local cursor=0
     local rr=loop.run(L,30417,{
         duration=seconds,
@@ -75,7 +75,17 @@ local function run(profile, threat, group, seconds, defend, lowMana)
             if r.us.power<=r.us.powerMax*0.25 then
                 low.first=low.first or t
                 if r.pressed[r.combat] then low.accepted=low.accepted+1 end
-                if fresh and low.samples<3 then low.samples=low.samples+1 end
+                if fresh and low.samples<3 then
+                    low.samples=low.samples+1
+                    local output=H.Hekili.Engine.Output.Primary
+                    local rec=output and output.recs and output.recs[1]
+                    low.checkpoints[#low.checkpoints+1]={
+                        t=t, events=#r.W.truth,
+                        suggested=r.ours[r.combat],
+                        wait=rec and rec.wait or nil,
+                        accepted=r.pressed[r.combat],
+                    }
+                end
             end
         end
     },{{H=H}})
@@ -114,6 +124,23 @@ local function run(profile, threat, group, seconds, defend, lowMana)
             profile,tostring(low.first),low.samples,low.accepted,rr.us.power))
         assert.is_truthy(low.first,"natural 55% start never reached <=25% mana")
         assert.are.equal(3,low.samples,"no three true enemy swing checkpoints at <=25% mana")
+        -- Guard the full reachable final fallback.  Three identical immediately
+        -- ready recommendations with no accepted action while actual enemy
+        -- swings advance are evidence of a repeated-unusable-icon failure.
+        -- Nil wait is UNKNOWN, never silently interpreted as zero/ready.
+        local allReady,allUnaccepted=true,true
+        local previous
+        for i,s in ipairs(low.checkpoints) do
+            print(("PROT_LOW_MANA_TAIL profile=%s check=%d t=%.1f event=%d suggested=%s wait=%s accepted=%s"):format(
+                profile,i,s.t,s.events,tostring(s.suggested),
+                tostring(s.wait),tostring(s.accepted)))
+            if s.suggested==nil or s.wait==nil or s.wait>0 then allReady=false end
+            if s.accepted then allUnaccepted=false end
+            if previous and previous~=s.suggested then allReady=false end
+            previous=s.suggested
+        end
+        assert.is_false(allReady and allUnaccepted,
+            "three identical ready-but-unaccepted final-fallback suggestions over real enemy swings")
     end
     if n>0 then
         assert.is_true(aura>=1,"no source-true Holy Shield aura")
