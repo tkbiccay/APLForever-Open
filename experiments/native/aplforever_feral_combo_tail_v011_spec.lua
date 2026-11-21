@@ -37,6 +37,12 @@ local function import(H,C,name)
     for k in pairs(lists) do
         assert.is_true(H.Hekili:IsListActive(C.PACK,k),"inactive "..k)
     end
+    if #H.errors>0 then
+        print(("FERAL_IMPORT_ERRORS profile=%s count=%d warnings=%s"):format(name,#H.errors,tostring(warnings)))
+        for i,e in ipairs(H.errors) do
+            print(("FERAL_IMPORT_ERR profile=%s index=%d value=%s"):format(name,i,tostring(e)))
+        end
+    end
     assert.are.same({},H.errors)
 end
 local function run(name,attackers,seed)
