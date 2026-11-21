@@ -107,11 +107,34 @@ local function one(profile,seed,threat,distance,defensives,seconds)
   t.cooldowns.value=false
   t.defensives.value=defensives
   t.movement.value=false
-  local rr=loop.run(L,seed,{duration=seconds},{{H=H}})
+  local priorGcd=0
+  local refusalTrace={}
+  local rr=loop.run(L,seed,{
+    duration=seconds,
+    on=function(w,_,time)
+      local n=w.refused.gcd or 0
+      if n>priorGcd then
+        if #refusalTrace<12 then
+          local action=w.ours[w.combat]
+          local accepted=w.pressed[w.combat]
+          local rec=H.Hekili.Engine.Output.Primary
+          local first=rec and rec.recs and rec.recs[1]
+          local ahead=(w.us.gcdUntil or 0)-w.W.t
+          refusalTrace[#refusalTrace+1]={
+            t=time,action=action,accepted=accepted,
+            ahead=ahead,wait=first and first.wait
+          }
+        end
+      end
+      priorGcd=n
+    end
+  },{{H=H}})
   assert.are.equal(0,rr.errors)
   assert.are.equal(0,rr.raises)
-  if profile=="candidate" then
-    assert.are.same({},rr.refused,"source-refused complete Guardian v1.5")
+  for i,e in ipairs(refusalTrace) do
+    print(("GUARDIAN_BARKSKIN_GCD_REFUSAL seed=%d profile=%s idx=%d t=%.2f action=%s accepted=%s worldGCDRemaining=%.3f recommendedWait=%s"):format(
+      seed,profile,i,e.t,tostring(e.action),tostring(e.accepted),
+      e.ahead,tostring(e.wait)))
   end
   local by=rr.pressedBy or {}
   local press,apply,expire={}, {}, {}
@@ -179,6 +202,9 @@ local function one(profile,seed,threat,distance,defensives,seconds)
     profile,seed,tostring(threat),distance,tostring(defensives),seconds,
     rr.presses,refused,#press,#apply,#expire,table.concat(ts,","),
     by.demoralizing_roar or 0,rr.presses-#press,#rr.W.truth))
+  if profile=="candidate" then
+    assert.are.same({},rr.refused,"source-refused full Guardian v1.5; see timing diagnostics")
+  end
   return {casts=#press,accepted=rr.presses,refused=refused,
           times=press,by=by}
 end
