@@ -135,7 +135,7 @@ local function run(profile, threat, group, seconds, defend, lowMana)
                 profile,i,s.t,s.events,tostring(s.suggested),
                 tostring(s.wait),tostring(s.accepted)))
             if s.suggested==nil or s.wait==nil or s.wait>0 then allReady=false end
-            if s.accepted~=nil then allUnaccepted=false end
+            if s.accepted then allUnaccepted=false end
             if previous and previous~=s.suggested then allReady=false end
             previous=s.suggested
         end
