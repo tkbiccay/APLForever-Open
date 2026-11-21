@@ -42,9 +42,20 @@ local function worldFor(threat,distance)
 end
 local function install(H,C,name)
   if name=="shipped" then return end
+  local original=read(paths[name] or paths.candidate)
+  if name=="guarded" then
+    -- Test-only alternate complete APL, one verified in-memory condition.
+    -- Preserve every actual Candidate byte: only test whether the released
+    -- gcd.remains field can prevent repeated Barkskin GCD refusals.
+    local changed,n=original:gsub(
+      "actions%.defensive_cooldowns=barkskin,if=[^\n]+",
+      function(line) return line.."&gcd.remains<=0.05" end)
+    assert.are.equal(1,n,"source v1.5 Barkskin fallback line changed")
+    original=changed
+  end
   local lists,warnings=H.Hekili:ImportSimcAPL(
     "Druid_Guardian","APLForever-Guardian-Barkskin-Source-Only",
-    read(paths[name]),C.PACK)
+    original,C.PACK)
   for _,key in ipairs({"precombat","default","damage","mitigation",
                         "defensive_cooldowns","rage_dump"}) do
     if key=="defensive_cooldowns" and name=="working" then
@@ -162,14 +173,14 @@ local function one(profile,seed,threat,distance,defensives,seconds)
     assert.is_true(expire[i]>=apply[i]+14.9,
       "Barkskin buff expired before native class duration")
   end
-  if not defensives or distance>5 or profile~="candidate" then
+  if not defensives or distance>5 or (profile~="candidate" and profile~="guarded") then
     assert.are.equal(0,#press,
       "disabled/out-of-range or no Barkskin APL must not cast")
   elseif threat then
     assert.is_true(#press>=1,
       "defensive toggle ON, actual source-native Guardian never cast")
   end
-  if profile=="candidate" and threat and distance<=5 and defensives then
+  if (profile=="candidate" or profile=="guarded") and threat and distance<=5 and defensives then
     -- Really advance beyond an actual Barkskin cast. An off-GCD icon
     -- standing still is not a verified ongoing combat rotation.
     local tail={}
@@ -202,8 +213,15 @@ local function one(profile,seed,threat,distance,defensives,seconds)
     profile,seed,tostring(threat),distance,tostring(defensives),seconds,
     rr.presses,refused,#press,#apply,#expire,table.concat(ts,","),
     by.demoralizing_roar or 0,rr.presses-#press,#rr.W.truth))
-  if profile=="candidate" then
-    assert.are.same({},rr.refused,"source-refused full Guardian v1.5; see timing diagnostics")
+  if profile=="candidate" and seed==30417 and threat and distance==4 and defensives then
+    -- Known negative: source recommendation wait=0 against GCD 0.5/0.3/0.1
+    -- before its eventual true Barkskin cast. A passing expected-negative
+    -- assertion is NOT a passing candidate castability/safety verdict.
+    assert.are.equal(3,rr.refused.gcd or 0,
+      "full original v1.5 GCD failure signature changed")
+  elseif profile=="candidate" or profile=="guarded" then
+    assert.are.same({},rr.refused,
+      "source-refused full stored Candidate / test-only guard variant")
   end
   return {casts=#press,accepted=rr.presses,refused=refused,
           times=press,by=by}
@@ -212,12 +230,18 @@ local function compare(seed,threat,distance,defensives,seconds)
   local shipped=one("shipped",seed,threat,distance,defensives,seconds)
   local working=one("working",seed,threat,distance,defensives,seconds)
   local candidate=one("candidate",seed,threat,distance,defensives,seconds)
-  print(("GUARDIAN_BARKSKIN_COMPARE seed=%d threat=%s yd=%d toggle=%s shipped=%d/%d/%d working=%d/%d/%d v15=%d/%d/%d"):format(
+  local guarded=one("guarded",seed,threat,distance,defensives,seconds)
+  print(("GUARDIAN_BARKSKIN_COMPARE seed=%d threat=%s yd=%d toggle=%s shipped=%d/%d/%d working=%d/%d/%d v15=%d/%d/%d inMemoryGcd=%d/%d/%d"):format(
     seed,tostring(threat),distance,tostring(defensives),
     shipped.accepted,shipped.refused,shipped.casts,
     working.accepted,working.refused,working.casts,
-    candidate.accepted,candidate.refused,candidate.casts))
-  return candidate,working,shipped
+    candidate.accepted,candidate.refused,candidate.casts,
+    guarded.accepted,guarded.refused,guarded.casts))
+  if defensives and distance==4 and threat then
+    assert.is_true(guarded.casts>=1,
+      "in-memory guard must still produce real source Barkskin casts")
+  end
+  return candidate,working,shipped,guarded
 end
 describe("Guardian v0.11 class-backed test-only Barkskin native toggle and fallback",function()
   before_each(adaptKit)
