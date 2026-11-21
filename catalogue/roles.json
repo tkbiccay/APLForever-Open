@@ -53,7 +53,7 @@
       "limitations": [
         "Archived Cat/Bear/caster branches require evidence-based review: distinguish legitimate pre-unlock and defensive shifts from sustained off-role rotation. Preserve original APL unchanged.",
         "Unpromoted Feral DPS v1.1 Candidate must prove Shred/Claw castability by position and resolve combo-point and Shifting Power observability. Current v1.0 remains a Draft, not proven working.",
-        "v0.10.0: Current v1.0 and older v1.1 Candidate have three unreachable in-combat health.pct defensive thresholds; v1.2 removes them as a Draft but is not preferred or gameplay validated.",
+        "v0.10.0 Current/older v1.1 health.pct defensive guards were unobservable; v0.11.0 released-native independent import confirms Current v1.0 emits exactly 3 H.errors, removed by 3 in-memory-only health.pct guard substitutions. No in-game impact established. Keep exact selected Draft and investigate before promotion.",
         "Unselected Feral v1.3 Barkskin source-native candidate: gated by client aggro and group/visible AoE; controlled-threat world cast safe after explicit gcd.remains<=0, but real instance threat observability and mitigation value remain unverified. In-game proof and fair default comparison still required.",
         "Feral v1.4 Draft: accepts source-native Cat transition from stationary engaged Travel Form; player-moving travel escape should stay untouched. Native movement is readable in v0.11 source but real-client intent/latency and actual 1–60 form coverage remain unverified. Never promote from source-only equality."
       ],
@@ -64,7 +64,14 @@
           "status": "Draft",
           "sha256": "f2f72d0621c8e709c7df8f2ccff248ce0af604a1c02e115a5ad725cf93d288f1",
           "evidence": [],
-          "test_results": [],
+          "test_results": [
+            {
+              "kind": "source_native_v011_import_defensive_health_pct_negative",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44903782868",
+              "result": "Current v1.0 full import on released source produced 3 opaque H.errors diagnostic templates (one each of three health.pct guard predicates). In-memory test-only substitution of EXACT three health.pct<= threshold expressions with literal 0 reduced errors 3→0. Despite parser errors the remaining source combat loop accepted 45–52/25 actions over 120s 1/3 attackers with zero refused casts; not a clean APL import or in-game proof. Exact v1.0 bytes/SHA and preferred selection protected, Needs Retest."
+            }
+          ],
           "rollback_reference": null,
           "migrated_from": "APL_Druid_Feral_DPS_v0.5_Draft.txt",
           "migration_type": "exact-byte-copy",
@@ -74,7 +81,7 @@
           "talents": null,
           "gear": null,
           "settings": null,
-          "caveat": "Archival v1.0 migration only; no new validation, default comparison or gameplay proof",
+          "caveat": "Archival source-untested preferred Draft until 21 Nov 2026: v0.11 full-import 3 parser H.errors due three health.pct predicates (isolated source-native 3→0 on in-memory replacement). Source world can press other abilities but this does NOT validate complete Current or establish in-game error. Preserve exact APL and selection; Needs Retest.",
           "legacy_filename": true,
           "purity_review": "Review pending: assess Feral cat-DPS branch purpose, bounded level support and possible defensive Bear shifting; mixture alone is not invalid.",
           "relocated_from": "roles/APL_Druid_Feral_DPS_v1.0_Draft.txt"
@@ -156,7 +163,14 @@
               "reference": "Hekili Forever v0.11.0 86b739cbc4e6afbcbc693c3790ee81197fc6234b; 20 Nov 2026 native Travel Form original v1.3 zero accepted actions, test-only guarded shift 16 accepted/0 refused; movement guard positive/negative proof. Stored-file confirmation pending; PR #52"
             }
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "kind": "source_native_v011_full_feral_energy_cp_natural_fallback",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44903782868",
+              "result": "5/5 PASS source-native: 12 full-source profile worlds, 1/3 naturally attacking mobs x seeds30417/30418 x shipped/Current/v1.4, 120s. Full v1.4 imports without H.errors, accepted 48/45/22/28 casts with 0 refused; natural true Energy fell <=20, at least 3 subsequent accepted actions and 3 time/event-advanced final-fallback samples without repeated immediately ready but unaccepted recommendation. Current v1.0 had 3 importer health.pct diagnostics: failed comparator completeness, see its independent record. No faithful damage, multi-target count, boss, game proof or superiority. Candidate remains unselected Draft."
+            }
+          ],
           "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt",
           "min_source_release": "v0.11.0",
           "game_build": null,
@@ -164,7 +178,7 @@
           "talents": null,
           "gear": null,
           "settings": "No required spec setting. Retains native optional cooldown and Defensive off-switches; uses source-reported combat, target within 5yd and !moving.",
-          "caveat": "Unselected fully standalone Draft: stationary Travel Form combat form-recovery only; source-native in-memory comparison passed, full stored-file native run and live intent/escape safety remain to be proven. Intent, movement update timing, Cat Form rank/unlock and low-level Bear fallback are not universally proven. Current v1.0 Draft, earlier v1.3, shipped reference remain exact."
+          "caveat": "Fully standalone v0.11 Source-Native 5/5 in tested Cat Energy/CP/finisher and low-Energy fallback worlds, no refused casts; v1.4 Travel Form stationary shift also tested separately. No proven damage superiority, multi-unit AoE, movement intent, low-level unlocks or client health observability. 3 Current v1.0 source import health.pct errors remain separate issue. No Approved, no selection/promotion."
         }
       ],
       "apl_name": "Druid_Feral"
