@@ -199,7 +199,8 @@
       "shipped_default_apl": null,
       "latest_revision": "v1.5",
       "limitations": [
-        "Guardian v1.5 aggro-driven Roar can under-maintain debuff when threat is hidden. Source-native tests control the client aggro response; no real threat, output, in-game or high-Rage Maul proof."
+        "Guardian v1.5 aggro-driven Roar can under-maintain debuff when threat is hidden. Source-native tests control the client aggro response; no real threat, output, in-game or high-Rage Maul proof.",
+        "21 Nov 2026 v0.11 source-native long-fight verified Guardian v1.5 landed Roar 30s expiry and safe resist retry, but source kit omits Barkskin so Defensives ON behaviour and real mitigation remain untested. Roar accepted presses may resist and are not equal to debuff auras; prior false-positive red checks preserved. No promotion."
       ],
       "revisions": [
         {
@@ -330,6 +331,12 @@
               "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
               "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44891425933",
               "result": "5/5 published-source tests PASS: full shipped/default, exact reported-working v1.0 and complete unselected v1.5, 15 matched source-world profile executions, zero source-refused casts. Synthetic plain client role and observed threat controls: v1.5 grouped true aggro, either DAMAGER or TANK client role, one accepted Demoralising Roar + three subsequent Primal Bite/Lacerate/Primal Bite casts. False aggro and short solo: no wasted Roar; native Defensives OFF no Barkskin. Actual player threat, group context, Rage, AoE target coverage and DPS/TPS/survival NOT proven."
+            },
+            {
+              "kind": "source_native_v011_guardian_roar_30s_landed_aura_resist",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44941415657",
+              "result": "PASS 4/4 full source-native cases, 12 shipped/working v1.0/Draft v1.5 4/6yd worlds 58–110s. True-threat grouped client-role DAMAGER at 4yd seeds30417/30418 candidate landed exactly two Roar auras at 9.6/53.0 and 43.4/78.6 seconds (>=30s, source-truth aura events), zero refused; seed30418 four accepted presses but two resisted, legitimate 25.8s and 1.6s retries. 110s no-aggro and 6yd negative controls zero Roar and actual auras. Previous red accepted-press-spacing test was false positive because Roar can resist; keep red CI. No true player threat, Barkskin ON, mitigation/DPS or live approval. All APL hashes/preferred rollback unchanged."
             }
           ],
           "rollback_reference": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
