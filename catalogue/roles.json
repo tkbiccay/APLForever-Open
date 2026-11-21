@@ -498,6 +498,12 @@
               "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
               "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44925682804",
               "result": "PASS 12/12 level 1/4/6/9 × 4/6/12yd scenarios, 36 full shipped/Current v1.1/Candidate v1.4 world executions. At 12yd lvl4 source-accepted 4 Serpent Stings; lvl6/9 accepted 7 Arcane and 3 Sting, zero refusals. At 4/6yd both full customs only 1 setup action, NO combat follow-on; shipped 211 source-refused presses per lvl4/6/9 at short range. Source BM Turret fixture omits level1 Raptor Strike, modelled Auto Shot and pet acquisition, starts with pet and 3750 Mana at all levels: UNVALIDATED pre10 melee/auto/playability; no 3-press or gameplay/efficiency claims, candidate unselected."
+            },
+            {
+              "kind": "source_native_v011_hunter_bm_pre10_raptor_queued_strike",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/44938679671",
+              "result": "PASS 12/12 source-native tests; 36 full shipped/Current v1.1/v1.4 profiles at levels 1/4/6/9 x 4/6/12yd plus 4 unaugmented 4yd v1.4 controls (40 total). Test-only published wowsims.content kit Raptor Strike (rank1 ID2973 learned lv1) uses released Hunter class and hunter-world next-swing model. At 4yd Current and full v1.4 had 7 accepted queues/6 actual paid next-swing strikes with 60 Mana spent levels1/4/6 or 150 at level9 and zero refuses, vs 1 setup/zero strikes without kit. 6yd still one setup/no combat; 12yd behaviour unchanged. Source BM pre-pet and Mana/weapon scaling are unfaithful; off-GCD queues are not GCD fillers or live game proof. Shipped at level4/6/9 short range 211 refused ranged attempts. Candidate remains unselected Draft."
             }
           ],
           "rollback_reference": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.3_Draft.txt",
@@ -506,7 +512,7 @@
           "talents": null,
           "gear": null,
           "settings": "No manual setting dependency; native Major Cooldowns and Ability Require Toggle remain respected.",
-          "caveat": "UNSELECTED Draft only. Full v0.11.0 source-native PASS 10/10 for 51-point Lone Wolf pet-state icon logic and no-Lone-Wolf 6/12yd on/off accepted casts; actual pet revival/arrival, real DPS/1–60 and live client proof pending."
+          "caveat": "UNSELECTED Draft. Published v0.11 BM source-native Raptor positive at 4yd only with exact released spell added to TEST fixture, not stored APL; 7 accepted queues/6 paid strikes per lv1/4/6/9 seed and 0 refuses, still 6yd dead-zone, unfaithful pre-10 pet/Mana and no three GCD/live proof. Earlier 10/10 Lone Wolf + Hawk model tests apply only to specified source worlds. Current v1.1, candidate and all 45 APLs protected; live player proof and damage needed."
         }
       ],
       "apl_name": "Hunter_BeastMastery"
