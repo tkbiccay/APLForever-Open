@@ -133,8 +133,13 @@ local function one(profile,seed,threat,distance,seconds)
         assert.are.equal(0,n.elunes_light or 0,
             "native Major OFF should never call Elune's Light")
         local last=-1e10
-        for _,time in ipairs(foundRoarTimes) do
-            assert.is_true(time-last>=29.0,
+        for index,time in ipairs(foundRoarTimes) do
+            local dt=time-last
+            if index>1 then
+                print(("GUARDIAN_ROAR_INTERVAL_V011 profile=%s seed=%d threat=%s yd=%d previous=%.3f latest=%.3f delta=%.3f"):format(
+                    profile,seed,tostring(threat),distance,last,time,dt))
+            end
+            assert.is_true(dt>=29.0,
                 "Demoralising Roar source-accepted before own 30s debuff expires")
             last=time
         end
