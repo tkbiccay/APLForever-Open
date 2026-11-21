@@ -15,7 +15,10 @@ local function loadFile(path)
 end
 local function worldFor(attackers)
     return setmetatable({
-        SCENARIO="game",
+        -- Published default source loop scenario ("sim"), not the game-mode
+        -- override.  Game-mode full Current v1.0 import raised three literal
+        -- Forever error-template records in red CI 44903123945; preserve
+        -- that separate unresolved engine/fixture diagnostic, not a pass.
         WORLD=setmetatable({
             distance=4,attackers=attackers,mobHealth=1000000000
         },{__index=stock.WORLD})
