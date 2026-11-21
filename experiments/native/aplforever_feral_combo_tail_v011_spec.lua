@@ -155,6 +155,17 @@ local function run(name,attackers,seed)
     if name~="shipped" then
         assert.are.same({},rr.refused,"complete custom source refused a cast")
         assert.is_true(rr.presses>=3,"no 3 actual successful casts")
+        assert.is_not_nil(lowStart,"fixture never reached naturally low Energy")
+        assert.are.equal(3,#checkpoints,
+            "3 progressed low-Energy fallback observations missing")
+        assert.is_true(lowActions>=3,
+            "no three actual accepted actions AFTER natural low-Energy boundary")
+        assert.is_true(checkpoints[1].t<checkpoints[2].t
+            and checkpoints[2].t<checkpoints[3].t,
+            "time did not progress between fallback checkpoints")
+        assert.is_true(checkpoints[1].events<checkpoints[2].events
+            and checkpoints[2].events<checkpoints[3].events,
+            "true world events did not progress between fallback checkpoints")
         assert.is_false(repeatedReady,
             "triple immediately ready identical first icon without accepted cast")
     end
