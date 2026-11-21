@@ -163,7 +163,38 @@ local function run(name,attackers,seed)
         maxTruePoints=maxTruePoints}
 end
 
+local function importErrorsOnly(text)
+    local C=worldFor(1)
+    local L=loop.new(C)
+    local H=L.us
+    local lists,warnings=H.Hekili:ImportSimcAPL(
+        "Druid_Feral","APLForever-Current-Import-Isolation",text,C.PACK)
+    assert.is_table(lists)
+    H.Hekili.DB.profile.packs[C.PACK].lists=lists
+    H.Hekili:LoadScripts();H.Hekili:ReviewPacks()
+    local errors={}
+    for i,e in ipairs(H.errors) do errors[i]=tostring(e) end
+    return errors,warnings
+end
+
 describe("Feral v0.11 full APL finisher/fallback with 1 or 3 source attackers",function()
+    it("diagnose exact old Current three malformed/hidden HP guards without touching rollback",function()
+        local original=loadFile(roles.current)
+        local guarded,n=original:gsub("health%.pct<=[0-9]+","0")
+        assert.are.equal(3,n,"Current v1.0 protected health-guard count changed")
+        assert.is_true(guarded~=original)
+        local old=importErrorsOnly(original)
+        local fixed=importErrorsOnly(guarded)
+        print(("FERAL_IMPORT_ISOLATION currentErrors=%d substituteHealthGuardsErrors=%d replaced=%d"):format(
+            #old,#fixed,n))
+        assert.are.equal(3,#old,
+            "pinned Current import errors changed; review source regression")
+        -- This in-memory negative control checks whether the exact three
+        -- non-source-observable health.pct conditions explain the errors.
+        -- If it fails, retain red evidence; do not waive the parser gate.
+        assert.are.equal(0,#fixed,
+            "three errors not isolated to Current health.pct guards")
+    end)
     for _,attackers in ipairs({1,3}) do
         for _,seed in ipairs({30417,30418}) do
             it(("natural melee attackers=%d seed=%d"):format(attackers,seed),function()
