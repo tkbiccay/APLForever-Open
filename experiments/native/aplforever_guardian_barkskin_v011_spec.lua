@@ -49,7 +49,7 @@ local function install(H,C,name)
     -- gcd.remains field can prevent repeated Barkskin GCD refusals.
     local changed,n=original:gsub(
       "actions%.defensive_cooldowns=barkskin,if=[^\n]+",
-      function(line) return line.."&gcd.remains<=0.05" end)
+      function(line) return line.."&gcd.remains=0" end)
     assert.are.equal(1,n,"source v1.5 Barkskin fallback line changed")
     original=changed
   end
