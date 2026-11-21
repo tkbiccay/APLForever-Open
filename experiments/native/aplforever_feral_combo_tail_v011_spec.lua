@@ -158,8 +158,10 @@ describe("Feral v0.11 full APL finisher/fallback with 1 or 3 source attackers",f
         for _,seed in ipairs({30417,30418}) do
             it(("natural melee attackers=%d seed=%d"):format(attackers,seed),function()
                 local shipped=run("shipped",attackers,seed)
-                local current=run("current",attackers,seed)
+                -- Observe independent v1.4 source import/casts before protected
+                -- Current v1.0 import diagnostics can fail this same case.
                 local candidate=run("candidate",attackers,seed)
+                local current=run("current",attackers,seed)
                 assert.is_true((current.by.claw or 0)+(current.by.shred or 0)>=2)
                 assert.is_true((candidate.by.claw or 0)+(candidate.by.shred or 0)>=2)
                 -- Complete v1.4 differs from Current on finish threshold,
