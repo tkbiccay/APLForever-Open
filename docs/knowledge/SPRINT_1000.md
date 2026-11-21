@@ -1,0 +1,28 @@
+# APLForever — Sprint 1000 campaign
+
+**Launched:** Saturday **21 November 2026**, Europe/London. This is an enthusiastic, evidence-driven AI-built hobby project; **quality and safety outrank producing 1,000 commits**.
+
+## Automation and what the counter means
+
+Existing ChatGPT task **APLForever Sprint 1000**, ID `6b00c3284bd48191add6444c4983fb75`, updated 21 Nov 2026. Schedule `DTSTART:20261121T120000` (Europe/London) and `RRULE:FREQ=HOURLY;COUNT=1000`: **up to 1,000 scheduled hourly opportunities**, first **21 Nov 2026 12:00 UK**, last scheduled slot approximately **2 Jan 2027 03:00 GMT**. An automation occurrence may be delayed, retried, have no worthwhile code change, fail or be missed; **the scheduler's slot index is NOT the count of successful AI sprints, tests, or merged PRs**. The actual run history maintained by the automation is the source of truth for completed runs; report failures and empty/blocked cycles without creating vanity commits. The 1,000-count schedule ends automatically; continuation beyond the limit requires a new explicit decision. The separate **Saturday 08:00 UK gameplay checklist** remains independent.
+
+This page is a **campaign launch and milestone ledger, NOT a per-hour check-in file**. Update it only alongside material source/test/role work, not to increment a counter. Exact running total cannot be reconstructed from Git commits or schedule alone; never label a run #N completed based only on elapsed hours.
+
+## Priorities and proof
+
+- **Joint P0:** Druid Guardian/Feral Tank and Hunter Beast Mastery; **P1** Feral DPS; then the other supported roles, preserving the 28 intended roles (five healer roles blocked as currently recorded in the live catalogue).
+- Every individual APL is **complete and standalone**; the shipped WoWSims APL is the first research reference and a fair comparator, *not* a ceiling. No mandatory settings tickboxes, never override the user's native off-switches. Robust final/repeated recommendation and real subsequent casts > synthetic optimisation.
+- On every worthwhile PR: publish source release SHA, shipped **and** exact Current/last-working comparator, full standalone Candidate and SHA if any, test seeds and world setup, genuine source-accepted casts or recorded limitations, negative/fallback controls and exact-head **all-green CI** before safe merge. Do not invent casts, pets, DPS or secret WoW state; don't switch source to Retail/Classic/SoD.
+- No automatic promotion or Approved status from a headless pass. A complete new Candidate can be stored as **unselected Draft** without immediate gameplay. Last-working selection changes require explicit real in-game proof and safe rollback. Human game questions are batched on **Saturday mornings**; human availability does not halt source-grounded work on other issues.
+- Never open a commit/PR solely to keep a daily activity streak or inflate fun facts. If a hypothesis is falsified, log it once and move on. Avoid repeated default or guide research when source and failed attempts are already pinned.
+
+## Milestones (verified evidence only)
+
+| Date | Milestone | Observed evidence | Outcome |
+| --- | --- | --- | --- |
+| 21 Nov 2026 | Campaign configured | Existing task changed to finite **1,000 hourly slots**, Saturday task retained | **Scheduled**, NOT 1,000 executed |
+| 21 Nov 2026 | Launch-session **manual** source experiment (before first scheduled slot) | [PR #60](https://github.com/tkbiccay/APLForever-Open/pull/60), exact released v0.11.0 [7-case source run 44898520234](https://github.com/tkbiccay/APLForever-Open/actions/runs/44898520234), 28 whole-pack worlds, 6/7.9/8/9/10/35/35.1yd | **7/7 pass**; original coarse `outside8` guard already enables valid 8yd shots; test-only 'range-only' redesign gains **zero** source-accepted casts. **Reject redesign, preserve BM v1.4**. This is NOT scheduled cycle 1. |
+
+## Current protected baseline as of launch
+
+Public [repository](https://github.com/tkbiccay/APLForever-Open); launch base main `33691e45ef8e02cd90361e18cde22427a245336f` (prior [PR #59](https://github.com/tkbiccay/APLForever-Open/pull/59)); **28 roles, 45 full SHA-protected revisions, zero Approved**. Guardian v1.0 Reported Working / Needs Retest remains preferred and rollback; Guardian v1.5 Draft, Hunter BM v1.4 Draft and Feral DPS v1.4 Draft unselected. Pin Hekili Forever **v0.11.0** `86b739cbc4e6afbcbc693c3790ee81197fc6234b` and verify release each new run. Consult the [current handover](CONTINUATION_HANDOVER.md), [live role catalogue](../../catalogue/roles.json), [individual Tests_ evidence](../Tests_Hunter_BeastMastery_v0.11_RangeBoundary.md) and [Saturday acceptance](../Tests_P0_LIVE_ACCEPTANCE_V011.md) rather than inferring later status from this static launch record.
