@@ -47,13 +47,23 @@ local function selectCurrent()
     assert.are.equal(23,#sorted,"published Supported-role manifest changed")
     return sorted
 end
-local function one(entry)
+local function one(entry, armsNegativeControl)
     local C=fixture(entry)
     local H=headless.new({character=C.character(),pack=C.PACK})
     assert.are.same({},H.loadErrors)
     assert.are.same({},H.Hekili.Class.loadErrors or {})
+    local apl=read(entry.apl_file)
+    if armsNegativeControl then
+        assert.are.equal("Warrior_Arms",entry.apl_name)
+        -- Precisely ONE existing precombat phase-dependent health predicate.
+        -- Remove the source-hidden health check ONLY from this in-memory
+        -- negative control. Stored SHA-verified bytes remain immutable.
+        local changed,n=apl:gsub("health%.pct>=95","0")
+        assert.are.equal(1,n,"source Arms health condition changed")
+        apl=changed
+    end
     local lists,warnings=H.Hekili:ImportSimcAPL(entry.apl_name,
-        "APLForever-v011-Catalogue-Import",read(entry.apl_file),C.PACK)
+        "APLForever-v011-Catalogue-Import",apl,C.PACK)
     assert.is_table(lists)
     assert.is_table(lists.default)
     assert.is_table(lists.precombat)
@@ -77,8 +87,9 @@ local function one(entry)
     for _ in pairs(lists) do count=count+1 end
     local errors={}
     for _,e in ipairs(H.errors) do errors[#errors+1]=tostring(e) end
-    print(("ALLROLE_V011 role=%s revision=%s file=%s sha256=%s lists=%d compiler_errors=%d importer_rejects=%d inactive_lists=%d"):format(
-        entry.apl_name,entry.revision,entry.apl_file,entry.sha256,count,
+    print(("ALLROLE_V011 role=%s revision=%s file=%s bytes=%s lists=%d compiler_errors=%d importer_rejects=%d inactive_lists=%d"):format(
+        entry.apl_name,entry.revision,entry.apl_file,
+        armsNegativeControl and "IN_MEMORY_NEGATIVE_CONTROL" or entry.sha256,count,
         #errors,#rejects,#inactive))
     for i,e in ipairs(errors) do print(("ALLROLE_COMPILER_DETAIL role=%s i=%d info=%s"):format(entry.apl_name,i,e:sub(1,250))) end
     for i,e in ipairs(rejects) do print(("ALLROLE_IMPORT_REJECT role=%s i=%d detail=%s"):format(entry.apl_name,i,e:sub(1,250))) end
@@ -101,6 +112,15 @@ describe("All 23 protected Current/Archive role profiles on released Forever v0.
                     and result.inactive==0 then
                     knownLegacy[#knownLegacy+1]=r.apl_name
                     print("ALLROLE_V011_KNOWN_COMPILER_DEBT role=Druid_Feral count=3 source=hidden-health.pct")
+                elseif r.apl_name=="Warrior_Arms" and result.compiler==1
+                    and result.rejects==0 and result.inactive==0 then
+                    local control=one(r,true)
+                    assert.are.equal(0,control.compiler,
+                        "Arms precombat health negative control did not clear compiler warning")
+                    assert.are.equal(0,control.rejects)
+                    assert.are.equal(0,control.inactive)
+                    knownLegacy[#knownLegacy+1]=r.apl_name
+                    print("ALLROLE_V011_KNOWN_COMPILER_DEBT role=Warrior_Arms count=1 source=precombat-health.pct testonly_fixed=1")
                 else
                     failed[#failed+1]=r.apl_name..": compiler="..result.compiler..
                         " rejected="..result.rejects.." inactive="..result.inactive
@@ -113,8 +133,8 @@ describe("All 23 protected Current/Archive role profiles on released Forever v0.
             #selected,okCount,#knownLegacy,#failed))
         for _,f in ipairs(failed) do print("ALLROLE_V011_UNEXPECTED "..f) end
         assert.are.equal(23,#selected)
-        assert.are.same({"Druid_Feral"},knownLegacy,
-            "Feral historical health compiler diagnostic unexpectedly changed")
+        assert.are.same({"Druid_Feral","Warrior_Arms"},knownLegacy,
+            "known source/legacy compiler diagnostics unexpectedly changed")
         assert.are.same({},failed,
             "current v0.11.0 Supported-role importer/compile regressions; see per-role logs")
     end)
