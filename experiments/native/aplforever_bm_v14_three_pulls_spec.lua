@@ -1,5 +1,8 @@
 -- 22 Nov 2026: new full v1.4 same-addon three-pull reset regression.
 -- Source native only; not proof of pet arrival, DPS or client play.
+-- Count aspect_of_the_hawk separately from summon_hawk; exclude repeated
+-- summon_hawk from the three follow-on actions so pet commands cannot
+-- inflate evidence of actual offensive/maintenance progression.
 -- Source-native Hunter BM v0.11.0 three consecutive fights on one addon boot.
 -- Ported carefully from the historic v0.8.3 three-fight gate. No source
 -- pet arrival, fake bonus cast, numerical DPS, or gameplay proof.
@@ -63,7 +66,7 @@ local function run(profile,seedBase)
             on=function(r,_,t)
                 local press=r.pressed[r.combat]
                 if press and press=="summon_hawk" then firstHawk=firstHawk or r.combat end
-                if press and firstHawk and r.combat>firstHawk and #tail<4 then
+                if press and press~="summon_hawk" and firstHawk and r.combat>firstHawk and #tail<4 then
                     tail[#tail+1]=press
                 end
             end
@@ -71,6 +74,7 @@ local function run(profile,seedBase)
         local pressed=result.pressedBy or {}
         local hawk=pressed.summon_hawk or 0
         local arcane=pressed.arcane_shot or 0
+        local aspect=pressed.aspect_of_the_hawk or 0
         print(("BM_3FIGHTS_V011 profile=%s fight=%d hawk=%d arcane=%d accepted=%d refused=%s errors=%d raises=%d post_hawk=%s world_t=%.2f counts=%s mana_end=%.2f"):format(
             profile,fight,hawk,arcane,result.presses,
             tostring(next(result.refused)~=nil),result.errors,result.raises,
@@ -80,8 +84,9 @@ local function run(profile,seedBase)
         assert.are.same({},result.refused,"source refused a recommendation after session reset")
         assert.is_true(result.presses>=3,"no useful accepted actions in 35-second pull")
         assert.is_true(result.combat>=20,"no meaningful combat progression")
-        assert.is_true(hawk>=1,"lost source-accepted Hawk on one of three pulls")
-        assert.is_true(#tail>=3,"no 3 accepted post-Hawk actions on this fight")
+        assert.is_true(hawk>=1,"lost source-accepted summon_hawk on one of three pulls")
+        assert.is_true(aspect>=1,"lost source-accepted aspect_of_the_hawk upkeep")
+        assert.is_true(#tail>=3,"no 3 accepted non-summon actions after first summon_hawk")
         total.fights=total.fights+1
         total.hawks=total.hawks+hawk
         total.arcane=total.arcane+arcane
