@@ -51,6 +51,25 @@ class RepositoryValidationTests(unittest.TestCase):
         failures, _ = validator.validate_repository(ROOT, check_git=False)
         self.assertEqual(failures, [])
 
+    def test_active_handover_size_guard_preserves_archival_freedom(self) -> None:
+        # Active reads in 1000 scheduled sprints must stay lean. Full history
+        # can grow separately without making every subsequent AI run expensive.
+        docs = self.root / "docs" / "knowledge"
+        docs.mkdir(parents=True)
+        active = docs / "CONTINUATION_HANDOVER.md"
+        archived = docs / "CONTINUATION_ARCHIVE_20261122.md"
+        active.write_bytes(b"A" * 12000)
+        archived.write_bytes(b"B" * 54000)
+        self.assertEqual(self.errors(), [])
+        active.write_bytes(b"A" * 12001)
+        self.assertTrue(any(
+            "CONTINUATION_HANDOVER.md exceeds 12 KB" in msg
+            for msg in self.errors()
+        ))
+        # A missing active handover remains legal for isolated role fixtures.
+        active.unlink()
+        self.assertEqual(self.errors(), [])
+
     def test_canonical_apl_names_match_class_and_spec_only(self) -> None:
         self.assertEqual(len({role["apl_name"] for role in self.data["roles"]}), 28)
         self.assertTrue(all(
