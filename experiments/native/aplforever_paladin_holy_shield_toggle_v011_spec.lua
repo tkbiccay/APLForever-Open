@@ -1,6 +1,8 @@
 -- Published v0.11.0 source-world, test-only complete Paladin Protection APL.
 -- Hypothesis: optional Defensives OFF hides routine Holy Shield in protected
--- v1.0; an in-memory bounded routine guard can restore it while tanking.
+-- v1.0; isolate whether a known-and-missing-buff guard is source-castable.
+-- Earlier bounded aggro/Mana guard returned 0 casts versus shipped 3;
+-- this deliberately isolates predicate gating without claiming safe production logic.
 -- No candidate is stored or promoted by this experiment.
 local loop=require("Game.harness.loop")
 local stock=assert(require("Forever.helpers.paladin_world").Protection)
@@ -9,7 +11,7 @@ local path=root.."/roles/Paladin/Current/APL_Paladin_Protection_Tank_v1.0_Draft.
 local f=assert(io.open(path,"rb"))
 local original=assert(f:read("*a"));f:close()
 local needle="holy_shield,if=toggle.defensives&!buff.holy_shield.up"
-local replacement="holy_shield,if=action.holy_shield.known&combat>0&aggro&!buff.holy_shield.up&mana.lo>=action.holy_shield.cost"
+local replacement="holy_shield,if=action.holy_shield.known&!buff.holy_shield.up"
 assert(original:find(needle,1,true),"protected original gate changed")
 local candidate,n=original:gsub("holy_shield,if=toggle%.defensives&!buff%.holy_shield%.up",replacement)
 assert(n==1,"expected exactly one test-only Holy Shield guard")
@@ -50,6 +52,6 @@ describe("Paladin Protection routine Holy Shield vs optional Defensives OFF",fun
         print(("PALADIN_HOLY_SHIELD_COMPARE shipped=%d current=%d guarded=%d"):format(shipped,current,guarded))
         assert.are.equal(0,current,"Current should not cast toggle-gated Holy Shield with Defensives OFF")
         -- A positive result must show actual source-accepted casts, not only import.
-        assert.is_true(guarded>current,"bounded routine guard failed to restore accepted Holy Shield")
+        assert.is_true(guarded>current,"minimal known/buff guard failed to restore accepted Holy Shield")
     end)
 end)
