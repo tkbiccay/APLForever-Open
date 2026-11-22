@@ -19,11 +19,11 @@ local function read(path)
   local f=assert(io.open(root.."/"..path,"rb"))
   local s=assert(f:read("*a"));f:close();return s
 end
-local function worldFor(threat,distance)
+local function worldFor(threat,distance,attackers)
   local C=ws.content(stock,{pack=stock.PACK,level=60,kit={"barkskin"}})
   C.SCENARIO="game"
   C.WORLD=setmetatable({
-    distance=distance,attackers=2,targetLevel=60,
+    distance=distance,attackers=attackers or 2,targetLevel=60,
     mobHealth=1000000000,
   },{__index=C.WORLD})
   local old=fake.new
@@ -91,8 +91,8 @@ local function restore()
   helper.MAP.barkskin=nil
   stock.IDS.barkskin=nil
 end
-local function one(profile,seed,threat,distance,defensives,seconds)
-  local L,C=worldFor(threat,distance)
+local function one(profile,seed,threat,distance,defensives,seconds,attackers)
+  local L,C=worldFor(threat,distance,attackers)
   local H=L.us
   assert.are.same({},H.loadErrors)
   assert.are.same({},H.Hekili.Class.loadErrors or {})
@@ -222,11 +222,11 @@ local function one(profile,seed,threat,distance,defensives,seconds)
   return {casts=#press,accepted=rr.presses,refused=refused,
           times=press,by=by}
 end
-local function compare(seed,threat,distance,defensives,seconds)
-  local shipped=one("shipped",seed,threat,distance,defensives,seconds)
-  local working=one("working",seed,threat,distance,defensives,seconds)
-  local candidate=one("candidate",seed,threat,distance,defensives,seconds)
-  local v16=one("v16",seed,threat,distance,defensives,seconds)
+local function compare(seed,threat,distance,defensives,seconds,attackers)
+  local shipped=one("shipped",seed,threat,distance,defensives,seconds,attackers)
+  local working=one("working",seed,threat,distance,defensives,seconds,attackers)
+  local candidate=one("candidate",seed,threat,distance,defensives,seconds,attackers)
+  local v16=one("v16",seed,threat,distance,defensives,seconds,attackers)
   print(("GUARDIAN_BARKSKIN_COMPARE seed=%d threat=%s yd=%d toggle=%s shipped=%d/%d/%d working=%d/%d/%d v15=%d/%d/%d v16=%d/%d/%d"):format(
     seed,tostring(threat),distance,tostring(defensives),
     shipped.accepted,shipped.refused,shipped.casts,
@@ -263,5 +263,16 @@ describe("Guardian v0.11 class-backed test-only Barkskin native toggle and fallb
     -- Do not assert an invented no-threat health or mitigation fact;
     -- source client no-threat != proof that no damage can reach player.
     assert.is_true(c.accepted>=3,"source combat did not advance")
+  end)
+  it("separate zero incoming attackers from zero synthetic client threat (source observability control)",function()
+    -- Previously no-threat always retained TWO attackers, conflating the
+    -- threat API with the source-world incoming-attack condition.
+    -- No damage/mitigation conclusion: the published world has no such model.
+    local c,w,sh,v16=compare(30419,false,4,true,38,0)
+    print(("GUARDIAN_BARKSKIN_ZERO_ATTACKERS seed=30419 syntheticThreat=0 attackers=0 shipped=%d working=%d v15=%d v16=%d"):format(
+      sh.casts,w.casts,c.casts,v16.casts))
+    -- A true source-world negative should never be relabelled as mitigation.
+    -- Only enforce source cast/refusal invariants already checked in one().
+    assert.is_true(v16.casts<=1,"native 60s Barkskin cooldown violated in 38s")
   end)
 end)
