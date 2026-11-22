@@ -14,3 +14,18 @@
 
 **Decision: REJECT a Guardian v1.6 Maul-order promotion at this time.** Neither candidate reached the existing v1.5 `rage.lo >=35` source reserve, so reordering could not plausibly trigger its high-kit Maul branch. The experiment proves source castability and no regression **in these states**, not that Maul can never execute; a high-Rage source-positive scenario and/or true live Rage+snapshot is required before promoting a new architecture. This is a **test coverage/resource belief boundary**, not reason to invent synthetic combat Rage, weaken safe reserves, or replace protected v1.0/v1.5. The older v0.9 v1.1 experiment used different source/architecture and cannot substitute as a v0.11 positive.
  Live guardian aggro, post-Roar, high-Rage and repeated-fallback remain separate final game gates.
+
+## 22 November 2026 — five and six natural attackers, source-safe negative
+
+**[Draft PR #70](https://github.com/tkbiccay/APLForever-Open/pull/70), exact initial PR-head [native 44995308854](https://github.com/tkbiccay/APLForever-Open/actions/runs/44995308854) 5/5 PASS with 0 failures/errors** against published `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. Existing 2/3/4-attacker case results reproduced without alteration. A *new* five/six-attacker natural world was added to the same original-vs-one-list-reorder experiment; neither complete stored v1.5 bytes nor the test-only in-memory alternate logic were modified, and the source gave natural mob swings, resource gains and GCDs only.
+
+| Source natural attackers | Profile | Max true Rage | Max belief Rage lower bound | Lo >=35 ticks | Enemy swings | Maul queue/strike | Core casts | Accepted/refused |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| 5 | original v1.5 | 46.00 | **40.38** | **2** | 91 | 0/0 | 13 | 14/0 |
+| 5 | test-only reordered | 40.75 | 28.38 | 0 | 89 | 0/0 | 13 | 14/0 |
+| 6 | original v1.5 | 36.25 | 34.00 | 0 | 85 | 0/0 | 13 | 14/0 |
+| 6 | test-only reordered | 36.25 | 34.00 | 0 | 85 | 0/0 | 13 | 14/0 |
+
+**New important distinction:** the five-attacker *original* actually crossed the 35-Rage lower bound on two ticks, but **no Maul was queued or paid**; the candidate reorder never crossed 35 in the same seed. The full high-kit Maul branch has **additional** constraints: `active_enemies<3|rage.lo>=50`, affordability/reserves for Primal Bite, Lacerate and Swipe, no clearcasting, and a queued-swing guard. The source world's `WORLD.attackers=5` does not *by itself* prove what Hekili's `active_enemies` evaluation was at each opportunity. Do **not** assert that the 50-Rage multi-target guard uniquely caused the missing queue or that merely crossing 35 proves action eligibility. A real 35+ threshold opportunity is **Supported**; the desired successful high-kit Maul queue/strike remains **Blocked / Not Demonstrated**. No reason to promote the list reorder; keep Guardian v1.6 Draft and reported-working v1.0 intact, with all exact catalogue hashes preserved.
+
+**Possible distinct next test:** source-native eligibility trace *at the two observed qualifying ticks*, checking the entire current Maul predicate, effective `active_enemies` and queued swing, without fabricated Rage. Only worthwhile if it can falsify a concrete APL decision; otherwise collect real client `/hek snap` during naturally high Rage. This is not proof of damage, survival, damage mitigation, AoE range or live player behavior. Exact final PR-head checks must be green before merge.
