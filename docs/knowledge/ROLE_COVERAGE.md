@@ -25,7 +25,7 @@
 | Mage Frost | Clean import only | Targeted v0.11 source evidence not yet inventoried | Frostfire conditional support vs actual published kit; range/fallback |
 | Paladin Protection | Clean import only | [v0.11 Holy Shield predicates](https://github.com/tkbiccay/APLForever-Open/actions/runs/45041801938) — focused source-native | Holy Shield source aggro suppression with safe no-threat counterexample |
 | Paladin Retribution | Clean import only | Targeted v0.11 source evidence not yet inventoried | Routine seal upkeep without tickboxes, Mana/execute fallback |
-| Priest Shadow | Clean import only | [PR #80](https://github.com/tkbiccay/APLForever-Open/pull/80) — RUNNING; do not count as passed | PR #80 DoT/real channel, low Mana and 60yd negative |
+| Priest Shadow | Clean import | [v0.11 Shadow native 6/6](https://github.com/tkbiccay/APLForever-Open/actions/runs/45084348959) — 20yd normal/25% Mana follow-ons zero Current refusals; 60yd SOURCE RANGE LIMIT | Low-level ranks, real range, channel clipping, DoT truth uptime and late combat fallback |
 | Rogue Assassination | Clean import only | Targeted v0.11 source evidence not yet inventoried | Poison/finisher upkeep, Combo Point availability and low-energy fallback |
 | Rogue Combat | Clean import only | Targeted v0.11 source evidence not yet inventoried | Energy, Slice and Dice upkeep and repeated next action |
 | Rogue Subtlety | Clean import only | Targeted v0.11 source evidence not yet inventoried | Stealth opener transitions and non-stealth fallback across three casts |
