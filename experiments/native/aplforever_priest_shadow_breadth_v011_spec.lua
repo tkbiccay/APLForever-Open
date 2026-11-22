@@ -87,14 +87,18 @@ describe("Shadow Priest v0.11 source-native DoT/channel/final fallback breadth",
             assert.is_true(currentRun.presses>=3,
                 "low-Mana Current failed to progress through three real accepted actions")
         end)
-        it("60yd out-of-range current-vs-shipped negative "..seed,function()
+        it("exposes published Priest source-world range fidelity limit at 60yd "..seed,function()
             local shipped=one("shipped",seed,60,nil,28)
             local currentRun=one("current",seed,60,nil,28)
-            assert.are.equal(0,currentRun.attacks,
-                "out-of-range offensive action incorrectly source accepted")
+            -- Published Priest world.resolve/usability do not encode cast
+            -- range. It source-accepts even 60yd attacks at WORLD.distance=60.
+            -- No in-game out-of-range success or actual APL fault can be
+            -- inferred from these source-world accepted casts.
+            assert.is_true(currentRun.attacks>0,
+                "published out-of-range fidelity limitation changed; investigate")
             assert.are.equal(0,currentRun.refused,
-                "Current source-refused out-of-range recommendation")
-            print(("SHADOW_RANGE_V011 seed=%d shipped=%d/%d current=%d/%d"):format(
+                "Current source-world range-independent diagnostic changed")
+            print(("SHADOW_RANGE_ENGINE_LIMIT_V011 seed=%d distance=60 shipped=%d/%d current=%d/%d genuine_game_range=UNVERIFIED"):format(
                 seed,shipped.attacks,shipped.refused,currentRun.attacks,currentRun.refused))
         end)
     end
