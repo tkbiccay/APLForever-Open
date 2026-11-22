@@ -52,7 +52,7 @@ local function execute(profile,level)
     local H=L.us
     assert.are.same({},H.loadErrors)
     assert.are.same({},H.Hekili.Class.loadErrors or {})
-    local parseErrors=import(H,C,profile)
+    local parseErrors=import(H,C,profile) or 0
     local t=H.Hekili.DB.profile.toggles
     t.cooldowns.value=false
     t.minor_cooldowns.value=false
@@ -71,9 +71,22 @@ local function execute(profile,level)
     assert.are.equal(level>=20,known.cat)
     assert.are.equal(level>=20,known.claw)
     assert.are.equal(level>=22,known.shred)
-    assert.are.equal(level>=24,known.rake)
     assert.are.equal(level>=20,known.rip)
-    assert.are.equal(level>=32,known.bite)
+    -- Exact released class metadata includes Rake variant 1289140 and
+    -- Bite variants 1328618/1289142. These IDs are ABSENT from the
+    -- generated learn_druid.lua table, and ws.content defaults an absent
+    -- ID to level 1: "known" cannot prove pre-24 actual unlocks.
+    -- Never guess a variant's real character learn-level.
+    local learnt=ws.learn("DRUID")
+    assert.is_nil(learnt[1289140])
+    assert.is_nil(learnt[1328618])
+    assert.is_nil(learnt[1289142])
+    if level>=24 then assert.is_true(known.rake) end
+    if level>=32 then assert.is_true(known.bite) end
+    if level<24 then
+        print(("FERAL_UNLOCK_LIMIT level=%d rakeKnown=%s biteKnown=%s source=unmapped-Forever-variant-rank NO-NEGATIVE-UNLOCK-PROOF"):format(
+            level,tostring(known.rake),tostring(known.bite)))
+    end
     local r=loop.run(L,30417,{duration=36},{{H=H}})
     local by=r.pressedBy or {}
     local first={}
