@@ -1,5 +1,12 @@
 # APLForever-Open — concise canonical continuation (22 November 2026)
 
+## Live pending work — 22 November 2026, 16:04 UTC
+
+- [Draft PR #74](https://github.com/tkbiccay/APLForever-Open/pull/74), exact submitted head `a6ad0417ce11d09b242ede2234e53b924b7ded50`: published v0.11.0 pinned native diagnostic isolates Protection Holy Shield `combat>0`, `aggro`, `mana.lo>=action.holy_shield.cost`, and their conjunction against shipped/Current/minimal with matched seed. **CI pending, no pass claimed.** No protected APL or catalogue changed.
+- **NEXT hourly action:** inspect #74 exact-head source-native workflow and validator logs. If green, read `PALADIN_HOLY_SHIELD_PREDICATES` actual counts and determine which guard suppresses source-world Holy Shield; merge test-only through protection when all required checks green. If red, fix fixture without suppressing legitimate negatives. Maintain all rollbacks and no approval.
+- Preceding [PR #73](https://github.com/tkbiccay/APLForever-Open/pull/73) merged at `76fb567059c8d8bbafcac69a5ebe05d1d528a81a`; [native PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45030324150): shipped 3/33, Current 0/31, minimal 4/32, zero refusals/errors. Minimal diagnostic not production-safe.
+
+
 > **Read this checkpoint first.** The complete pre-compaction ~70 KB continuation history is permanently preserved in [main at `cf64b166`](https://github.com/tkbiccay/APLForever-Open/blob/cf64b166889a9bacab87e5c3fdfa37dc8433cced/docs/knowledge/CONTINUATION_HANDOVER.md). PRs, source-pinned knowledge, every complete APL and their SHA-256 checksums remain individually accessible. Do not repeatedly load the historical full document unless investigating an earlier decision.
 
 ## Latest verified state and provenance
