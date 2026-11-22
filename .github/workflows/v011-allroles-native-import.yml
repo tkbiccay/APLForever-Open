@@ -6,6 +6,10 @@ on:
       - "experiments/native/aplforever_allroles_import_v011_spec.lua"
       - "scripts/build_native_manifest.py"
       - "catalogue/roles.json"
+      - "docs/Tests_AllRoles_Import_v0.11.0.md"
+      - "docs/knowledge/engine/RELEASE_LEDGER.md"
+      - "docs/knowledge/engine/current-release.json"
+      - "docs/knowledge/CONTINUATION_HANDOVER.md"
   workflow_dispatch:
 permissions:
   contents: read
