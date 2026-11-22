@@ -45,6 +45,7 @@ local function run(profile,attackers)
     H.Hekili.DB.profile.toggles.defensives.value=false
     H.Hekili.DB.profile.toggles.movement.value=false
     local maxTrue,maxLo,maxMismatch,reserveTicks=0,0,0,0
+    local reserve35to49,reserve50=0,0
     local cursor,naturalMobSwings=0,0
     local rr=loop.run(L,30417,{
         duration=70,
@@ -64,6 +65,8 @@ local function run(profile,attackers)
                 maxLo=math.max(maxLo,lo)
                 if r.us.power>=35 and lo<35 then maxMismatch=maxMismatch+1 end
                 if lo>=35 then reserveTicks=reserveTicks+1 end
+                if lo>=35 and lo<50 then reserve35to49=reserve35to49+1 end
+                if lo>=50 then reserve50=reserve50+1 end
             end
         end,
     },{{H=H}})
@@ -82,9 +85,9 @@ local function run(profile,attackers)
     local pressed=rr.pressedBy or {}
     local core=(pressed.primal_bite or 0)+(pressed.lacerate or 0)
         +(pressed.swipe_bear or 0)
-    print(("GUARDIAN_MAUL_V011 profile=%s attackers=%d true_max=%.2f beliefLo_max=%.2f highTruthLowBelief=%d beliefReserveTicks=%d mobSwings=%d maulQueue=%d maulStrikes=%d maulUnqueue=%d paidRage=%d core=%d accepted=%d refused=%s errors=%d raises=%d"):format(
+    print(("GUARDIAN_MAUL_V011 profile=%s attackers=%d true_max=%.2f beliefLo_max=%.2f highTruthLowBelief=%d beliefReserveTicks=%d reserve35to49=%d reserve50=%d mobSwings=%d maulQueue=%d maulStrikes=%d maulUnqueue=%d paidRage=%d core=%d accepted=%d refused=%s errors=%d raises=%d"):format(
         profile,attackers,maxTrue,maxLo,maxMismatch,reserveTicks,
-        naturalMobSwings,queue,strikes,unqueues,paid,core,rr.presses,
+        reserve35to49,reserve50,naturalMobSwings,queue,strikes,unqueues,paid,core,rr.presses,
         tostring(next(rr.refused)~=nil),rr.errors,rr.raises))
     assert.are.equal(0,rr.errors)
     assert.are.equal(0,rr.raises)
@@ -95,6 +98,7 @@ local function run(profile,attackers)
     if strikes>0 then assert.is_true(paid>0,"source strike paid no Rage") end
     return {queue=queue,strikes=strikes,paid=paid,core=core,
             maxTrue=maxTrue,maxLo=maxLo,reserve=reserveTicks,
+            reserve35to49=reserve35to49,reserve50=reserve50,
             pressed=rr.presses}
 end
 describe("Guardian v1.5 natural 70s Rage and Maul list-order A/B",function()
@@ -108,6 +112,10 @@ describe("Guardian v1.5 natural 70s Rage and Maul list-order A/B",function()
             local baseline=run("original",attackers)
             local variant=run("reordered",attackers)
             assert.is_true(variant.core>=3,"test-only order lost minimum GCD progress")
+            if attackers==5 then
+                assert.is_true(baseline.reserve35to49>0,"natural five-attacker 35–49 Rage window disappeared")
+                assert.are.equal(0,baseline.reserve50,"50-Rage threshold unexpectedly reached; re-evaluate multi-target Maul")
+            end
             -- A positive candidate queue requires source-earned Rage, later
             -- STRIKE and payment, not just an action recommendation.
             if variant.strikes>baseline.strikes then
