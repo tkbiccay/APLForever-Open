@@ -163,6 +163,16 @@ def validate_repository(
 
     if data.get("schema_version") != 1:
         errors.append("catalogue/roles.json: schema_version must be 1")
+    # Keep recurring AI Sprint handovers readable. The full old handover is
+    # archived intact; growing append-only notes must never become the active
+    # hourly work queue again. Optional for lightweight validator fixtures.
+    active_handover = root / "docs" / "knowledge" / "CONTINUATION_HANDOVER.md"
+    if active_handover.is_file() and active_handover.stat().st_size > 12000:
+        errors.append(
+            "docs/knowledge/CONTINUATION_HANDOVER.md exceeds 12 KB; "
+            "archive history and keep the live next-action checkpoint concise"
+        )
+
     role_rows = data["roles"]
     keys = [_role_key(role) if isinstance(role, dict) else ("", "", "") for role in role_rows]
     duplicates = {key for key in keys if keys.count(key) > 1}
