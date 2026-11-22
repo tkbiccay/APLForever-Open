@@ -98,7 +98,12 @@ local function run(profile,attackers)
             pressed=rr.presses}
 end
 describe("Guardian v1.5 natural 70s Rage and Maul list-order A/B",function()
-    for _,attackers in ipairs({2,3,4}) do
+    -- Extend source-natural attackers from 2/3/4 to 5/6 as separate
+    -- bounded high-Rage reserve diagnostics. No fake Rage, changes to
+    -- ability costs, spells, APL files, or source engine. These extra
+    -- cases do NOT require positive Maul queue; log Blocked if the
+    -- belief lower band still never reaches its verified 35 guard.
+    for _,attackers in ipairs({2,3,4,5,6}) do
         it("complete original and test-only reordered candidate, "..attackers.." attackers",function()
             local baseline=run("original",attackers)
             local variant=run("reordered",attackers)

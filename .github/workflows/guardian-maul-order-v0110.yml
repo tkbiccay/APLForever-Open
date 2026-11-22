@@ -32,7 +32,7 @@ jobs:
       - name: Bootstrap published Forever Lua world
         working-directory: upstream/hekili
         run: make bootstrap
-      - name: Compare full Guardian v1.5 Maul ordering with 2, 3, 4 natural attackers
+      - name: Compare original/reordered Guardian v1.5 with 2–6 natural attackers
         working-directory: upstream/hekili
         run: |
           cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_guardian_maul_order_v011_spec.lua" tests/Forever/aplforever_guardian_maul_order_v011_spec.lua
