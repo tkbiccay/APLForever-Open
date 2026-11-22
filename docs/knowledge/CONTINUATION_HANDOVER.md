@@ -2,6 +2,12 @@
 
 **Updated:** 22 November 2026 (UK). **Read this one page FIRST**, then LIVE GitHub PRs, runs, catalogue and exact pinned source. This is an actionable checkpoint, not the complete research history. The entire **53,406-character pre-compaction handover** is preserved byte-for-byte in [CONTINUATION_ARCHIVE_20261122.md](CONTINUATION_ARCHIVE_20261122.md), with the older pre-compaction baseline [at cf64b166](https://github.com/tkbiccay/APLForever-Open/blob/cf64b166889a9bacab87e5c3fdfa37dc8433cced/docs/knowledge/CONTINUATION_HANDOVER.md). Never lose historical tests/negative results. **Live refs supersede any saved SHA.**
 
+## LIVE checkpoint — 22 November 2026, 22:00 UTC
+
+- Main `0817bdd42ae9c88af9bb0bd3f2cd17672c18979b`: postmerge [validator 45069647210](https://github.com/tkbiccay/APLForever-Open/actions/runs/45069647210) PASS. No other open PR at preflight.
+- [Draft PR #78](https://github.com/tkbiccay/APLForever-Open/pull/78), branch `sprint/bm-v011-major-offswitch-20261122`, head `e07e129f1b31041e196249c22aeef8101a6f1488` before this handover update. New complete Hunter BM shipped/Current v1.1/Candidate v1.4 source-native Major Cooldowns OFF/ON and accepted non-major progression experiment, seeds 30417/30437, exact published Forever v0.11.0 pin `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. No APL or catalogue changed.
+- **CI_NOT_TRIGGERED** at immediate PR-head check (zero workflow runs); not a native PASS. **Next:** inspect exact latest PR-head native and validator checks; if absent, check pull_request path triggers and permissions once, then use a supported safe dispatch or leave Draft and pivot. If red, diagnose actual logs; if green, merge test-only PR without promoting any APL. Require zero major accepted with OFF, three genuine accepted non-major actions, no refusals/errors; ON is diagnostic, not evidence of damage gains. Maintain immutable rollbacks.
+
 ## LIVE checkpoint — 22 November 2026, 20:03 UTC
 
 - Main verified `e3bacbdc16f50a19a9dee0b48485f034d893c4e6`; [post-merge validator 45058628791](https://github.com/tkbiccay/APLForever-Open/actions/runs/45058628791) PASS. No other open PR at this run's preflight.
