@@ -1,0 +1,45 @@
+name: Forever v0.11 — all 23 Supported APL native compiler/import gate
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/v011-allroles-native-import.yml"
+      - "experiments/native/aplforever_allroles_import_v011_spec.lua"
+      - "scripts/build_native_manifest.py"
+      - "catalogue/roles.json"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  allrole-import-v011:
+    name: Released source 23-role import/compile with known legacy isolation
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify release and all immutable protected APL hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+          python project/scripts/build_native_manifest.py --source-release v0.11.0 --output "$RUNNER_TEMP/aplforever-native-manifest.lua"
+          {
+            echo "APLFOREVER_ROOT=$GITHUB_WORKSPACE/project"
+            echo "APLFOREVER_NATIVE_MANIFEST=$RUNNER_TEMP/aplforever-native-manifest.lua"
+            echo "APLFOREVER_SOURCE_RELEASE=v0.11.0"
+          } >> "$GITHUB_ENV"
+      - name: Bootstrap published Forever v0.11 native source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Check all Supported catalogue Current/Archive imports and compiler findings
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_allroles_import_v011_spec.lua" tests/Forever/aplforever_allroles_import_v011_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_allroles_import_v011_spec.lua
