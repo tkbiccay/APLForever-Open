@@ -93,9 +93,11 @@ local function run(profile,seedBase)
     return total
 end
 describe("Hunter BM v0.11.0 three fights, exact complete APLs and no reload",function()
-    for _,profile in ipairs({"shipped","current-v1.1","candidate-v1.2"}) do
-        it(profile.." accepts Hawk, has 3 post-Hawk casts and zero refusals in each fight",function()
-            run(profile)
-        end)
+    for _,seedBase in ipairs({30417,30437}) do
+        for _,profile in ipairs({"shipped","current-v1.1","candidate-v1.4"}) do
+            it(profile.." seed="..seedBase.." accepts Hawk, has 3 post-Hawk casts and zero refusals in each fight",function()
+                run(profile,seedBase)
+            end)
+        end
     end
 end)
