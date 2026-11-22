@@ -1,0 +1,47 @@
+# Role coverage and cross-spec learning queue — Hekili Forever v0.11.0
+
+**As at 22 Nov 2026.** Public repo `tkbiccay/APLForever-Open`; published addon pin `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. One class/spec row is **a development queue, not an approval**. Protect 46 SHA-verified full APL revisions; 28 intended roles, **23 Supported and 5 Blocked healer roles**; zero Approved.
+
+## What coverage means
+
+**Importer:** [PR #79](https://github.com/tkbiccay/APLForever-Open/pull/79) source-native v0.11 `ImportSimcAPL`/script compilation checked **all 23 Supported Current/Archive full APLs**: 21 clean, Feral Current v1.0 three known `health.pct` compiler errors, Warrior Arms v1.0 one precombat `health.pct` error. This is not gameplay or accepted-cast compatibility.
+
+**Targeted:** a spec's actual released-source world advances the **complete** shipped versus exact Current/last-working versus Candidate, records REAL accepted/refused actions and follow-on/final fallbacks in at least one meaningful positive/negative scenario. A named scoped test does NOT cover levels 1–60, all toggles, PvE modes, missing source observables or numerical DPS unless explicitly stated. "Not inventoried" is **not evidence none exists** in historical tests.
+
+**Improved:** a distinct original complete unselected Draft demonstrably corrects a material safe/castable issue under fair matched comparator tests; do not count simple same-output parity. **Approved:** requires separate repeatable actual in-game owner proof and protected rollback.
+
+## Full Supported portfolio — next worthwhile research and validations
+
+| Supported role | Current v0.11 import | Known targeted current-release evidence | Most valuable remaining next test |
+| --- | --- | --- | --- |
+| Druid Balance | Clean import only | Targeted v0.11 source evidence not yet inventoried | Full Moonkin/form eligibility, safe Mana recovery and final three casts |
+| Druid Feral | 3 known compile errors | [v0.11 Feral test](https://github.com/tkbiccay/APLForever-Open/actions/runs/45064263862) — source-native; Current 3 errors | Resolve Current combat health compiler debt; verify rank-data gap and Cat fallback |
+| Druid Guardian | Clean import only | [v0.11 Barkskin source](https://github.com/tkbiccay/APLForever-Open/actions/runs/44945344925) — focused source-native | Live true-aggro and Barkskin efficacy; source-native 35–50 Rage/Maul gate |
+| Hunter BeastMastery | Clean import only | [v0.11 Major OFF native](https://github.com/tkbiccay/APLForever-Open/actions/runs/45075209976) — focused source-native | Client Call/Revive arrival and 6–8 yd Hawk; safe three subsequent casts |
+| Hunter Marksmanship | Clean import only | Targeted v0.11 source evidence not yet inventoried | Pet recovery, range/auto-shot fallbacks and Major OFF |
+| Hunter Survival | Clean import only | Targeted v0.11 source evidence not yet inventoried | Melee weave/6yd dead-zone with real legal follow-on casts |
+| Mage Arcane | Clean import only | Targeted v0.11 source evidence not yet inventoried | Mana-exhaustion and proc/cooldown normal filler chain |
+| Mage Fire | Clean import only | Targeted v0.11 source evidence not yet inventoried | Combustion/DoT maintenance and low-Mana final fallback |
+| Mage Frost | Clean import only | Targeted v0.11 source evidence not yet inventoried | Frostfire conditional support vs actual published kit; range/fallback |
+| Paladin Protection | Clean import only | [v0.11 Holy Shield predicates](https://github.com/tkbiccay/APLForever-Open/actions/runs/45041801938) — focused source-native | Holy Shield source aggro suppression with safe no-threat counterexample |
+| Paladin Retribution | Clean import only | Targeted v0.11 source evidence not yet inventoried | Routine seal upkeep without tickboxes, Mana/execute fallback |
+| Priest Shadow | Clean import | [v0.11 Shadow native 6/6](https://github.com/tkbiccay/APLForever-Open/actions/runs/45084348959) — 20yd normal/25% Mana follow-ons zero Current refusals; 60yd SOURCE RANGE LIMIT | Low-level ranks, real range, channel clipping, DoT truth uptime and late combat fallback |
+| Rogue Assassination | Clean import only | Targeted v0.11 source evidence not yet inventoried | Poison/finisher upkeep, Combo Point availability and low-energy fallback |
+| Rogue Combat | Clean import only | Targeted v0.11 source evidence not yet inventoried | Energy, Slice and Dice upkeep and repeated next action |
+| Rogue Subtlety | Clean import only | Targeted v0.11 source evidence not yet inventoried | Stealth opener transitions and non-stealth fallback across three casts |
+| Shaman Elemental | Clean import only | Targeted v0.11 source evidence not yet inventoried | Clearcasting procs, hidden Mana, DoT and safe next three casts |
+| Shaman Enhancement | Clean import only | Targeted v0.11 source evidence not yet inventoried | Verified imbue/totem upkeep and Mana/melee fallback |
+| Warlock Affliction | Clean import only | Targeted v0.11 source evidence not yet inventoried | DoT/curses upkeep; low-Mana Life Tap final repeated recommendation |
+| Warlock Demonology | Clean import only | Targeted v0.11 source evidence not yet inventoried | DEM0-006 Life Tap repeat safeguard; pet/DoT follow-ons vs working rollback |
+| Warlock Destruction | Clean import only | Targeted v0.11 source evidence not yet inventoried | Immolate/Conflagrate sequence, Mana and Life Tap fallback |
+| Warrior Arms | 1 known compile error | Targeted v0.11 source evidence not yet inventoried | Precombat health compiler debt (one error), Rage/stance and final chain |
+| Warrior Fury | Clean import only | Targeted v0.11 source evidence not yet inventoried | Revalidate v1.2 movement off-switch and 30-Rage Bloodthirst on v0.11 |
+| Warrior Protection | Clean import only | Targeted v0.11 source evidence not yet inventoried | Shield Block/Revenge eligibility, level unlocks, Rage final fallback |
+
+## Portfolio-first rules and cross-spec transfer
+
+- New substantive role-specific sprint units: target approximately **three in four** on currently underserved specs until **every one of these 23** has independent, meaningful current-release combat/fallback evidence. Joint P0 Guardian + BM continue for urgent faults and testable improvements; Feral P1 remains active. Exceptions for critical safety or unfinished exact-head PRs are always allowed; do not create vanity PRs.
+- Rotate to a different under-served class on consecutive breadth units when feasible. Existing protected working candidates cannot be displaced by source-only scores.
+- Log each new finding as **Observed symptom → source-native evidence → APL/engine/API/fixture/data/game-mechanics classification → independently falsifiable cross-spec hypothesis → affected roles → separate follow-up tests**. A shared issue must be *proved* in each transferred spec before changing that APL.
+- Examples worth checking: Priest Shadow channels/DoTs ↔ Mage, Warlock and Shaman DoTs; rogue Energy ↔ Feral energy; Life Tap repeat ↔ health-cost and resource-conversion last fallbacks; P0 Guardian Rage guard ↔ Warrior rage; Hunter pet arrival ↔ Warlock demon.
+- A green importer-only preflight does NOT mean adequate role coverage. Update this table alongside a **substantive** role-specific PR after checking exact source CI; do not commit a count-only ledger update.
