@@ -4,9 +4,9 @@
   "release_tag": "v0.11.0",
   "release_commit": "86b739cbc4e6afbcbc693c3790ee81197fc6234b",
   "published_at_utc": "2026-11-20T14:59:13Z",
-  "recorded_on": "2026-11-20",
-  "compatibility_status": "Partial / Focused P0 Native PASS; Full All-Role Unverified",
-  "compatibility_notes": "Published v0.11.0 source reviewed. Focused Guardian v1.5 and BM v1.1/v1.2 native run 44771820185 PASSED; standalone APL selection and in-game castability still unproven. Historical v0.10.0 role-evidence remains pinned to its old source SHA, not transposed to v0.11.0. Full v0.10.0 all-role gate stayed Partial/red (Feral in-combat hidden health and Arms phase-agnostic precombat warning); v0.11.0 full all-role compatibility is UNVERIFIED.",
+  "recorded_on": "2026-11-22",
+  "compatibility_status": "Partial / 23-role importer triaged (21 clean; 2 known faults); combat unverified",
+  "compatibility_notes": "Published Forever v0.11.0 exact release pin retained. New PR #79 source-native 23/23 complete Current/Archive importer/compilation diagnostic: 21 clean, Feral Current v1.0 three known health.pct compiler errors and Warrior Arms Current v1.0 one known precombat health.pct compiler error. In-memory Arms single-expression negative control clears the one error, but is NOT an importable fix. Exact-head positive native CI 45081377956. Strict unknown-error count zero. This is only importer/compiler scope: 23-role source-world accepted casts, repeated final fallbacks, 1-60 level coverage, source gameplay accuracy and real client remain UNVERIFIED. Previous focused Guardian/BM v0.11 source-native PASS 44771820185. Zero Approved; all 46 protected APL bytes intact.",
   "latest_passing_historical_native_release": {
     "tag": "v0.9.0",
     "commit": "8f95f2ea0a45428554c1e938ed7357b870030514",
