@@ -31,7 +31,7 @@
 | Rogue Subtlety | Clean import only | Targeted v0.11 source evidence not yet inventoried | Stealth opener transitions and non-stealth fallback across three casts |
 | Shaman Elemental | Clean import only | Targeted v0.11 source evidence not yet inventoried | Clearcasting procs, hidden Mana, DoT and safe next three casts |
 | Shaman Enhancement | Clean import only | Targeted v0.11 source evidence not yet inventoried | Verified imbue/totem upkeep and Mana/melee fallback |
-| Warlock Affliction | Clean import only | Targeted v0.11 source evidence not yet inventoried | DoT/curses upkeep; low-Mana Life Tap final repeated recommendation |
+| Warlock Affliction | Clean import | [v0.11 full native 6/6](https://github.com/tkbiccay/APLForever-Open/actions/runs/45085850377): 2 seeds × normal/25%-Mana/60yd, 0 Current refuses, low-Mana 15 Current vs 33 shipped accepted; 60yd fixture range gap | Research safe health-aware Life Tap alternatives and DoT/filler uptime; do not copy shipped 8 Taps without health proof |
 | Warlock Demonology | Clean import only | Targeted v0.11 source evidence not yet inventoried | DEM0-006 Life Tap repeat safeguard; pet/DoT follow-ons vs working rollback |
 | Warlock Destruction | Clean import only | Targeted v0.11 source evidence not yet inventoried | Immolate/Conflagrate sequence, Mana and Life Tap fallback |
 | Warrior Arms | 1 known compile error | Targeted v0.11 source evidence not yet inventoried | Precombat health compiler debt (one error), Rage/stance and final chain |
