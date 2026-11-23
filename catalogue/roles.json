@@ -1088,7 +1088,7 @@
         },
         {
           "revision": "v1.1",
-          "apl_file": "roles/Rogue/Candidates/APL_Rogue_Assassination_DPS_v1.1_Draft.txt",
+          "apl_file": "roles/Rogue/Candidates/APL_Rogue_Assassination_v1.1_Draft.txt",
           "status": "Draft",
           "sha256": "380dbbd82db40e6f8a9dca67e7e6b89bbcde24becfc847cd39d59665ebf87ad9",
           "evidence": [

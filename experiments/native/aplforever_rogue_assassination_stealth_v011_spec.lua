@@ -12,7 +12,7 @@ local new="actions.opener=garrote,focus=1,if=action.garrote.known&!debuff.garrot
 local escaped=old:gsub("([^%w])","%%%1")
 local hypothesis,n=current:gsub(escaped,new)
 assert.are.equal(1,n,"precise original Assassination opener changed; do not guess fix")
-local fc=assert(io.open(root.."/roles/Rogue/Candidates/APL_Rogue_Assassination_DPS_v1.1_Draft.txt","rb"))
+local fc=assert(io.open(root.."/roles/Rogue/Candidates/APL_Rogue_Assassination_v1.1_Draft.txt","rb"))
 local guarded=assert(fc:read("*a"));fc:close()
 assert.are.equal(hypothesis,guarded,
  "stored complete v1.1 Draft differs from exact validated one-line guard")
