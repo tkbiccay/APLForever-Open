@@ -105,14 +105,34 @@ describe("Forever v0.11 MM full-profile low-Mana and ranged dead-zone breadth",f
     assert.are.equal(0,x.major)
    end
   end)
-  it("diagnose 7yd: verify no invented real-client range conclusion seed "..seed,function()
-   local shipped=one("shipped",seed,nil,7,30)
-   local base=one("current",seed,nil,7,30)
-   local cand=one("candidate",seed,nil,7,30)
-   print(("MM_RANGE_DIAG_V011 seed=%d distance=7 shipped=%d/%d current=%d/%d candidate=%d/%d real_client=NOT_TESTED"):format(
-    seed,shipped.accepted,shipped.refused,base.accepted,base.refused,
-    cand.accepted,cand.refused))
-   assert.is_true(base.accepted>=0 and cand.accepted>=0)
+  it("diagnose 5/7/9yd ranged and melee boundaries without inventing client proof seed "..seed,function()
+   local sevenShipped=one("shipped",seed,nil,7,30)
+   local sevenBase=one("current",seed,nil,7,30)
+   local sevenCand=one("candidate",seed,nil,7,30)
+   -- Diagnostic observation of source fixture range gating, not an
+   -- assumption that movement/auto-shot/melee is modelled identically in game.
+   print(("MM_RANGE_DIAG_V011 seed=%d yd=7 shipped=%d/%d current=%d/%d candidate=%d/%d real_client=NOT_TESTED"):format(
+    seed,sevenShipped.accepted,sevenShipped.refused,
+    sevenBase.accepted,sevenBase.refused,sevenCand.accepted,sevenCand.refused))
+   assert.are.equal(0,sevenBase.refused,
+     "Current attempts source-rejected spell in 6-8yd source dead zone")
+   assert.are.equal(0,sevenCand.refused,
+     "Candidate attempts source-rejected spell in 6-8yd source dead zone")
+   local nearRanged=one("current",seed,nil,9,30)
+   local candRanged=one("candidate",seed,nil,9,30)
+   assert.is_true(nearRanged.follow>=3 and candRanged.follow>=3,
+     "9yd source range failed three accepted subsequent ranged actions")
+   assert.are.equal(0,nearRanged.refused)
+   assert.are.equal(0,candRanged.refused)
+   local nearMelee=one("current",seed,nil,5,30)
+   local candMelee=one("candidate",seed,nil,5,30)
+   print(("MM_MELEE_BOUNDARY_V011 seed=%d yd=5 current_offense=%d/%d candidate_offense=%d/%d client_melee=UNVERIFIED"):format(
+      seed,nearMelee.offensive,nearMelee.refused,
+      candMelee.offensive,candMelee.refused))
+   -- Source MarksmanshipTurret kit is primarily ranged. Do not require
+   -- a melee cast if the pinned client kit does not know melee specials.
+   assert.are.equal(0,nearMelee.refused)
+   assert.are.equal(0,candMelee.refused)
   end)
  end
 end)
