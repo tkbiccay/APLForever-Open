@@ -10,6 +10,9 @@ on:
       - "docs/knowledge/CROSS_SPEC_LESSONS.md"
       - "docs/knowledge/CONTINUATION_HANDOVER.md"
       - "roles/Rogue/Current/APL_Rogue_Subtlety_v1.0_Draft.txt"
+      - "roles/Rogue/Candidates/APL_Rogue_Subtlety_v1.1_Draft.txt"
+      - "catalogue/roles.json"
+      - "Catalogue_All_Roles.md"
       - "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
       - "roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt"
   workflow_dispatch:
