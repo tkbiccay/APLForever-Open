@@ -34,7 +34,29 @@ local function run(profile,seed,energy,duration)
   t.cooldowns.value=false
   t.minor_cooldowns.value=false
   t.defensives.value=false
-  local rr=loop.run(L,seed,{duration=duration},{{H=H}})
+  local trace,hookInstalled={},false
+  local rr=loop.run(L,seed,{
+    duration=duration,
+    on=function(w)
+      if hookInstalled then return end
+      local raw=w.W.press
+      w.W.press=function(player,key,resolved)
+        local t0=w.W.t
+        local ok,why=raw(player,key,resolved)
+        if player==w.us and not ok and t0>=loop.PULL and #trace<7 then
+          trace[#trace+1]={key=key,reason=why,t=t0,
+            energy=player.power, cost=resolved and resolved.cost}
+        end
+        return ok,why
+      end
+      hookInstalled=true
+    end,
+  },{{H=H}})
+  for i,e in ipairs(trace) do
+    print(("ROGUE_TRACE profile=%s seed=%d energy=%d idx=%d t=%.2f key=%s reason=%s energyWorld=%.2f cost=%s"):format(
+      profile,seed,energy,i,e.t,tostring(e.key),tostring(e.reason),
+      tonumber(e.energy) or -1,tostring(e.cost)))
+  end
   assert.are.equal(0,rr.errors)
   assert.are.equal(0,rr.raises)
   local refused=0
