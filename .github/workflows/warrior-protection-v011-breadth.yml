@@ -1,0 +1,36 @@
+name: Warrior Protection v0.11 native Rage fallback breadth
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/warrior-protection-v011-breadth.yml"
+      - "experiments/native/aplforever_warrior_protection_rage_v011_spec.lua"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify published source and repository integrity
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap source-native test runtime
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Test shipped vs Current vs unselected Candidate
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_warrior_protection_rage_v011_spec.lua" tests/Forever/aplforever_warrior_protection_rage_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose tests/Forever/aplforever_warrior_protection_rage_v011_spec.lua
