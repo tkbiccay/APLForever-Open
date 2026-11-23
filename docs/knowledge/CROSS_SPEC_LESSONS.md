@@ -2,6 +2,12 @@
 
 **Purpose:** Reuse confirmed findings across all **23 Supported** Hekili Forever roles without blindly copying APL fixes. Always preserve **symptom → actual released-source evidence → cause category → test limitations → candidate transferable hypothesis → target roles and separate validation**. This is developmental knowledge, not a shared runtime dependency or a change to protected APLs.
 
+## Lesson — Warrior Protection accepted-press gate versus simulation ticks
+
+**23 November 2026; published v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b`.** [PR #85](https://github.com/tkbiccay/APLForever-Open/pull/85), [prior-head native 4/4](https://github.com/tkbiccay/APLForever-Open/actions/runs/45121534053). Two matched seeds, 100/25 starting Rage, full shipped/Current v1.0/Candidate v1.1: `rr.combat=501` represented simulation combat ticks, **not 501 accepted casts**. Actual `rr.presses`: shipped 30/38; Current and Candidate 21–22. Shipped seed 30461 had three cost refusals; Current and Candidate zero. Native Major OFF produced zero recorded major presses. **Classification: confirmed test-harness assertion defect**, not APL combat defect; correcting acceptance gate to `rr.presses>=4` on PR head, with final exact-head CI pending. Accepted totals are not proof of damage, threat, mitigation or a specific Shield Block/Revenge eligibility transition.
+
+**Cross-spec transfer hypothesis:** other `Game.harness.loop` tests may mistakenly use `rr.combat` as evidence of three legal follow-on actions. Independently audit source-native tests for `rr.combat` versus `rr.presses` and enforce accepted-action progression (and refusals) per class; Guardian Rage/next-swing is a candidate, but no universal APL change follows. Separately test actual Warrior Shield Block/Revenge preconditions with source-supported controls.
+
 ## Lesson 1 — Cast-range diagnostics require class-specific source-world fidelity
 
 **Date/pin:** 22 November 2026; released `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. **Origin:** Priest Shadow Current v1.0, [PR #80](https://github.com/tkbiccay/APLForever-Open/pull/80), [original red 45084240028](https://github.com/tkbiccay/APLForever-Open/actions/runs/45084240028), corrected [native 45084348959](https://github.com/tkbiccay/APLForever-Open/actions/runs/45084348959).
