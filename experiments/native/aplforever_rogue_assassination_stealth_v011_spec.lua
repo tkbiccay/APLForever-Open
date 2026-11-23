@@ -10,8 +10,12 @@ local current=assert(f:read("*a"));f:close()
 local old="actions.opener=garrote,focus=1,if=action.garrote.known&!debuff.garrote.up&(buff.stealth.up|buff.vanish.up|buff.ghostly_strike_next.up)"
 local new="actions.opener=garrote,focus=1,if=action.garrote.known&!debuff.garrote.up&((!combat&buff.stealth.up)|buff.vanish.up|buff.ghostly_strike_next.up)"
 local escaped=old:gsub("([^%w])","%%%1")
-local guarded,n=current:gsub(escaped,new)
+local hypothesis,n=current:gsub(escaped,new)
 assert.are.equal(1,n,"precise original Assassination opener changed; do not guess fix")
+local fc=assert(io.open(root.."/roles/Rogue/Candidates/APL_Rogue_Assassination_DPS_v1.1_Draft.txt","rb"))
+local guarded=assert(fc:read("*a"));fc:close()
+assert.are.equal(hypothesis,guarded,
+ "stored complete v1.1 Draft differs from exact validated one-line guard")
 local function run(profile,seed,energy,duration)
  local world=setmetatable({power=energy,mobHealth=1000000000},{__index=stock.WORLD})
  local C=setmetatable({WORLD=world},{__index=stock})
@@ -93,6 +97,8 @@ describe("Rogue Assassination full v0.11 Stealth transfer and resource fallback"
    local guardedRun=run("guarded",seed,100,75)
    assert.is_true(shipped.combat>=4,"published shipped unable to advance")
    assert.is_true(currentRun.combat>=4,"original Current failed regular full-Energy combat")
+   assert.are.equal(currentRun.presses,guardedRun.presses,
+    "guard changed previously healthy normal Energy profile")
    assert.is_true(guardedRun.follow>=3,"guarded APL fails three accepted actions")
    assert.are.equal(0,guardedRun.major)
    assert.are.equal(0,guardedRun.refused,"guarded test refused a regular opener action")
@@ -109,6 +115,10 @@ describe("Rogue Assassination full v0.11 Stealth transfer and resource fallback"
     "guarded hypothesis still repeats source-unusable Garrote or filler")
    -- Do not assert the Combat symptom occurs in Assassination. We must
    -- independently observe if Current is stuck or healthy in this class.
+   assert.are.equal(501,currentRun.refused,
+    "original protected Current no longer reproduces source Stealth refusal; re-evaluate comparator")
+   assert.are.equal(0,currentRun.combat,
+    "original Current unexpectedly advances in low Energy; re-evaluate")
    if currentRun.refused>0 then
     assert.is_true(guardedRun.combat>currentRun.combat,
      "guarded change did not recover stalled combat; re-evaluate root cause")

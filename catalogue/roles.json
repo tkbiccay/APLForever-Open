@@ -1062,7 +1062,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [],
       "revisions": [
         {
@@ -1085,6 +1085,32 @@
           "settings": null,
           "caveat": "Independent source-level custom Rogue v1.0. Poison/facing/weapon gating, Vanish safety and DPS output unverified in game; Draft only, not preferred or Approved.",
           "relocated_from": "roles/APL_Rogue_Assassination_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Rogue/Candidates/APL_Rogue_Assassination_DPS_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "380dbbd82db40e6f8a9dca67e7e6b89bbcde24becfc847cd39d59665ebf87ad9",
+          "evidence": [
+            {
+              "kind": "native",
+              "reference": "PR #89, exact Hekili Forever v0.11.0 source 86b739cbc4e6afbcbc693c3790ee81197fc6234b; complete shipped / protected Current / guarded one-line APL, two matched seeds at 100 and 25 Energy, full source accepted/refused cast regression. Initial in-memory evidence run 45143006494 (4/4 PASS). Stored Candidate rerun pending final exact-head CI."
+            }
+          ],
+          "test_results": [
+            {
+              "kind": "source_native_v011_rogue_assassination_stale_stealth",
+              "result": "Pending stored-file exact-head source-native CI; in-memory hypothesis 4/4 PASS (45143006494). 25 starting Energy original Current 2 accepted/501 refused per seed, guarded 57/52 accepted and 0 refused. Normal 100 Energy guarded and Current 45/44 accepted, 0 refused. Three-plus accepted post-opener combat actions in guarded result.",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/45143006494"
+            }
+          ],
+          "rollback_reference": "roles/Rogue/Current/APL_Rogue_Assassination_v1.0_Draft.txt",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No per-spec checkbox; native Major/Minor OFF verified in published source",
+          "caveat": "Fully standalone unselected Draft; original Current v1.0 and previous hashes unchanged. Only a source-world one-line Stealth Garrote guard tested. No client Stealth/Vanish, real damage, Combo Point truth or in-game proof. Do not mark Approved or preferred."
         }
       ],
       "apl_name": "Rogue_Assassination"
