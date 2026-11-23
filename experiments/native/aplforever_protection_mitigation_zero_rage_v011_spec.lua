@@ -148,7 +148,7 @@ local function warriorRun(profile,seed,rage)
       if began then later=later+1 else began=true end
     end
   end
-  local refused=0,cost=0
+  local refused,cost=0,0
   for why,n in pairs(rr.refused or {}) do
     refused=refused+n
     if why=="cost" then cost=cost+n end
