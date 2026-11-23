@@ -19,9 +19,14 @@ local function trial(profile,seed,low)
   if profile=="current" then
     local lists,warnings=H.Hekili:ImportSimcAPL("Shaman_Enhancement","APLForever-Enhancement-v011",current,C.PACK)
     assert.is_table(lists)
-    assert.is_table(lists.default)
-    assert.is_table(lists.final_fallback)
+    for _,name in ipairs({
+      "precombat","default","weapon_upkeep","support_totems","fire_totems",
+      "mana_recovery","major_cooldowns","aoe","final_fallback",
+    }) do
+      assert.is_table(lists[name],"missing complete Current list "..name)
+    end
     assert.is_falsy((warnings or ""):find("Unsupported action",1,true))
+    assert.is_falsy((warnings or ""):find("Unknown key",1,true))
     H.Hekili.DB.profile.packs[C.PACK].lists=lists
     H.Hekili:LoadScripts()
     H.Hekili:ReviewPacks()
@@ -59,7 +64,8 @@ describe("Enhancement v0.11 melee Mana and final fallback",function()
         -- Refusals are intentionally diagnostic first; a reproducible
         -- refusal is a failure hypothesis for a subsequent isolated gate,
         -- not evidence of DPS or permission to mutate protected Current.
-        assert.is_true(currentResult.offensive>=3,"Current lacks three accepted offensive follow-on actions")
+        assert.is_true(currentResult.offensive>=4,
+          "Current lacks first plus three source-accepted offensive actions")
         assert.are.equal(0,currentResult.refused,"Current has source-refused actions")
         assert.is_true(currentResult.shield>=1,"Current fails autonomous Lightning Shield upkeep")
         -- Windfury is diagnostic only: the released fixture observed zero
