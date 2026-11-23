@@ -174,7 +174,7 @@ local function run(kind,profile,seed,percent)
             auraIds[key]=assert(positiveAura(H,key),"unknown source aura "..key)
         end
         local positive={corruption=0,bane_of_agony=0,siphon_life=0}
-        local trueTicks=0,shadowTicks=0,firstDotAt=nil,firstTickAt=nil
+        local trueTicks,shadowTicks,firstDotAt,firstTickAt=0,0,nil,nil
         local nightfall=0
         local tranceId=positiveAura(H,"shadow_trance")
         for _,e in ipairs(rr.W.truth) do
