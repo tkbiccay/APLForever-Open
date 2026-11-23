@@ -14,7 +14,7 @@ One unit is one NEW independently supported, role-specific, falsifiable safety/r
 
 | 02 | Rogue Subtlety | **Negative cross-spec transfer**: low-Energy Current v1.0 does NOT reproduce Combat/Assassination's stale-Stealth Garrote refusal; guarded test-only substitution has identical accepted counts and zero refusals. No Candidate justified. | v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b` | [PR #90](https://github.com/tkbiccay/APLForever-Open/pull/90), [4/4 native PASS 45152835829](https://github.com/tkbiccay/APLForever-Open/actions/runs/45152835829) | 25 Energy seeds 30417/30437: Current and guard each 55 accepted, 0 refused; normal Energy 46/48 accepted, 0 refused. Source-only, not DPS proof; no change to protected APL. Next distinct class Mage Fire/Hunter Survival. |
 
-**Completed: 1/50 on protected main; prospective #02 independently source-verified but NOT counted until PR #90 merges.** Count only verified NEW units after the baseline and update alongside meaningful development PRs. Do not make a commit solely to increment a number.
+**Completed: 2/50 on protected main; #02 merged in PR #90 at 33edbf88411ca223ebc5174885c0be1a3e3f3641. PR #91 Mage Fire is pending and not counted.** Count only verified NEW units after the baseline and update alongside meaningful development PRs. Do not make a commit solely to increment a number.
 
 ## Priority and guardrails
 
