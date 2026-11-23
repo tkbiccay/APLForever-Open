@@ -1465,7 +1465,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [],
       "revisions": [
         {
@@ -1487,6 +1487,26 @@
           "caveat": "Historical file carried StaticValidated label; migration does not establish renewed static, simulation or in-game validation",
           "legacy_filename": true,
           "relocated_from": "roles/APL_Warrior_Arms_DPS_v1.0_StaticValidated.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Warrior/Candidates/APL_Warrior_Arms_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "28a3b253e94869ac7c043474426d1dd402c85305a3600431481c0efdc66d066b",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Forever v0.11.0 published zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b. Unmodified Current v1.0 precombat Bloodrage health.pct>=95 compiles with 1 known error; existing in-memory health predicate diagnostic clears it but is NOT health-safe. v1.1 is exact v1.0 minus entire health-unsafe automatic precombat Bloodrage line. Public PR #99 native full combat comparison pending."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Warrior/Current/APL_Warrior_Arms_DPS_v1.0_StaticValidated.txt",
+          "addon_version": "v0.11.0",
+          "game_build": null,
+          "talents": "Published native Warrior Arms level60 source talent header only; not user profile",
+          "gear": "Published two-handed Warrior Arms world only; not user gear",
+          "settings": "Full standalone with native Major/Minor/Defensives/Movement user off-switches; no per-spec tickbox required",
+          "caveat": "Compiler+HP safety exploration: removing automatic precombat Bloodrage avoids a predicate the v0.11 parser cannot compile, but may lose Rage that shipped uses. Released source World does not subtract Bloodrage HP; gameplay, boss health safety and output are not verified. Keep Current v1.0 exact-byte immutable, catalogue preferred null, no promotion. Complete Source-native and 1–60/life-cost live tests required."
         }
       ],
       "apl_name": "Warrior_Arms"
