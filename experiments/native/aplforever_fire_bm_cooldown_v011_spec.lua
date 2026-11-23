@@ -108,11 +108,15 @@ local function one(spec,profile,seed,percent,cds)
         local at=run.W.t
         local before=(player.castUntil or 0)-at
         local mana=player.power
+        local belief=H.Hekili.State.mana
+        local beliefLo=type(belief)=="table" and belief.lo or nil
+        local shownCost=resolved and resolved.cost or nil
         local ok,reason=prev(player,key,resolved)
         if player==run.us and at>=loop.PULL and type(key)=="string" then
           if ok then accepted[#accepted+1]={t=at,key=key,mana=mana}
           else refusals[#refusals+1]={t=at,key=key,mana=mana,
-            reason=reason,castRem=before} end
+            reason=reason,castRem=before,
+            beliefLo=beliefLo,sourceCost=shownCost} end
         end
         return ok,reason
       end
@@ -131,9 +135,10 @@ local function one(spec,profile,seed,percent,cds)
     local eps=r.reason=="casting" and r.castRem>0
       and r.castRem<=1e-7
     if eps then boundary=boundary+1 else substantive=substantive+1 end
-    print(("BREADTH_CD_REFUSED role=%s profile=%s seed=%d pct=%d cds=%s t=%.17g key=%s reason=%s mana=%.3f castRemain=%.17g epsilon=%s"):format(
+    print(("BREADTH_CD_REFUSED role=%s profile=%s seed=%d pct=%d cds=%s t=%.17g key=%s reason=%s mana=%.3f beliefLo=%s resolvedCost=%s castRemain=%.17g epsilon=%s"):format(
       spec.key,profile,seed,percent,tostring(cds),r.t,r.key,
-      tostring(r.reason),r.mana,r.castRem,tostring(eps)))
+      tostring(r.reason),r.mana,tostring(r.beliefLo),
+      tostring(r.sourceCost),r.castRem,tostring(eps)))
   end
   local by=rr.pressedBy or {}
   local offense=0
