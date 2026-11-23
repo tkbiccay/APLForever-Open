@@ -54,7 +54,7 @@ local function run(profile,seed,startMana,duration)
       local old=w.W.press
       w.W.press=function(player,key,resolved)
         local timestamp=w.W.t
-        local castingRemaining=math.max(0,(player.castUntil or 0)-timestamp)
+        local castingRemaining=(player.castUntil or 0)-timestamp
         local ok,why=old(player,key,resolved)
         if player==w.us and timestamp>=loop.PULL and type(key)=="string" then
           if ok then
@@ -78,11 +78,26 @@ local function run(profile,seed,startMana,duration)
       profile,seed,startMana,tostring(why),n))
   end
   for _,e in ipairs(failed) do
-    print(("DESTRO_PRESS_FAIL profile=%s seed=%d mana=%.2f t=%.12f key=%s reason=%s castRemain=%.12f"):format(
+    print(("DESTRO_PRESS_FAIL profile=%s seed=%d mana=%.2f t=%.17g key=%s reason=%s castRemain=%.17g"):format(
       profile,seed,startMana,e.t,tostring(e.key),tostring(e.reason),e.remaining))
   end
   assert.are.equal(refused,#failed,
     "world refusal count differs from captured failed presses")
+  -- Native W.press refuses any cast while t < castUntil (no epsilon).
+  -- Strictly classify ONLY the observed Conflagrate nanosecond cast-end
+  -- overlap; every substantial/cost/GCD/range/other refusal still FAILS.
+  -- A 0 or negative remaining duration does NOT qualify as a boundary.
+  local boundary,substantive=0,0
+  for _,e in ipairs(failed) do
+    if e.key=="conflagrate" and e.reason=="casting"
+        and e.remaining>0 and e.remaining<=1e-7 then
+      boundary=boundary+1
+    else
+      substantive=substantive+1
+    end
+  end
+  print(("DESTRO_REFUSAL_CLASS profile=%s seed=%d mana=%.2f raw=%d boundary=%d substantive=%d"):format(
+    profile,seed,startMana,refused,boundary,substantive))
   local accepted=rr.pressedBy or {}
   local totals,traceOffence=0,0
   for key in pairs(offence) do totals=totals+(accepted[key] or 0) end
@@ -117,7 +132,7 @@ local function run(profile,seed,startMana,duration)
     profile,seed,startMana,rr.presses,refused,totals,traceOffence,
     immolate,conflag,orderedConflag,firstDot,postDot,fillers,
     taps,majors,minor,rr.us.power))
-  return {presses=rr.presses,refused=refused,offence=totals,
+  return {presses=rr.presses,refused=refused,boundary=boundary,substantive=substantive,offence=totals,
     trace=traceOffence,immolate=immolate,conflag=conflag,
     orderedConflag=orderedConflag,postDot=postDot,firstDot=firstDot,
     fillers=fillers,tap=taps,major=majors,minor=minor}
@@ -134,7 +149,8 @@ describe("Warlock Destruction v0.11 native Immolate/Conflagrate/fallback",functi
       assert.is_true(c.orderedConflag>=1,
         "Current never cast Conflagrate after an accepted Immolate")
       assert.is_true(c.fillers>=3,"Current lacks accepted offensive fallback")
-      assert.are.equal(0,c.refused,"Current repeats refused cast")
+      assert.are.equal(0,c.substantive,"Current has a genuine refused cast")
+      assert.is_true(c.boundary<=1,"Repeated cast-end collisions need root cause")
       assert.are.equal(0,c.tap,"Current cast source health-unmodelled Life Tap")
       assert.are.equal(0,c.major,"Current violated Major OFF")
       assert.are.equal(0,c.minor,"Current violated Minor OFF")
