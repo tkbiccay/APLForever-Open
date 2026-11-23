@@ -1,5 +1,11 @@
 # APLForever-Open — active sprint handover
 
+## LIVE checkpoint — 23 November 2026, 02:02 UTC
+
+- Protected main `10ec57dd3fe41eddc895ad1db3d6881236ce827e` includes merged Rogue Combat [PR #83](https://github.com/tkbiccay/APLForever-Open/pull/83) and unselected v1.1 guarded-opener Draft. Source-native [4/4](https://github.com/tkbiccay/APLForever-Open/actions/runs/45093860815) was PR-head evidence; preserve original Current/rollback. No open PRs at initial preflight.
+- **OPEN Draft [PR #84](https://github.com/tkbiccay/APLForever-Open/pull/84)**: BREADTH Mage Arcane, new full shipped-vs-exact-Current source-native two-seed normal/25%-Mana fallback and native Major OFF test. Source pinned to published Forever v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. Test `experiments/native/aplforever_mage_arcane_mana_v011_spec.lua`, workflow `.github/workflows/mage-arcane-v011-breadth.yml`. Initial head `64352f011e4347ee0eea7bda1c12c08aec698595`; CI had **zero registered runs at initial inspection**, not a pass. No APL or selection changed.
+- **NEXT:** check live PR #84 HEAD, native and validator workflow registration. Diagnose genuine failures, including potential helper-world missing support, rather than weaken tests or invent Mana/procs. Merge only exact-head all-green with protected main, then postmerge validation. If source-world unavailable, mark precise test limit and pivot to different under-served class (e.g. Warrior Protection). Update role coverage/cross-spec lesson only after measured evidence. No Approved.
+
 **Updated:** 22 November 2026 (UK). **Read this one page FIRST**, then LIVE GitHub PRs, runs, catalogue and exact pinned source. This is an actionable checkpoint, not the complete research history. The entire **53,406-character pre-compaction handover** is preserved byte-for-byte in [CONTINUATION_ARCHIVE_20261122.md](CONTINUATION_ARCHIVE_20261122.md), with the older pre-compaction baseline [at cf64b166](https://github.com/tkbiccay/APLForever-Open/blob/cf64b166889a9bacab87e5c3fdfa37dc8433cced/docs/knowledge/CONTINUATION_HANDOVER.md). Never lose historical tests/negative results. **Live refs supersede any saved SHA.**
 
 ## LIVE checkpoint — 23 November 2026, ~01:21 UTC
