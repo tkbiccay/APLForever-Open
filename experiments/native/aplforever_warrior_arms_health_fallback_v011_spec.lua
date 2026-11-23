@@ -99,7 +99,7 @@ local function run(profile,seed,initialRage,minor,duration)
   local nOff,nMajor=0,0
   for key in pairs(offensive) do nOff=nOff+(counts[key] or 0) end
   for key in pairs(major) do nMajor=nMajor+(counts[key] or 0) end
-  local nRef=0,nCost=0
+  local nRef,nCost=0,0
   for reason,n in pairs(rr.refused or {}) do
     nRef=nRef+n
     if reason=="cost" then nCost=nCost+n end
