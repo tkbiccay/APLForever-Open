@@ -1,9 +1,9 @@
 # APLForever-Open — active sprint handover
 
-## LIVE checkpoint — 23 November 2026, 16:00 UTC
+## LIVE checkpoint — 23 November 2026, ~16:20 UTC
 
-- **PR #91 Mage Fire BREADTH**: latest source-native [run 45201511732](https://github.com/tkbiccay/APLForever-Open/actions/runs/45201511732) **FAIL 0/4** on `cdbb6945`: strict tick-history equality disagreed with source-accepted `pressedBy` offensive totals by 1–2 (25% and 5% Mana, both seeds). Validator PASS. The accepted-action totals, not tick-history completeness, are the source-backed cast-count oracle; corrected the test to derive 3 follow-on offensive casts from `pressedBy`, bound offense by total accepted presses, and retain tick history as diagnostic in commit `d2d41aa`. **New exact-head CI pending; do not merge or count #03 until independently green.** No APL bytes/selection/rollback changed. Published source v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. Next: verify all exact-head native+validator logs, then protected squash merge if green; otherwise diagnose failure. Campaign 2/50 on protected main.
-
+- **OPEN Draft [PR #91](https://github.com/tkbiccay/APLForever-Open/pull/91)** Mage Fire BREADTH unit #03. Published Forever v0.11.0 source pin `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. Final native [45212151120](https://github.com/tkbiccay/APLForever-Open/actions/runs/45212151120) **4/4 PASS**: complete shipped vs protected Current v1.0, 25%/5% Mana two seeds, Current 20/20 and 20/16 accepted offensive vs shipped 30/31 and 32/32; zero Current refusals and 3+ further accepted offensives in all runs, Major OFF. Actual tick-indexed history omits 1–2 accepted events; source `rr.pressedBy` counters are truth for accepted count, NOT chronological proof. [Report](../Tests_Mage_Fire_Breadth_v011.md), [lesson](CROSS_SPEC_LESSONS.md), [campaign](BREADTH_50_CAMPAIGN.md).
+- **NEXT:** verify all LIVE exact-head native+validator checks on this evidence commit; squash-merge only green/clean protected main and then postmerge validate. Campaign **2/50 on main until merge; 3/50 when #91 merges**. No APL, catalogue or rollback altered; 48 protected revisions, zero Approved. Next distinct BREADTH role Hunter Survival melee/ranged/6–8yd kit gap. Do not claim cast counts equal DPS. Annual Saturday gameplay remains approval gate.
 
 ## LIVE checkpoint — 23 November 2026, ~15:10 UTC
 

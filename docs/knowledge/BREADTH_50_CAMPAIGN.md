@@ -14,10 +14,12 @@ One unit is one NEW independently supported, role-specific, falsifiable safety/r
 
 | 02 | Rogue Subtlety | **Negative cross-spec transfer**: low-Energy Current v1.0 does NOT reproduce Combat/Assassination's stale-Stealth Garrote refusal; guarded test-only substitution has identical accepted counts and zero refusals. No Candidate justified. | v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b` | [PR #90](https://github.com/tkbiccay/APLForever-Open/pull/90), [4/4 native PASS 45152835829](https://github.com/tkbiccay/APLForever-Open/actions/runs/45152835829) | 25 Energy seeds 30417/30437: Current and guard each 55 accepted, 0 refused; normal Energy 46/48 accepted, 0 refused. Source-only, not DPS proof; no change to protected APL. Next distinct class Mage Fire/Hunter Survival. |
 
-**Completed: 2/50 on protected main; #02 merged in PR #90 at 33edbf88411ca223ebc5174885c0be1a3e3f3641. PR #91 Mage Fire is pending and not counted.** Count only verified NEW units after the baseline and update alongside meaningful development PRs. Do not make a commit solely to increment a number.
+| 03 | Mage Fire | Verified no source-refused low-Mana filler in Current v1.0 at 25%/5% Mana, plus diagnosed non-exhaustive combat-tick history vs source-accepted counters; no APL change or DPS claim | v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b` | [PR #91](https://github.com/tkbiccay/APLForever-Open/pull/91), [4/4 final source-native 45212151120](https://github.com/tkbiccay/APLForever-Open/actions/runs/45212151120) | Two seeds: Current 20/20 at 25% and 20/16 at 5% accepted offensive, all 0 refused and 3+ later accepted; shipped 30/31 and 32/32 offensive. Investigate genuine DPS/DoT/Scorch without equating counts to gain. |
+
+**Completed: 3/50 on protected main after PR #91 safely merges; #03 must not be counted while the PR is unmerged.** Count only verified NEW units after the baseline and update alongside meaningful development PRs. Do not make a commit solely to increment a number.
 
 ## Priority and guardrails
 
 Across 23 Supported roles (5 Blocked healers), rotate under-served specs and mechanics; use the [role coverage ledger](ROLE_COVERAGE.md) to select the next falsifiable source-native task. Joint P0 Guardian/Feral Tank and Hunter BM retain urgent safety priority. Keep separate 25/50 and 50/50 review milestones without claiming either before evidence. Class and source fixture limitations are not in-game results; save Saturday live tasks separately.
 
-**Next after #90:** rotate to a distinct underserved class (Mage Fire or Hunter Survival), with a new source-observable combat/fallback hypothesis. No in-game Approved claims.
+**Next after #91:** Hunter Survival (melee-known kit and dead-zone safe follow-on), or Shaman Enhancement (imbues/totems/low Mana). No in-game Approved claims.
