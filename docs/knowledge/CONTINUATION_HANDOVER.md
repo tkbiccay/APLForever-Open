@@ -1,5 +1,10 @@
 # APLForever-Open — active sprint handover
 
+## LIVE checkpoint — 23 November 2026, ~11:00 UTC
+
+- **PR #90 Rogue Subtlety BREADTH** exact initial head `86c33a2738ede4ccde956dbe9c9f4754c50a1cd0`: [native 4/4 PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45152835829) and [validator PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45152835621), published Forever v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. **Negative transfer**: Current Subtlety v1.0 at 25 Energy accepted 55 actions, zero refusals, both seeds; in-memory Garrote guard identical; 100 Energy Current 46/48, also zero refusals. Source-only: cannot infer DPS/stealth live safety. **No Candidate warranted; protected APL unchanged.**
+- PR branch now includes evidence ledger amendment; **new exact-head CI must pass before protected merge**. Count stays **1/50 on main** until #90 merged. Next: distinct under-served class (Mage Fire or Hunter Survival) and new source-native observable. Preserve Saturday gameplay approval gate.
+
 ## LIVE checkpoint — 23 November 2026, ~09:08 UTC
 
 - User **authorised 50 meaningful BREADTH units** on 23 Nov, tracked on protected main in [BREADTH_50_CAMPAIGN.md](BREADTH_50_CAMPAIGN.md). Existing hourly Sprint1000 updated without schedule change; user authorises development/green protected merges, **not automatic in-game Approved** status. Published Hekili Forever v0.11.0 pin `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. Main before campaign `8765ee5538c336d157b1746a5c0c6aec062cf2e7` (Ret [#87](https://github.com/tkbiccay/APLForever-Open/pull/87) merged, postmerge green); 47 immutable pre-campaign revisions, zero Approved.
