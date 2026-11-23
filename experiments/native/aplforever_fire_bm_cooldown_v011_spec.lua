@@ -42,9 +42,9 @@ for _,spec in ipairs(specs) do
     local b="actions.final_fallback+=/scorch,if=action.scorch.known"
     assert.is_truthy(spec.apls.current:find(a,1,true))
     assert.is_truthy(spec.apls.candidate:find(
-      b.."&mana.lo>=action.scorch.cost",1,true))
+      b.."&mana.lo>=action.scorch.cost+20",1,true))
     assert.is_truthy(spec.apls.candidate:find(
-      "executing&mana.lo>=action.scorch.cost",1,true))
+      "executing&mana.lo>=action.scorch.cost+20",1,true))
     assert.is_nil(spec.apls.current:find(
       "mana.lo>=action.scorch.cost",1,true))
   end
