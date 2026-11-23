@@ -2,6 +2,13 @@
 
 **Updated:** 22 November 2026 (UK). **Read this one page FIRST**, then LIVE GitHub PRs, runs, catalogue and exact pinned source. This is an actionable checkpoint, not the complete research history. The entire **53,406-character pre-compaction handover** is preserved byte-for-byte in [CONTINUATION_ARCHIVE_20261122.md](CONTINUATION_ARCHIVE_20261122.md), with the older pre-compaction baseline [at cf64b166](https://github.com/tkbiccay/APLForever-Open/blob/cf64b166889a9bacab87e5c3fdfa37dc8433cced/docs/knowledge/CONTINUATION_HANDOVER.md). Never lose historical tests/negative results. **Live refs supersede any saved SHA.**
 
+## LIVE checkpoint — 23 November 2026, 00:05 UTC (pending source-native CI)
+
+- Protected main at branch creation `e48cd2b4c3dce4a17a82796b1cbb00bacae58b84` after merged Affliction #81. No open PR at preflight. Published Forever v0.11.0 pinned `86b739cbc4e6afbcbc693c3790ee81197fc6234b`; 23 Supported, 46 immutable revisions, zero Approved.
+- **OPEN Draft [PR #82](https://github.com/tkbiccay/APLForever-Open/pull/82)**: BREADTH Shaman Elemental; new complete-profile native test `experiments/native/aplforever_shaman_elemental_breadth_v011_spec.lua` and workflow `.github/workflows/shaman-elemental-v011-breadth.yml`. Exact PR head at creation `5945162968730ec68032c5ff84935f2a1a055126`. Two seeds, full/25%-Mana at 25yd, 60yd diagnostic; shipped vs protected Current v1.0. **CI NOT YET VERIFIED**, do not count pass or completed micro-cycle. No APL changes.
+- **NEXT:** inspect #82 live exact-head source-native and validator jobs; if red, diagnose importer/world or legitimate low-Mana refusal and fix only real fixture errors; if green, record measured results in role coverage and cross-spec lessons on the same branch, revalidate exact final head, merge safely and confirm postmerge. Do not mistake source-world range for actual game castability. Next distinct breadth class after Elemental: Rogue Combat or Mage Arcane (least served).
+- Rollback: protected `roles/Shaman/Current/APL_Shaman_Elemental_v1.0_Draft.txt` unchanged; no selection or Approved status changes.
+
 ## LIVE checkpoint — 22 November 2026, 23:57 UTC
 
 - Verified latest main before work `487a9042728ff482b874f295859bfd96d3e9476c`. [PR #80](https://github.com/tkbiccay/APLForever-Open/pull/80) Priest Shadow breadth merged, green post-merge validator 45084647769; 23 Supported roles, 46 protected revisions, 0 Approved; released Forever v0.11.0 pin `86b739cbc4e6afbcbc693c3790ee81197fc6234b`.
