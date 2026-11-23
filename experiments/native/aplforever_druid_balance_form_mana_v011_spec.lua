@@ -89,7 +89,7 @@ local function simulate(profile,seed,mana,initialForm,cooldowns,duration)
       tostring(e.reason),e.castRemaining))
   end
   local counts=rr.pressedBy or {}
-  local offences=0,traceOffence=0
+  local offences,traceOffence=0,0
   for k in pairs(offence) do offences=offences+(counts[k] or 0) end
   local postDot,seenDot=0,false
   for _,e in ipairs(acceptedEvents) do
