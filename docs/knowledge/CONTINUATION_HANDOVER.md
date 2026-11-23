@@ -1,5 +1,10 @@
 # APLForever-Open — active sprint handover
 
+## LIVE checkpoint — 23 November 2026, ~19:35 UTC
+
+- **OPEN Draft [PR #93](https://github.com/tkbiccay/APLForever-Open/pull/93)** Shaman Enhancement unit #05. Published Hekili Forever v0.11.0 exact source `86b739cbc4e6afbcbc693c3790ee81197fc6234b`, shipped vs protected full Current v1.0, two seeds × 100%/25%-starting Mana at 5yd. Latest native [45243957224](https://github.com/tkbiccay/APLForever-Open/actions/runs/45243957224) **4/4 PASS**: Current accepted 37/35 normal and 23/22 low with **0 source refusals**, Major OFF; Shield accepted 10/12 and 5/5. Exact fixture **Lightning Shield three stacks are consumed by incoming WOUND**, so multiple recasts cannot be called waste without timeline. **Windfury Weapon absent from published Enhancement known kit**, no valid imbue conclusion. Full APL/candidate/catalogue unchanged, 48 protected revisions, zero Approved. [Tests](../Tests_Shaman_Enhancement_Breadth_v011.md), [cross-spec lesson](CROSS_SPEC_LESSONS.md), [campaign](BREADTH_50_CAMPAIGN.md).
+- **NEXT:** require the **new exact-head CI** after report + stronger 4-offense/complete-list assertion, check clean PR/base and untouched role files; green → safe protected squash merge + postmerge validation. Campaign **4/50 now, 5/50 if #93 merged**. Next BREADTH distinct role **Warlock Demonology** DEMO-006, Life Tap health cost and post-DoT repeated fallback; joint P0 Guardian/BM urgent safety remains higher priority.
+
 ## LIVE checkpoint — 23 November 2026, ~16:28 UTC
 
 - **MERGED [PR #91](https://github.com/tkbiccay/APLForever-Open/pull/91)** Mage Fire unit #03 on protected main `42c69ae84e6818a231f19db45785dc6731f22c97`, all 11 exact-head checks and [postmerge validation 45215767244](https://github.com/tkbiccay/APLForever-Open/actions/runs/45215767244) PASS. 3/50 verified on main. Original Mage Fire APL untouched.

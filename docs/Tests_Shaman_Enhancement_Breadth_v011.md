@@ -1,0 +1,18 @@
+# Shaman Enhancement — source-native Forever v0.11.0 melee, Mana and Lightning Shield fallback
+
+**Dated:** 23 November 2026. **Released Forever pin:** `zmsl/hekili v0.11.0@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. **Role:** Supported Shaman Enhancement DPS. **Baselines:** complete shipped WoWSims-derived priority and exact protected Current `roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt`. No separately reported-working/approved Enhancement APL, and no new APL Candidate. [PR #93](https://github.com/tkbiccay/APLForever-Open/pull/93); [exact-head native PASS 4/4 45243957224](https://github.com/tkbiccay/APLForever-Open/actions/runs/45243957224). Two matched seeds × 100/25%-starting Mana, 90 seconds at 5yd; eight complete source-world profile executions; native Major/Minor/Defensive OFF.
+
+| Seed | Mana scenario | Shipped accepted/refused | Current accepted/refused | Current Stormstrike/Shocks/Bolts | Current Lightning Shield casts |
+| --- | --- | --- | --- | --- | --- |
+| 30417 | Full | 35 / 0 | **37 / 0** | 14 / 8 / 5 | 10 |
+| 30437 | Full | 33 / 0 | **35 / 0** | 13 / 7 / 3 | 12 |
+| 30417 | 25% | 22 / 0 | **23 / 0** | 14 / 1 / 3 | 5 |
+| 30437 | 25% | 26 / 0 | **22 / 0** | 13 / 1 / 3 | 5 |
+
+**Entire reachable source fallback checkpoint:** all Current runs had 4+ source-accepted offensive actions and zero source-refused actions, so at least three additional accepted offensive attacks after the first under these tested conditions. This is an accepted-total assertion, **not a complete time-series, no-icon-flicker guarantee, sustained DPS, or 1–60 statement**. Native Major OFF was honoured with zero Rage of the Farseer/Blood Fury. Testing the exact imported complete list requires all nine named APL sublists; source-level warning checks reject unsupported/unknown script keys. All existing Current, shipped comparator, APL hashes, rollbacks and catalogue selections remain untouched.
+
+**Lightning Shield causality:** the pinned `shaman_world.lua` applies **3 charges** on each source-accepted Lightning Shield. In the Enhancement pack, the incoming enemy's `WOUND` events decrement a charge, delete the aura at zero, and emit Aura updates. Source Current's 10/12 or 5/5 Shield casts therefore need not be repetitive wasted spam. Yet this test did not measure recast delay relative to actual charge loss, effect mitigation, mana efficiency, optimal Shield priority or the game's aura state. Do not count Shields as effective DPS.
+
+**Weapon-imbue limitation:** `PACKS.Enhancement.kit` does **not know `windfury_weapon`**. Both shipped and Current registered zero such presses, so this run **does not validate automatic weapon imbues**. Such coverage requires a verified known-rank character and effect in a separate source-native world; do not infer client castability from missing fixture actions. Totem maintenance was not forced by a boss/multi-target truth state; no claim about totems. Stormstrike/Revenge-like readiness, Maelstrom spend, range/movement, 2+/AoE, level unlocks, damage and live client need independent tests.
+
+**Default versus protected reference:** shipped differs in shield upkeep and total counts, but accepted-count totals do **not** establish output or survivability improvements. We therefore **do not modify or promote** v1.0. Source-native evidence classification: **Supported**, not In-Game Validated/Approved. [Cross-spec lesson](knowledge/CROSS_SPEC_LESSONS.md); [campaign ledger](knowledge/BREADTH_50_CAMPAIGN.md). Next distinct class: **Warlock Demonology** Life Tap health-cost and post-DoT final fallback or Mage Frost conditional kit, with P0 Guardian/BM safety still prioritised.
