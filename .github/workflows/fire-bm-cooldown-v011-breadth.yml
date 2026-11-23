@@ -1,4 +1,4 @@
-name: Breadth #14-15 Fire Combustion and BM Rapid Fire v0.11
+name: "Breadth #14-15 Fire Combustion and BM Rapid Fire v0.11"
 on:
   pull_request:
     paths:
@@ -10,6 +10,9 @@ on:
       - "docs/knowledge/CROSS_SPEC_LESSONS.md"
       - "docs/knowledge/CONTINUATION_HANDOVER.md"
       - "roles/Mage/Current/APL_Mage_Fire_v1.0_Draft.txt"
+      - "roles/Mage/Candidates/APL_Mage_Fire_v1.1_Draft.txt"
+      - "catalogue/roles.json"
+      - "Catalogue_All_Roles.md"
       - "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt"
       - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt"
   workflow_dispatch:
