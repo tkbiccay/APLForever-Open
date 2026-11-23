@@ -1578,7 +1578,7 @@
         },
         {
           "revision": "v1.3",
-          "apl_file": "roles/Warrior/Candidates/APL_Warrior_Fury_DPS_v1.3_Draft.txt",
+          "apl_file": "roles/Warrior/Candidates/APL_Warrior_Fury_v1.3_Draft.txt",
           "status": "Draft",
           "sha256": "1e0b52d5b969d597303fa165e0e3d6f8fe61b4112e5100d73e99a08f4593ceaf",
           "evidence": [
