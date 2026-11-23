@@ -1099,7 +1099,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [],
       "revisions": [
         {
@@ -1122,6 +1122,32 @@
           "settings": null,
           "caveat": "Independent source-level custom Rogue v1.0. Poison/facing/weapon gating, Vanish safety and DPS output unverified in game; Draft only, not preferred or Approved.",
           "relocated_from": "roles/APL_Rogue_Combat_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Rogue/Candidates/APL_Rogue_Combat_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "97f4b0a3514fa9c31b0710b97e85e283d78b31d76a69392f5aa0bc0f246748ca",
+          "min_source_release": "v0.11.0",
+          "evidence": [
+            "Published Forever v0.11.0 pinned source zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b, Rogue.lua stealth and Rogue Combat native world; exact one-line Garrote opener guard vs protected Current",
+            "Native in-memory full shipped / Current / guarded comparator at 100/25 Energy, two matched seeds: https://github.com/tkbiccay/APLForever-Open/actions/runs/45093516898 (4/4 PASS; all 46 previously immutable revisions unchanged)"
+          ],
+          "test_results": [
+            {
+              "kind": "source_native_v011_rogue_combat_stealth_opener_low_energy",
+              "source": "Hekili Forever v0.11.0 @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/45093516898",
+              "result": "In-memory exact one-line guard 4/4 PASS at full/25 Energy, two seeds. At 25 Energy original Current 2 accepted setup, zero combat, 501 repeatedly refused Garrotes per seed (not stealthed), guarded full profile 64/63 accepted, 0 refused and 61/60 later accepted combat actions. At 100 Energy guarded accepted counts matched Current exactly 52/51, both zero refused. Stored v1.1 byte-match and registered catalogue CI not yet run; DO NOT promote."
+            }
+          ],
+          "rollback_reference": "roles/Rogue/Current/APL_Rogue_Combat_v1.0_Draft.txt",
+          "game_build": null,
+          "addon_version": "v0.11.0",
+          "talents": null,
+          "gear": null,
+          "settings": "No new per-spec manual setting; native Major Cooldowns OFF respected in the matched source world.",
+          "caveat": "UNSELECTED FULL Draft. Original Current v1.0 retained byte-for-byte and unselected. Source-world 25 Energy opener regression resolved with one verified combat-state guard; actual Stealth/Vanish transitions, levels 1–60, poison application, Slice and Dice intent, DPS, client cast success and true subsequent live rotations remain UNVERIFIED."
         }
       ],
       "apl_name": "Rogue_Combat"

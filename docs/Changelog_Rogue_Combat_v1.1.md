@@ -1,0 +1,7 @@
+# Changelog — Rogue Combat v1.1 Draft
+
+**23 Nov 2026.** New original full standalone **unselected Candidate** `roles/Rogue/Candidates/APL_Rogue_Combat_v1.1_Draft.txt` SHA256 `97f4b0a3514fa9c31b0710b97e85e283d78b31d76a69392f5aa0bc0f246748ca`, replacing **no working/current selection**. Exact source-line change only: for `actions.opener=garrote`, ordinary `buff.stealth.up` is additionally conditioned by `!combat`; `buff.vanish.up` and `buff.ghostly_strike_next.up` remain available as before. Full v1.0 Current SHA256 `ff69f6d4baa3e74d054f8e96595993b5bd931e283e0b7a81cf1dd95a03b13218` is preserved. All other APL lists including precombat poison, builders, finishers, native major off-switches, and final Sinister Strike fallback are byte-identical.
+
+**Reason/evidence:** at 25 initial Energy prior v1.0 repeated unusable Garrote 501 times and never entered a combat filler chain in two source-native seeds; v1.1 had 64/63 accepted, zero refusals, three-plus legal subsequent actions and no regression at 100 Energy. [Full stored candidate test 45093860815](https://github.com/tkbiccay/APLForever-Open/actions/runs/45093860815) **4/4 PASS**. This is not a numeric DPS gain or in-game approval.
+
+**Rollback/next:** original Current v1.0 retained, `preferred_apl=null`; live test actual Stealth/Vanish/target context, then optimise boss/ST Slice and Dice independently if data supports. See [research](Research_Rogue_Combat_v1.1.md), [tests](Tests_Rogue_Combat_v1.1.md) and [limitations](Limitations_Rogue_Combat_v1.1.md).
