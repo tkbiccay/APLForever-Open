@@ -43,7 +43,7 @@ local function run(profile,seed,rage)
     print(("PROT_REFUSED profile=%s seed=%d rage=%d reason=%s count=%d"):format(profile,seed,rage,tostring(reason),n))
   end
   local combatActions={}
-  for i=1,rr.combat do combatActions[#combatActions+1]=rr.pressed[i] end
+  for i=1,rr.combat do combatActions[#combatActions+1]=tostring(rr.pressed[i]) end
   local majors=rr.pressedBy or {}
   local major=(majors.blood_fury or 0)+(majors.berserking or 0)+(majors.eureka or 0)+(majors.elunes_light or 0)
   print(("PROT_V011 profile=%s seed=%d rage=%d accepted=%d combat=%d refused=%d major=%d first=%s"):format(profile,seed,rage,rr.presses,rr.combat,refused,major,table.concat(combatActions,",",1,math.min(8,#combatActions))))
