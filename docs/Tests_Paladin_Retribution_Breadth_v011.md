@@ -1,0 +1,20 @@
+# Paladin Retribution — Forever v0.11.0 Seal/Mana/final fallback breadth
+
+**23 November 2026, BREADTH, bounded source-native, NOT in-game.** Forever release `zmsl/hekili v0.11.0@86b739cbc4e6afbcbc693c3790ee81197fc6234b`, published `tests/Forever/helpers/paladin_world.lua` Retribution pack, level 60, simulated melee enemy with huge health. Full shipped WoWSims-derived baseline vs exact protected Current v1.2 `roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt`, not a new Candidate. [Draft PR #87](https://github.com/tkbiccay/APLForever-Open/pull/87); [six source-native successes 45141404758](https://github.com/tkbiccay/APLForever-Open/actions/runs/45141404758). Mana is secret to the in-combat Belief state; attack damage, threat and optimum uptime were NOT evaluated.
+
+| Seed | Starting Mana | Shipped accepted/refused | Current accepted/refused | Current Seals | Current Judgement / Holy Strike |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 30417 | 6000 (100%) | 32 / 0 | **33 / 0** | 7 | 8 / 8 |
+| 30437 | 6000 (100%) | 33 / 0 | **33 / 0** | 7 | 8 / 8 |
+| 30417 | 1500 (25%) | 21 / 0 | **22 / 0** | 3 | 7 / 9 |
+| 30437 | 1500 (25%) | 20 / 0 | **21 / 0** | 3 | 6 / 9 |
+| 30417 | 300 (5%) | 10 / 0 | **10 / 0** | 1 | 3 / 5 |
+| 30437 | 300 (5%) | 10 / 0 | **10 / 0** | 1 | 3 / 5 |
+
+**Accepted actions only, not GCD count or DPS.** The test runs 75s full Mana, 95s at 25%, and 45s at 5% (two seeds), resulting in **12 full shipped/Current source-world profile executions**. Both the shipped default and Current complete APL lists import through source-native compiler and activate; no hidden helper APL dependency. Every Current simulation had zero source-refused actions, zero engine raises/errors and native Major Cooldowns OFF with zero such actions. Full and 25% Current each showed at least three genuine later accepted actions after the first observed Seal, including Judgement and Holy Strike in representative traces. Severe 5% starting Mana was an intentionally non-promotional negative control: Current completed ten accepted actions with no refused spam, but instrumented `afterSeal=0` despite eight offensive actions overall. That could reflect action order/precombat counting: do **not** claim three post-Seal actions or a proven optimal low-Mana rotation.
+
+**Source mechanic boundaries:** the Ret fixture includes known Command/Righteousness/Crusader Seals, exclusive Seal auras, a simulated Echo system, Judgement and 5yd Holy Strike, with actual in-combat Mana hidden. It does **not** prove in-game Seal Twist timing, boss-target Crusader opener/debuff, Seal expiration, Echo proc truth, target swaps, 2+/3+ target Consecration, executable ranks at levels 1–60, safe defensive/interrupt/potions behaviour, true clients or damage. The shipped default used Seal of Crusader in each normal source scenario (one at full and low/5%), while Current used none in this non-boss fixture; **this alone is not a mechanical defect**, and boss flag coverage is a specific next test.
+
+**Entire reachable fallback / repeated recommendation checkpoint:** zero source refusals in all six worlds is a useful screen, not proof that every resource threshold/talent or the actual icon loop is safe. At 5% the source had legal accepted attacks and no refused presses; inspect post-upkeep chronology, held-while-ready and final fallback more deeply before making a new Candidate. Verify with live `/hek snap` and actual game only when naturally encountered; don't replace Current or infer DPS from accepted count.
+
+**Comparison and status:** shipped is the independently defined default comparator; catalogue has no separately reported-working or approved Ret version. Current v1.2 retained as exact rollback, 47 older revision hashes unchanged; no new APL candidate, status **Draft**. Independent guide coverage is not freshly verified in this bounded native test; no Retail/Classic substitutions. Next breadth role: Rogue Assassination low-Energy Stealth/fallback (transfer only after independent source-world proof); Ret targeted follow-up is boss Seal of Crusader/Judgement and real Echo/Twist state.
