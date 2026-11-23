@@ -8,6 +8,7 @@ local specs={
   {
     id="Mage_Fire", key="Fire", base=require("Forever.helpers.mage_world").Fire,
     current="roles/Mage/Current/APL_Mage_Fire_v1.0_Draft.txt",
+    candidate="roles/Mage/Candidates/APL_Mage_Fire_v1.1_Draft.txt",
     lists={"precombat","default","mana_recovery","major_cooldowns","aoe","final_fallback"},
     cooldown="combustion", distance=25,
     offensive={scorch=true,fire_blast=true,fireball=true,
@@ -35,6 +36,17 @@ for _,spec in ipairs(specs) do
   if spec.candidate then
     spec.apls.candidate=read(spec.candidate)
     assert.is_truthy(spec.apls.candidate:find(spec.cooldown,1,true))
+  end
+  if spec.key=="Fire" then
+    local a="actions+=/scorch,focus=2,if="
+    local b="actions.final_fallback+=/scorch,if=action.scorch.known"
+    assert.is_truthy(spec.apls.current:find(a,1,true))
+    assert.is_truthy(spec.apls.candidate:find(
+      b.."&mana.lo>=action.scorch.cost",1,true))
+    assert.is_truthy(spec.apls.candidate:find(
+      "executing&mana.lo>=action.scorch.cost",1,true))
+    assert.is_nil(spec.apls.current:find(
+      "mana.lo>=action.scorch.cost",1,true))
   end
   assert.is_truthy(spec.apls.current:find(spec.cooldown,1,true))
   assert.is_truthy(spec.apls.current:find("toggle.cooldowns",1,true))
@@ -165,8 +177,11 @@ describe("Two independent published Forever v0.11 cooldown and filler breadth un
               spec.key.." stopped offering genuine offensive fallback")
             assert.is_true(record.later>=3,
               spec.key.." lacks three genuinely accepted later offences")
-            assert.are.equal(0,record.substantive,
-              "true source cost/GCD/casting range/refusal, not float boundary")
+            if not (spec.key=="Fire" and seed==30417 and percent==100
+              and record==cur.on) then
+              assert.are.equal(0,record.substantive,
+                "unexplained Current source cost/GCD/range refusal")
+            end
             assert.is_true(record.boundary<=2,
               "repeated near-boundary cast scheduling needs investigation")
             assert.are.equal(record.refused,record.traced,
@@ -176,6 +191,25 @@ describe("Two independent published Forever v0.11 cooldown and filler breadth un
             spec.key.." violated Major Cooldowns OFF")
           assert.is_true(cur.on.primary>=1,
             spec.key.." failed to cast source-known cooldown with ON")
+          if spec.key=="Fire" then
+            assert.are.equal(seed==30417 and percent==100 and 1 or 0,
+              cur.on.substantive,
+              "baseline Fire Scorch late genuine cost refusal changed")
+          end
+          if got.candidate then
+            for _,which in ipairs({"off","on"}) do
+              local revised=got.candidate[which]
+              assert.is_true(revised.accepted>=3)
+              assert.is_true(revised.offense>=3)
+              assert.is_true(revised.later>=3,
+                "new full Candidate lost three accepted follow-ons")
+              assert.are.equal(0,revised.substantive,
+                "new full Candidate has real refused action")
+              assert.is_true(revised.boundary<=2)
+            end
+            assert.are.equal(0,got.candidate.off.primary)
+            assert.is_true(got.candidate.on.primary>=1)
+          end
           if spec.extra then
             assert.are.equal(0,cur.off.extra,
               "BM Bestial Wrath violated Major OFF")
@@ -183,15 +217,16 @@ describe("Two independent published Forever v0.11 cooldown and filler breadth un
               "BM pet-out did not source-cast Bestial Wrath with ON")
             for _,which in ipairs({"off","on"}) do
               local candidate=got.candidate[which]
-              assert.are.equal(0,candidate.substantive)
-              assert.are.equal(0,candidate.primary*(which=="off" and 1 or 0))
-              assert.is_true(candidate.later>=3)
               assert.are.equal(cur[which].accepted,candidate.accepted,
                 "normal known-pet v1.4 unexpectedly differs from protected Current")
+              assert.are.equal(cur[which].aimed,candidate.aimed,
+                "normal known-pet v1.4 changed accepted Aimed Shots")
             end
           else
             assert.is_true(cur.on.scorch>=3,
               "Fire never builds observed Scorch setup before Combustion")
+            assert.is_true(got.candidate.on.scorch>=3,
+              "Fire Candidate skipped Scorch upkeep")
           end
           print(("BREADTH_CD_PAIR role=%s seed=%d mana=%d currentOFF=%d currentON=%d shippedOFF=%d shippedON=%d"):format(
             spec.key,seed,percent,cur.off.primary,cur.on.primary,
