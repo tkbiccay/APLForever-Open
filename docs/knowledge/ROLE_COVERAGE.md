@@ -14,7 +14,7 @@
 
 | Supported role | Current v0.11 import | Known targeted current-release evidence | Most valuable remaining next test |
 | --- | --- | --- | --- |
-| Druid Balance | Clean import only | Targeted v0.11 source evidence not yet inventoried | Full Moonkin/form eligibility, safe Mana recovery and final three casts |
+| Druid Balance | Clean import | [Published v0.11 source-native 10/10](https://github.com/tkbiccay/APLForever-Open/actions/runs/45264542438), full shipped vs protected Current v1.0 2 seeds × 5 Moonkin/unshifted 100%/25%/5% Mana and Cooldowns ON/OFF cases, 20 complete combat loops. Current 25/25 full, 17/17 quarter, 13/12 extreme low-Mana accepted with **0 refused**; source 11 accepted Wraths/seed at 5%; unshifted shifts into Moonkin exactly once; Innervate once when ON and never OFF | Real Moonkin talent 1–59, spell range (fixture has no Balance range map), actual Mana/DoTs/Eclipse, boss/2+ AoE, gear/potions and output unverified; no APL change or approval. [Report](../Tests_Druid_Balance_Breadth_v011.md) |
 | Druid Feral | 3 known compile errors | [v0.11 Feral test](https://github.com/tkbiccay/APLForever-Open/actions/runs/45064263862) — source-native; Current 3 errors | Resolve Current combat health compiler debt; verify rank-data gap and Cat fallback |
 | Druid Guardian | Clean import only | [v0.11 Barkskin source](https://github.com/tkbiccay/APLForever-Open/actions/runs/44945344925) — focused source-native | Live true-aggro and Barkskin efficacy; source-native 35–50 Rage/Maul gate |
 | Hunter BeastMastery | Clean import only | [v0.11 Major OFF native](https://github.com/tkbiccay/APLForever-Open/actions/runs/45075209976) — focused source-native | Client Call/Revive arrival and 6–8 yd Hawk; safe three subsequent casts |
