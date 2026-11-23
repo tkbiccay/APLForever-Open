@@ -35,7 +35,39 @@ local function run(profile,seed,distance,mana,duration)
   t.cooldowns.value=false
   t.minor_cooldowns.value=false
   t.defensives.value=false
-  local rr=loop.run(L,seed,{duration=duration},{{H=H}})
+  -- Test-only trace: source-world refusal *reason* is indexed rather than
+  -- action name in rr.refused. Capture exact attempted spell and existing cast
+  -- timing without manufacturing a spell, Mana gain, or client recommendation.
+  local hookInstalled=false
+  local refusalTrace={}
+  local rr=loop.run(L,seed,{
+    duration=duration,
+    on=function(w,_,time)
+      if hookInstalled then return end
+      local raw=w.W.press
+      w.W.press=function(player,key,resolved)
+        local at=w.W.t
+        local wasCastingUntil=player.castUntil or 0
+        local ok,reason=raw(player,key,resolved)
+        if player==w.us and not ok and at>=loop.PULL then
+          refusalTrace[#refusalTrace+1]={
+            t=at, key=key, reason=reason,
+            castRemain=math.max(0,wasCastingUntil-at),
+            mana=player.power,
+            cost=resolved and resolved.cost,
+          }
+        end
+        return ok,reason
+      end
+      hookInstalled=true
+    end,
+  },{{H=H}})
+  for i,entry in ipairs(refusalTrace) do
+    print(("ELEMENTAL_PRESS_REFUSAL_V011 profile=%s seed=%d yd=%d i=%d t=%.3f spell=%s reason=%s castingRemain=%.3f mana=%.1f cost=%s"):format(
+      profile,seed,distance,i,entry.t,tostring(entry.key),
+      tostring(entry.reason),entry.castRemain,entry.mana,
+      tostring(entry.cost)))
+  end
   assert.are.equal(0,rr.errors)
   assert.are.equal(0,rr.raises)
   local refused=0
