@@ -776,11 +776,11 @@
           "revision": "v1.1",
           "apl_file": "roles/Mage/Candidates/APL_Mage_Fire_v1.1_Draft.txt",
           "status": "Draft",
-          "sha256": "dbf976aa137a7857daa555b764ab3bb1e2ec4b2d9bc85e525e502738bbf4572f",
+          "sha256": "dde6ce369f549ae38f68364ddc8c7e794519cc3bffba0356f8af5604c9426250",
           "evidence": [
             {
               "kind": "source",
-              "reference": "Published Hekili Forever v0.11.0 source SHA 86b739cbc4e6afbcbc693c3790ee81197fc6234b, PR #101. Exact protected Fire Current v1.0 unguarded Scorch rejected once: true Mana 134.166 vs published top-rank cost 150, seed30417, 100% start Mana, boss Cooldowns ON near t89. New complete v1.1 adds source-supported mana.lo>=action.scorch.cost to both Scorch upkeep and fallback, no other change. Full matched source-native comparator CI pending."
+              "reference": "Published Hekili Forever v0.11.0 source @ 86b739cbc4e6afbcbc693c3790ee81197fc6234b; exact Current v1.0 full Mana seed30417 CD ON t89 source refused Scorch at true Mana 134.166 vs 150 cost despite engine reported mana.lo=151.4465 (17.2805 higher than truth). Exact-cost guard remains unsafe and was preserved as RED CI 45274664575. New full unselected v1.1 uses cost+20 at both Scorch branches based on measured discrepancy. Focused and full native tests are pending; PR #101."
             }
           ],
           "test_results": [],
@@ -791,7 +791,7 @@
           "talents": "Published level60 Mage Fire wowsims source talent kit (incl Improved Scorch), not player's talent build",
           "gear": "Published Mage Fire world only; not actual owner gear",
           "settings": "Normal rotation standalone, using only existing native user Major Cooldowns OFF/ON and source resource bounds, no new settings",
-          "caveat": "Unselected experimental full Draft. Source Fire one genuine late Scorch cost refusal from v1.0. This candidate guards both existing Scorch lines using supported Mana cost syntax; source test, 1–60, non-boss, moving, actual DPS, rank and in-game proof needed. Do not promote from CI alone. Preserve exact original Current."
+          "caveat": "Unselected experimental complete Draft. The observed true-vs-Belief Mana discrepancy is 17.2805 at 60; +20 is a scenario-derived reserve, not a universal bound or proven optimal. Exact-cost v1.1 initially failed source; replacement +20 requires positive full latest-release CI. Level1–59, moving, non-boss, real client, DPS and future resource uncertainty remain unverified. Current v1.0 protected, no promotion."
         }
       ],
       "apl_name": "Mage_Fire"
