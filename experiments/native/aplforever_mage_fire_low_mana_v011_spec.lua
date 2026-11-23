@@ -39,7 +39,7 @@ local function run(profile,seed,mana,duration)
  local offense={fireball=true,fire_blast=true,scorch=true,pyroblast=true,frostbolt=true,
   frostfire_bolt=true,arcane_blast=true,arcane_missiles=true,blizzard=true}
  local n,follow=0,0
- for i=1,rr.combat do
+ for i=1,rr.presses do
   if offense[rr.pressed[i]] then n=n+1; if n>1 then follow=follow+1 end end
  end
  local majors=(m.combustion or 0)+(m.eureka or 0)+(m.blood_fury or 0)+(m.berserking or 0)
@@ -63,9 +63,10 @@ describe("Mage Fire full shipped vs Current v0.11 low-Mana final fallback",funct
    local shipped=run("shipped",seed,mana,100)
    local currentRun=run("current",seed,mana,100)
    assert.are.equal(0,currentRun.major)
-   assert.is_true(shipped.accepted>=0 and currentRun.accepted>=0)
-   -- 5% is deliberately diagnostic until source-world natural Mana recovery
-   -- and spell affordability are established; do not invent three casts.
+   assert.is_true(shipped.accepted>=1,"shipped fixture did not progress at 5% Mana")
+   assert.is_true(currentRun.follow>=3,"Current did not deliver three accepted offensive follow-ons at 5% Mana")
+   assert.are.equal(0,currentRun.refused,"Current repeats an uncastable spell at 5% Mana")
+   -- This source-world gate proves accepted casts only, not faithful live Mana recovery.
    print(("FIRE_5PCT_DECISION seed=%d shippedAccepted=%d currentAccepted=%d currentRefused=%d currentFollow=%d"):format(
     seed,shipped.accepted,currentRun.accepted,currentRun.refused,currentRun.follow))
   end)
