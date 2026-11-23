@@ -36,7 +36,7 @@
 | Warlock Destruction | Clean import only | Targeted v0.11 source evidence not yet inventoried | Immolate/Conflagrate sequence, Mana and Life Tap fallback |
 | Warrior Arms | 1 known compile error | Targeted v0.11 source evidence not yet inventoried | Precombat health compiler debt (one error), Rage/stance and final chain |
 | Warrior Fury | Clean import only | Targeted v0.11 source evidence not yet inventoried | Revalidate v1.2 movement off-switch and 30-Rage Bloodthirst on v0.11 |
-| Warrior Protection | Clean import only | Targeted v0.11 source evidence not yet inventoried | Shield Block/Revenge eligibility, level unlocks, Rage final fallback |
+| Warrior Protection | Clean import | [PR #85 v0.11 source-native 4/4 prior-head](https://github.com/tkbiccay/APLForever-Open/actions/runs/45121534053): 2 seeds × 100/25 initial Rage, shipped 30/38 accepted (3 cost refusals seed 30461), Current and unselected Candidate v1.1 21–22 accepted and 0 refusals, Major OFF. **Corrected accepted-action assertion on later head awaits exact-head CI.** | Validate true accepted next-three on corrected head; then test Shield Block/Revenge eligibility, unlocks and actual mitigation/aggro separately |
 
 ## Portfolio-first rules and cross-spec transfer
 
