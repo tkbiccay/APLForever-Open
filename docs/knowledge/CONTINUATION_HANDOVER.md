@@ -1,5 +1,12 @@
 # APLForever-Open — active sprint handover
 
+## LIVE checkpoint — 23 November 2026, after PR #94 merged / PR #95 source-native evidence
+
+- **Protected main fac43ba6b0eeb253d104d260ca9871ff641a1f81:** [#94 Demonology](https://github.com/tkbiccay/APLForever-Open/pull/94) merged after exact-head green, campaign **6/50**, **48 protected APL revisions**, **zero Approved**. Historical handover below documents its pre-merge state; do not mistake that prior checkpoint for current.
+- **OPEN Draft [PR #95 Mage Frost](https://github.com/tkbiccay/APLForever-Open/pull/95)**, breadth #07, published source v0.11.0 at 86b739cbc4e6afbcbc693c3790ee81197fc6234b. Initial [7/7 native PASS 45254820633](https://github.com/tkbiccay/APLForever-Open/actions/runs/45254820633) plus [validator PASS 45254820295](https://github.com/tkbiccay/APLForever-Open/actions/runs/45254820295). Exact full shipped vs Current v1.0 at 25yd two seeds × 100/25/5% Mana. Current accepted **32/32, 16/16, 12/11**, **zero source refusals**, genuine 3+ subsequent offensives, Major OFF. Published Frost known kit excludes Frostfire Bolt; separate Frostfire Fire-build kit includes it. Shipped low-Mana source presses exceed Current but do NOT establish higher DPS. [Dated evidence](../Tests_Mage_Frost_Breadth_v011.md), [cross-spec lesson 13](CROSS_SPEC_LESSONS.md), [campaign ledger](BREADTH_50_CAMPAIGN.md).
+- **NEXT:** require **fresh exact final-head CI after documentation updates**, review every required check and changed file, **merge #95 only if clean**, postmerge validation and report 7/50 then. No APL bytes, catalogue selection, working rollback or Approved status changed. Next distinct underserved role Warlock Destruction (Immolate/Conflagrate, health-unsafe Life Tap source limitation). Equal-P0 Guardian Tank / Hunter BM and Saturday gameplay checks retain priority when actionable.
+
+
 ## LIVE checkpoint — 23 November 2026, ~19:46 UTC
 
 - Protected main before this sprint `c896a83e20fde9164cf7211cb76e2b357120fa59` after [#93 Shaman Enhancement](https://github.com/tkbiccay/APLForever-Open/pull/93) **merged**, all 12 exact-head checks and [postmerge validator 45250616016](https://github.com/tkbiccay/APLForever-Open/actions/runs/45250616016) green. 5/50 campaign units completed; 48 immutable full APL revisions, zero Approved. #93 Shield casts reflect source charge loss on enemy WOUND; Windfury is absent from source kit. [Enhancement report](../Tests_Shaman_Enhancement_Breadth_v011.md).
