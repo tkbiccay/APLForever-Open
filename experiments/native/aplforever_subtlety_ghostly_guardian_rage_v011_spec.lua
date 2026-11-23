@@ -23,6 +23,9 @@ local rguard=rcur:gsub("actions%.opener=garrote[^\n]+",function(line)
   return new
 end)
 assert.are.equal(1,n)
+local stored=read("roles/Rogue/Candidates/APL_Rogue_Subtlety_v1.1_Draft.txt")
+assert.are.equal(rguard,stored,"persisted full v1.1 differs from source-accepted one-line hypothesis")
+rguard=stored
 assert.is_truthy(rcur:find("actions.final_fallback+=/hemorrhage",1,true))
 assert.is_truthy(gcan:find("actions.rage_dump+=/maul",1,true))
 local function content(stock,rage,attackers)
