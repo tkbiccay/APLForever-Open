@@ -9,7 +9,7 @@ local paths={
   current="roles/Warrior/Current/APL_Warrior_Fury_DPS_v1.0_Draft.txt",
   archived="roles/Warrior/Archive/APL_Warrior_Fury_v1.1_Draft.txt",
   candidate="roles/Warrior/Candidates/APL_Warrior_Fury_v1.2_Draft.txt",
-  revised="roles/Warrior/Candidates/APL_Warrior_Fury_DPS_v1.3_Draft.txt"
+  revised="roles/Warrior/Candidates/APL_Warrior_Fury_v1.3_Draft.txt"
 }
 local data={}
 for name,path in pairs(paths) do
