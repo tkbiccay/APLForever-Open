@@ -1,5 +1,9 @@
 # APLForever-Open — active sprint handover
 
+## LIVE checkpoint — 23 November 2026, ~14:00 UTC
+
+- **PR #91 Mage Fire BREADTH** initial exact head `5b111da0c1635b626226230acb905bfba0058246`: [native 4/4 PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45180207290), [validator PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45180207302). Published Forever v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. 25% Mana Current accepted 20/20 with 0 refusals vs shipped 31/32; 5% Mana Current 20/16 vs shipped 33/33, also 0 refusals; Major OFF. No performance inference: native fixture Mana recovery/range is not proven faithful. Test had `rr.combat` index bound; fixed to actual `rr.presses` and strengthened 5% follow-on/no-refusal gate on new head `5f0ba10885ef79940dfc9fd1c44b7cb923053e9d`. **New exact-head CI pending; do not count #03 or merge until green.** No APL bytes or approvals changed. Next: verify final exact-head checks and classify source limits; if safe merge, rotate Hunter Survival or Shaman Enhancement.
+
 ## LIVE checkpoint — 23 November 2026, ~13:04 UTC
 
 - **OPEN [PR #91](https://github.com/tkbiccay/APLForever-Open/pull/91), Mage Fire BREADTH**: new released v0.11.0 (`86b739cbc4e6afbcbc693c3790ee81197fc6234b`) native full shipped-vs-protected Current 25%-Mana three-follow-on/no-refusal gate and separate 5%-Mana diagnostic, two matched seeds, Major/Minor OFF. Native CI and validator **not yet observed**; no behavioural outcome or Candidate claimed. Source fixture may not model true range, proc or client Mana. **NEXT** inspect exact-head CI, classify any failing test/engine limitation; do not merge while Draft/unverified. No protected APL edits.
