@@ -1095,13 +1095,17 @@
             {
               "kind": "native",
               "reference": "PR #89, exact Hekili Forever v0.11.0 source 86b739cbc4e6afbcbc693c3790ee81197fc6234b; complete shipped / protected Current / guarded one-line APL, two matched seeds at 100 and 25 Energy, full source accepted/refused cast regression. Initial in-memory evidence run 45143006494 (4/4 PASS). Stored Candidate rerun pending final exact-head CI."
+            },
+            {
+              "kind": "native",
+              "reference": "Stored full v1.1 exact byte-match to in-memory one-line guard, source-native 4/4 PASS on current PR head 26b16c12d87305f82aa901eabfb424c01a39330f, GitHub Actions run 45143611408, 23 Nov 2026"
             }
           ],
           "test_results": [
             {
               "kind": "source_native_v011_rogue_assassination_stale_stealth",
-              "result": "Pending stored-file exact-head source-native CI; in-memory hypothesis 4/4 PASS (45143006494). 25 starting Energy original Current 2 accepted/501 refused per seed, guarded 57/52 accepted and 0 refused. Normal 100 Energy guarded and Current 45/44 accepted, 0 refused. Three-plus accepted post-opener combat actions in guarded result.",
-              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/45143006494"
+              "result": "PASS: 4/4 source-native tests, 12 complete profiles, two seeds x 100/25 Energy. Low-energy Current 2 accepted / 501 requires:not stealthed refusals and zero combat follow-ons per seed; full stored v1.1 57/52 accepted, 0 refused, 54/49 genuine subsequent combat actions. Normal Energy v1.1 matches 45/44 Current accepted 0 refused; Major OFF respected. Only source-world evidence.",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/45143611408"
             }
           ],
           "rollback_reference": "roles/Rogue/Current/APL_Rogue_Assassination_v1.0_Draft.txt",
@@ -1110,7 +1114,7 @@
           "talents": null,
           "gear": null,
           "settings": "No per-spec checkbox; native Major/Minor OFF verified in published source",
-          "caveat": "Fully standalone unselected Draft; original Current v1.0 and previous hashes unchanged. Only a source-world one-line Stealth Garrote guard tested. No client Stealth/Vanish, real damage, Combo Point truth or in-game proof. Do not mark Approved or preferred."
+          "caveat": "Fully standalone unselected Draft; original Current v1.0 and previous hashes unchanged. Only a released-source-world one-line Stealth Garrote guard tested; 4/4 source-native PASS on 45143611408. No client Stealth/Vanish, real damage, Combo Point truth or in-game proof. Do not mark Approved or preferred."
         }
       ],
       "apl_name": "Rogue_Assassination"
