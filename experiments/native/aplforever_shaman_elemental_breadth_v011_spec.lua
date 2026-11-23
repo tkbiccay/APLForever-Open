@@ -39,17 +39,25 @@ local function run(profile,seed,distance,mana,duration)
   assert.are.equal(0,rr.errors)
   assert.are.equal(0,rr.raises)
   local refused=0
-  for _,n in pairs(rr.refused or {}) do refused=refused+n end
+  for key,n in pairs(rr.refused or {}) do
+    refused=refused+n
+    print(("ELEMENTAL_REFUSAL_V011 profile=%s seed=%d yd=%d spell=%s count=%d"):format(
+      profile,seed,distance,tostring(key),n))
+  end
   local m=rr.pressedBy or {}
   local offensive=(m.lightning_bolt or 0)+(m.chain_lightning or 0)
     +(m.flame_shock or 0)+(m.earth_shock or 0)
+  -- Count genuinely ACCEPTED subsequent actions even when the SAME
+  -- legal Lightning Bolt repeats. The original test skipped all subsequent
+  -- Bolts and falsely printed zero follow-ons during low-Mana normal filler.
   local nextThree={}
   local seen=false
   for i=1,rr.combat do
-    local a=rr.pressed[i]
-    if a=="flame_shock" or a=="lightning_bolt" then seen=true
-    elseif seen and type(a)=="string" and #nextThree<3 then
-      nextThree[#nextThree+1]=a
+    local key=rr.pressed[i]
+    if not seen and (key=="flame_shock" or key=="lightning_bolt") then
+      seen=true
+    elseif seen and type(key)=="string" and #nextThree<3 then
+      nextThree[#nextThree+1]=key
     end
   end
   print(("ELEMENTAL_BREADTH_V011 profile=%s seed=%d yd=%d initialMana=%.1f accepted=%d refused=%d offensive=%d bolt=%d chain=%d shock=%d manaEnd=%.1f follow=%s"):format(
@@ -67,6 +75,10 @@ describe("Elemental v0.11 source-native full profile Mana and fallback",function
       assert.is_true(shipped.accepted>=3,"shipped source failed to advance")
       assert.is_true(current.accepted>=3,"Current failed three accepted casts")
       assert.is_true(current.offensive>=3,"Current failed offensive progression")
+      assert.is_true(current.follow>=3,
+        "Current lost three actual accepted follow-on actions after first offensive cast")
+      assert.are.equal(0,current.refused,
+        "Current had source-refused normal-Mana casts; diagnose precise spell before claiming safe")
       assert.are.equal(0,current.major,"native Major OFF not honoured")
     end)
     it("25-percent starting Mana and final fallback seed "..seed,function()
@@ -74,6 +86,8 @@ describe("Elemental v0.11 source-native full profile Mana and fallback",function
       local shipped=run("shipped",seed,25,mana,90)
       local current=run("current",seed,25,mana,90)
       assert.is_true(current.accepted>=3,"Current failed three legal actions")
+      assert.is_true(current.follow>=3,
+        "low-Mana Current failed three genuinely accepted subsequent actions")
       assert.are.equal(0,current.refused,"Current repeated refused low-Mana action")
       print(("ELEMENTAL_LOW_MANA_V011 seed=%d shipped=%d/%d current=%d/%d"):format(
         seed,shipped.accepted,shipped.refused,current.accepted,current.refused))
