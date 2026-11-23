@@ -45,7 +45,7 @@ local function trial(profile,seed,low)
   assert.are.equal(0,rr.errors)
   assert.are.equal(0,rr.raises)
   return {accepted=rr.presses,refused=refused,major=(m.rage_of_the_farseer or 0)+(m.blood_fury or 0),
-    offensive=(m.stormstrike or 0)+(m.flame_shock or 0)+(m.earth_shock or 0)+(m.lightning_bolt or 0)}
+    offensive=(m.stormstrike or 0)+(m.flame_shock or 0)+(m.earth_shock or 0)+(m.lightning_bolt or 0), shield=m.lightning_shield or 0, windfury=m.windfury_weapon or 0}
 end
 describe("Enhancement v0.11 melee Mana and final fallback",function()
   for _,seed in ipairs({30417,30437}) do
@@ -59,7 +59,11 @@ describe("Enhancement v0.11 melee Mana and final fallback",function()
         -- Refusals are intentionally diagnostic first; a reproducible
         -- refusal is a failure hypothesis for a subsequent isolated gate,
         -- not evidence of DPS or permission to mutate protected Current.
-        assert.is_true(currentResult.offensive>=1,"Current never reached offensive fallback")
+        assert.is_true(currentResult.offensive>=3,"Current lacks three accepted offensive follow-on actions")
+        assert.are.equal(0,currentResult.refused,"Current has source-refused actions")
+        assert.is_true(currentResult.shield>=1,"Current fails autonomous Lightning Shield upkeep")
+        -- Windfury is diagnostic only: the released fixture observed zero
+        -- weapon imbue presses in both profiles; do not infer live upkeep.
       end)
     end
   end
