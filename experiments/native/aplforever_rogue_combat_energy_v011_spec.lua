@@ -7,6 +7,8 @@ local stock=assert(require("Forever.helpers.rogue_world").Combat)
 local root=assert(os.getenv("APLFOREVER_ROOT"))
 local f=assert(io.open(root.."/roles/Rogue/Current/APL_Rogue_Combat_v1.0_Draft.txt","rb"))
 local current=assert(f:read("*a"));f:close()
+local fc=assert(io.open(root.."/roles/Rogue/Candidates/APL_Rogue_Combat_v1.1_Draft.txt","rb"))
+local guardedAPL=assert(fc:read("*a"));fc:close()
 local function run(profile,seed,energy,duration)
   local world=setmetatable({power=energy,mobHealth=1000000000},{__index=stock.WORLD})
   local C=setmetatable({WORLD=world},{__index=stock})
@@ -19,8 +21,12 @@ local function run(profile,seed,energy,duration)
       local old="actions.opener=garrote,focus=1,if=action.garrote.known&!debuff.garrote.up&(buff.stealth.up|buff.vanish.up|buff.ghostly_strike_next.up)"
       local new="actions.opener=garrote,focus=1,if=action.garrote.known&!debuff.garrote.up&((!combat&buff.stealth.up)|buff.vanish.up|buff.ghostly_strike_next.up)"
       local n
-      apl,n=apl:gsub(old:gsub("([^%w])","%%%1"),new)
+      local expected
+      expected,n=apl:gsub(old:gsub("([^%w])","%%%1"),new)
       assert.are.equal(1,n,"original Current Garrote opener guard changed unexpectedly")
+      assert.are.equal(expected,guardedAPL,
+        "stored full v1.1 Candidate is not exactly the verified one-line guard change")
+      apl=guardedAPL
     end
     local lists,warnings=H.Hekili:ImportSimcAPL("Rogue_Combat",
       "APLForever-Rogue-Combat-Breadth",apl,C.PACK)
