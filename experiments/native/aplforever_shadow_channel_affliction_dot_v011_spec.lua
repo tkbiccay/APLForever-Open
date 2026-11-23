@@ -71,7 +71,7 @@ local function run(kind,profile,seed,percent)
                 local castUntil=player.castUntil or 0
                 local ok,why=original(player,key,resolved)
                 if player==w.us and stamp>=loop.PULL then
-                    attempted[#attempted+1]={t=stamp,key=key,ok=ok,why=why}
+                    attempted[#attempted+1]={t=stamp,key=key,ok=ok,why=why,castRemain=castUntil-stamp}
                     if not ok and #refusedSample<6 then
                         refusedSample[#refusedSample+1]={
                             t=stamp,key=key,why=why,power=power,
@@ -88,7 +88,17 @@ local function run(kind,profile,seed,percent)
     assert.are.equal(0,rr.errors)
     assert.are.equal(0,rr.raises)
     local accepted=rr.pressedBy or {}
-    local refused=0
+    local refused,substantive,epsilonBoundary=0,0,0
+    for _,attempt in ipairs(attempted) do
+        if not attempt.ok then
+            if attempt.why=="casting" and attempt.castRemain
+              and math.abs(attempt.castRemain)<=1e-8 then
+                epsilonBoundary=epsilonBoundary+1
+            else
+                substantive=substantive+1
+            end
+        end
+    end
     for reason,count in pairs(rr.refused or {}) do
         refused=refused+count
         print(("BREADTH_STATE_REFUSED role=%s profile=%s seed=%d percent=%.2f reason=%s count=%d"):format(
@@ -110,12 +120,15 @@ local function run(kind,profile,seed,percent)
             later=later+1
         end
     end
-    local state={presses=rr.presses,refused=refused,later=later,
+    local state={presses=rr.presses,refused=refused,
+        substantive=substantive,boundary=epsilonBoundary,later=later,
         manaEnd=rr.us.power,low=percent,traceCount=#attempted}
+    assert.are.equal(refused,substantive+epsilonBoundary,
+      "source W.press hook disagreements with authoritative rr.refused")
     if kind=="shadow" then
         local flay=H.Hekili.Class.abilities.mind_flay
         local flayId=assert(H.ns.VirtualState.KnownID(flay.id))
-        local flayStarts,full,clip,open,totalTicks,validTickTriples=0,0,0,0,0,0
+        local flayStarts,full,clip,cutoff,open,totalTicks,validTickTriples=0,0,0,0,0,0,0
         local active=nil
         local ticksBy={0,0,0,0}
         local dotsApplied=0
@@ -139,7 +152,13 @@ local function run(kind,profile,seed,percent)
                     totalTicks=totalTicks+1
                 elseif e.kind=="channelStop" and e.spell==flayId and active then
                     if e.t<active.untilT-0.02 then
-                        clip=clip+1
+                        if math.abs(e.t-rr.W.t)<=1e-6 then
+                            cutoff=cutoff+1
+                        else
+                            clip=clip+1
+                            print(("SHADOW_REAL_CLIP role=%s profile=%s seed=%d startMana=%.2f stopAt=%.4f expectedAt=%.4f sourceEnd=%.4f"):format(
+                                kind,profile,seed,percent,e.t,active.untilT,rr.W.t))
+                        end
                     else
                         full=full+1
                         if active.hits==3 then validTickTriples=validTickTriples+1 end
@@ -151,13 +170,17 @@ local function run(kind,profile,seed,percent)
         end
         if active then open=open+1 end
         state.flay=flayStarts;state.full=full;state.clip=clip
-        state.ticks=totalTicks;state.triples=validTickTriples
+        state.cutoff=cutoff;state.ticks=totalTicks;state.triples=validTickTriples
         state.dotAuras=dotsApplied
-        print(("SHADOW_CHANNEL_TRUTH profile=%s seed=%d manaStart=%.2f fullAction=%d flayAccepted=%d channelStarts=%d fullChannels=%d clipped=%d openAtEnd=%d tickSpellHits=%d completeThreeTick=%d trueDotAuras=%d postDot=%d refused=%d trueManaEnd=%.2f"):format(
+        print(("SHADOW_CHANNEL_TRUTH profile=%s seed=%d manaStart=%.2f fullAction=%d flayAccepted=%d channelStarts=%d fullChannels=%d combatClips=%d simulationCutoffs=%d openAtEnd=%d tickSpellHits=%d completeThreeTick=%d trueDotAuras=%d postDot=%d refused=%d substantive=%d epsilon=%d trueManaEnd=%.2f"):format(
             profile,seed,percent,rr.presses,accepted.mind_flay or 0,
-            flayStarts,full,clip,open,totalTicks,validTickTriples,dotsApplied,
-            later,refused,rr.us.power))
+            flayStarts,full,clip,cutoff,open,totalTicks,validTickTriples,dotsApplied,
+            later,refused,substantive,epsilonBoundary,rr.us.power))
         if profile=="current" then
+            assert.are.equal(0,state.substantive,
+                "Shadow complete Current source refused a genuine cast")
+            assert.are.equal(0,state.clip,
+                "Shadow actually clipped Mind Flay during combat; investigate")
             assert.is_true(state.presses>=3,"Shadow source stopped before three accepted casts")
             if percent>=0.25 then
                 assert.is_true(dotsApplied>=2,"Shadow complete APL DoT casts never actually applied")
@@ -201,14 +224,16 @@ local function run(kind,profile,seed,percent)
         end
         state.positive=positive;state.ticks=trueTicks;state.shadowTicks=shadowTicks
         state.trance=nightfall
-        print(("AFF_DOT_TRUTH profile=%s seed=%d manaStart=%.2f accepted=%d rejected=%d corAura=%d baneAura=%d siphonAura=%d actualTick=%d shadowTick=%d nightfallAura=%d bolt=%d wrack=%d pain=%d lifeTap=%d postDot=%d firstDot=%s firstTick=%s trueManaEnd=%.2f"):format(
-            profile,seed,percent,rr.presses,refused,positive.corruption,
-            positive.bane_of_agony,positive.siphon_life,trueTicks,
+        print(("AFF_DOT_TRUTH profile=%s seed=%d manaStart=%.2f accepted=%d rejected=%d substantive=%d epsilon=%d corAura=%d baneAura=%d siphonAura=%d actualTick=%d shadowTick=%d nightfallAura=%d bolt=%d wrack=%d pain=%d lifeTap=%d postDot=%d firstDot=%s firstTick=%s trueManaEnd=%.2f"):format(
+            profile,seed,percent,rr.presses,refused,substantive,epsilonBoundary,
+            positive.corruption,positive.bane_of_agony,positive.siphon_life,trueTicks,
             shadowTicks,nightfall,accepted.shadow_bolt or 0,
             accepted.wrack or 0,accepted.searing_pain or 0,
             accepted.life_tap or 0,later,tostring(firstDotAt),
             tostring(firstTickAt),rr.us.power))
         if profile=="current" then
+            assert.are.equal(0,state.substantive,
+                "Affliction protected Current had a genuine refused action")
             assert.are.equal(0,accepted.life_tap or 0,
                 "protected Affliction unexpectedly started spending player HP")
             assert.is_true(rr.presses>=2,"current Affliction failed two real advances")
