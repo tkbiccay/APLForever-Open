@@ -49,7 +49,7 @@ local function simulate(profile,seed,energy)
       profile,seed,energy,tostring(reason),count))
   end
   local acceptedCombat={}
-  for i=1,rr.combat do
+  for i=1,rr.presses do
     if type(rr.pressed[i])=="string" then
       acceptedCombat[#acceptedCombat+1]=rr.pressed[i]
     end
