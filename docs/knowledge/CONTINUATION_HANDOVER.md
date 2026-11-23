@@ -1,5 +1,10 @@
 # APLForever-Open — active sprint handover
 
+## LIVE checkpoint — 23 November 2026, ~13:04 UTC
+
+- **OPEN [PR #91](https://github.com/tkbiccay/APLForever-Open/pull/91), Mage Fire BREADTH**: new released v0.11.0 (`86b739cbc4e6afbcbc693c3790ee81197fc6234b`) native full shipped-vs-protected Current 25%-Mana three-follow-on/no-refusal gate and separate 5%-Mana diagnostic, two matched seeds, Major/Minor OFF. Native CI and validator **not yet observed**; no behavioural outcome or Candidate claimed. Source fixture may not model true range, proc or client Mana. **NEXT** inspect exact-head CI, classify any failing test/engine limitation; do not merge while Draft/unverified. No protected APL edits.
+- **50-unit campaign: 2/50 on protected main** (#89 Assassination, #90 Subtlety), PR #91 pending. Corrected obsolete ledger count text in this substantive PR; preserve 47 baseline revisions and zero Approved. Main `33edbf88411ca223ebc5174885c0be1a3e3f3641` has no PR-triggered postmerge run returned by connector; do not assert postmerge green.
+
 ## LIVE checkpoint — 23 November 2026, ~11:00 UTC
 
 - **PR #90 Rogue Subtlety BREADTH** exact initial head `86c33a2738ede4ccde956dbe9c9f4754c50a1cd0`: [native 4/4 PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45152835829) and [validator PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45152835621), published Forever v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. **Negative transfer**: Current Subtlety v1.0 at 25 Energy accepted 55 actions, zero refusals, both seeds; in-memory Garrote guard identical; 100 Energy Current 46/48, also zero refusals. Source-only: cannot infer DPS/stealth live safety. **No Candidate warranted; protected APL unchanged.**
