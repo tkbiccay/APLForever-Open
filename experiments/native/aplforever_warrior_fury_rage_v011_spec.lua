@@ -89,7 +89,7 @@ local function one(profile,level,seed,startRage,attackers,duration)
   },{{H=H}})
   assert.are.equal(0,rr.errors)
   assert.are.equal(0,rr.raises)
-  local refused=0,cost=0
+  local refused,cost=0,0
   for why,n in pairs(rr.refused or {}) do
     refused=refused+n
     if why=="cost" then cost=cost+n end
@@ -101,7 +101,7 @@ local function one(profile,level,seed,startRage,attackers,duration)
   end
   local counted=rr.pressedBy or {}
   local blood=counted.bloodthirst or 0
-  local offence=0,major=0,charge=0
+  local offence,major,charge=0,0,0
   for name in pairs(offensive) do offence=offence+(counted[name] or 0) end
   for name in pairs(majors) do major=major+(counted[name] or 0) end
   charge=(counted.charge or 0)+(counted.intercept or 0)
