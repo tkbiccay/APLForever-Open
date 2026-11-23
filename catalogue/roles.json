@@ -1501,7 +1501,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.2",
+      "latest_revision": "v1.3",
       "limitations": [
         "Source v0.8.6 v1.2 passes real-range 3/12/30yd Movement OFF/ON and matched levels 1-60 source casts/fallbacks with 0 refusals; archived v1.1 fails 4 near-30-Rage Bloodthirst presses. Source AI Rage estimates and UI toggle availability require in-game proof; no approved/last-working evidence. See Tests_Warrior_Fury_v1.2.md."
       ],
@@ -1575,6 +1575,27 @@
           "gear": "Released source Fury dual-wield simulation (high-level gear in lower-level cases), not owner's equipment",
           "settings": "All cooldown/minor/defensive/movement toggles OFF in natural resource baseline; ON/OFF Movement tested separately at valid range",
           "caveat": "Headless v0.8.6 48 movement cases and 18 natural v1.2 Fury worlds PASS, with archived 4 Bloodthirst refusals retained as negative-control evidence. Must still validate live Movement toggle UI/range, real Rage near 30 and repeated recommendations, then fair shipped+Current gameplay before candidate selection. Never auto-promote."
+        },
+        {
+          "revision": "v1.3",
+          "apl_file": "roles/Warrior/Candidates/APL_Warrior_Fury_v1.3_Draft.txt",
+          "status": "Draft",
+          "sha256": "1e0b52d5b969d597303fa165e0e3d6f8fe61b4112e5100d73e99a08f4593ceaf",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Published Hekili Forever v0.11.0 at zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b; new 1 refusal Whirlwind cost from v1.2 at 24.9475 true Rage, 25 required, level60 90 initial Rage 1 attacker seed 30417; public PR #97 complete shipped/current/archived/v1.2/v1.3 native comparator"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Warrior/Current/APL_Warrior_Fury_DPS_v1.0_Draft.txt",
+          "addon_version": "v0.11.0",
+          "min_source_release": "v0.11.0",
+          "game_build": null,
+          "talents": "Released wowsims Fury level60/24 talent cuts, not player's character",
+          "gear": "Released source Fury dual-wield simulation; not owner character",
+          "settings": "Full original standalone APL with native Major/Minor/Defensive/Interrupts/Movement OFF gates tested; no per-spec settings required",
+          "caveat": "Independent test of Whirlwind Rage uncertainty; +5 to both Whirlwind ST and AoE conditions over complete preserved v1.2. New unselected Draft only, preserve exact Current v1.0, archived v1.1 and v1.2; zero in-game proof or DPS advantage. Source/native v0.11 CI and full current-release validation required before any further consideration."
         }
       ],
       "apl_name": "Warrior_Fury"
