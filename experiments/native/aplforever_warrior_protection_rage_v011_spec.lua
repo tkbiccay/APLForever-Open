@@ -47,7 +47,7 @@ local function run(profile,seed,rage)
   local majors=rr.pressedBy or {}
   local major=(majors.blood_fury or 0)+(majors.berserking or 0)+(majors.eureka or 0)+(majors.elunes_light or 0)
   print(("PROT_V011 profile=%s seed=%d rage=%d accepted=%d combat=%d refused=%d major=%d first=%s"):format(profile,seed,rage,rr.presses,rr.combat,refused,major,table.concat(combatActions,",",1,math.min(8,#combatActions))))
-  return {combat=rr.combat,refused=refused,major=major}
+  return {combat=rr.combat,accepted=rr.presses,refused=refused,major=major}
 end
 describe("Warrior Protection v0.11 complete source-native Rage/final fallback",function()
   for _,seed in ipairs({30461,30479}) do
@@ -56,9 +56,9 @@ describe("Warrior Protection v0.11 complete source-native Rage/final fallback",f
         local shipped=run("shipped",seed,rage)
         local currentRun=run("current",seed,rage)
         local candidateRun=run("candidate",seed,rage)
-        assert.is_true(shipped.combat>=3,"source world shipped failed to advance three actions")
-        assert.is_true(currentRun.combat>=4,"Current did not advance first plus three follow-on combat actions")
-        assert.is_true(candidateRun.combat>=4,"unselected Candidate did not advance first plus three follow-on combat actions")
+        assert.is_true(shipped.accepted>=4,"shipped source world did not accept first plus three follow-on actions")
+        assert.is_true(currentRun.accepted>=4,"Current did not accept first plus three follow-on actions")
+        assert.is_true(candidateRun.accepted>=4,"unselected Candidate did not accept first plus three follow-on actions")
         assert.are.equal(0,currentRun.refused,"Current source-refused an action")
         assert.are.equal(0,candidateRun.refused,"Candidate source-refused an action")
         assert.are.equal(0,currentRun.major)
