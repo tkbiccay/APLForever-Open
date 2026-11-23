@@ -40,6 +40,11 @@ jobs:
       - name: Bootstrap current released source
         working-directory: upstream/hekili
         run: make bootstrap
+      - name: Diagnose the reproduced Fire Scorch true-Mana refusal before wider matrix
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_fire_bm_cooldown_v011_spec.lua" tests/Forever/aplforever_fire_bm_cooldown_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose --filter='Fire seed30417' tests/Forever/aplforever_fire_bm_cooldown_v011_spec.lua
       - name: Execute Fire and BM independent CD source-native whole-profile loops
         working-directory: upstream/hekili
         run: |
