@@ -54,8 +54,12 @@ local function run(kind,profile,seed,power)
         assert.is_table(lists[p])
       end
     else
-      for _,p in ipairs({"damage","mitigation","rage_dump","defensive_cooldowns"}) do
+      for _,p in ipairs({"damage","mitigation","rage_dump"}) do
         assert.is_table(lists[p],"missing Guardian complete "..p)
+      end
+      if profile=="candidate" then
+        assert.is_table(lists.defensive_cooldowns,
+          "full v1.6 defensive branch missing")
       end
     end
     assert.is_falsy((warnings or ""):find("Unsupported action",1,true))
