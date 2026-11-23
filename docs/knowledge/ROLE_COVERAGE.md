@@ -1,6 +1,6 @@
 # Role coverage and cross-spec learning queue — Hekili Forever v0.11.0
 
-**As at 22 Nov 2026.** Public repo `tkbiccay/APLForever-Open`; published addon pin `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. One class/spec row is **a development queue, not an approval**. Protect 46 SHA-verified full APL revisions; 28 intended roles, **23 Supported and 5 Blocked healer roles**; zero Approved.
+**Updated 23 Nov 2026.** Public repo `tkbiccay/APLForever-Open`; published addon pin `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. One class/spec row is **a development queue, not an approval**. Protect 47 SHA-verified full APL revisions; 28 intended roles, **23 Supported and 5 Blocked healer roles**; zero Approved.
 
 ## What coverage means
 
@@ -20,7 +20,7 @@
 | Hunter BeastMastery | Clean import only | [v0.11 Major OFF native](https://github.com/tkbiccay/APLForever-Open/actions/runs/45075209976) — focused source-native | Client Call/Revive arrival and 6–8 yd Hawk; safe three subsequent casts |
 | Hunter Marksmanship | Clean import only | Targeted v0.11 source evidence not yet inventoried | Pet recovery, range/auto-shot fallbacks and Major OFF |
 | Hunter Survival | Clean import only | Targeted v0.11 source evidence not yet inventoried | Melee weave/6yd dead-zone with real legal follow-on casts |
-| Mage Arcane | Clean import only | Targeted v0.11 source evidence not yet inventoried | Mana-exhaustion and proc/cooldown normal filler chain |
+| Mage Arcane | Clean import | [v0.11 full shipped/Current 4/4](https://github.com/tkbiccay/APLForever-Open/actions/runs/45099858565): 2 seeds × normal/25%-Mana, 75/100s; Current 31/31 normal and 22/19 low accepted, 0 refusals, 3+ offensive subsequent casts, Major OFF | Source-test exact Mage proc, boss/AoE and final fallbacks with held/ready events; cast count vs shipped is NOT DPS, real Mana/real range unverified |
 | Mage Fire | Clean import only | Targeted v0.11 source evidence not yet inventoried | Combustion/DoT maintenance and low-Mana final fallback |
 | Mage Frost | Clean import only | Targeted v0.11 source evidence not yet inventoried | Frostfire conditional support vs actual published kit; range/fallback |
 | Paladin Protection | Clean import only | [v0.11 Holy Shield predicates](https://github.com/tkbiccay/APLForever-Open/actions/runs/45041801938) — focused source-native | Holy Shield source aggro suppression with safe no-threat counterexample |
