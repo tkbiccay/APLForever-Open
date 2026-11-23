@@ -1,5 +1,11 @@
 # APLForever-Open — active sprint handover
 
+## LIVE checkpoint — 23 Nov 2026, 08:57 UTC
+
+- Main `8765ee5538c336d157b1746a5c0c6aec062cf2e7`; [#87](https://github.com/tkbiccay/APLForever-Open/pull/87) merged. Forever v0.11.0 pinned `86b739c`.
+- **OPEN Draft [#88](https://github.com/tkbiccay/APLForever-Open/pull/88), Rogue Assassination BREADTH:** full shipped/Current vs in-memory-only Garrote guard, 100/25 Energy, two seeds. Native CI UNVERIFIED; no APL changed. [Scope](../Tests_Rogue_Assassination_Breadth_v011.md).
+- **NEXT:** exact-head native/validator logs; classify positive/negative transfer, update coverage and lessons on actual evidence, merge only green; then distinct-class breadth. Zero Approved.
+
 ## LIVE checkpoint — 23 November 2026, ~08:48 UTC
 
 - Main before work `84ac13521d96b9bd625a2ae0699e07ebfbd19691`; published Forever `v0.11.0` pinned `86b739cbc4e6afbcbc693c3790ee81197fc6234b`. Hunter Marksmanship [PR #86](https://github.com/tkbiccay/APLForever-Open/pull/86) previously merged, [6/6 full native](https://github.com/tkbiccay/APLForever-Open/actions/runs/45136477431); no APL replaced.
