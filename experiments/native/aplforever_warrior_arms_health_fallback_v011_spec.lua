@@ -16,8 +16,12 @@ end
 local old,new=read(files.current),read(files.candidate)
 local suspect="actions.precombat+=/bloodrage,use_off_gcd=1,if=action.bloodrage.known&toggle.minor_cooldowns&target.is_boss&health.pct>=95&rage.lo<=10&!buff.bloodrage.up"
 assert.is_truthy(old:find(suspect,1,true))
-assert.are.equal(new,(old:gsub(suspect.."\n","",1)),
-  "v1.1 must be EXACT v1.0 save one source-hidden health-cost action")
+local at=assert(old:find(suspect,1,true))
+assert.are.equal("\n",old:sub(at+#suspect,at+#suspect),
+  "exact removed precombat line must end in newline")
+local removed=old:sub(1,at-1)..old:sub(at+#suspect+1)
+assert.are.equal(new,removed,
+  "v1.1 must be EXACT v1.0 minus just one health-cost action line")
 assert.is_nil(new:find("health.pct",1,true))
 assert.is_nil(new:find("bloodrage",1,true))
 local offensive={mortal_strike=true,slam=true,overpower=true,execute=true,
