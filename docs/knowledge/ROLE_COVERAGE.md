@@ -1,6 +1,6 @@
 # Role coverage and cross-spec learning queue — Hekili Forever v0.11.0
 
-**Updated 23 Nov 2026.** Public repo `tkbiccay/APLForever-Open`; published addon pin `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. One class/spec row is **a development queue, not an approval**. Protect 47 SHA-verified full APL revisions; 28 intended roles, **23 Supported and 5 Blocked healer roles**; zero Approved.
+**Updated 23 Nov 2026.** Public repo `tkbiccay/APLForever-Open`; published addon pin `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`. One class/spec row is **a development queue, not an approval**. Protect 48 SHA-verified full APL revisions; 28 intended roles, **23 Supported and 5 Blocked healer roles**; zero Approved.
 
 ## What coverage means
 
@@ -26,7 +26,7 @@
 | Paladin Protection | Clean import only | [v0.11 Holy Shield predicates](https://github.com/tkbiccay/APLForever-Open/actions/runs/45041801938) — focused source-native | Holy Shield source aggro suppression with safe no-threat counterexample |
 | Paladin Retribution | Clean import | [v0.11 full shipped/Current 6/6](https://github.com/tkbiccay/APLForever-Open/actions/runs/45141404758): 2 seeds × full/25%/5% Mana, 75/95/45s; Current 33/33, 22/21, 10/10 accepted, zero refused, 3 post-Seal actions at full/25%, Major OFF | Verify boss Seal of Crusader/Judgement and Twist Echo truth, late 5%-Mana first-three sequence, level 1–60, AoE and real damage; no DPS proof |
 | Priest Shadow | Clean import | [v0.11 Shadow native 6/6](https://github.com/tkbiccay/APLForever-Open/actions/runs/45084348959) — 20yd normal/25% Mana follow-ons zero Current refusals; 60yd SOURCE RANGE LIMIT | Low-level ranks, real range, channel clipping, DoT truth uptime and late combat fallback |
-| Rogue Assassination | Clean import only | Targeted v0.11 source evidence not yet inventoried | Poison/finisher upkeep, Combo Point availability and low-energy fallback |
+| Rogue Assassination | Clean import | [v0.11 full stored v1.1 4/4](https://github.com/tkbiccay/APLForever-Open/actions/runs/45143611408): normal/25 Energy × two seeds; original Current low 501 refused Garrote/seed and 0 combat; unselected full v1.1 57/52 accepted, 0 refused, normal full parity | Real Stealth/Vanish transitions; poison, Slice and Dice solo vs shipped, Combo Point truth, 1–60 and DPS remain unverified; preserve Current v1.0 |
 | Rogue Combat | Clean import | [v0.11 full Candidate v1.1 4/4](https://github.com/tkbiccay/APLForever-Open/actions/runs/45093860815): 100/25 Energy, two matched seeds; Current 501 repeatedly refused Garrotes vs v1.1 0 and 61/60 actual later combat actions | In-game Stealth/Vanish transition and 1–60 resource progression; single-target Slice and Dice priority vs shipped separately |
 | Rogue Subtlety | Clean import only | Targeted v0.11 source evidence not yet inventoried | Stealth opener transitions and non-stealth fallback across three casts |
 | Shaman Elemental | Clean import | [v0.11 full native 6/6](https://github.com/tkbiccay/APLForever-Open/actions/runs/45088305320): 2 matched seeds × normal/25%-Mana/60yd; Current three genuine accepted subsequent Lightning Bolts, zero genuine casting/cost refusal; source 0–2 sub-0.0000001s cast-end boundary collisions | Positive source Clearcasting cost/proc chronology, DoT/totem uptime and 1–60 fallback; 60yd range remains source-fixture limitation |
