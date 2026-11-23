@@ -184,7 +184,7 @@ local function run(kind,profile,seed,power)
       trace.mobSwings,queue,strike,unqueue,cost,attack,rr.presses,refused))
     return {accepted=rr.presses,refused=refused,core=attack,
       queue=queue,strike=strike,unqueue=unqueue,paid=cost,
-      maxLo=trace.maxLo,lo35=trace.lo35,mobs=trace.mobSwings}
+      maxTrue=trace.maxTrue,maxLo=trace.maxLo,lo35=trace.lo35,mobs=trace.mobSwings}
   end
 end
 describe("Independent Rogue Subtlety Ghostly-to-Garrote source-true chain",function()
