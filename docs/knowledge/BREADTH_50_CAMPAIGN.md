@@ -16,10 +16,12 @@ One unit is one NEW independently supported, role-specific, falsifiable safety/r
 
 | 03 | Mage Fire | Verified no source-refused low-Mana filler in Current v1.0 at 25%/5% Mana, plus diagnosed non-exhaustive combat-tick history vs source-accepted counters; no APL change or DPS claim | v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b` | [PR #91](https://github.com/tkbiccay/APLForever-Open/pull/91), [4/4 final source-native 45212151120](https://github.com/tkbiccay/APLForever-Open/actions/runs/45212151120) | Two seeds: Current 20/20 at 25% and 20/16 at 5% accepted offensive, all 0 refused and 3+ later accepted; shipped 30/31 and 32/32 offensive. Investigate genuine DPS/DoT/Scorch without equating counts to gain. |
 
-**Completed: 3/50 on protected main after PR #91 safely merges; #03 must not be counted while the PR is unmerged.** Count only verified NEW units after the baseline and update alongside meaningful development PRs. Do not make a commit solely to increment a number.
+| 04 | Hunter Survival | Independently verify 5yd melee-known vs 11yd ranged and 7yd uncastable dead-zone using released *Survival* kit (not MM turret); matched 25%-Mana melee fallback, Current and unselected v1.1 parity; no refused source actions in Current. | v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b` | [PR #92](https://github.com/tkbiccay/APLForever-Open/pull/92), [8/8 native 45216281966](https://github.com/tkbiccay/APLForever-Open/actions/runs/45216281966) | Source 7yd shipped 149 refused/seed, Current zero but silent; 5yd Current 26/29 full and 25/28 at 25%-Mana accepted, zero refused; 11yd Current 15 accepted, 7 ranged. Fixed-distance tests, no DPS/live movement. |
+
+**Completed: 3/50 on main after #91 merged at `42c69ae84e6818a231f19db45785dc6731f22c97`; unit #04 increases this to 4/50 only if PR #92 is safely merged.** Count only verified NEW units after the baseline and update alongside meaningful development PRs. Do not make a commit solely to increment a number.
 
 ## Priority and guardrails
 
 Across 23 Supported roles (5 Blocked healers), rotate under-served specs and mechanics; use the [role coverage ledger](ROLE_COVERAGE.md) to select the next falsifiable source-native task. Joint P0 Guardian/Feral Tank and Hunter BM retain urgent safety priority. Keep separate 25/50 and 50/50 review milestones without claiming either before evidence. Class and source fixture limitations are not in-game results; save Saturday live tasks separately.
 
-**Next after #91:** Hunter Survival (melee-known kit and dead-zone safe follow-on), or Shaman Enhancement (imbues/totems/low Mana). No in-game Approved claims.
+**Next after #92:** Shaman Enhancement (verified weapon imbues, totems, low Mana) or Warlock Demonology (Life Tap health-cost truth and post-DoT fallback). Keep Guardian/BM joint P0 safety urgent. No in-game Approved claims.

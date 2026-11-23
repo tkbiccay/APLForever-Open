@@ -1,0 +1,18 @@
+# Hunter Survival — Forever v0.11.0 source-native melee, ranged and dead-zone breadth
+
+**23 November 2026.** Source pinned **Hekili Forever v0.11.0** `zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b`, released `tests/Forever/helpers/hunter_world.lua` `SurvivalMelee` (5yd) and `SurvivalMeleeRanged` (7/11yd, same known melee kit plus ranged weapon). Two matched seeds 30417/30437 × four scenarios × complete shipped default, protected Current `roles/Hunter/Current/APL_Hunter_Survival_DPS_v1.0_Draft.txt` and unselected full pet-upkeep v1.1 `roles/Hunter/Candidates/APL_Hunter_Survival_v1.1_Draft.txt`, **24 full source-world profile executions**. [PR #92](https://github.com/tkbiccay/APLForever-Open/pull/92), [8/8 native 45216281966](https://github.com/tkbiccay/APLForever-Open/actions/runs/45216281966). Major/Minor/Defensive/Movement toggles OFF (zero Major actions). No new APL revision and no selection change.
+
+| Source distance / Mana | Seed | Shipped accepted / refused | Current accepted / refused | Candidate v1.1 accepted / refused | Current legal offensive actions |
+| --- | --- | --- | --- | --- | --- |
+| 5yd melee / 3915 Mana | 30417 | 39 / 0 | **26 / 0** | **26 / 0** | 18 (15 melee) |
+| 5yd melee / 3915 Mana | 30437 | 39 / 0 | **29 / 0** | **29 / 0** | 21 (18 melee) |
+| 11yd ranged / 3915 Mana | both seeds | 22 / 0 | **15 / 0** | **15 / 0** | 7 ranged |
+| 7yd gap / 3915 Mana | both seeds | 2 / **149 range** | **2 / 0** | **2 / 0** | zero |
+| 5yd melee / 978.75 Mana (25%) | 30417 | 26 / 0 | **25 / 0** | **25 / 0** | 21 (20 melee) |
+| 5yd melee / 978.75 Mana (25%) | 30437 | 26 / 0 | **28 / 0** | **28 / 0** | 24 (23 melee) |
+
+**True follow-on and final fallback check:** for 5yd and 11yd positive scenarios Current/Candidate completed first plus at least three source-accepted attacks, not merely recommendation icons; no source-rejected cost, range or casting attempts. At 7yd Current/Candidate avoided all uncastable recommendations but provided no attack due to the published melee (≤5yd) vs shot (≥8yd) range split. Source `rr.pressedBy` accepted action counts are definitive for number, **not precise per-action timing or clickability in game**. In the 5yd normal source world Candidate's extra pet-upkeep lines did not change combat outputs versus protected Current, because its pet was pre-spawned and alive. This does **not** prove actual Call/Revive success or arrival when needed.
+
+**Default vs working:** shipped is benchmark, not architectural mandate; no separate reported-working Hunter SV APL is selected. Current v1.0 remains exact protected development comparator/rollback, v1.1 stays unselected Draft. Shipped's 39 vs Current's 26/29 melee accepted counts and its 22 vs Current's 15 ranged accepted counts **do not establish DPS gains** or justify copying shipped. No live combat logs, actual auto-shot queue, next-swing timing, movement, pet arrival, talent/rank unlocks 1–60, multi-target AoE, cooldowns ON, trinket warnings, pet damage, threat, or quantitative DPS. The fixed-distance source-world character can vary known kit/weapon and distance between tests, but it does not model an actual transition. Real 7yd player-facing icon and positioning cue require Saturday gameplay and `/hek snap`.
+
+**Campaign:** candidate for evidence **unit #04** on safe PR merge; 48 existing APL full revision hashes preserved and **zero Approved**. Cross-spec mechanics lesson in [CROSS_SPEC_LESSONS.md](knowledge/CROSS_SPEC_LESSONS.md) and coverage row [ROLE_COVERAGE.md](knowledge/ROLE_COVERAGE.md). Next distinct-class breadth: **Shaman Enhancement**, verified imbue/totem upkeep and low-Mana final fallback. 
