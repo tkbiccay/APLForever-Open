@@ -4,6 +4,9 @@ on:
     paths:
       - ".github/workflows/warrior-fury-v011-breadth.yml"
       - "experiments/native/aplforever_warrior_fury_rage_v011_spec.lua"
+      - "roles/Warrior/Current/APL_Warrior_Fury_DPS_v1.0_Draft.txt"
+      - "roles/Warrior/Candidates/APL_Warrior_Fury_v1.2_Draft.txt"
+      - "roles/Warrior/Candidates/APL_Warrior_Fury_v1.3_Draft.txt"
       - "docs/Tests_Warrior_Fury_Breadth_v011.md"
       - "docs/knowledge/BREADTH_50_CAMPAIGN.md"
       - "docs/knowledge/ROLE_COVERAGE.md"
@@ -34,7 +37,7 @@ jobs:
       - name: Bootstrap released native source
         working-directory: upstream/hekili
         run: make bootstrap
-      - name: Execute shipped vs protected Current vs known-bad archived vs unselected Candidate
+      - name: Execute five complete Fury profiles with exact v1.2 negative control vs new unselected v1.3
         working-directory: upstream/hekili
         run: |
           cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_warrior_fury_rage_v011_spec.lua" tests/Forever/aplforever_warrior_fury_rage_v011_spec.lua
