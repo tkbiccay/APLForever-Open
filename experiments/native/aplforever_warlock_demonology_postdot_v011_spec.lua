@@ -40,7 +40,7 @@ local function one(profile,seed,initial,duration)
  toggles.cooldowns.value=false
  toggles.minor_cooldowns.value=false
  toggles.defensives.value=false
- local events,installed={},false
+ local events,failed,installed={},{},false
  local rr=loop.run(L,seed,{
    duration=duration,
    on=function(w)
@@ -48,10 +48,14 @@ local function one(profile,seed,initial,duration)
      local previous=w.W.press
      w.W.press=function(player,key,resolved)
        local timestamp=w.W.t
+       local remaining=math.max(0,(player.castUntil or 0)-timestamp)
        local success,reason=previous(player,key,resolved)
        if player==w.us and timestamp>=loop.PULL and type(key)=="string" then
          if success then
            events[#events+1]={t=timestamp,key=key}
+         elseif #failed<10 then
+           failed[#failed+1]={t=timestamp,key=key,reason=reason,
+             castRemain=remaining,mana=player.power,cost=resolved and resolved.cost}
          end
        end
        return success,reason
@@ -61,6 +65,11 @@ local function one(profile,seed,initial,duration)
  },{{H=H}})
  assert.are.equal(0,rr.errors)
  assert.are.equal(0,rr.raises)
+ for i,e in ipairs(failed) do
+   print(("DEMO_PRESS_REFUSAL_V011 profile=%s seed=%d startMana=%.1f i=%d t=%.12f spell=%s reason=%s castRemain=%.12f mana=%.2f cost=%s"):format(
+      profile,seed,initial,i,e.t,tostring(e.key),tostring(e.reason),
+      e.castRemain,tonumber(e.mana) or -1,tostring(e.cost)))
+ end
  local m=rr.pressedBy or {}
  local refused=0
  for why,n in pairs(rr.refused or {}) do
