@@ -748,7 +748,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [],
       "revisions": [
         {
@@ -771,6 +771,27 @@
           "settings": null,
           "caveat": "Original custom design. Bounded source/static review only; no native import or repeatable gameplay validation. Not preferred or Approved.",
           "relocated_from": "roles/APL_Mage_Fire_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Mage/Candidates/APL_Mage_Fire_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "dbf976aa137a7857daa555b764ab3bb1e2ec4b2d9bc85e525e502738bbf4572f",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Published Hekili Forever v0.11.0 source SHA 86b739cbc4e6afbcbc693c3790ee81197fc6234b, PR #101. Exact protected Fire Current v1.0 unguarded Scorch rejected once: true Mana 134.166 vs published top-rank cost 150, seed30417, 100% start Mana, boss Cooldowns ON near t89. New complete v1.1 adds source-supported mana.lo>=action.scorch.cost to both Scorch upkeep and fallback, no other change. Full matched source-native comparator CI pending."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Mage/Current/APL_Mage_Fire_v1.0_Draft.txt",
+          "addon_version": "v0.11.0",
+          "min_source_release": "v0.11.0",
+          "game_build": null,
+          "talents": "Published level60 Mage Fire wowsims source talent kit (incl Improved Scorch), not player's talent build",
+          "gear": "Published Mage Fire world only; not actual owner gear",
+          "settings": "Normal rotation standalone, using only existing native user Major Cooldowns OFF/ON and source resource bounds, no new settings",
+          "caveat": "Unselected experimental full Draft. Source Fire one genuine late Scorch cost refusal from v1.0. This candidate guards both existing Scorch lines using supported Mana cost syntax; source test, 1–60, non-boss, moving, actual DPS, rank and in-game proof needed. Do not promote from CI alone. Preserve exact original Current."
         }
       ],
       "apl_name": "Mage_Fire"
