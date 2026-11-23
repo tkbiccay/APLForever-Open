@@ -8,7 +8,8 @@ local root=assert(os.getenv("APLFOREVER_ROOT"))
 local paths={
   current="roles/Warrior/Current/APL_Warrior_Fury_DPS_v1.0_Draft.txt",
   archived="roles/Warrior/Archive/APL_Warrior_Fury_v1.1_Draft.txt",
-  candidate="roles/Warrior/Candidates/APL_Warrior_Fury_v1.2_Draft.txt"
+  candidate="roles/Warrior/Candidates/APL_Warrior_Fury_v1.2_Draft.txt",
+  revised="roles/Warrior/Candidates/APL_Warrior_Fury_DPS_v1.3_Draft.txt"
 }
 local data={}
 for name,path in pairs(paths) do
@@ -21,6 +22,8 @@ assert.is_truthy(data.candidate:find("rage.lo>=action.bloodthirst.cost+5",1,true
 assert.is_nil(data.current:find("toggle.movement",1,true),
   "selected protected Current unexpectedly added Movement guard")
 assert.is_truthy(data.candidate:find("toggle.movement",1,true))
+assert.is_truthy(data.revised:find("actions.aoe=whirlwind,if=rage.lo>=action.whirlwind.cost+5",1,true))
+assert.is_truthy(data.revised:find("actions.single_target+=/whirlwind,if=rage.lo>=action.whirlwind.cost+5",1,true))
 local offensive={bloodthirst=true,whirlwind=true,overpower=true,slam=true,
   heroic_strike=true,cleave=true,execute=true,thunder_clap=true,rend=true,
   sunder_armor=true,spearing_strike=true,victory_rush=true}
@@ -137,14 +140,15 @@ describe("Fury published v0.11 Rage and full fallback; safe unselected v1.2",fun
       it(("level %d rage %d attackers %d seed %d"):format(
           level,rage,attackers,seed),function()
         local results={}
-        for _,profile in ipairs({"shipped","current","archived","candidate"}) do
+        for _,profile in ipairs({"shipped","current","archived","candidate","revised"}) do
           results[profile]=one(profile,level,seed,rage,attackers,duration)
         end
-        local cur,old,new=results.current,results.archived,results.candidate
+        local cur,old,previous,new=results.current,results.archived,results.candidate,results.revised
         assert.is_true(cur.accepted>=3,"Current fails progression")
         assert.is_true(new.accepted>=3,"Candidate fails progression")
         assert.is_true(new.offensive>=2,"Candidate fails meaningful combat")
-        assert.are.equal(0,new.cost,"Candidate source-refused due to cost")
+        assert.are.equal(0,new.cost,"Revised Candidate source-refused due to cost")
+        assert.are.equal(0,new.refused,"Revised Candidate has any substantive source refusal")
         assert.are.equal(0,cur.cost,"Current unexpectedly cost-refused")
         assert.are.equal(0,new.majors,"Candidate broke major cooldown OFF")
         assert.are.equal(0,cur.majors,"Current broke major cooldown OFF")
@@ -155,10 +159,15 @@ describe("Fury published v0.11 Rage and full fallback; safe unselected v1.2",fun
         else
           assert.are.equal(0,new.blood,"lower-level unlocked Bloodthirst improperly")
         end
-        -- Preserve the expected-bad archived profile even if its old v0.8.6
-        -- cost failure no longer reproduces under changed v0.11 combat timing.
-        print(("FURY_COMPARATOR level=%d seed=%d rage=%d attackers=%d oldCost=%d newCost=%d currentCost=%d shippedCost=%d"):format(
-          level,seed,rage,attackers,old.cost,new.cost,cur.cost,results.shipped.cost))
+        -- Archived v1.1 was a historical v0.8.6 expected-bad control, but
+        -- its Bloodthirst cost failure does NOT reproduce in tested v0.11 worlds.
+        -- Instead preserve exact newly observed v1.2 *Whirlwind* bad control.
+        if level==60 and rage==90 and attackers==1 and seed==30417 then
+          assert.is_true(previous.cost>=1,
+            "v1.2 v0.11 source-native Whirlwind cost negative control disappeared")
+        end
+        print(("FURY_COMPARATOR level=%d seed=%d rage=%d attackers=%d archivedCost=%d v12Cost=%d revisedCost=%d currentCost=%d shippedCost=%d"):format(
+          level,seed,rage,attackers,old.cost,previous.cost,new.cost,cur.cost,results.shipped.cost))
       end)
     end
   end
