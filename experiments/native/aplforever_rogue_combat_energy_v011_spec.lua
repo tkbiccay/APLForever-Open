@@ -13,9 +13,17 @@ local function run(profile,seed,energy,duration)
   local L=loop.new(C)
   local H=L.us
   assert.are.same({},H.loadErrors)
-  if profile=="current" then
+  if profile=="current" or profile=="guarded" then
+    local apl=current
+    if profile=="guarded" then
+      local old="actions.opener=garrote,focus=1,if=action.garrote.known&!debuff.garrote.up&(buff.stealth.up|buff.vanish.up|buff.ghostly_strike_next.up)"
+      local new="actions.opener=garrote,focus=1,if=action.garrote.known&!debuff.garrote.up&((!combat&buff.stealth.up)|buff.vanish.up|buff.ghostly_strike_next.up)"
+      local n
+      apl,n=apl:gsub(old:gsub("([^%w])","%%%1"),new)
+      assert.are.equal(1,n,"original Current Garrote opener guard changed unexpectedly")
+    end
     local lists,warnings=H.Hekili:ImportSimcAPL("Rogue_Combat",
-      "APLForever-Rogue-Combat-Breadth",current,C.PACK)
+      "APLForever-Rogue-Combat-Breadth",apl,C.PACK)
     assert.is_table(lists)
     for _,name in ipairs({"precombat","default","final_fallback"}) do
       assert.is_table(lists[name],"missing complete list "..name)
@@ -90,15 +98,26 @@ describe("Rogue Combat v0.11 complete source-native energy/fallback",function()
       assert.is_true(candidate.follow>=3)
       assert.are.equal(0,candidate.major,"Current violated native Major OFF")
       assert.are.equal(0,candidate.refused,"Current repeated source-refused recommendation")
+      local guarded=run("guarded",seed,100,75)
+      assert.are.equal(0,guarded.refused,"one-guard in-memory candidate regressed normal Energy")
+      assert.is_true(guarded.follow>=3)
+      assert.are.equal(0,guarded.major)
     end)
     it("low initial Energy and natural regen seed "..seed,function()
       local shipped=run("shipped",seed,25,100)
-      local candidate=run("current",seed,25,100)
+      local currentRun=run("current",seed,25,100)
+      local guarded=run("guarded",seed,25,100)
       assert.is_true(shipped.combat>=3,"shipped low Energy did not advance")
-      assert.is_true(candidate.combat>=4,"Current low Energy lost follow-on actions")
-      assert.is_true(candidate.follow>=3)
-      assert.are.equal(0,candidate.major)
-      assert.are.equal(0,candidate.refused,"Current repeatedly recommended unaffordable action")
+      assert.are.equal(501,currentRun.refused,
+        "original protected Current low-Energy symptom changed; re-investigate")
+      assert.are.equal(0,currentRun.combat,
+        "original Current unexpectedly advanced; re-investigate")
+      assert.is_true(guarded.combat>=4,
+        "in-memory guarded candidate lost three legal low-Energy follow-on actions")
+      assert.is_true(guarded.follow>=3)
+      assert.are.equal(0,guarded.major)
+      assert.are.equal(0,guarded.refused,
+        "in-memory guard failed to prevent rejected Garrote recommendations")
     end)
   end
 end)
