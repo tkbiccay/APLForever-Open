@@ -139,3 +139,14 @@
 - **Next tests:** source-real source-world HP debit needs a separate verified extension/fixtures before any Life Tap-based optimisation; actual gameplay `/hek snap` after DoTs and low Mana should check next-three icons, pet Demonology sacrifice/brand, curse settings and 1–60 rank gates. Historical DEMO-006 repeat symptom remains **Reported / Unconfirmed cause**; the test shows **no Life Tap in preserved reported-working APL**, not proof the original client's issue was fixed or reproduced.
 
 [Full bounded evidence](../Tests_Warlock_Demonology_Breadth_v011.md). No APL byte, working reference, catalogue selection, or Approved status changed.
+
+
+## Lesson 13 — The Mage Frost and Frostfire published fixture kits are not interchangeable
+
+**Released source:** 23 November 2026, Hekili Forever v0.11.0 source 86b739cbc4e6afbcbc693c3790ee81197fc6234b; [PR #95](https://github.com/tkbiccay/APLForever-Open/pull/95); [7/7 native 45254820633](https://github.com/tkbiccay/APLForever-Open/actions/runs/45254820633). In published mage_world.lua, Frost is spec 100083 and does **not** include Frostfire Bolt in its known kit; separate Frostfire is Fire-spec 100082 and does. Positive/negative source-world creation confirms both. Neither full shipped nor Current Frost cast Frostfire Bolt in 12 matched 25yd source profile runs. This is **source fixture evidence**, not a universal spellbook limitation or an in-game impossibility claim. Do not add Frostfire-based priorities to a Frost Candidate without a proven talent-/rank-aware client guard.
+
+- **Repeated fallback:** Current Frost made at least 9 directly observed later accepted offensive actions in the most Mana-starved world, and zero source-refused recommendations in all full/25%/5% Mana profiles. No new APL needed solely to fix a non-existent tested refusal. The W.press event trace is not guaranteed exhaustive: source pressedBy counted up to two additional accepted offensives per profile that the hook did not observe. Keep accepted counters for totals and actual observed events for ordering, with no fabricated complete chronology.
+- **Negative transfer:** Shipped Frost accepted more low-Mana actions than Current (25/26 vs 16/16 at 25%; 23/22 vs 12/11 at 5%) but no source-measured DPS, Mana safety, spell efficiency or client control. Never use press count as an optimisation proof. Investigate observed cast mix/rank/proc before changing a protected APL, and test every candidate with the exact same known kit.
+- **Reusable classification:** missing Frostfire cast = published Frost fixture known-kit boundary, not automatically a broken APL/engine; test sibling class/build packs independently. Actual in-game Frostfire availability, moving target, Ice Lance/Fingers of Frost, level 1–60 and native cooldowns ON still unverified.
+
+[Detailed source results](../Tests_Mage_Frost_Breadth_v011.md). All original APL bytes, selection and rollbacks protected. No new Approved status.

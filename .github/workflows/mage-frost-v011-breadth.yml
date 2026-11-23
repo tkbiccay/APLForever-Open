@@ -1,0 +1,41 @@
+name: Mage Frost v0.11 source-native Frostfire kit and fallback
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/mage-frost-v011-breadth.yml"
+      - "experiments/native/aplforever_mage_frost_fallback_v011_spec.lua"
+      - "docs/Tests_Mage_Frost_Breadth_v011.md"
+      - "docs/knowledge/BREADTH_50_CAMPAIGN.md"
+      - "docs/knowledge/ROLE_COVERAGE.md"
+      - "docs/knowledge/CROSS_SPEC_LESSONS.md"
+      - "docs/knowledge/CONTINUATION_HANDOVER.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify published source and immutable role hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap published source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Test complete Frost shipped vs Current and separate Frostfire fixture
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_mage_frost_fallback_v011_spec.lua" tests/Forever/aplforever_mage_frost_fallback_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose tests/Forever/aplforever_mage_frost_fallback_v011_spec.lua
