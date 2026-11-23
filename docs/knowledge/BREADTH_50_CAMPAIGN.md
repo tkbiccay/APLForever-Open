@@ -12,10 +12,12 @@ One unit is one NEW independently supported, role-specific, falsifiable safety/r
 | --- | --- | --- | --- | --- | --- |
 | 01 | Rogue Assassination | **Verified** same true-Stealth/Belief Garrote repeat at low Energy, independently from Combat; full unselected standalone v1.1 corrects 501 refusals/seed, preserves normal Energy | v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b` | [PR #89](https://github.com/tkbiccay/APLForever-Open/pull/89), [stored-file 4/4 PASS 45143611408](https://github.com/tkbiccay/APLForever-Open/actions/runs/45143611408) | No in-game promotion; next Subtlety transfer and live Stealth/poison test |
 
-**Completed: 1/50 on protected main only after PR #89 merges** (zero until then). Count only verified NEW units after the baseline and update alongside meaningful development PRs. Do not make a commit solely to increment a number.
+| 02 | Rogue Subtlety | **Negative cross-spec transfer**: low-Energy Current v1.0 does NOT reproduce Combat/Assassination's stale-Stealth Garrote refusal; guarded test-only substitution has identical accepted counts and zero refusals. No Candidate justified. | v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b` | [PR #90](https://github.com/tkbiccay/APLForever-Open/pull/90), [4/4 native PASS 45152835829](https://github.com/tkbiccay/APLForever-Open/actions/runs/45152835829) | 25 Energy seeds 30417/30437: Current and guard each 55 accepted, 0 refused; normal Energy 46/48 accepted, 0 refused. Source-only, not DPS proof; no change to protected APL. Next distinct class Mage Fire/Hunter Survival. |
+
+**Completed: 1/50 on protected main; prospective #02 independently source-verified but NOT counted until PR #90 merges.** Count only verified NEW units after the baseline and update alongside meaningful development PRs. Do not make a commit solely to increment a number.
 
 ## Priority and guardrails
 
 Across 23 Supported roles (5 Blocked healers), rotate under-served specs and mechanics; use the [role coverage ledger](ROLE_COVERAGE.md) to select the next falsifiable source-native task. Joint P0 Guardian/Feral Tank and Hunter BM retain urgent safety priority. Keep separate 25/50 and 50/50 review milestones without claiming either before evidence. Class and source fixture limitations are not in-game results; save Saturday live tasks separately.
 
-**Next unit after #89 is merged:** independent Rogue Subtlety source-native 25/100-Energy Stealth and actual accepted follow-on test. No in-game Approved claims.
+**Next after #90:** rotate to a distinct underserved class (Mage Fire or Hunter Survival), with a new source-observable combat/fallback hypothesis. No in-game Approved claims.
