@@ -202,6 +202,20 @@ describe("Independent Rogue Subtlety Ghostly-to-Garrote source-true chain",funct
           "released World Ghostly Strike next-Garrote aura never applied")
         assert.is_true(guarded.ghost>=1,
           "no real source Ghostly Strike press after dropping stealth")
+        assert.is_true(guarded.chain>=1 and guarded.consumed>=1,
+          "Ghostly Strike did not produce a real following Garrote and aura consumption")
+        if start==0 then
+          assert.is_true(current.refused>=500,
+            "protected Current repeated non-stealth Garrote failure vanished; investigate")
+          assert.is_true(current.accepted<=2,
+            "protected Current no longer stalls after zero initial Energy")
+          assert.is_true(guarded.accepted>=50,
+            "full v1.1 no longer recovers real later accepted combat actions")
+        else
+          assert.are.equal(0,current.refused)
+          assert.are.equal(current.accepted,guarded.accepted,
+            "full v1.1 changed healthy full-Energy source combat accepted actions")
+        end
         print(("SUB_GHOST_PAIR seed=%d energy=%d shipped=%d current=%d/%d guarded=%d/%d ghostchain=%d"):format(
           seed,start,shipped.accepted,current.accepted,current.refused,
           guarded.accepted,guarded.refused,guarded.chain))
@@ -224,6 +238,18 @@ describe("P0 Guardian published source real starting Rage and Maul queue/strike"
         assert.are.equal(0,candidate.refused,"new source world rejected v1.6")
         assert.is_true(candidate.queue>=candidate.strike,
           "actual Maul strikes without enqueued source Maul")
+        assert.is_true(shipped.queue>=1,
+          "published source comparator no longer queues Maul in this world")
+        assert.is_true(candidate.maxLo<35 and candidate.lo35==0,
+          "new source Rage belief can now meet 35 Maul threshold; recheck blocked status")
+        assert.are.equal(0,candidate.queue,
+          "candidate unexpectedly queues Maul with belief below 35")
+        assert.are.equal(0,candidate.strike,
+          "candidate unexpectedly strikes Maul with belief below 35")
+        if rage==50 then
+          assert.is_true(candidate.maxTrue>=50,
+            "controlled true carried Rage was not actually granted")
+        end
         if candidate.strike>0 then
           assert.is_true(candidate.paid>0,"actual Maul strike paid no true Rage")
         end
