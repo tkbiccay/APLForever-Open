@@ -1,5 +1,10 @@
 # APLForever-Open — active sprint handover
 
+## LIVE checkpoint — 23 November 2026, ~19:00 UTC
+
+- **OPEN Draft [PR #93](https://github.com/tkbiccay/APLForever-Open/pull/93), Shaman Enhancement BREADTH.** Previous exact head `72ef59ed6b6dc86255846994c3429e1e70a6aab0` [released v0.11 native 4/4 PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45232972836) and [validator PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45232973287). Shipped vs protected Current, seeds 30417/30437 at 5yd, normal/25%-Mana: Current accepted 37/35 and 23/22, all **zero refusals**, 10/12 and 5/5 Lightning Shield presses respectively; shipped accepted 35/33 and 22/26 with zero shield presses. Both profiles zero Windfury presses; **weapon enchant observability unproven**, not a live claim. No DPS inference.
+- **New head `2e0d14fec0d3dd73fea409744af77f18f73a8117`** strengthens source-native assertions to require 3 offensive accepted actions, zero refusals and autonomous shield upkeep; **new exact-head CI pending/unverified**, keep Draft. Published source pin `86b739cbc4e6afbcbc693c3790ee81197fc6234b`; full protected APL unchanged. **NEXT:** inspect latest native/validator and all required checks, safely merge only exact green, then record unit #05 and rotate different class. Campaign **4/50 on protected main** until merge; zero Approved.
+
 ## LIVE checkpoint — 23 November 2026, ~16:28 UTC
 
 - **MERGED [PR #91](https://github.com/tkbiccay/APLForever-Open/pull/91)** Mage Fire unit #03 on protected main `42c69ae84e6818a231f19db45785dc6731f22c97`, all 11 exact-head checks and [postmerge validation 45215767244](https://github.com/tkbiccay/APLForever-Open/actions/runs/45215767244) PASS. 3/50 verified on main. Original Mage Fire APL untouched.
