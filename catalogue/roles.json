@@ -1213,7 +1213,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [],
       "revisions": [
         {
@@ -1236,6 +1236,27 @@
           "settings": null,
           "caveat": "Independent source-level custom Rogue v1.0. Poison/facing/weapon gating, Vanish safety and DPS output unverified in game; Draft only, not preferred or Approved.",
           "relocated_from": "roles/APL_Rogue_Subtlety_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Rogue/Candidates/APL_Rogue_Subtlety_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "4270209e134f25882bd35a1c17a355087df8e5174d982b23c366182c4d5add4a",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "Published Hekili Forever v0.11.0 zmsl/hekili@86b739cbc4e6afbcbc693c3790ee81197fc6234b. Native full shipped vs exact protected Current v1.0 vs complete in-memory-and-stored v1.1. Source true initial Energy0: Current 576 repeated not-stealthed Garrote rejects per seed, only two actions; full v1.1 57–63 accepted actions with zero refusals, actual Ghostly Strike next Garrote proc; 100 Energy current and v1.1 equal. Full candidate final-head CI pending PR #103."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Rogue/Current/APL_Rogue_Subtlety_v1.0_Draft.txt",
+          "addon_version": "v0.11.0",
+          "min_source_release": "v0.11.0",
+          "game_build": null,
+          "talents": "Published source world level60 Subtlety wowsims preset, not user's talent build",
+          "gear": "Published Rogue source weapons, client daggers and poisons not validated",
+          "settings": "Native Major/Minor/Defensive OFF in source; no required per-spec checkboxes",
+          "caveat": "UNSELECTED experimental complete Draft; one conditional tighter Stealth opener. Source fixed repeat-unusable Garrote at Energy 0 while keeping Ghostly Strike next-Garrote proc, but source IsStealthed API always false and belief is cast-derived. In-game Stealth, Vanish, actual level1–60, position/facing, weapon damage, poison, AoE and true DPS not verified; 0 Approved. Preserve exact full Current."
         }
       ],
       "apl_name": "Rogue_Subtlety"
