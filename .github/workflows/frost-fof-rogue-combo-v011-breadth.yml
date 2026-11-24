@@ -8,6 +8,8 @@ on:
       - "roles/Rogue/Current/APL_Rogue_Combat_v1.0_Draft.txt"
       - "roles/Rogue/Candidates/APL_Rogue_Combat_v1.1_Draft.txt"
       - "docs/Tests_Breadth_Frost_FoF_Rogue_Combo_v011.md"
+      - "docs/Research_Breadth_Frost_Rogue_v011.md"
+      - "docs/knowledge/BREADTH_25_REVIEW.md"
       - "docs/knowledge/ROLE_COVERAGE.md"
       - "docs/knowledge/BREADTH_50_CAMPAIGN.md"
       - "docs/knowledge/CROSS_SPEC_LESSONS.md"
