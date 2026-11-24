@@ -1,0 +1,46 @@
+name: "Breadth #22-23 Ret Echo and Enh Maelstrom v0.11"
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/ret-echo-enh-maelstrom-v011-breadth.yml"
+      - "experiments/native/aplforever_ret_echo_enh_maelstrom_v011_spec.lua"
+      - "docs/Tests_Breadth_Ret_Echo_Enh_Maelstrom_v011.md"
+      - "docs/knowledge/ROLE_COVERAGE.md"
+      - "docs/knowledge/BREADTH_50_CAMPAIGN.md"
+      - "docs/knowledge/CROSS_SPEC_LESSONS.md"
+      - "docs/knowledge/CONTINUATION_HANDOVER.md"
+      - "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt"
+      - "roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt"
+      - "roles/Shaman/Candidates/APL_Shaman_Enhancement_v1.1_Draft.txt"
+      - "catalogue/roles.json"
+      - "Catalogue_All_Roles.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify published Forever source and protected hash integrity
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap exact source-native Forever harness
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Execute full Ret Echo and Enh Maelstrom effect test matrix
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_ret_echo_enh_maelstrom_v011_spec.lua" tests/Forever/aplforever_ret_echo_enh_maelstrom_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose tests/Forever/aplforever_ret_echo_enh_maelstrom_v011_spec.lua

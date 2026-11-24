@@ -1,0 +1,9 @@
+# Changelog — Shaman Enhancement v1.1 complete Draft
+
+**24 Nov 2026. NOT selected / NOT Approved.**
+
+**Prior → new:** preserved complete Current roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt SHA256 **76c3ed75a4b01ebe18980104261bcd5589b48924fcaef87a3ed356f00de6ab35** → new whole source-imported Candidate roles/Shaman/Candidates/APL_Shaman_Enhancement_v1.1_Draft.txt SHA256 **0eb349e19c49e5839eb85a4a0acd4ddfe4a5f448a778693331a0c6d907ce694d**. One priority action added before the original grouped support-totem call: solo Windfury Totem if known, no current air totem, combat, under3 enemies, non-boss and conservative mana.pct_lo>=20; all original complete branches and final fallback unchanged. No extra user settings.
+
+**Hypothesis and native evidence:** [v0.11 exact published source, 12/12 PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45347446688): original lacks solo Totem, but v1.1 spends 250 Mana once to gain 2–10 source bonus Windfury hits in 135s source encounters while retaining 4–5 true instant zero-Mana Maelstrom Lightning Bolts and 0 refused. At 5% initial Mana v1.1 holds totem (0 cost), retains 5 free Bolts and 0 refused. **NEGATIVE 20s outdoor case:** source cost 250 Mana for only 0/1 bonus hit; on one seed Current had more accepted actions. This is a justified unselected research experiment, not a validated better solo rotation or measured DPS. Source does not model roaming totem radius or player weapon imbue state.
+
+**Conclusion / rollback / next:** DO NOT PROMOTE v1.1. Exact Current v1.0 retained, preferred null, last-working null, original SHA-safe rollback; [full Tests_](Tests_Breadth_Ret_Echo_Enh_Maelstrom_v011.md), [Research_](Research_Shaman_Enhancement_v1.1.md), [Limitations_](Limitations_Shaman_Enhancement_v1.1.md). Candidate remains Draft / Needs Retest until safe fight-duration observability and real playable Saturday 10–20s and stationary-long comparisons. Source green ≠ Approved.

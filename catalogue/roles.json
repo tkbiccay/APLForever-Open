@@ -1308,7 +1308,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [],
       "revisions": [
         {
@@ -1331,6 +1331,26 @@
           "settings": null,
           "caveat": "First independent custom Shaman DPS APL, static/source verified only. Totem range, resource and repeated recommendations not in-game verified; not preferred or Approved.",
           "relocated_from": "roles/APL_Shaman_Enhancement_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Shaman/Candidates/APL_Shaman_Enhancement_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "0eb349e19c49e5839eb85a4a0acd4ddfe4a5f448a778693331a0c6d907ce694d",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "24 Nov 2026 Hekili Forever v0.11.0 pinned source 86b739cbc4e6afbcbc693c3790ee81197fc6234b; source-native 8/8 first full shipped/current/candidate Echo + Maelstrom, CI 45346680315. Genuine Windfury air totem +9/2/10/8 accepted source bonus strikes across two seeds x 100/25% Mana, exact full Candidate 0 refused and true 4-5 zero-Mana instant Maelstrom Bolts, source true totem Mana cost; extreme 5%-Mana final gate and all final-head CI pending PR #105."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt",
+          "addon_version": "v0.11.0",
+          "game_build": null,
+          "talents": "Published source Enhancement level60 wowsims preset; no user-level talent validation",
+          "gear": "Published source World two-handed Enhancement preset; real weapon imbue API absent in test fixture",
+          "settings": "No mandatory per-spec checkbox: routine Windfury solo upkeep controlled in APL; default native toggles remain OFF",
+          "caveat": "UNSELECTED experimental whole v1.1. One action added before existing grouped totem call: solo Windfury Totem when known, absent, in combat, <3 enemies, non-boss, source Mana lo >=20%. Source at 25%+ starting Mana creates real Windfury totem/bonus attacks with zero rejected casts and preserves Maelstrom instant zero-Mana Bolts. Source lacks Windfury Weapon imbue state, actual player survival/damage/DPS, all level 1–60, moving/target changes, group threat and true in-game mana. Numbers are genuine modelled procs, not calibrated damage superiority. Current original remains immutable and preferred=null until live owner evidence."
         }
       ],
       "apl_name": "Shaman_Enhancement"
