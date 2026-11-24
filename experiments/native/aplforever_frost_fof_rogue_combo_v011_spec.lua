@@ -225,7 +225,7 @@ end
 
 describe("Breadth #24 Frost actual Fingers-of-Frost grant/spend, not just legal Bolt",function()
   for _,seed in ipairs({30417,30437}) do
-    for _,mana in ipairs({1,0.25}) do
+    for _,mana in ipairs({1,0.25,0.05}) do
       it(("seed %d true Mana %.2f whole shipped vs Current"):format(seed,mana),function()
         local shipped=trial("frost","shipped",seed,mana,100)
         local current=trial("frost","current",seed,mana,100)
@@ -240,6 +240,8 @@ describe("Breadth #24 Frost actual Fingers-of-Frost grant/spend, not just legal 
           assert.is_true(current.lancesOnFoF>=1,
             "Ice Lance accepted without actual Fingers of Frost to spend")
           assert.is_true(current.chill>=1,"Frost did not actually apply Winters Chill")
+          assert.is_true(current.sourceLanceEffects>=1,
+            "Source actual unique 300/600 frost magic Ice Lance damage never landed")
         end
         print(("FROST_EFFECT_PAIR seed=%d manaPct=%.2f shippedFoF=%d curFoF=%d curLances=%d curLancesOnFoF=%d curChill=%d"):format(
           seed,mana,shipped.fof,current.fof,current.iceLances,
