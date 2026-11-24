@@ -8,6 +8,10 @@ on:
       - "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt"
       - "roles/Hunter/Current/APL_Hunter_Marksmanship_DPS_v1.0_Draft.txt"
       - "roles/Hunter/Candidates/APL_Hunter_Marksmanship_v1.1_Draft.txt"
+      - "docs/Tests_Breadth_Feral_MM_Effects_v011.md"
+      - "docs/knowledge/BREADTH_50_CAMPAIGN.md"
+      - "docs/knowledge/ROLE_COVERAGE.md"
+      - "docs/knowledge/CROSS_SPEC_LESSONS.md"
       - "docs/knowledge/CONTINUATION_HANDOVER.md"
   workflow_dispatch:
 permissions:
