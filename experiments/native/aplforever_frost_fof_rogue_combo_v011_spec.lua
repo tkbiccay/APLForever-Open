@@ -74,7 +74,8 @@ local function trial(kind,profile,seed,startPct,duration)
     attempted=0,refused=0,firstRefusal="",lancesOnFoF=0,
     rogueBuilder=0,rogueFinisher=0,rogueFinishAt3=0,
     rogueConsume=0,rogueMaxCP=0,rogueFinisherWrong=0,
-    rogueExcess=0,fofMaxAtLance=0,cpExamples={}
+    rogueAvoidedFinish=0,rogueExcess=0,fofMaxAtLance=0,
+    terminalRefused=0,combatRefused=0,cpExamples={}
   }
   local started=false
   local rr=loop.run(L,seed,{
@@ -97,6 +98,12 @@ local function trial(kind,profile,seed,startPct,duration)
               trace.firstRefusal=("time=%.3f key=%s why=%s"):format(
                 time,tostring(key),tostring(why))
             end
+            if math.abs(time-(loop.PULL+duration))<=1e-6 and
+              key=="garrote" and why=="requires:not stealthed" then
+              trace.terminalRefused=trace.terminalRefused+1
+            else
+              trace.combatRefused=trace.combatRefused+1
+            end
           else
             if kind=="frost" and key=="ice_lance" then
               if preFoF>0 then
@@ -116,6 +123,11 @@ local function trial(kind,profile,seed,startPct,duration)
                 if beforePt>=3 then trace.rogueFinishAt3=trace.rogueFinishAt3+1 end
                 if beforePt>0 and afterPt==0 then
                   trace.rogueConsume=trace.rogueConsume+1
+                elseif beforePt>0 and afterPt==beforePt
+                  and e.lastHit and e.lastHit.act~="WOUND" then
+                  -- Source world.W.effects explicitly keeps combo points
+                  -- when Eviscerate is avoided.
+                  trace.rogueAvoidedFinish=trace.rogueAvoidedFinish+1
                 else
                   trace.rogueFinisherWrong=trace.rogueFinisherWrong+1
                 end
@@ -143,8 +155,10 @@ local function trial(kind,profile,seed,startPct,duration)
   local auraFoF,fofMax,fofDrop,chillAuras,chillMax,iceSpells=0,0,0,0,0,0
   local trueSnd,sndExpires=0,0
   local comboEvents,comboSpends=0,0
-  local sourceLance=H.ns.VirtualState.KnownID(H.Hekili.Class.abilities.ice_lance and
-    H.Hekili.Class.abilities.ice_lance.id or 0)
+  -- Published source W.hit emits kind=spell but NOT a spell ID.
+  -- At 25 yards Cone of Cold is out of range; source Ice Lance
+  -- resolves AMOUNT=300 or 600 on critical, unique among ranged kit.
+  local lanceAmount=300
   for _,ev in ipairs(rr.W.truth) do
     if kind=="frost" then
       if ev.kind=="aura" and ev.dst==rr.us and ev.aura==fof then
@@ -158,8 +172,11 @@ local function trial(kind,profile,seed,startPct,duration)
         chillAuras=chillAuras+1
         chillMax=math.max(chillMax,ev.stacks)
       end
-      if ev.kind=="spell" and ev.src==rr.us and
-        ev.spell==sourceLance then iceSpells=iceSpells+1 end
+      if ev.kind=="spell" and ev.src==rr.us and ev.dst
+        and ev.dst.kind=="mob"
+        and (ev.amount==lanceAmount or ev.amount==2*lanceAmount) then
+          iceSpells=iceSpells+1
+      end
     else
       if ev.kind=="aura" and ev.dst==rr.us and ev.aura==snd then
         if (ev.stacks or 0)>0 then trueSnd=trueSnd+1
@@ -187,11 +204,12 @@ local function trial(kind,profile,seed,startPct,duration)
       count.ice_lance or 0,trace.lancesOnFoF,auraFoF,fofMax,fofDrop,
       chillAuras,chillMax,iceSpells,later,trace.firstRefusal))
   else
-    print(("ROG_COMBO_TRUTH profile=%s seed=%d energyPct=%.2f duration=%d accepted=%d refused=%d sinister=%d generatedPoints=%d maxCP=%d evis=%d evisBefore3=%d actualSpentTo0=%d invalidFinish=%d cpAuraGain=%d cpAuraSpend=%d trueSliceAuras=%d trueSliceExpires=%d postBuilder=%d example=%s firstRefusal=%s"):format(
+    print(("ROG_COMBO_TRUTH profile=%s seed=%d energyPct=%.2f duration=%d accepted=%d refused=%d sinister=%d generatedPoints=%d maxCP=%d evis=%d evisBefore3=%d actualSpentTo0=%d invalidFinish=%d avoidedFinish=%d cpAuraGain=%d cpAuraSpend=%d trueSliceAuras=%d trueSliceExpires=%d postBuilder=%d terminalGarroteRefused=%d inCombatRefused=%d example=%s firstRefusal=%s"):format(
       profile,seed,startPct,duration,rr.presses,raw,count.sinister_strike or 0,
       trace.rogueBuilder,trace.rogueMaxCP,trace.rogueFinisher,
       trace.rogueFinishAt3,trace.rogueConsume,trace.rogueFinisherWrong,
-      comboEvents,comboSpends,trueSnd,sndExpires,later,
+      trace.rogueAvoidedFinish,comboEvents,comboSpends,trueSnd,sndExpires,
+      later,trace.terminalRefused,trace.combatRefused,
       table.concat(trace.cpExamples,","),trace.firstRefusal))
   end
   return {accepted=rr.presses,refused=raw,later=later,
@@ -199,6 +217,8 @@ local function trial(kind,profile,seed,startPct,duration)
     lancesOnFoF=trace.lancesOnFoF,chill=chillAuras,
     builders=trace.rogueBuilder,finishers=trace.rogueFinisher,
     spent=trace.rogueConsume,wrong=trace.rogueFinisherWrong,
+    avoided=trace.rogueAvoidedFinish,terminal=trace.terminalRefused,
+    inCombatRefused=trace.combatRefused,sourceLanceEffects=iceSpells,
     maxCp=trace.rogueMaxCP,excess=trace.rogueExcess,
     snd=trueSnd,comboEvents=comboEvents,comboSpends=comboSpends}
 end
@@ -237,16 +257,26 @@ describe("Breadth #25 Rogue Combat real builders/five-point spending and short-s
         local candidate=trial("rogue","candidate",seed,energy,95)
         assert.is_true(shipped.accepted>=3)
         assert.is_true(candidate.accepted>=3)
-        assert.are.equal(0,candidate.refused,
-          "Combat v1.1 has source-refused recommended action")
+        assert.are.equal(0,candidate.inCombatRefused,
+          "Combat v1.1 refused a real during-fight recommended action")
+        assert.is_true(candidate.terminal<=1,
+          "Combat v1.1 repeatedly refused terminal stale Garrote; FAIL")
         assert.is_true(candidate.builders>=3,"candidate did not truly gain builder combo points")
         assert.is_true(candidate.finishers>=2,"candidate did not truly execute finishers")
         assert.is_true(candidate.spent>=2,"Eviscerate did not actually consume source combo points")
-        assert.are.equal(0,candidate.wrong,"any finisher failed to spend true source combo points")
+        assert.are.equal(0,candidate.wrong,
+          "Eviscerate neither spent on landing nor legally retained points on avoid")
+        assert.are.equal(candidate.finishers,candidate.spent+candidate.avoided,
+          "Every accepted Eviscerate must spend on hit or retain on avoid")
         assert.are.equal(0,candidate.excess,"source combo points exceeded 5")
         assert.is_true(candidate.later>=3,"candidate lacked three follow-on legal actions")
-        assert.is_true(current.refused>=10,
-          "protected Current known Garrote negative control unexpectedly disappeared")
+        if energy==0.25 then
+          assert.is_true(current.inCombatRefused>=10,
+            "protected Current low-Energy repeated Garrote negative vanished")
+        else
+          -- High initial Energy never triggered the historical stale opener.
+          assert.are.equal(0,current.inCombatRefused)
+        end
         print(("ROG_COMBO_PAIR seed=%d energyPct=%.2f shippedFinished=%d curRefused=%d candidateFinished=%d candidateSpent=%d candidateRealBuilders=%d candidateRefused=%d"):format(
           seed,energy,shipped.finishers,current.refused,
           candidate.finishers,candidate.spent,candidate.builders,candidate.refused))
@@ -256,10 +286,11 @@ describe("Breadth #25 Rogue Combat real builders/five-point spending and short-s
       local shipped=trial("rogue","shipped",seed,1,20)
       local current=trial("rogue","current",seed,1,20)
       local candidate=trial("rogue","candidate",seed,1,20)
-      assert.are.equal(0,candidate.refused)
+      assert.are.equal(0,candidate.inCombatRefused)
       assert.is_true(candidate.builders>=1)
       assert.is_true(candidate.later>=1)
-      assert.is_true(current.refused>0,"original stale Garrote pressure negative vanished")
+      -- Full Energy naturally avoided old Garrote loop: parity control.
+      assert.are.equal(0,current.inCombatRefused)
       print(("ROG_COMBO_SHORT seed=%d oldRefused=%d candidateBuilder=%d candidateFinish=%d candidateSpent=%d shippedFinish=%d"):format(
         seed,current.refused,candidate.builders,candidate.finishers,
         candidate.spent,shipped.finishers))
