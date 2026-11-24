@@ -30,7 +30,7 @@ assert.is_truthy(alt:find("actions.final_fallback+=/earth_shock",1,true))
 local stored=read("roles/Shaman/Candidates/APL_Shaman_Enhancement_v1.1_Draft.txt")
 assert.are.equal(alt,stored,"saved full standalone v1.1 differs from native validated one-line hypothesis")
 apl.enhCandidate=stored
-local function run(kind,profile,seed,pct)
+local function run(kind,profile,seed,pct,durationOverride)
   local stock=kind=="ret" and pal or sham
   local world=setmetatable({
     power=stock.WORLD.max*pct,
@@ -95,7 +95,7 @@ local function run(kind,profile,seed,pct)
   local stats={twists=0,boltsWith5=0,instantBolts=0,boltsPaid=0,
     rejected=0,paidRejects=0,totemCasts=0,totemCost=0,trace=0,example=""}
   local hook=false
-  local duration=kind=="ret" and 125 or 135
+  local duration=durationOverride or (kind=="ret" and 125 or 135)
   local rr=loop.run(L,seed,{
     duration=duration,
     on=function(w)
@@ -294,5 +294,27 @@ describe("Breadth #23 Enh genuine five-stack Maelstrom and Lightning Bolt source
           current.instant,candidate.instant,candidate.bad))
       end)
     end
+  end
+end)
+
+
+describe("Enhancement short outdoor pull decision gate is separate from long sustained source procs",function()
+  for _,seed in ipairs({30417,30437}) do
+    it(("20-second single-target high-Mana source seed %d"):format(seed),function()
+      local shipped=run("enh","shipped",seed,1,20)
+      local current=run("enh","current",seed,1,20)
+      local candidate=run("enh","candidate",seed,1,20)
+      assert.are.equal(0,current.bad)
+      assert.are.equal(0,candidate.bad)
+      assert.are.equal(0,current.airTotems)
+      assert.is_true(candidate.totemCasts<=1,
+        "candidate is placing multiple expensive solo air totems in one short pull")
+      assert.is_true(candidate.totemCost<=250,
+        "short pull unexpectedly pays more than one real 250-Mana Windfury Totem")
+      print(("ENH_SHORT_PULL_TRADEOFF seed=%d secs=20 shippedWF=%d currentWF=%d candidateWF=%d candidateTotemMana=%.1f candidateTotems=%d currentAccepted=%d candidateAccepted=%d isDpsProof=NO"):format(
+        seed,shipped.wfStrikes,current.wfStrikes,candidate.wfStrikes,
+        candidate.totemCost,candidate.totemCasts,
+        current.accepted,candidate.accepted))
+    end)
   end
 end)
