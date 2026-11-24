@@ -11,6 +11,9 @@ on:
       - "docs/knowledge/CONTINUATION_HANDOVER.md"
       - "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt"
       - "roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt"
+      - "roles/Shaman/Candidates/APL_Shaman_Enhancement_v1.1_Draft.txt"
+      - "catalogue/roles.json"
+      - "Catalogue_All_Roles.md"
   workflow_dispatch:
 permissions:
   contents: read
