@@ -15,8 +15,8 @@ local apl={
   ret=read("roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt"),
   enh=read("roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt"),
 }
--- Independent fully standalone solo support architecture, in-memory only until
--- native castability / Windfury bonus-strike positive and no-regression control.
+-- Full standalone unselected solo v1.1 recorded after actual 8/8 source PASS;
+-- byte-exact complete stored Candidate must match this one-line hypothesis.
 local old="actions+=/call_action_list,name=support_totems,if=target.is_boss|active_enemies>=3"
 local new="actions+=/windfury_totem,if=action.windfury_totem.known&!totem.air.up&combat>0&active_enemies<3&!target.is_boss&mana.pct_lo>=20\n"..old
 local occurrences=0
@@ -27,7 +27,9 @@ local alt=apl.enh:gsub("actions%+=/call_action_list,name=support_totems,[^\n]+",
 end)
 assert.are.equal(1,occurrences,"the complete solo candidate should add only one new action")
 assert.is_truthy(alt:find("actions.final_fallback+=/earth_shock",1,true))
-apl.enhCandidate=alt
+local stored=read("roles/Shaman/Candidates/APL_Shaman_Enhancement_v1.1_Draft.txt")
+assert.are.equal(alt,stored,"saved full standalone v1.1 differs from native validated one-line hypothesis")
+apl.enhCandidate=stored
 local function run(kind,profile,seed,pct)
   local stock=kind=="ret" and pal or sham
   local world=setmetatable({
@@ -91,7 +93,7 @@ local function run(kind,profile,seed,pct)
   local castKey=kind=="ret" and "judgement" or "lightning_bolt"
   local goalId=H.ns.VirtualState.KnownID(castIds[castKey].id)
   local stats={twists=0,boltsWith5=0,instantBolts=0,boltsPaid=0,
-    rejected=0,paidRejects=0,maxRage=0,trace=0,example=""}
+    rejected=0,paidRejects=0,totemCasts=0,totemCost=0,trace=0,example=""}
   local hook=false
   local duration=kind=="ret" and 125 or 135
   local rr=loop.run(L,seed,{
@@ -115,6 +117,10 @@ local function run(kind,profile,seed,pct)
               ((key=="seal_of_righteousness" and preCmd)
                 or (key=="seal_of_command" and preRig)) then
               stats.twists=stats.twists+1
+            end
+            if kind=="enh" and key=="windfury_totem" then
+              stats.totemCasts=stats.totemCasts+1
+              stats.totemCost=stats.totemCost+(resolved.cost or 0)
             end
             if kind=="enh" and key=="lightning_bolt" then
               if preStacks>=5 then stats.boltsWith5=stats.boltsWith5+1 end
@@ -211,17 +217,19 @@ local function run(kind,profile,seed,pct)
       trueEchoCmd,maxCmd,fullEchoCmd,trueEchoRig,maxRig,fullEchoRig,
       stats.twists,judgements,later,stats.example))
   else
-    print(("ENH_MAELSTROM_TRUTH profile=%s seed=%d manaPct=%.2f accepted=%d refused=%d badCostOrRequires=%d mwAuraEvents=%d mwMax=%d mwStack5Events=%d mwGone=%d mwGoneAfter5=%d boltWith5=%d instantBolts=%d boltCostTotal=%.2f actualBoltCasts=%d airTotems=%d wfStrikes=%d later=%d example=%s"):format(
+    print(("ENH_MAELSTROM_TRUTH profile=%s seed=%d manaPct=%.2f accepted=%d refused=%d badCostOrRequires=%d mwAuraEvents=%d mwMax=%d mwStack5Events=%d mwGone=%d mwGoneAfter5=%d boltWith5=%d instantBolts=%d boltCostTotal=%.2f actualBoltCasts=%d airTotems=%d wfStrikes=%d wfTotemCasts=%d wfTotemPaid=%.1f later=%d example=%s"):format(
       profile,seed,pct,rr.presses,refused,stats.paidRejects,
       mwApplies,maxMw,mwFull,mwGone,mwGoneAfterFull,
       stats.boltsWith5,stats.instantBolts,stats.boltsPaid,
-      judgements,totemAir,windfuryStrikes,later,stats.example))
+      judgements,totemAir,windfuryStrikes,stats.totemCasts,stats.totemCost,later,stats.example))
   end
   return {accepted=rr.presses,refused=refused,bad=stats.paidRejects,
     twists=stats.twists,echoMax=maxCmd,rigMax=maxRig,
     echoEvents=trueEchoCmd,judgement=judgements,airTotems=totemAir,
     mwMax=maxMw,mwFull=mwFull,mwGoneAfterFull=mwGoneAfterFull,
-    bolt5=stats.boltsWith5,instant=stats.instantBolts,later=later}
+    bolt5=stats.boltsWith5,instant=stats.instantBolts,
+    wfStrikes=windfuryStrikes,totemCost=stats.totemCost,totemCasts=stats.totemCasts,
+    later=later}
 end
 describe("Breadth #22 Ret source Echo gain/real seal twist separate from earlier cast-only seal test",function()
   for _,seed in ipairs({30417,30437}) do
@@ -249,38 +257,41 @@ describe("Breadth #22 Ret source Echo gain/real seal twist separate from earlier
 end)
 describe("Breadth #23 Enh genuine five-stack Maelstrom and Lightning Bolt source effect",function()
   for _,seed in ipairs({30417,30437}) do
-    for _,pct in ipairs({1,0.25}) do
-      it(("seed %d true initial Mana %.2f shipped vs full Current"):format(seed,pct),function()
+    for _,pct in ipairs({1,0.25,0.05}) do
+      it(("seed %d true initial Mana %.2f shipped vs complete Current/candidate"):format(seed,pct),function()
         local shipped=run("enh","shipped",seed,pct)
         local current=run("enh","current",seed,pct)
         local candidate=run("enh","candidate",seed,pct)
-        assert.is_true(shipped.accepted>=3)
-        assert.is_true(current.accepted>=3)
-        assert.is_true(candidate.accepted>=3)
-        assert.is_true(current.later>=3 and candidate.later>=3)
         assert.are.equal(0,current.bad,"protected Enhancement source old regression")
         assert.are.equal(0,candidate.bad,"full solo-totem candidate refused cost or eligibility")
-        assert.is_true(current.mwMax>=5 and candidate.mwMax>=5,
-          "source Maelstrom never reached five real stacks")
-        assert.is_true(current.bolt5>=1 and candidate.bolt5>=1,
-          "a real source five-stack Lightning Bolt is missing")
-        assert.are.equal(current.bolt5,current.instant,
-          "current five-stack source Bolts not all instant")
-        assert.are.equal(candidate.bolt5,candidate.instant,
-          "candidate five-stack source Bolts not all instant")
         assert.are.equal(0,current.airTotems,
-          "prior Current zero-air-totem negative control changed")
-        assert.is_true(shipped.airTotems>=1,
-          "source shipped Windfury air totem negative control vanished")
-        if pct==1 then
+          "prior Current solo zero-air-totem negative control changed")
+        if pct>=0.25 then
+          assert.is_true(shipped.accepted>=3)
+          assert.is_true(current.accepted>=3 and candidate.accepted>=3)
+          assert.is_true(current.later>=3 and candidate.later>=3)
+          assert.is_true(current.mwMax>=5 and candidate.mwMax>=5,
+            "source Maelstrom never reached five real stacks")
+          assert.is_true(current.bolt5>=1 and candidate.bolt5>=1,
+            "a real source five-stack Lightning Bolt is missing")
+          assert.are.equal(current.bolt5,current.instant,
+            "current five-stack source Bolts not all instant")
+          assert.are.equal(candidate.bolt5,candidate.instant,
+            "candidate five-stack source Bolts not all instant")
+          assert.is_true(shipped.airTotems>=1,
+            "source shipped Windfury air totem negative control vanished")
           assert.is_true(candidate.airTotems>=1,
-            "full solo candidate did not safely maintain Windfury air totem at full Mana")
+            "source candidate never kept Windfury Totem at normal/quarter Mana")
+          assert.is_true(candidate.wfStrikes>=1,
+            "source candidate Windfury air totem never triggered any real bonus strike")
+          assert.is_true(candidate.totemCasts>=1 and candidate.totemCost>0,
+            "model did not debit a true totem Mana cost")
         end
-        print(("ENH_MAELSTROM_PAIR seed=%d pct=%.2f shippedMax=%d currentMax=%d candMax=%d currentAt5=%d currentBolt5=%d candidateBolt5=%d curAir=%d candidateAir=%d currentInstant=%d candidateInstant=%d candidateBad=%d"):format(
+        print(("ENH_MAELSTROM_PAIR seed=%d pct=%.2f shippedMax=%d currentMax=%d candMax=%d currentAt5=%d currentBolt5=%d candidateBolt5=%d curAir=%d candidateAir=%d candidateWF=%d paidWF=%.1f currentInstant=%d candidateInstant=%d candidateBad=%d"):format(
           seed,pct,shipped.mwMax,current.mwMax,candidate.mwMax,
           current.mwFull,current.bolt5,candidate.bolt5,
-          current.airTotems,candidate.airTotems,current.instant,
-          candidate.instant,candidate.bad))
+          current.airTotems,candidate.airTotems,candidate.wfStrikes,candidate.totemCost,
+          current.instant,candidate.instant,candidate.bad))
       end)
     end
   end
