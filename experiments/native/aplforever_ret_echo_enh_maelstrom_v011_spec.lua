@@ -15,6 +15,19 @@ local apl={
   ret=read("roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt"),
   enh=read("roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt"),
 }
+-- Independent fully standalone solo support architecture, in-memory only until
+-- native castability / Windfury bonus-strike positive and no-regression control.
+local old="actions+=/call_action_list,name=support_totems,if=target.is_boss|active_enemies>=3"
+local new="actions+=/windfury_totem,if=action.windfury_totem.known&!totem.air.up&combat>0&active_enemies<3&!target.is_boss&mana.pct_lo>=20\n"..old
+local occurrences=0
+local alt=apl.enh:gsub("actions%+=/call_action_list,name=support_totems,[^\n]+",function(line)
+  assert.are.equal(old,line,"exact protected Enhancement support call changed")
+  occurrences=occurrences+1
+  return new
+end)
+assert.are.equal(1,occurrences,"the complete solo candidate should add only one new action")
+assert.is_truthy(alt:find("actions.final_fallback+=/earth_shock",1,true))
+apl.enhCandidate=alt
 local function run(kind,profile,seed,pct)
   local stock=kind=="ret" and pal or sham
   local world=setmetatable({
@@ -27,10 +40,13 @@ local function run(kind,profile,seed,pct)
   local H=L.us
   assert.are.same({},H.loadErrors)
   assert.are.same({},H.Hekili.Class.loadErrors or {})
-  if profile=="current" then
+  if profile=="current" or profile=="candidate" then
+    assert.is_true(profile~="candidate" or kind=="enh",
+      "candidate belongs to Shaman Enhancement only")
     local spec=kind=="ret" and "Paladin_Retribution" or "Shaman_Enhancement"
+    local source=profile=="candidate" and apl.enhCandidate or apl[kind]
     local lists,warnings=H.Hekili:ImportSimcAPL(spec,
-      "APLForever-Breadth-Echo-Maelstrom-v011-"..kind,apl[kind],C.PACK)
+      "APLForever-Breadth-Echo-Maelstrom-v011-"..kind.."-"..profile,source,C.PACK)
     assert.is_table(lists)
     assert.is_table(lists.default)
     assert.is_table(lists.precombat)
@@ -216,6 +232,11 @@ describe("Breadth #22 Ret source Echo gain/real seal twist separate from earlier
         assert.is_true(shipped.accepted>=3)
         assert.is_true(current.accepted>=3)
         assert.is_true(current.later>=3)
+        assert.are.equal(0,current.bad,"Ret refused a source-unusable or unaffordable action")
+        assert.is_true(current.echoMax>=3 and current.rigMax>=1,
+          "published source actual Echo/Seal stack never accumulated")
+        assert.is_true(current.twists>=1,"Ret did not execute any real two-Seal twist")
+        assert.is_true(current.judgement>=1,"Ret did not cast source-truth Judgement")
         -- First diagnostics collect whether source genuinely produces
         -- 3-stack Echo and two-seal twists, rather than assert a desired win.
         print(("RET_ECHO_PAIR seed=%d pct=%.2f shippedEcho=%d/%d currentEcho=%d/%d shippedTwists=%d currentTwists=%d currentJudgements=%d currentBad=%d"):format(
@@ -232,15 +253,34 @@ describe("Breadth #23 Enh genuine five-stack Maelstrom and Lightning Bolt source
       it(("seed %d true initial Mana %.2f shipped vs full Current"):format(seed,pct),function()
         local shipped=run("enh","shipped",seed,pct)
         local current=run("enh","current",seed,pct)
+        local candidate=run("enh","candidate",seed,pct)
         assert.is_true(shipped.accepted>=3)
         assert.is_true(current.accepted>=3)
-        assert.is_true(current.later>=3)
-        -- A source five-stack Maelstrom may be reachable yet held because
-        -- the APL belief is conservative. Record negative rather than
-        -- force a cast or fake a proc, compare full shipped vs Current.
-        print(("ENH_MAELSTROM_PAIR seed=%d pct=%.2f shippedMax=%d currentMax=%d currentAt5=%d currentBolt5=%d currentInstant=%d currentBad=%d"):format(
-          seed,pct,shipped.mwMax,current.mwMax,current.mwFull,
-          current.bolt5,current.instant,current.bad))
+        assert.is_true(candidate.accepted>=3)
+        assert.is_true(current.later>=3 and candidate.later>=3)
+        assert.are.equal(0,current.bad,"protected Enhancement source old regression")
+        assert.are.equal(0,candidate.bad,"full solo-totem candidate refused cost or eligibility")
+        assert.is_true(current.mwMax>=5 and candidate.mwMax>=5,
+          "source Maelstrom never reached five real stacks")
+        assert.is_true(current.bolt5>=1 and candidate.bolt5>=1,
+          "a real source five-stack Lightning Bolt is missing")
+        assert.are.equal(current.bolt5,current.instant,
+          "current five-stack source Bolts not all instant")
+        assert.are.equal(candidate.bolt5,candidate.instant,
+          "candidate five-stack source Bolts not all instant")
+        assert.are.equal(0,current.airTotems,
+          "prior Current zero-air-totem negative control changed")
+        assert.is_true(shipped.airTotems>=1,
+          "source shipped Windfury air totem negative control vanished")
+        if pct==1 then
+          assert.is_true(candidate.airTotems>=1,
+            "full solo candidate did not safely maintain Windfury air totem at full Mana")
+        end
+        print(("ENH_MAELSTROM_PAIR seed=%d pct=%.2f shippedMax=%d currentMax=%d candMax=%d currentAt5=%d currentBolt5=%d candidateBolt5=%d curAir=%d candidateAir=%d currentInstant=%d candidateInstant=%d candidateBad=%d"):format(
+          seed,pct,shipped.mwMax,current.mwMax,candidate.mwMax,
+          current.mwFull,current.bolt5,candidate.bolt5,
+          current.airTotems,candidate.airTotems,current.instant,
+          candidate.instant,candidate.bad))
       end)
     end
   end
