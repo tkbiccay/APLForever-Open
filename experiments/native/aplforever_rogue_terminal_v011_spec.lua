@@ -58,6 +58,7 @@ local function trial(profile,seed,seconds,pct)
       local vanish=e.auras[ids[2]]~=nil
       local ghost=e.auras[ids[3]]~=nil
       local power=e.power
+      if not t.firstAttemptEnergy then t.firstAttemptEnergy=power; t.firstAttemptTime=now end
       local cp=w.W.res(e,4)
       local output=H.Hekili.Engine.Output.Primary
       local rec=output and output.recs and output.recs[1]
@@ -95,6 +96,12 @@ local function trial(profile,seed,seconds,pct)
     end
   end},{{H=H}})
   assert.are.equal(0,rr.errors);assert.are.equal(0,rr.raises)
+  -- scenarios.world saves the real initial pool as us.power0 before prepull regen.
+  -- A configured 25% start must not be described as 25% at the first press.
+  assert.are.equal(C.WORLD.power,rr.us.power0,"configured resource pool did not reach world truth")
+  assert.is_number(t.firstAttemptEnergy,"no combat attempt was measured")
+  print(("ROGUE_RESOURCE_CONTEXT profile=%s seed=%d seconds=%.1f configured=%.2f initialTruth=%.2f firstAttemptTime=%.3f firstAttemptEnergy=%.2f"):format(
+    profile,seed,seconds,C.WORLD.power,rr.us.power0,t.firstAttemptTime,t.firstAttemptEnergy))
   local raw=0
   for reason,n in pairs(rr.refused or {}) do
     raw=raw+n
