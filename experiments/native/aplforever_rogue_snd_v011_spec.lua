@@ -51,6 +51,9 @@ local function trial(profile,seed,seconds)
       local halted=e.stopped==true
       local cp=w.W.res(e,4)
       local energy=e.power
+      if not halted and t.firstPressEnergy==nil then
+        t.firstPressEnergy=energy;t.firstPressKey=key;t.firstPressTime=w.W.t
+      end
       local prior=e.auras[id]
       local expiry=prior and prior.expires
       local ok,why=old(e,key,p)
@@ -58,7 +61,9 @@ local function trial(profile,seed,seconds)
         t.refused=t.refused+1
         if not halted then t.activeRefused=t.activeRefused+1 end
         print("SND_RAW_REFUSAL",profile,seed,seconds,w.W.t,key,why,tostring(halted))
-      elseif halted then t.afterStop=t.afterStop+1
+      elseif halted then
+        t.afterStop=t.afterStop+1
+        print("SND_AFTER_STOP_ACCEPTED",profile,seed,seconds,w.W.t,key,energy,cp)
       else
         t.accepted=t.accepted+1
         t.minEnergy=math.min(t.minEnergy,energy)
@@ -83,6 +88,8 @@ local function trial(profile,seed,seconds)
   end},{{H=H}})
   assert.are.equal(0,rr.errors);assert.are.equal(0,rr.raises)
   assert.are.equal(C.WORLD.power,rr.us.power0)
+  assert.is_number(t.firstPressEnergy)
+  print("SND_RESOURCE",profile,seed,seconds,"initial",rr.us.power0,"firstPress",t.firstPressEnergy,t.firstPressKey,t.firstPressTime)
   local raw=0;for _,v in pairs(rr.refused or {}) do raw=raw+v end
   assert.are.equal(raw,t.refused,"raw refusal count must match")
   local pull,stop=loop.PULL,loop.PULL+seconds
