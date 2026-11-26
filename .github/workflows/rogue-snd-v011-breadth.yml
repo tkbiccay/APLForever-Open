@@ -1,0 +1,39 @@
+name: "Breadth #29 Rogue Combat solo Slice and Dice v0.11"
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/rogue-snd-v011-breadth.yml"
+      - "experiments/native/aplforever_rogue_snd_v011_spec.lua"
+      - "roles/Rogue/Current/APL_Rogue_Combat_v1.0_Draft.txt"
+      - "roles/Rogue/Candidates/APL_Rogue_Combat_v1.1_Draft.txt"
+      - "docs/Tests_Breadth_Rogue_SnD_v011.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: 86b739cbc4e6afbcbc693c3790ee81197fc6234b
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify released source pin and immutable APLs
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "86b739cbc4e6afbcbc693c3790ee81197fc6234b"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap source-native world
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Run matched solo Slice and Dice experiments
+        working-directory: upstream/hekili
+        run: |
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_rogue_snd_v011_spec.lua" tests/Forever/aplforever_rogue_snd_v011_spec.lua
+          APLFOREVER_ROOT="$GITHUB_WORKSPACE/project" .lua/bin/busted --verbose tests/Forever/aplforever_rogue_snd_v011_spec.lua
