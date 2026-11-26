@@ -1,29 +1,35 @@
 {
   "schema_version": 1,
   "upstream_repository": "zmsl/hekili",
-  "release_tag": "v0.11.0",
-  "release_commit": "86b739cbc4e6afbcbc693c3790ee81197fc6234b",
-  "published_at_utc": "2026-11-20T14:59:13Z",
-  "recorded_on": "2026-11-22",
-  "compatibility_status": "Partial / 23-role importer triaged (21 clean; 2 known faults); combat unverified",
-  "compatibility_notes": "Published Forever v0.11.0 exact release pin retained. New PR #79 source-native 23/23 complete Current/Archive importer/compilation diagnostic: 21 clean, Feral Current v1.0 three known health.pct compiler errors and Warrior Arms Current v1.0 one known precombat health.pct compiler error. In-memory Arms single-expression negative control clears the one error, but is NOT an importable fix. Exact-head positive native CI 45081377956. Strict unknown-error count zero. This is only importer/compiler scope: 23-role source-world accepted casts, repeated final fallbacks, 1-60 level coverage, source gameplay accuracy and real client remain UNVERIFIED. Previous focused Guardian/BM v0.11 source-native PASS 44771820185. Zero Approved; all 46 protected APL bytes intact.",
+  "release_tag": "v0.12.1",
+  "release_commit": "a4ca044512d7aacfdebca85cef617b1127115962",
+  "published_at_utc": "2026-11-25",
+  "recorded_on": "2026-11-26",
+  "compatibility_status": "Partial / 23 roles, 31 selected revisions strict import/compile PASS; combat unverified",
+  "compatibility_notes": "CurseForge published 25 Nov 2026 (day precision; tag commit 21:05:03 UTC, not assumed publication time). Exact tested head f892fe4bd1e4f3be92b19a077b966c2e0aa17576, native run 45908071181 job 140209545129. 31/31 clean compiler/reject/inactive checks across 23 roles; all 53 catalogue hashes verified. Old Feral three and Arms one health compiler errors no longer reproduced without exemptions. Four self-health guard review lines remain (Feral Current Barkskin, Frenzied Regeneration, Nature's Grasp; Arms Current precombat Bloodrage). Generic trinket warnings retained. Import/compile only; no current-release cast progression, health/TTD decision correctness, live proof or Approval. P0 Guardian/BM native combat next.",
   "latest_passing_historical_native_release": {
     "tag": "v0.9.0",
     "commit": "8f95f2ea0a45428554c1e938ed7357b870030514",
     "scope": "bounded source-native tests, not real gameplay"
   },
   "tracking_issue_numbers": [
+    112,
     26,
     14,
     15
   ],
-  "draft_compatibility_pr": null,
-  "source_release_url": "https://github.com/zmsl/hekili/releases/tag/v0.11.0",
+  "draft_compatibility_pr": 113,
+  "source_release_url": "https://www.curseforge.com/wow/addons/hekili-forever/files/9818487",
   "historical_evidence_pins": [
     {
       "release_tag": "v0.10.0",
       "release_commit": "3c2cf3e32472cc807b1ba29d992fc13a273da8ee",
       "scope": "Explicit historical native evidence only; no v0.11.0 compatibility claim"
+    },
+    {
+      "release_tag": "v0.11.0",
+      "release_commit": "86b739cbc4e6afbcbc693c3790ee81197fc6234b",
+      "scope": "Historical 23-role import (21 clean/2 known faults), bounded combat breadth through #30; not v0.12.1 proof"
     }
   ]
 }

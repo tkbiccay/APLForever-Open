@@ -140,3 +140,8 @@ All existing suites also passed on this exact test-only head: 126 native, 116 Hu
 - [Guardian Clearcasting queue regression — PR #53]([private historical reference; not publicly accessible])
 - [Open game-wide fallback/regression evidence — Issue #30]([private historical reference; not publicly accessible])
 - [Version-pinned wiki update policy](wiki-update-policy.md)
+
+
+## v0.12.1 — 26 November 2026: strict manifest import gate
+
+Published 25 Nov [CurseForge](https://www.curseforge.com/wow/addons/hekili-forever/files/9818487); tag a4ca044512d7aacfdebca85cef617b1127115962 (tag commit 21:05:03 UTC, publication time not verified beyond date). [PR #113](https://github.com/tkbiccay/APLForever-Open/pull/113), [native PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/45908071181) at f892fe4bd1e4f3be92b19a077b966c2e0aa17576: 23 Supported roles, 31 exact manifest revisions clean, zero compiler/rejected/inactive failures, all 53 hashes checked; four unguarded self-health lines remain. Historical Feral/Arms compiler debt no longer reproduced; do not infer runtime health safety. Generic trinket warnings retained. See [report](../../Tests_Compatibility_v0121_Import.md). **Partial: import/compile only.** Historical #30 merged on v0.11.0; 30/50 merged units. New-release actual combat, P0 Guardian/BM first, then Feral/other risk-scoped roles. No APL change, no approval, no breadth credit for compiler-only. Reconciled head needs fresh CI before protected merge.
