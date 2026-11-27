@@ -1,0 +1,58 @@
+name: "P0 Guardian and BM v0.12.1 — native compatibility regressions"
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/p0-guardian-bm-v0121.yml"
+      - "experiments/native/aplforever_guardian_aggro_v011_spec.lua"
+      - "experiments/native/aplforever_guardian_barkskin_v011_spec.lua"
+      - "experiments/native/aplforever_bm_lone_wolf_v14_spec.lua"
+      - "experiments/native/aplforever_bm_lone_wolf_v14_combat_spec.lua"
+      - "experiments/native/aplforever_bm_hawk_cap_v011_spec.lua"
+      - "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
+      - "roles/Druid/Candidates/APL_Druid_Guardian_v1.*_Draft.txt"
+      - "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.*_Draft.txt"
+      - "docs/Tests_P0_Combat_Compatibility_v0121.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-regression:
+    name: "${{ matrix.fixture }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture:
+          - aplforever_guardian_aggro_v011_spec.lua
+          - aplforever_guardian_barkskin_v011_spec.lua
+          - aplforever_bm_lone_wolf_v14_spec.lua
+          - aplforever_bm_lone_wolf_v14_combat_spec.lua
+          - aplforever_bm_hawk_cap_v011_spec.lua
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: a4ca044512d7aacfdebca85cef617b1127115962
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify exact released source and catalogue integrity
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "a4ca044512d7aacfdebca85cef617b1127115962"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap published source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Execute unchanged historical fixture against new source
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+          FIXTURE: ${{ matrix.fixture }}
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/$FIXTURE" "tests/Forever/$FIXTURE"
+          .lua/bin/busted --verbose "tests/Forever/$FIXTURE"
