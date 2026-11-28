@@ -11,3 +11,16 @@ Exact head 8f97fce0bc6e6d9cef24f56173ad1cc4f768500d: all 26 workflows green, [10
 
 ## Refined hypothesis — pending CI
 Add one competing in-memory full profile: same six-second Insect guard plus conditional Moonfire deferral only when target estimated > Wrath cast time and <=6, Wrath known and affordable from mana.lo. Keep instant option if target estimated shorter, Wrath unlearned/unaffordable, or TTD unknown. Source [expression reference](https://github.com/zmsl/hekili/blob/a4ca044512d7aacfdebca85cef617b1127115962/docs/wiki/APL-Expression-Reference.md) verifies cast and cost expressions, source world Wrath 250 and Moonfire direct 100 modelled hits not game DPS. Not asserting that Wrath is always selected: earlier Eclipse spender remains unchanged. Compare four full profiles over three seeds × five contexts (60 worlds proposed), adding 2.5k/8k HP to avoid fitting one health fixture. Trace all offensive configured costs, Moonfire cost/late count, end Mana, actual kill clock, raw refusals and unknown parity. Costs are source accepted press costs, not independent live resource oracle. No need to force an APL if refined results are mixed. Preserve first measured evidence. Test at exact new head; no credit for an unrun alternative.
+
+## Final measured result and retain decision
+Exact refined head f59ce4ff8c34017b295303046386c27dabeb1237, [16/16 PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/46124181853), job 140914970327, 26/26 workflows; #117 merged df1e15942e434776d3670035394cbae9c044db50. 60 worlds. Deltas refined minus Current by matched seed 30417/30437/30461 (negative cost/kill clock favourable):
+
+| HP/context | Traced offensive cost delta | Model kill clock delta (s) | End Mana delta |
+|---|---|---|---|
+| 2500 full | -750 / -160 / -160 | -3 / -1.4 / -1.4 | +712.17 / +142.35 / +142.35 |
+| 5000 full | 0 / +180 / -320 | -1.6 / -1.6 / -3.2 | -20.18 / -200.18 / +285.55 |
+| 8000 full | 0 / 0 / +180 | 0 / 0 / +7 | 0 / 0 / -64.56 |
+| 15000 quarter | 0 / 0 / 0 | no kill in cap | 0 / 0 / 0 |
+| library absent | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+
+Both alternative profiles zero raw refusals and observed late Insect. Insect-only guard has same 8k regression; refinement not sufficient. Retain Current v1.0, archive measured hypotheses, no stored new APL, no measured universal Mana/DPS gain. Cost trace excludes early unhooked actions; model kill clock includes pull and is not real TTK. Distinct breadth evidence #33, not improved-role credit. Next investigate estimate uncertainty and actual multi-target/low-level coverage rather than fit a threshold to these seeds.

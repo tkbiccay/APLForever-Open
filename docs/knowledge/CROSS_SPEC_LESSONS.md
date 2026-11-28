@@ -283,3 +283,7 @@
 ## Lesson 28 — Unknown health fallback can pass a positive health threshold
 
 28 Nov v0.12.1 [5/5 native](https://github.com/tkbiccay/APLForever-Open/actions/runs/46119135081): source health.known false and health.pct=100, old Arms Bloodrage fires first on repeated precombat cycles. First health.known guard prevents it, known high positive retained. Guarded precombat only version-aware audit, not blanket hidden-health allowance; real HP cost absent from native world. Verify each transferred spec and combat reachability independently.
+
+## Lesson 29 — Preventing an expensive cast does not prove net efficiency
+
+28 Nov v0.12.1: Balance [#33](https://github.com/tkbiccay/APLForever-Open/actions/runs/46124181853) 60 worlds, late DoT guard and replacement Moonfire deferral, good very-short outcomes but +7s medium regression; Frost [#34](https://github.com/tkbiccay/APLForever-Open/actions/runs/46124270910) 45 worlds, 10→0 low-Mana Cone yet mixed costs and action counts. Measure actual replacement costs, follow-ons, remaining resources and context, not merely fewer expensive actions. Retain baseline when mixed; never tune to one seed or claim DPS from uncalibrated world. No blanket TTD or reserve thresholds across specs.

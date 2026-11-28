@@ -1,0 +1,40 @@
+name: "Breadth #34 Frost v0.12.1 single-target Cone Mana reserve"
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/frost-mana-v0121-breadth.yml"
+      - "experiments/native/aplforever_frost_mana_v0121_spec.lua"
+      - "roles/Mage/Current/APL_Mage_Frost_v1.0_Draft.txt"
+      - "docs/Tests_Breadth_Frost_Mana_v0121.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-frost:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: a4ca044512d7aacfdebca85cef617b1127115962
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify source and all protected APL hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "a4ca044512d7aacfdebca85cef617b1127115962"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap released source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Compare whole profiles and actual Mana and aura effects
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_frost_mana_v0121_spec.lua" tests/Forever/aplforever_frost_mana_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_frost_mana_v0121_spec.lua
