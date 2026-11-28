@@ -5,6 +5,7 @@ on:
       - ".github/workflows/arcane-proc-v0121-breadth.yml"
       - "experiments/native/aplforever_arcane_range_oracle_v0121_spec.lua"
       - "roles/Mage/Current/APL_Mage_Arcane_v1.0_Draft.txt"
+      - "roles/Mage/Candidates/APL_Mage_Arcane_v1.1_Draft.txt"
       - "docs/Tests_Breadth_Arcane_Proc_v0121.md"
   workflow_dispatch:
 permissions:

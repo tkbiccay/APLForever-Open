@@ -10,7 +10,7 @@
 | Hunter_BeastMastery | v1.1 a9d752c5e6cd | v1.4 | P0 scoped v0.12.1 native candidate evidence #114; live gate pending |
 | Hunter_Marksmanship | v1.0 43c78f4517f2 | v1.1 | Audit existing candidate measured benefit; improve or retain |
 | Hunter_Survival | v1.0 e58fe21c311c | v1.1 | Audit existing candidate measured benefit; improve or retain |
-| Mage_Arcane | v1.0 d89600259308 | v1.0 | #119 proc reorder mixed initial results, three range controls failed; corrected actual range observation pending |
+| Mage_Arcane | v1.0 d89600259308 | v1.1 Draft | Measured explicit Fire Blast range guard: 1488→0 strict test-oracle refuses, 0→64 offensive, near parity; stored retest pending #119 |
 | Mage_Fire | v1.0 500a40752f3f | v1.1 | Audit existing candidate measured benefit; improve or retain |
 | Mage_Frost | v1.0 f05a17a34b9d | v1.0 | Retain v1.0 after #34: 45 worlds, low-Mana Cone eliminated but costs/progression mixed; merged #118, seek independent improvement |
 | Paladin_Protection | v1.0 8f1ba35a4663 | v1.1 | Audit existing candidate measured benefit; improve or retain |

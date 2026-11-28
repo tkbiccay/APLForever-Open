@@ -17,6 +17,10 @@ local function rangeGuard(apl)
   return apl
 end
 local guarded=rangeGuard(current)
+local storedFile=assert(io.open(root.."/roles/Mage/Candidates/APL_Mage_Arcane_v1.1_Draft.txt","rb"))
+local stored=assert(storedFile:read("*a"));storedFile:close()
+assert.are.equal(guarded,stored,"stored full Draft differs from measured range guard")
+guarded=stored
 local combined=rangeGuard(alternate)
 local profiles={current=current,alternate=alternate,guarded=guarded,combined=combined}
 local offence={arcane_wrath=true,arcane_blast=true,arcane_missiles=true,fire_blast=true,
