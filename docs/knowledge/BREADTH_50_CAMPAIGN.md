@@ -76,6 +76,8 @@ One unit is one NEW independently supported, role-specific, falsifiable safety/r
 
 **Live 28 Nov:** #111 merged 27/27, #113 compiler and #114 P0 migration merged; 30/50 historical breadth, 31 provisional, 53 protected prior hashes; 54 on candidate branch, 0 Approved. #114 migration not counted.
 
+**Live 28 Nov:** #115 merged e093766abbfb99006747a56ee900d49cd381b53c after 31/31 CI, #116 merged 0bf3954f594ad0861ead7a39a16f46805143b220 after 28/28 CI and [10/10 stored native](https://github.com/tkbiccay/APLForever-Open/actions/runs/46120201618). 32/50 merged, 55 immutable revisions, 0 Approved. #33 Balance TTD test pending; no count before measured merge. 50 is milestone, improvement portfolio continues.
+
 ## Priority and guardrails
 
 Across 23 Supported roles (5 Blocked healers), rotate under-served specs and mechanics; use the [role coverage ledger](ROLE_COVERAGE.md) to select the next falsifiable source-native task. Joint P0 Guardian/Feral Tank and Hunter BM retain urgent safety priority. Keep separate 25/50 and 50/50 review milestones without claiming either before evidence. Class and source fixture limitations are not in-game results; save Saturday live tasks separately.
