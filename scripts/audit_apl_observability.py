@@ -95,8 +95,11 @@ def guarded_precombat_health(rhs: str, phase: str, min_source_release: str) -> b
     if phase != "precombat":
         return False
     fields = [part[3:] for part in rhs.split(",") if part.startswith("if=")]
-    return (len(fields) == 1 and fields[0].startswith("health.known&")
-            and "|" not in fields[0] and "?" not in fields[0]
+    # Deliberately accept only a terminal if= with simple conjunctions of
+    # identifier/negation/numeric-comparison atoms; reject XOR, OR, arithmetic,
+    # parentheses and other options until separately validated.
+    return (len(fields) == 1 and rhs.rsplit(",", 1)[-1] == "if=" + fields[0]
+            and re.fullmatch(r"health\.known(?:&!?[a-z_][a-z0-9_.]*(?:(?:>=|<=|!=|=|>|<)[0-9]+(?:\.[0-9]+)?)?)+", fields[0]) is not None
             and fields[0].count("health.known") == 1)
 
 
