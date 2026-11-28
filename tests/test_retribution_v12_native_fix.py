@@ -67,9 +67,15 @@ class RetributionV12NativeFix(unittest.TestCase):
         self.assertEqual(role["validation_status"], "Draft")
         self.assertIsNone(role["preferred_apl"])
         self.assertIsNone(role["last_working_apl"])
-        self.assertEqual(role["latest_revision"], "v1.2")
-        self.assertEqual(len(role["revisions"]), 3)
-        last = role["revisions"][-1]
+        self.assertIsNone(role["last_approved_apl"])
+        self.assertGreaterEqual(len(role["revisions"]), 3)
+        self.assertEqual([x["revision"] for x in role["revisions"][:3]], ["v1.0", "v1.1", "v1.2"])
+        self.assertEqual(role["latest_revision"], role["revisions"][-1]["revision"])
+        last = next(x for x in role["revisions"] if x["revision"] == "v1.2")
+        self.assertEqual(last["apl_file"], NEW12.relative_to(ROOT).as_posix())
+        for newer in role["revisions"][3:]:
+            self.assertEqual(newer["status"], "Draft")
+            self.assertIn("/Candidates/", newer["apl_file"])
         self.assertEqual(last["status"], "Draft")
         self.assertEqual(last["sha256"], HASHES[2])
         self.assertEqual(last["rollback_reference"], "roles/Paladin/Archive/APL_Paladin_Retribution_v1.1_Draft.txt")
