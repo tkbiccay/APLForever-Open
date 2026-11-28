@@ -1,5 +1,6 @@
 -- First guardian stealth gate: full profiles, controlled observed forms, recommendations only.
 local headless=require("Game.harness.headless")
+local fake=require("Game.State.helpers.fake_api")
 local druid=require("Forever.helpers.druid_loop_world")
 local C=druid.Guardian
 local root=assert(os.getenv("APLFOREVER_ROOT"))
@@ -56,7 +57,19 @@ local function trial(profile,case)
   else
     char.power={type=1,token="RAGE",max=100,value=40}
   end
-  local H=headless.new({character=char,pack=C.PACK,scenario="game"})
+  -- Shifts consume Mana even when the displayed power is Energy or Rage.
+  -- Seed the off-form pool before login; do not inject a simulated APL state.
+  local mana=case.mana==nil and 2584 or case.mana
+  local oldNew=fake.new
+  fake.new=function(...)
+    local api,ctl=oldNew(...)
+    ctl.powerMax[0]=2584;ctl.power[0]=mana
+    ctl.regen[0]={0,0}
+    return api,ctl
+  end
+  local ok,H=pcall(headless.new,{character=char,pack=C.PACK,scenario="game"})
+  fake.new=oldNew
+  assert.is_true(ok,tostring(H))
   assert.are.same({},H.loadErrors);assert.are.same({},H.Hekili.Class.loadErrors or {})
   if profile~="shipped" then
     local lists,warnings=H.Hekili:ImportSimcAPL("Druid_Guardian","APLForever-Guardian-stealth-"..profile,packs[profile],C.PACK)
@@ -82,6 +95,7 @@ local function trial(profile,case)
   H.ctl.power[1]=40
   H.Fire("PLAYER_TARGET_CHANGED");H.Fire("UPDATE_SHAPESHIFT_FORM");H.Fire("UPDATE_STEALTH")
   H.Fire("UNIT_POWER_UPDATE","player",case.cat and "ENERGY" or "RAGE")
+  H.Fire("UNIT_POWER_UPDATE","player","MANA")
   H.Fire("SPELL_UPDATE_USABLE")
   assert.is_true(H.Hekili.Engine.Subscribe("Primary",function() end))
   local picks={};local start=H.ctl.now
@@ -93,6 +107,12 @@ local function trial(profile,case)
     local pick=rec and rec.actionName or "NO_ACTION"
     H.Hekili.State.reset("Primary",true)
     local S=H.Hekili.State
+    assert.is_true(S.action.bear_form.known,"Bear unlock absent")
+    if case.cat then
+      print("GUARDIAN_SHIFT_MANA",profile,case.name,i,S.mana.lo,S.action.bear_form.cost)
+      if mana>0 then assert.is_true(S.mana.lo>=S.action.bear_form.cost,"shift funding control absent")
+      else assert.is_true(S.mana.lo<S.action.bear_form.cost,"short shift control absent") end
+    end
     assert.are.equal(case.cat==true,S.buff.cat_form.up,"Cat observation")
     assert.are.equal(case.cat~=true,S.buff.bear_form.up,"Bear observation")
     assert.are.equal(case.group==true,S.group,"group observation")
@@ -121,7 +141,15 @@ local function trial(profile,case)
     local pick=out.count>0 and out.recs[1].actionName or "NO_ACTION"
     H.Hekili.State.reset("Primary",true)
     assert.is_false(H.Hekili.State.buff.prowl.up)
-    assert.are.equal("bear_form",pick,"tank transition failed")
+    local S=H.Hekili.State
+    print("GUARDIAN_SHIFT_RETURN",case.name,pick,S.mana.lo,S.action.bear_form.cost)
+    if mana>0 then
+      assert.is_true(S.mana.lo>=S.action.bear_form.cost,"transition funding lost")
+      assert.are.equal("bear_form",pick,"tank transition failed")
+    else
+      assert.are_not.equal("bear_form",pick,"unfunded shift")
+      assert.is_falsy(openerKeys[pick],"stealth opener after loss")
+    end
     print("GUARDIAN_STEALTH_RETURN",case.name,pick)
   end
   return picks
@@ -130,6 +158,7 @@ describe("Guardian v0.12.1 solo Prowl exception; existing tank behaviour preserv
   for _,case in ipairs({
     {name="solo_ravage",cat=true,stealth=true,ravage=true,pounce=true,expected="ravage",transition=true},
     {name="solo_pounce",cat=true,stealth=true,pounce=true,expected="pounce"},
+    {name="solo_ravage_no_mana",cat=true,stealth=true,ravage=true,pounce=true,mana=0,expected="ravage",transition=true},
     {name="solo_early",cat=true,stealth=true,expected="shred"},
     {name="solo_targeting",cat=true,stealth=true,ravage=true,pounce=true,targeting=true,expected="claw"},
     {name="solo_approach",cat=true,stealth=true,ravage=true,pounce=true,range=12,expected="NO_ACTION"},
@@ -147,6 +176,7 @@ describe("Guardian v0.12.1 solo Prowl exception; existing tank behaviour preserv
       if case.expected then for _,pick in ipairs(new) do assert.are.equal(case.expected,pick) end
       else
         assert.are.same(old,new,"tank or group recommendation changed")
+        if case.cat then for _,pick in ipairs(new) do assert.are.equal("bear_form",pick,"funded ordinary/group Cat must return to Bear") end end
         for _,pick in ipairs(new) do assert.is_falsy(openerKeys[pick],"unexpected Cat attack") end
       end
       for _,pick in ipairs(new) do assert.are_not.equal("prowl",pick,"automatic Prowl") end
