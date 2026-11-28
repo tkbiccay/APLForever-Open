@@ -7,23 +7,23 @@
 | Need | On-main location |
 | --- | --- |
 | Canonical role statuses, selections and SHA-256 | [catalogue/roles.json](../catalogue/roles.json) |
-| Current import/test reference | `roles/<Class>/Current/` — confirm `preferred_apl`, validation status and actual working evidence |
+| Protected development rollback | `roles/<Class>/Current/` — confirm `protected_rollback_apl`, validation status and actual working evidence |
 | Brand-new independently importable APL | `roles/<Class>/Candidates/` — always **Draft**, initially **unselected**, new revision and hash |
-| Protected fallback | `roles/<Class>/Checkpoints/` where applicable, or the exact **reported-working Current** — never relocate existing hashes casually |
+| Protected fallback | the exact catalogue protected rollback or actual last-working import (which may be archived) — never relocate existing hashes casually |
 | History / archived comparators | `roles/<Class>/Archive/` |
 | Exact Forever talents, abilities and toggles | [knowledge/](../knowledge/) and [generated source references](reference/) |
 | Native headless tests | [tests/native/](../tests/native/) and [CI workflows](../.github/workflows/) |
 | Research/Tests/Changelog/Limitations per role | [docs/](./) and [handover](knowledge/CONTINUATION_HANDOVER.md) |
 | Original goals, safety and priorities | [AGENTS.md](../AGENTS.md), [PROJECT_PRIORITIES.md](PROJECT_PRIORITIES.md) |
 
-**Example now on `main` (19 November 2026):** Hunter BM `v1.1 Draft` is in `Current`, and the separately hashed, unselected `v1.2 Draft` is in `Candidates`; BM `preferred_apl=null`. Druid Guardian v1.0 in `Current` is **Reported Working / Needs Retest** and remains a protected rollback. The 32 historical protected APL hashes are intact; v1.2 adds a separate 33rd record.
+**Lifecycle example:** BM v1.0 is protected Current; v1.1 and later active drafts are Candidates. Exact native test selections remain separate. Guardian v1.0 remains Reported Working / Needs Retest.
 
 ## One lean change at a time
 
 1. **Research once:** check main catalogue, pinned knowledge, shipped/default, existing last-working, tests and previous negative findings. Define one useful hypothesis, acceptance criteria and rollback.
 2. **Preserve:** create a unique **complete standalone** new Draft in `roles/<Class>/Candidates/` with a new revision, catalogue SHA-256, source pin, test constraints and unchanged rollback. Never modify historical APL bytes or select the Candidate implicitly.
 3. **Validate:** use one short-lived PR branch from current main. Run `python scripts/validate_repository.py`, Python tests and relevant current-release native accepted/refused casts with final/repeated fallback and toggle checks. Do the expensive all-role gate only for actual cross-role/shared-engine changes, release upgrades or promotion-risk regressions. Failed tests stay visible.
-4. **Merge into main:** once the applicable tests pass and no working APL is regressed, the sole maintainer merges the changes. **This is publication of a Draft Candidate, NOT its selection for regular gameplay or approval.** The native manifest should continue testing `Current` by default; test new Candidates independently.
+4. **Merge into main:** once the applicable tests pass and no working APL is regressed, the sole maintainer merges the changes. **This is publication of a Draft Candidate, NOT its selection for regular gameplay or approval.** The native manifest preserves explicit historical test comparators; new engineering work compares Current and relevant Candidates independently.
 5. **Tidy:** delete the merged short-lived GitHub branch; leave its PR, commits and CI accessible as permanent evidence. Update handover only for substantive outcomes and move to the next decision.
 
 **Approval is a separate gate:** verified in-game gameplay evidence, no significant safety/regression failures, a fair default + last-working comparison and explicit maintainer acceptance. When in doubt, keep `Current` unchanged. Never merge known failing critical code just to tidy branches.

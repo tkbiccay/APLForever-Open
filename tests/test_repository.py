@@ -97,7 +97,7 @@ class RepositoryValidationTests(unittest.TestCase):
         self.assertEqual("Current", validator._lifecycle_folder(hunter, current))
         for candidate in candidates:
             self.assertEqual("Candidates", validator._lifecycle_folder(hunter, candidate))
-        self.assertEqual("Archive", validator._lifecycle_folder(hunter, hunter["revisions"][0]))
+        self.assertEqual("Current", validator._lifecycle_folder(hunter, hunter["revisions"][0]))
 
     def test_real_repository_enforces_class_lifecycle_layout(self) -> None:
         failures, _ = validator.validate_repository(ROOT, check_git=False)

@@ -10,7 +10,7 @@ local manifest = assert(dofile(assert(os.getenv("APLFOREVER_NATIVE_MANIFEST"))))
 local SEED = 30417
 local CANDIDATE = {
     apl_name = "Druid_Feral", revision = "v1.1",
-    apl_file = "roles/Druid/Candidates/APL_Druid_Feral_v1.1_Draft.txt",
+    apl_file = "roles/Druid/Archive/APL_Druid_Feral_v1.1_Draft.txt",
     sha256 = "f611e4510a52ca125103eed9f3d1d4fc99a0b656b161cdc88134f0e72b6e52f7",
 }
 

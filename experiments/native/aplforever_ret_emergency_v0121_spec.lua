@@ -4,7 +4,7 @@ local fake=require("Game.State.helpers.fake_api")
 local paladin=require("Forever.helpers.paladin_world")
 local stock=assert(paladin.Retribution)
 local root=assert(os.getenv("APLFOREVER_ROOT"))
-local f=assert(io.open(root.."/roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt","rb"))
+local f=assert(io.open(root.."/roles/Paladin/Candidates/APL_Paladin_Retribution_v1.2_Draft.txt","rb"))
 local current=assert(f:read("*a"));f:close()
 local line="actions=divine_shield,if=health.known&health.pct<=20&toggle.defensives&combat>0&!group&aggro&action.divine_shield.known&!buff.forbearance.up&!buff.divine_shield.up&gcd.remains<=0"
 local alt,n=current:gsub("actions=call_action_list,name=crusader_open",line.."\nactions+=/call_action_list,name=crusader_open")

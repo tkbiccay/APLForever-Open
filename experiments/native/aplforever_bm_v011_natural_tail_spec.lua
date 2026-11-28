@@ -7,7 +7,7 @@ local hunter = require("Forever.helpers.hunter_world")
 local C = assert(hunter.BeastMasteryTurret)
 local root = assert(os.getenv("APLFOREVER_ROOT"))
 local files = {
-    working_ref = "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+    working_ref = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
     candidate = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt",
 }
 local function read(path)

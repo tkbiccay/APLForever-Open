@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/feral-v0110-aggro-native.yml"
-      - "roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_v1.3_Draft.txt"
       - "experiments/native/aplforever_feral_aggro_defensive_v010_spec.lua"
   workflow_dispatch:
 permissions:

@@ -80,6 +80,14 @@ def render_catalogue(data: dict[str, Any]) -> str:
             rows.append("| INVALID | — | — | — | — | — | — | — |")
             continue
         preferred = role.get("preferred_apl") or "—"
+        if data.get("lifecycle_policy") == "protected-current-v1" and role.get("support_status") == "Supported":
+            protected = role.get("protected_rollback_apl")
+            current = [path for path in role_paths if "Current" in Path(path).parts]
+            if not isinstance(protected, str) or protected not in role_paths or current != [protected]:
+                errors.append(f"{label}: exactly one Current must match protected_rollback_apl")
+            native_test = role.get("native_test_apl")
+            if native_test is not None and (not isinstance(native_test, str) or native_test not in role_paths):
+                errors.append(f"{label}: native_test_apl must resolve to an owned revision")
         latest = role.get("latest_revision") or "—"
         rows.append(
             f"| {role.get('apl_name', '—')} | {role['class']} | {role['spec']} | {role['role']} | "
@@ -125,6 +133,17 @@ def _baseline_catalogue(root: Path) -> tuple[dict[str, Any] | None, str | None, 
 
 def _lifecycle_folder(role: dict[str, Any], revision: dict[str, Any]) -> str:
     """The selected testing profile is Current, not necessarily Approved."""
+    protected = role.get("protected_rollback_apl")
+    if protected is not None:
+        if revision.get("apl_file") == protected:
+            return "Current"
+        baseline = next((row for row in role.get("revisions", [])
+                         if row.get("apl_file") == protected), None)
+        if baseline is not None:
+            version = lambda item: tuple(int(part) for part in item["revision"][1:].split("."))
+            if version(revision) > version(baseline) and "Candidates" in Path(revision["apl_file"]).parts:
+                return "Candidates"
+        return "Archive"
     selected = role.get("preferred_apl")
     if selected is None:
         # latest_revision is provenance, NOT an implicit Current promotion.

@@ -4,8 +4,8 @@ on:
     paths:
       - ".github/workflows/feral-mm-effects-v011-breadth.yml"
       - "experiments/native/aplforever_feral_mm_effects_v011_spec.lua"
-      - "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
-      - "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt"
       - "roles/Hunter/Current/APL_Hunter_Marksmanship_DPS_v1.0_Draft.txt"
       - "roles/Hunter/Candidates/APL_Hunter_Marksmanship_v1.1_Draft.txt"
       - "docs/Tests_Breadth_Feral_MM_Effects_v011.md"

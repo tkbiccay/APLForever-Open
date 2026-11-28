@@ -4,7 +4,7 @@ on:
     paths:
       - ".github/workflows/bm-v011-range-boundary.yml"
       - "experiments/native/aplforever_bm_range_boundary_v011_spec.lua"
-      - "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt"
       - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt"
   workflow_dispatch:
 permissions:

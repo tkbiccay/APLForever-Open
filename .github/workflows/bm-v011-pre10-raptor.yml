@@ -4,7 +4,7 @@ on:
     paths:
       - ".github/workflows/bm-v011-pre10-raptor.yml"
       - "experiments/native/aplforever_bm_pre10_raptor_v011_spec.lua"
-      - "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt"
       - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt"
   workflow_dispatch:
 permissions:

@@ -15,14 +15,14 @@ local function read(path)
     return text
 end
 
-local v13 = read("roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt")
-local current = read("roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt")
+local v13 = read("roles/Druid/Archive/APL_Druid_Feral_v1.3_Draft.txt")
+local current = read("roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt")
 local old = "actions+=/cat_form,if=action.cat_form.known&!buff.cat_form.up&!buff.bear_form.up&!buff.travel_form.up&!buff.aquatic_form.up&!buff.moonkin_form.up"
 local proposed = "actions+=/cat_form,if=action.cat_form.known&!buff.cat_form.up&!buff.bear_form.up&!buff.aquatic_form.up&!buff.moonkin_form.up&(!buff.travel_form.up|combat>0&target.within5&!moving)"
 local first = assert(v13:find(old, 1, true), "protected form anchor changed")
 assert.is_nil(v13:find(old, first + #old, true), "ambiguous source replacement")
 local experiment = v13:sub(1, first - 1) .. proposed .. v13:sub(first + #old)
-local v14 = read("roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt")
+local v14 = read("roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt")
 assert.are.equal(experiment, v14, "Complete stored v1.4 differs from independently tested one-line hypothesis")
 
 local function import(H, source, pack)

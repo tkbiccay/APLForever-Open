@@ -10,7 +10,7 @@ local hunter = require("Forever.helpers.hunter_world")
 local C = assert(hunter.BeastMasteryTurret)
 local root = assert(os.getenv("APLFOREVER_ROOT"))
 local paths = {
-    { name = "v1.1-current", path = "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt" },
+    { name = "v1.1-current", path = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt" },
     { name = "v1.2-candidate", path = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt" },
 }
 
