@@ -18,6 +18,9 @@ local after="&((group|active_enemies>=2)|(health.known&health.pct<=65))&!buff.ba
 local n
 apl.health,n=apl.candidate:gsub(before:gsub("([^%w])","%%%1"),function() return after end)
 assert.are.equal(1,n,"only the existing Barkskin eligibility branch may change")
+local stored=read("roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt")
+assert.are.equal(apl.health,stored,"complete stored Draft differs from measured hypothesis")
+apl.health=stored
 local id=22812
 local original=stock.character
 local function adapt()

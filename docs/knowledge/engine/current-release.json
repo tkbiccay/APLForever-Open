@@ -5,8 +5,8 @@
   "release_commit": "a4ca044512d7aacfdebca85cef617b1127115962",
   "published_at_utc": "2026-11-25",
   "recorded_on": "2026-11-26",
-  "compatibility_status": "Partial / 23 roles, 31 selected revisions strict import/compile PASS; combat unverified",
-  "compatibility_notes": "CurseForge published 25 Nov 2026 (day precision; tag commit 21:05:03 UTC, not assumed publication time). Exact tested head f892fe4bd1e4f3be92b19a077b966c2e0aa17576, native run 45908071181 job 140209545129. 31/31 clean compiler/reject/inactive checks across 23 roles; all 53 catalogue hashes verified. Old Feral three and Arms one health compiler errors no longer reproduced without exemptions. Four self-health guard review lines remain (Feral Current Barkskin, Frenzied Regeneration, Nature's Grasp; Arms Current precombat Bloodrage). Generic trinket warnings retained. Import/compile only; no current-release cast progression, health/TTD decision correctness, live proof or Approval. P0 Guardian/BM native combat next.",
+  "compatibility_status": "Partial / 23 roles strict import/compile PASS; scoped Guardian and BM combat PASS",
+  "compatibility_notes": "CurseForge published 25 Nov 2026 (day precision; tag commit 21:05:03 UTC, not assumed publication time). Exact tested head f892fe4bd1e4f3be92b19a077b966c2e0aa17576, native run 45908071181 job 140209545129. 31/31 clean compiler/reject/inactive checks across 23 roles; all 53 catalogue hashes verified. Old Feral three and Arms one health compiler errors no longer reproduced without exemptions. Four self-health guard review lines remain (Feral Current Barkskin, Frenzied Regeneration, Nature's Grasp; Arms Current precombat Bloodrage). Generic trinket warnings retained. Import/compile only; no current-release cast progression, health/TTD decision correctness, live proof or Approval. P0 Guardian/BM native combat next. 28 Nov #114 merged after corrected 27/27 native PASS 46119049582, all 25 checks green; actual Guardian/BM source worlds and separate defensive display, permanent pet recovery and live damage/mitigation remain unproven. Other roles' new-release combat unverified.",
   "latest_passing_historical_native_release": {
     "tag": "v0.9.0",
     "commit": "8f95f2ea0a45428554c1e938ed7357b870030514",
@@ -18,7 +18,7 @@
     14,
     15
   ],
-  "draft_compatibility_pr": 113,
+  "draft_compatibility_pr": null,
   "source_release_url": "https://www.curseforge.com/wow/addons/hekili-forever/files/9818487",
   "historical_evidence_pins": [
     {

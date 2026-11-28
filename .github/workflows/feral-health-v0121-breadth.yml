@@ -6,6 +6,9 @@ on:
       - "experiments/native/aplforever_feral_health_v0121_spec.lua"
       - "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
       - "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt"
+      - "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt"
+      - "scripts/audit_apl_observability.py"
+      - "tests/test_apl_observability.py"
       - "docs/Tests_Breadth_Feral_Health_v0121.md"
   workflow_dispatch:
 permissions:

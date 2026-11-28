@@ -49,7 +49,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.4",
+      "latest_revision": "v1.5",
       "limitations": [
         "Archived Cat/Bear/caster branches require evidence-based review: distinguish legitimate pre-unlock and defensive shifts from sustained off-role rotation. Preserve original APL unchanged.",
         "Unpromoted Feral DPS v1.1 Candidate must prove Shred/Claw castability by position and resolve combo-point and Shifting Power observability. Current v1.0 remains a Draft, not proven working.",
@@ -179,6 +179,27 @@
           "gear": null,
           "settings": "No required spec setting. Retains native optional cooldown and Defensive off-switches; uses source-reported combat, target within 5yd and !moving.",
           "caveat": "Fully standalone v0.11 Source-Native 5/5 in tested Cat Energy/CP/finisher and low-Energy fallback worlds, no refused casts; v1.4 Travel Form stationary shift also tested separately. No proven damage superiority, multi-unit AoE, movement intent, low-level unlocks or client health observability. 3 Current v1.0 source import health.pct errors remain separate issue. No Approved, no selection/promotion."
+        },
+        {
+          "revision": "v1.5",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt",
+          "status": "Draft",
+          "sha256": "79385bc5f160890b546559f062c5d76c60275112c592ed20d0ab02d429b8a7d7",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "v0.12.1 a4ca044512d7aacfdebca85cef617b1127115962, PR #116 first head 10/10 native PASS https://github.com/tkbiccay/APLForever-Open/actions/runs/46119844234; full isolated known-low-health solo branch, class-backed Barkskin adapter, controlled observations. Exact stored-file retest pending."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt",
+          "min_source_release": "v0.12.1",
+          "addon_version": "v0.12.1",
+          "game_build": null,
+          "talents": "Native Feral level 60 fixture; Barkskin explicitly learned in test adapter",
+          "gear": "Native Feral source world",
+          "settings": "No per-spec settings; native Defensives OFF respected, separate/inline supported",
+          "caveat": "Unselected complete Draft; exact v1.4 except tested Barkskin group/AoE OR known low HP branch. Controlled health/threat only, modelled aura not mitigation; no 1–60/live superiority. Current v1.0 and all earlier revisions retained."
         }
       ],
       "apl_name": "Druid_Feral"
@@ -1527,7 +1548,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.1",
+      "latest_revision": "v1.2",
       "limitations": [],
       "revisions": [
         {
@@ -1569,6 +1590,27 @@
           "gear": "Published two-handed Warrior Arms world only; not user gear",
           "settings": "Full standalone with native Major/Minor/Defensives/Movement user off-switches; no per-spec tickbox required",
           "caveat": "Compiler+HP safety exploration: removing automatic precombat Bloodrage avoids a predicate the v0.11 parser cannot compile, but may lose Rage that shipped uses. Released source World does not subtract Bloodrage HP; gameplay, boss health safety and output are not verified. Keep Current v1.0 exact-byte immutable, catalogue preferred null, no promotion. Complete Source-native and 1–60/life-cost live tests required."
+        },
+        {
+          "revision": "v1.2",
+          "apl_file": "roles/Warrior/Candidates/APL_Warrior_Arms_v1.2_Draft.txt",
+          "status": "Draft",
+          "sha256": "ed0d970925ba653076a9463c19d6fa2ee0ccf8fd28ada00ad7a467063c90d261",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "v0.12.1 source player health reader and unknown=100 fallback; PR #115 first-head native 5/5 PASS, 15 full profile instances and 45 first icons, https://github.com/tkbiccay/APLForever-Open/actions/runs/46119135081. Exact in-memory guard; stored-file and combat tests pending."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Warrior/Current/APL_Warrior_Arms_DPS_v1.0_StaticValidated.txt",
+          "min_source_release": "v0.12.1",
+          "addon_version": "v0.12.1",
+          "game_build": null,
+          "talents": "Source level-60 Arms fixture; not user build",
+          "gear": "Source two-handed world",
+          "settings": "Native Minor off-switch; no additional settings",
+          "caveat": "Unselected Draft: exact Current v1.0 plus first health.known conjunction. First-icon safety proven in controlled source reader, not real cast/health cost, source band accuracy, all levels or DPS. v1.1 omission retained. Full stored and progression gates pending."
         }
       ],
       "apl_name": "Warrior_Arms"
