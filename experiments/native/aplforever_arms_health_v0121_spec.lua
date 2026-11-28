@@ -10,6 +10,12 @@ local current=assert(f:read("*a"));f:close()
 local guarded,n=current:gsub("actions%.precombat%+=/bloodrage,use_off_gcd=1,if=",
     "actions.precombat+=/bloodrage,use_off_gcd=1,if=health.known&")
 assert.are.equal(1,n,"one exact precombat Bloodrage guard only")
+local stored=assert(io.open(root.."/roles/Warrior/Candidates/APL_Warrior_Arms_v1.2_Draft.txt","rb"))
+local actual=assert(stored:read("*a"));stored:close()
+assert.are.equal(guarded,actual,"stored complete v1.2 differs from measured exact guard")
+guarded=actual
+local priorFile=assert(io.open(root.."/roles/Warrior/Candidates/APL_Warrior_Arms_v1.1_Draft.txt","rb"))
+local prior=assert(priorFile:read("*a"));priorFile:close()
 local function trial(profile,mode,minor,boss)
     local character=C.character()
     local old=fake.new
@@ -29,7 +35,7 @@ local function trial(profile,mode,minor,boss)
     assert.are.same({},H.Hekili.Class.loadErrors or {})
     if profile~="shipped" then
         local lists,warnings=H.Hekili:ImportSimcAPL("Warrior_Arms","APLForever-health-"..profile,
-            profile=="current" and current or guarded,C.PACK)
+            profile=="current" and current or profile=="prior" and prior or guarded,C.PACK)
         assert.is_table(lists.default);assert.is_table(lists.precombat)
         assert.is_falsy((warnings or ""):find("Unsupported action",1,true))
         assert.is_falsy((warnings or ""):find("Unknown key",1,true))
@@ -84,6 +90,8 @@ describe("Arms v0.12.1 full precombat Bloodrage unknown-health safety",function(
         it(mode.." minor="..tostring(minor).." boss="..tostring(boss),function()
             local shipped=trial("shipped",mode,minor,boss)
             local old=trial("current",mode,minor,boss)
+            local omitted=trial("prior",mode,minor,boss)
+            excludes(omitted)
             local new=trial("guarded",mode,minor,boss)
             if mode=="unknown" then
                 assert.are.equal("bloodrage",old[1],"historical risk not reproduced")

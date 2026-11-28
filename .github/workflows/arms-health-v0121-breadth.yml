@@ -6,6 +6,10 @@ on:
       - "experiments/native/aplforever_arms_health_v0121_spec.lua"
       - "roles/Warrior/Current/APL_Warrior_Arms_DPS_v1.0_StaticValidated.txt"
       - "docs/Tests_Breadth_Arms_Health_v0121.md"
+      - "experiments/native/aplforever_arms_guarded_combat_v0121_spec.lua"
+      - "roles/Warrior/Candidates/APL_Warrior_Arms_v1.*_Draft.txt"
+      - "scripts/audit_apl_observability.py"
+      - "tests/test_apl_observability.py"
   workflow_dispatch:
 permissions:
   contents: read
@@ -37,4 +41,5 @@ jobs:
           APLFOREVER_ROOT: ${{ github.workspace }}/project
         run: |
           cp "$APLFOREVER_ROOT/experiments/native/aplforever_arms_health_v0121_spec.lua" tests/Forever/aplforever_arms_health_v0121_spec.lua
-          .lua/bin/busted --verbose tests/Forever/aplforever_arms_health_v0121_spec.lua
+          cp "$GITHUB_WORKSPACE/project/experiments/native/aplforever_arms_guarded_combat_v0121_spec.lua" tests/Forever/aplforever_arms_guarded_combat_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_arms_health_v0121_spec.lua tests/Forever/aplforever_arms_guarded_combat_v0121_spec.lua
