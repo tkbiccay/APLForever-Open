@@ -1,0 +1,50 @@
+name: "Feral v1.6 manual Prowl opener coverage"
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/feral-stealth-v0121.yml"
+      - "experiments/native/aplforever_feral_stealth_v0121_spec.lua"
+      - "experiments/native/aplforever_feral_stealth_cast_v0121_spec.lua"
+      - "roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt"
+      - "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt"
+      - "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
+      - "docs/Tests_Druid_Feral_Stealth_v1.6.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-stealth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: a4ca044512d7aacfdebca85cef617b1127115962
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify pin and hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "a4ca044512d7aacfdebca85cef617b1127115962"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap released source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Full profiles and repeated recommendations
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_feral_stealth_v0121_spec.lua" tests/Forever/aplforever_feral_stealth_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_feral_stealth_v0121_spec.lua
+      - name: Full native opener presses and subsequent combat
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_feral_stealth_cast_v0121_spec.lua" tests/Forever/aplforever_feral_stealth_cast_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_feral_stealth_cast_v0121_spec.lua
