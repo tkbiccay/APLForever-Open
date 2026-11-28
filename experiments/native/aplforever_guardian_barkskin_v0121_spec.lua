@@ -1,0 +1,307 @@
+-- P0 Guardian v0.12.1: test-only Barkskin class-backed native source adapter.
+-- Stock WoWSims Guardian world omits Barkskin from BOTH kit and MAP.
+-- The RELEASED class spells: Barkskin ID22812, 60s CD, 15s aura,
+-- GCD=spell, native toggle="defensives"; source W.applyAura is generic.
+-- No production addon, APL, simulated mitigation, health or fake spell IDs.
+local loop=require("Game.harness.loop")
+local ws=require("Forever.helpers.wowsims")
+local helper=require("Forever.helpers.druid_loop_world")
+local fake=require("Game.State.helpers.fake_api")
+local stock=assert(helper.Guardian)
+local root=assert(os.getenv("APLFOREVER_ROOT"))
+local paths={
+  working="roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
+  candidate="roles/Druid/Candidates/APL_Druid_Guardian_v1.5_Draft.txt",
+  v16="roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt"
+}
+local BARKSKIN_ID=22812
+local function read(path)
+  local f=assert(io.open(root.."/"..path,"rb"))
+  local s=assert(f:read("*a"));f:close();return s
+end
+local function worldFor(threat,distance,attackers)
+  local C=ws.content(stock,{pack=stock.PACK,level=60,kit={"barkskin"}})
+  C.SCENARIO="game"
+  C.WORLD=setmetatable({
+    distance=distance,attackers=attackers or 2,targetLevel=60,
+    mobHealth=1000000000,
+  },{__index=C.WORLD})
+  local old=fake.new
+  fake.new=function(...)
+    local api,ctl=old(...)
+    ctl.role="DAMAGER"
+    api.UnitThreatSituation=function(unit)
+      if unit=="player" then return threat and 3 or 0 end
+      return nil
+    end
+    return api,ctl
+  end
+  local ok,L=pcall(loop.new,C)
+  fake.new=old
+  assert.is_true(ok,tostring(L))
+  return L,C
+end
+local function install(H,C,name)
+  if name=="shipped" then return end
+  local original=read(assert(paths[name],"missing exact protected full profile"))
+  if name=="v16" then
+    assert.is_truthy(original:find(
+      "actions.defensive_cooldowns=barkskin,if=toggle.defensives&action.barkskin.known&action.barkskin.ready&buff.bear_form.up&!buff.barkskin.up&target.within5&gcd.remains=0",
+      1,true),"actual saved v1.6 full file lost verified Barkskin GCD guard")
+  end
+  local lists,warnings=H.Hekili:ImportSimcAPL(
+    "Druid_Guardian","APLForever-Guardian-Barkskin-Source-Only",
+    original,C.PACK)
+  for _,key in ipairs({"precombat","default","damage","mitigation",
+                        "defensive_cooldowns","rage_dump"}) do
+    if key=="defensive_cooldowns" and name=="working" then
+      -- Exact protected working does not define a Barkskin action list.
+    else
+      assert.is_table(lists[key],"whole profile missing "..key)
+    end
+  end
+  assert.is_falsy((warnings or ""):find("Unsupported action",1,true))
+  assert.is_falsy((warnings or ""):find("Unknown key",1,true))
+  H.Hekili.DB.profile.packs[C.PACK].lists=lists
+  H.Hekili:LoadScripts();H.Hekili:ReviewPacks()
+  for key in pairs(lists) do
+    assert.is_true(H.Hekili:IsListActive(C.PACK,key),
+      "inactive complete APL source list "..key)
+  end
+  assert.are.same({},H.errors)
+end
+-- Exactly the already-published class action and W.applyAura world primitive,
+-- NOT a custom combat model or a new player spell/rotation in the addon.
+local function adaptKit()
+  assert.is_nil(helper.MAP.barkskin,
+    "new published Barkskin MAP exists: remove fixture adapter and retest")
+  assert.is_nil(stock.IDS.barkskin,
+    "the published Guardian source kit now includes Barkskin: use it directly")
+  helper.MAP.barkskin={
+    effect=function(W,e,_,X)
+      local a=assert(X.aura.barkskin,"released source Barkskin aura absent")
+      assert.are.equal(BARKSKIN_ID,a.id)
+      assert.are.equal(15,a.duration)
+      W.applyAura(e,a.id,a.duration,1,a.max_stack)
+    end
+  }
+  stock.IDS.barkskin={BARKSKIN_ID}
+end
+local function restore()
+  helper.MAP.barkskin=nil
+  stock.IDS.barkskin=nil
+end
+local function one(profile,seed,threat,distance,defensives,seconds,attackers,separate)
+  local L,C=worldFor(threat,distance,attackers)
+  local H=L.us
+  assert.are.same({},H.loadErrors)
+  assert.are.same({},H.Hekili.Class.loadErrors or {})
+  local abilities=H.Hekili.Class.abilities
+  local a=assert(abilities.barkskin,"native Druid class lacks Barkskin")
+  local aura=assert(H.Hekili.Class.auras.barkskin)
+  assert.are.equal(BARKSKIN_ID,a.id)
+  assert.are.equal("defensives",a.toggle)
+  assert.are.equal(60,a.cooldown)
+  assert.are.equal("spell",a.gcd)
+  assert.are.equal(BARKSKIN_ID,aura.id)
+  assert.are.equal(15,aura.duration)
+  assert.is_true(H.Hekili.State:IsKnown("barkskin"),
+    "published ws.content kit did not expose source-known Barkskin")
+  install(H,C,profile)
+  H.ctl.inGroup=true
+  H.ctl.groupMembers=2
+  local t=H.Hekili.DB.profile.toggles
+  t.cooldowns.value=false
+  t.defensives.value=defensives
+  -- v0.12.1 defaults to a separate Defensives display; loop presses Primary only.
+  -- Inline is a test control, NOT a required player setting.
+  local inheritedSeparate=t.defensives.separate
+  t.defensives.separate=separate==true
+  local defensiveBarkskin=0
+  t.movement.value=false
+  local priorGcd=0
+  local refusalTrace={}
+  local rr=loop.run(L,seed,{
+    duration=seconds,
+    on=function(w,_,time)
+      local out=H.Hekili.Engine.Output.Defensives
+      if out and out.count>0 and out.recs[1].actionName=="barkskin" then
+        defensiveBarkskin=defensiveBarkskin+1
+      end
+      local n=w.refused.gcd or 0
+      if n>priorGcd then
+        if #refusalTrace<12 then
+          local action=w.ours[w.combat]
+          local accepted=w.pressed[w.combat]
+          local rec=H.Hekili.Engine.Output.Primary
+          local first=rec and rec.recs and rec.recs[1]
+          local ahead=(w.us.gcdUntil or 0)-w.W.t
+          refusalTrace[#refusalTrace+1]={
+            t=time,action=action,accepted=accepted,
+            ahead=ahead,wait=first and first.wait
+          }
+        end
+      end
+      priorGcd=n
+    end
+  },{{H=H}})
+  assert.are.equal(0,rr.errors)
+  assert.are.equal(0,rr.raises)
+  for i,e in ipairs(refusalTrace) do
+    print(("GUARDIAN_BARKSKIN_GCD_REFUSAL seed=%d profile=%s idx=%d t=%.2f action=%s accepted=%s worldGCDRemaining=%.3f recommendedWait=%s"):format(
+      seed,profile,i,e.t,tostring(e.action),tostring(e.accepted),
+      e.ahead,tostring(e.wait)))
+  end
+  local by=rr.pressedBy or {}
+  local press,apply,expire={}, {}, {}
+  for _,e in ipairs(rr.W.truth) do
+    if e.src==rr.us and e.kind=="cast" and e.spell==BARKSKIN_ID then
+      press[#press+1]=e.t
+    elseif e.dst==rr.us and e.kind=="aura" and e.aura==BARKSKIN_ID then
+      if e.stacks>0 then apply[#apply+1]=e.t
+      else expire[#expire+1]=e.t end
+    end
+  end
+  assert.are.equal(by.barkskin or 0,#press,
+    "source counted different true Barkskin casts than actual accepted presses")
+  assert.are.equal(#press,#apply,
+    "self-Barkskin source casts must actually apply a buff")
+  for i=1,#apply do
+    assert.is_true(math.abs(apply[i]-press[i])<0.05,
+      "Barkskin buff applied without source-accepted cast")
+  end
+  for i=2,#press do
+    assert.is_true(press[i]-press[i-1]>=59,
+      "Barkskin cast while its native 60s cooldown should not be ready")
+  end
+  for i=1,#expire do
+    assert.is_true(expire[i]>=apply[i]+14.9,
+      "Barkskin buff expired before native class duration")
+  end
+  if separate or not defensives or distance>5 or (profile~="candidate" and profile~="v16") then
+    assert.are.equal(0,#press,
+      "disabled/out-of-range or no Barkskin APL must not cast")
+  elseif threat then
+    assert.is_true(#press>=1,
+      "defensive toggle ON, actual source-native Guardian never cast")
+  end
+  if not separate and (profile=="candidate" or profile=="v16") and threat and distance<=5 and defensives then
+    -- Really advance beyond an actual Barkskin cast. An off-GCD icon
+    -- standing still is not a verified ongoing combat rotation.
+    local tail={}
+    local first=nil
+    for idx=1,rr.combat do
+      if rr.pressed[idx]=="barkskin" then first=idx;break end
+    end
+    assert.is_truthy(first,"no real Barkskin pressed")
+    for idx=first+1,rr.combat do
+      local key=rr.pressed[idx]
+      if type(key)=="string" then
+        tail[#tail+1]=key
+        if #tail==3 then break end
+      end
+    end
+    assert.are.equal(3,#tail,
+      "no three accepted follow-on source actions after Barkskin")
+    for _,key in ipairs(tail) do
+      assert.is_true(key~="barkskin",
+        "immediate duplicated native Barkskin recommendation")
+    end
+    print(("GUARDIAN_BARKSKIN_NEXT3 seed=%d first=%s"):format(
+      seed,table.concat(tail,",")))
+  end
+  local refused=0
+  for _,v in pairs(rr.refused or {}) do refused=refused+v end
+  local ts={}
+  for _,v in ipairs(press) do ts[#ts+1]=("%.2f"):format(v) end
+  print(("GUARDIAN_BARKSKIN_V0121 profile=%s seed=%d threat=%s yd=%d toggle=%s duration=%d accepted=%d refused=%d BarkskinCast=%d trueApplied=%d expiries=%d times=%s Roar=%d other=%d truth=%d"):format(
+    profile,seed,tostring(threat),distance,tostring(defensives),seconds,
+    rr.presses,refused,#press,#apply,#expire,table.concat(ts,","),
+    by.demoralizing_roar or 0,rr.presses-#press,#rr.W.truth))
+  print("GUARDIAN_DISPLAY_V0121",profile,seed,"inheritedSeparate",tostring(inheritedSeparate),
+    "explicitSeparate",tostring(separate==true),"defensiveBarkskinTicks",defensiveBarkskin,
+    "allDefensiveTicks",rr.defShown or 0,"primaryCasts",#press,"rawRefusals",refused)
+  if profile=="v16" then
+    assert.are.same({},rr.refused,"stored v1.6 castability regression")
+  elseif profile=="candidate" then
+    -- v1.5 is the known historical negative comparator. Retain raw GCD
+    -- refusals; no claim that the old exact count must persist on a new release.
+    for reason in pairs(rr.refused or {}) do
+      assert.are.equal("gcd",reason,"new non-GCD refusal in v1.5 comparator")
+    end
+  end
+  if separate and profile=="v16" then
+    assert.are.equal(0,#press,"Primary driver must not press separate defensive")
+    if defensives and threat and distance<=5 then
+      assert.is_true(defensiveBarkskin>0,"no actual separate Barkskin recommendation")
+    else
+      assert.are.equal(0,defensiveBarkskin,"disabled or range-ineligible defensive shown")
+    end
+  end
+  return {casts=#press,accepted=rr.presses,refused=refused,
+          times=press,by=by,defensiveBarkskin=defensiveBarkskin}
+end
+local function compare(seed,threat,distance,defensives,seconds,attackers)
+  local shipped=one("shipped",seed,threat,distance,defensives,seconds,attackers)
+  local working=one("working",seed,threat,distance,defensives,seconds,attackers)
+  local candidate=one("candidate",seed,threat,distance,defensives,seconds,attackers)
+  local v16=one("v16",seed,threat,distance,defensives,seconds,attackers)
+  print(("GUARDIAN_BARKSKIN_COMPARE seed=%d threat=%s yd=%d toggle=%s shipped=%d/%d/%d working=%d/%d/%d v15=%d/%d/%d v16=%d/%d/%d"):format(
+    seed,tostring(threat),distance,tostring(defensives),
+    shipped.accepted,shipped.refused,shipped.casts,
+    working.accepted,working.refused,working.casts,
+    candidate.accepted,candidate.refused,candidate.casts,
+    v16.accepted,v16.refused,v16.casts))
+  if defensives and distance==4 and threat then
+    assert.is_true(v16.casts>=1,
+      "in-memory guard must still produce real source Barkskin casts")
+  end
+  return candidate,working,shipped,v16
+end
+describe("Guardian v0.12.1 class-backed test-only Barkskin native toggle and fallback",function()
+  before_each(adaptKit)
+  after_each(restore)
+  it("actual source buff and cooldown with Defensives ON, true-threat 4yd seed A",function()
+    local c=compare(30417,true,4,true,83)
+    assert.is_true(c.casts>=1)
+  end)
+  it("repeat cooldown and genuine successful source aura seed B",function()
+    local c=compare(30418,true,4,true,83)
+    assert.is_true(c.casts>=1)
+  end)
+  it("native Defensives OFF prevents Barkskin, despite learned source spell",function()
+    local c=compare(30417,true,4,false,83)
+    assert.are.equal(0,c.casts)
+  end)
+  it("Defensives ON 6yd but melee-only APL guard correctly withholds Barkskin",function()
+    local c=compare(30417,true,6,true,47)
+    assert.are.equal(0,c.casts)
+  end)
+  it("Defensives ON and synthetic zero client threat: measure proactive use, not call it a proven save",function()
+    local c=compare(30417,false,4,true,38)
+    -- Do not assert an invented no-threat health or mitigation fact;
+    -- source client no-threat != proof that no damage can reach player.
+    assert.is_true(c.accepted>=3,"source combat did not advance")
+  end)
+  it("separate zero incoming attackers from zero synthetic client threat (source observability control)",function()
+    -- Previously no-threat always retained TWO attackers, conflating the
+    -- threat API with the source-world incoming-attack condition.
+    -- No damage/mitigation conclusion: the published world has no such model.
+    local c,w,sh,v16=compare(30419,false,4,true,38,0)
+    print(("GUARDIAN_BARKSKIN_ZERO_ATTACKERS seed=30419 syntheticThreat=0 attackers=0 shipped=%d working=%d v15=%d v16=%d"):format(
+      sh.casts,w.casts,c.casts,v16.casts))
+    -- A true source-world negative should never be relabelled as mitigation.
+    -- Only enforce source cast/refusal invariants already checked in one().
+    assert.is_true(v16.casts<=1,"native 60s Barkskin cooldown violated in 38s")
+  end)
+  it("native separate Defensives ON: v1.6 shown there, never pressed by Primary",function()
+    local c=one("v16",30417,true,4,true,38,2,true)
+    assert.is_true(c.accepted>=3,"normal Primary combat stalled")
+    assert.is_true(c.defensiveBarkskin>0)
+  end)
+  it("native separate Defensives OFF: v1.6 must not show or press Barkskin",function()
+    local c=one("v16",30417,true,4,false,38,2,true)
+    assert.is_true(c.accepted>=3)
+    assert.are.equal(0,c.defensiveBarkskin)
+  end)
+end)
