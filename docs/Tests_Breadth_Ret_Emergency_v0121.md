@@ -13,3 +13,6 @@ Fresh Forever guide review 28 Nov: [Wowhead abilities](https://www.wowhead.com/f
 
 ## Stored native pass, static RED and correction
 Head bcbb3cb9e6ae986983c348247e1e5d9929e72771 [10/10 stored native](https://github.com/tkbiccay/APLForever-Open/actions/runs/46127325708), job 140924704063. [Validator RED](https://github.com/tkbiccay/APLForever-Open/actions/runs/46127325635), job 140924704039, 139 unit tests, two failures. The generic precombat health allowance unintentionally accepted this shield when moved to precombat; restrict it to the already-proven Bloodrage action, retain strict phase and expression requirements, add negative tests. Historical v1.2 test asserted latest fixed v1.2 and len3; preserve original exact hash/path/rollback/status and require unselected Draft successors rather than freeze revision growth. No weakening of prior APL integrity or promotion guard. No APL byte change. Rebase onto merged Arcane #119 with role-local catalogue replacement, preserving 56 previous revisions and both candidates. Final CI NOT RUN at creation. No live proof.
+
+## Final stored outcome
+#120 merged 6ca420a4352a2bcbb713def0e9d543db699153b1 after 30/30 CI and [10/10 native](https://github.com/tkbiccay/APLForever-Open/actions/runs/46134790371). Two positive casts/17 subsequent each, raw0, negative/display pass. 57 immutable, no approval.
