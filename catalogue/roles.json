@@ -732,7 +732,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [],
       "revisions": [
         {
@@ -755,6 +755,27 @@
           "settings": null,
           "caveat": "Original custom design. Bounded source/static review only; no native import or repeatable gameplay validation. Not preferred or Approved.",
           "relocated_from": "roles/APL_Mage_Arcane_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Mage/Candidates/APL_Mage_Arcane_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "4c58127b7af11c283cb5faa278101c76e2a10dc1c6c74a41a143067b7c06f31b",
+          "evidence": [
+            {
+              "kind": "native",
+              "reference": "v0.12.1 exact source, https://github.com/tkbiccay/APLForever-Open/actions/runs/46126372648 13/13 60 worlds. Source-observed range plus test-only strict Fire Blast press oracle: Current 496 refusals/0 offensive in each 25yd seed, range-only guard 0/22,22,20. Nine near pairs exact action-count parity. Stored retest pending."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Mage/Current/APL_Mage_Arcane_v1.0_Draft.txt",
+          "min_source_release": "v0.12.1",
+          "addon_version": "v0.12.1",
+          "game_build": null,
+          "talents": "Native Arcane L60 source fixture",
+          "gear": "Native mage source world",
+          "settings": "No additional settings; explicit range response",
+          "caveat": "Unselected Draft. Exact Current plus action.fire_blast.in_range. Strict test-only range oracle; no real player range, other spell range, unknown API, low-level or DPS proof. Mixed proc reorder not included."
         }
       ],
       "apl_name": "Mage_Arcane"

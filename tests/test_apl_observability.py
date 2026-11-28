@@ -114,6 +114,7 @@ class ObservabilityTests(unittest.TestCase):
             src.replace("&rage.lo<=10", "&(rage.lo<=10)"),
             src.rstrip() + ",value=1\n",
             src.replace("actions.precombat", "actions"),
+            src.replace("bloodrage,", "divine_shield,", 1),
             src.replace("health.pct", "health.current"),
             src + "actions=call_action_list,name=precombat\n",
         ):

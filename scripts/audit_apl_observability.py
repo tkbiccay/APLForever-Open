@@ -92,7 +92,9 @@ def guarded_precombat_health(rhs: str, phase: str, min_source_release: str) -> b
     version = re.fullmatch(r"v(\d+)\.(\d+)\.(\d+)", min_source_release)
     if not version or tuple(map(int, version.groups())) < (0, 12, 1):
         return False
-    if phase != "precombat":
+    # The precombat exception was validated only for Bloodrage. It must not
+    # admit a combat emergency defensive moved into a precombat list.
+    if phase != "precombat" or rhs.split(",", 1)[0].lstrip("/") != "bloodrage":
         return False
     fields = [part[3:] for part in rhs.split(",") if part.startswith("if=")]
     # Deliberately accept only a terminal if= with simple conjunctions of

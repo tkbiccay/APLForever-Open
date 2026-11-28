@@ -8,6 +8,7 @@ on:
       - "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.3_Draft.txt"
       - "scripts/audit_apl_observability.py"
       - "tests/test_apl_observability.py"
+      - "tests/test_retribution_v12_native_fix.py"
       - "docs/Tests_Breadth_Ret_Emergency_v0121.md"
   workflow_dispatch:
 permissions:
