@@ -65,8 +65,8 @@ class NativeManifestTests(unittest.TestCase):
             manifest.build_manifest(ROOT, source_release="latest")
 
     def test_feral_dps_v11_candidate_never_silently_replaces_current(self) -> None:
-        # v1.1 is physically in Candidates, but is not approved or the selected
-        # import. All source-release manifests must honour Current v1.0 Draft.
+        # v1.1 is historical, but is not approved or the selected
+        # import. All source-release manifests must honour the exact historical v1.0 test Draft.
         for version in ("v0.8.2", "v0.8.3", "v0.8.5"):
             entries, verified = manifest.build_manifest(ROOT, source_release=version)
             feral = [entry for entry in entries if entry["apl_name"] == "Druid_Feral"]
@@ -74,7 +74,7 @@ class NativeManifestTests(unittest.TestCase):
             self.assertEqual(feral[0]["revision"], "v1.0", version)
             self.assertEqual(
                 feral[0]["apl_file"],
-                "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+                "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt",
             )
             self.assertEqual(verified, self.expected_protected_revision_count())
 
@@ -107,7 +107,7 @@ class NativeManifestTests(unittest.TestCase):
 
         chosen = manifest.select_revision(hunter, "v0.9.0")
         self.assertEqual("v1.1", chosen["revision"])
-        self.assertEqual("roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+        self.assertEqual("roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
                          chosen["apl_file"])
 
         # A SPECIFIC manual preferred selection remains honoured; only
@@ -122,7 +122,7 @@ class NativeManifestTests(unittest.TestCase):
                       if role["apl_name"] == "Hunter_BeastMastery")
         old = manifest.select_revision(hunter, "v0.8.2")
         self.assertEqual("v1.0", old["revision"])
-        self.assertIn("/Archive/", old["apl_file"])
+        self.assertIn("/Current/", old["apl_file"])
 
         candidate_only = {
             "apl_name": "Hunter_BeastMastery",

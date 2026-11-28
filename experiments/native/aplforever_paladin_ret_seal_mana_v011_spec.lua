@@ -4,7 +4,7 @@
 local loop=require("Game.harness.loop")
 local C=assert(require("Forever.helpers.paladin_world").Retribution)
 local root=assert(os.getenv("APLFOREVER_ROOT"))
-local f=assert(io.open(root.."/roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt","rb"))
+local f=assert(io.open(root.."/roles/Paladin/Candidates/APL_Paladin_Retribution_v1.2_Draft.txt","rb"))
 local current=assert(f:read("*a"));f:close()
 local function simulate(profile,seed,mana,duration)
   local world=setmetatable({power=mana or C.WORLD.power,

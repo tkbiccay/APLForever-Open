@@ -4,7 +4,7 @@ on:
     paths:
       - ".github/workflows/ret-emergency-v0121-breadth.yml"
       - "experiments/native/aplforever_ret_emergency_v0121_spec.lua"
-      - "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt"
+      - "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.2_Draft.txt"
       - "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.3_Draft.txt"
       - "scripts/audit_apl_observability.py"
       - "tests/test_apl_observability.py"

@@ -48,6 +48,13 @@ def select_revision(role: dict[str, Any], source_release: str) -> dict[str, Any]
         if found is not None:
             return found
 
+    # Explicit historical test reference preserves comparator bytes after relocation.
+    explicit_test = role.get("native_test_apl")
+    if explicit_test:
+        found = next((revision for revision in eligible if revision["apl_file"] == explicit_test), None)
+        if found is not None:
+            return found
+
     def newest_in(folder: str) -> dict[str, Any] | None:
         candidates = [
             revision for revision in eligible

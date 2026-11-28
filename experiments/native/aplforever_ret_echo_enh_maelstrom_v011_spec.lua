@@ -12,7 +12,7 @@ local function read(path)
   local s=assert(f:read("*a"));f:close();return s
 end
 local apl={
-  ret=read("roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt"),
+  ret=read("roles/Paladin/Candidates/APL_Paladin_Retribution_v1.2_Draft.txt"),
   enh=read("roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt"),
 }
 -- Full standalone unselected solo v1.1 recorded after actual 8/8 source PASS;

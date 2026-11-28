@@ -34,6 +34,8 @@ When we diagnose and resolve a defect, preserve the symptom, actual root cause, 
 
 Maintain lean Research_, Tests_, Changelog_, Limitations_ and catalogue records with published version pins, conflicts, results, noise, negative tests, rollback IDs and the next narrow decision.
 
+**Cross-Spec Research Multiplier (28 November):** Every material finding must be screened against all supported roles and applicable action families. Record exact baselines, scope, reasons, source and evidence in the existing transfer index; independently validate receiving-role adaptations before implementation/promotion. Negative findings transfer too. A scan is not an improvement; one root cause can justify many independent tests, not indiscriminate identical APL edits. The owner-selected Feral v1.6 engineering baseline is recorded in the portfolio, separate from player-facing selection and approval.
+
 ### 4. Human direction, genuinely useful AI assistance
 
 The sole maintainer and ChatGPT lead priorities, source research, original design, triage, available validation and decisions. **Call Codex only for a specifically delegated, bounded engineering task** that benefits from its strengths; it reports evidence and stops. No autonomous code churn outside a maintainer-authorised AI Sprint, no surprise unrequested sprints or automatic gameplay APL promotions. We openly credit AI development and human validation, do not pretend AI is infallible, and welcome reproducible community criticism and GPLv3 contributions.
@@ -46,6 +48,8 @@ When the maintainer explicitly says **"AI Sprint"**, ChatGPT has permission duri
 
 An AI Sprint is active work in the current conversation, **not** a claim of unattended background work or a guaranteed timed hour after the response ends. The maintainer may interrupt, redirect or end it at any point. On a true game-only uncertainty, record the smallest useful in-game check and stop speculative candidate polish.
 ### 5. Rollbacks, integrity, scope and a sustainable hobby
+
+**Protected development rollback policy (owner, 28 November 2026):** use exact v1.0 for each Supported role by default, except explicitly owner-designated, evidence-backed newer revisions (currently Feral DPS v1.6). See [protected rollback registry](knowledge/PROTECTED_ROLLBACKS.md). A development rollback is an immutable comparison/reference, not a claim of game reliability; if it has a known fault or differs from the player's last-working profile, restore the actual last-working version for gameplay. Keep all historical bytes, catalogue pointers, last-working and Approved states unchanged. A new candidate or passing CI does not automatically change the rollback. Do not confuse incremental development comparator with protected rollback.
 
 Immutable Current/Checkpoint/Archive/Candidate history, SHA-256 checks, protected public main, owner-only merges, attribution, security/privacy screening and safe public GitHub-hosted CI protect the work. Old private APLForever is **read-only reference** with no automatic mirroring or future development. Never run untrusted public fork PRs on a private home/Hyper-V machine.
 

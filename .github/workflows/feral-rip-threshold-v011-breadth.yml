@@ -4,8 +4,8 @@ on:
     paths:
       - ".github/workflows/feral-rip-threshold-v011-breadth.yml"
       - "experiments/native/aplforever_feral_rip_threshold_v011_spec.lua"
-      - "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
-      - "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt"
       - "docs/Tests_Breadth_Feral_Rip_Threshold_v011.md"
   workflow_dispatch:
 permissions:

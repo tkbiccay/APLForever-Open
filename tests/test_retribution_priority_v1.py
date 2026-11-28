@@ -6,7 +6,7 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-APL = ROOT / "roles" / "Paladin" / "Archive" / "APL_Paladin_Retribution_DPS_v1.0_Draft.txt"
+APL = ROOT / "roles" / "Paladin" / "Current" / "APL_Paladin_Retribution_DPS_v1.0_Draft.txt"
 EXPECTED_SHA256 = "dcbfa7e6c9ba4d34d40c3d464652917c47b240c4743ace3f2ba89595f693a3aa"
 PALADIN_ACTIONS = {
     "blessing_of_might", "retribution_aura", "seal_of_the_crusader",

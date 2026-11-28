@@ -18,7 +18,7 @@ local specs={
   {
     id="Hunter_BeastMastery", key="BM",
     base=require("Forever.helpers.hunter_world").BeastMasteryTurret,
-    current="roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+    current="roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
     candidate="roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt",
     lists={"precombat","default","melee","major_cooldowns"},
     cooldown="rapid_fire", extra="bestial_wrath", distance=12,

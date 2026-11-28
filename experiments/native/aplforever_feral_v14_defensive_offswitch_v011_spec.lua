@@ -15,7 +15,7 @@ local pretty = require("pl.pretty")
 local druid = require("Forever.helpers.druid_loop_world")
 local stock = assert(druid.Feral)
 local root = assert(os.getenv("APLFOREVER_ROOT"))
-local path = "roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt"
+local path = "roles/Druid/Archive/APL_Druid_Feral_v1.2_Draft.txt"
 local BARKSKIN = 22812
 local f = assert(io.open(root .. "/" .. path, "rb"))
 local source = assert(f:read("*a"))
@@ -27,11 +27,11 @@ local after = "&combat>0&aggro&target.within5&(group|active_enemies>=2)&!buff.ba
 local function profile(which)
     if which == "feral-v1.2" then return source end
     if which == "feral-v1.4" then
-        local f = assert(io.open(root .. "/roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt", "rb"))
+        local f = assert(io.open(root .. "/roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt", "rb"))
         local text = assert(f:read("*a")); f:close(); return text
     end
     if which == "feral-v1.3" then
-        local c = assert(io.open(root .. "/roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt", "rb"))
+        local c = assert(io.open(root .. "/roles/Druid/Archive/APL_Druid_Feral_v1.3_Draft.txt", "rb"))
         local full = assert(c:read("*a"))
         c:close()
         assert.are.equal(profile("aggro-gcd-hypothesis"), full,

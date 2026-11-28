@@ -6,8 +6,8 @@ local F=assert(require("Forever.helpers.druid_loop_world").Feral)
 local M=assert(require("Forever.helpers.hunter_world").MarksmanshipTurret)
 local root=assert(os.getenv("APLFOREVER_ROOT"))
 local files={
-  feral={current="roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
-    candidate="roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt"},
+  feral={current="roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+    candidate="roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt"},
   mm={current="roles/Hunter/Current/APL_Hunter_Marksmanship_DPS_v1.0_Draft.txt",
     candidate="roles/Hunter/Candidates/APL_Hunter_Marksmanship_v1.1_Draft.txt"},
 }
