@@ -1,0 +1,41 @@
+name: "Breadth #42 Destruction Conflagrate rank boundary"
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/destruction-conflagrate-ranks-v0121.yml"
+      - "experiments/native/aplforever_destruction_conflagrate_ranks_v0121_spec.lua"
+      - "roles/Warlock/Current/APL_Warlock_Destruction_DPS_v1.0_Draft.txt"
+      - "docs/Tests_Breadth_Destruction_Conflagrate_Ranks_v0121.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-destruction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: a4ca044512d7aacfdebca85cef617b1127115962
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify released source and protected APL
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "a4ca044512d7aacfdebca85cef617b1127115962"
+          python project/scripts/validate_repository.py
+          echo "560235675b9882a40a4fee90fdc729f4f55536222c8277a4ffc5649b68bb6ac0  project/roles/Warlock/Current/APL_Warlock_Destruction_DPS_v1.0_Draft.txt" | sha256sum -c -
+      - name: Bootstrap released source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Rank boundary and matched full-profile worlds
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_destruction_conflagrate_ranks_v0121_spec.lua" tests/Forever/aplforever_destruction_conflagrate_ranks_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_destruction_conflagrate_ranks_v0121_spec.lua
