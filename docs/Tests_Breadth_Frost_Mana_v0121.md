@@ -18,3 +18,6 @@ Exact first head aace35c18e414740f71d746b9654e2eaeec14948, [16/16 native PASS](h
 | 25yd 25% | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
 
 The change successfully limits costly Cone but replacement actions/regen yield mixed efficiency and one full-Mana progression reduction. No guaranteed resource benefit or real DPS proof. Source effects, not client batching or real multi-target geometry. Keep exact v1.0, no new candidate, no APL selection. Distinct experiment #34 counts only after final protected merge, not improved-role credit. Final reconciliation head needs fresh CI. Next independent Frost research: castability under movement or early channel/target changes, or native FoF batching only when source supports it; avoid speculative threshold churn.
+
+## Range-control caveat from Arcane #119
+Final #118 merged ebc96bc7af3c891dbe0d18d01c840d009f340448, 28/28 CI and [16/16](https://github.com/tkbiccay/APLForever-Open/actions/runs/46124864421). Subsequent #119 exposed that WORLD.distance does not necessarily populate client distance. Frost's configured 25yd parity is not an independently verified client range control. Cone absence may arise from conditions other than actual range. Retain decision remains conservative; retest with explicit W.moveTo and observed client response before using this as range proof.
