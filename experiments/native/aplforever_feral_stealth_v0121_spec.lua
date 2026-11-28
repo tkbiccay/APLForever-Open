@@ -51,7 +51,11 @@ local function trial(profile,case)
     local worked,err=headless.cycle(H,start+i*0.2)
     assert.is_true(worked,tostring(err));assert.are.same({},H.errors)
     local out=H.Hekili.Engine.Output.Primary
-    picks[i]=out.count>0 and out.recs[1].actionName or "NO_ACTION"
+    local rec=out.count>0 and out.recs[1] or nil
+    picks[i]=rec and rec.actionName or "NO_ACTION"
+    local delay=rec and rec.time or 0
+    local floor=rec and rec.floors and rec.floors.energy or 0
+    local cost=rec and rec.cost or 0
     H.Hekili.State.reset("Primary",true)
     local S=H.Hekili.State
     assert.is_true(S.buff.cat_form.up,"cat control absent")
@@ -63,7 +67,15 @@ local function trial(profile,case)
     if case.noShred then assert.is_false(S.action.shred.known) end
     if case.energy==0 then assert.is_true(S.energy.lo<20,"energy control absent") end
     if profile=="new" and case.stealth and openers[picks[i]] then
-      assert.is_true(S.energy.lo>=S.action[picks[i]].cost,"unaffordable opener")
+      print("FERAL_STEALTH_READY",case.name,i,picks[i],S.energy.lo,delay,floor,cost)
+      assert.is_true(floor+1e-6>=cost,"forecasted lower bound below cost")
+      if delay<=0.05 then
+        assert.is_true(S.energy.lo+1e-6>=cost,"ready-while-short opener")
+      end
+      if case.energy==0 then
+        assert.is_true(delay>0.05,"short opener shown ready")
+        picks[i]="WAIT"
+      end
     end
     print(("FERAL_STEALTH_ICON profile=%s case=%s sample=%d prowl=%s in5=%s targeting=%s energy=%.2f pick=%s"):format(profile,case.name,i,tostring(S.buff.prowl.up),tostring(S.target.within5),tostring(S.target.is_targeting_player),S.energy.lo,picks[i]))
   end
@@ -91,7 +103,7 @@ describe("Feral v0.12.1 stored stealth recommendation coverage",function()
     {name="early_claw",stealth=true,range=4,energy=100,noShred=true,expected="claw"},
     {name="targeting_claw",stealth=true,range=4,energy=100,ravage=true,pounce=true,targeting=true,expected="claw"},
     {name="outside",stealth=true,range=12,energy=100,ravage=true,pounce=true,expected="NO_ACTION"},
-    {name="zero_energy",stealth=true,range=4,energy=0,ravage=true,pounce=true,expected="NO_ACTION"},
+    {name="zero_energy",stealth=true,range=4,energy=0,ravage=true,pounce=true,expected="WAIT"},
     {name="normal",stealth=false,combat=true,range=4,energy=100,ravage=true,pounce=true},
     {name="normal_targeting",stealth=false,combat=true,range=4,energy=100,ravage=true,pounce=true,targeting=true}
   }) do
@@ -100,7 +112,7 @@ describe("Feral v0.12.1 stored stealth recommendation coverage",function()
       local old=trial("prior",case);local new=trial("new",case)
       if case.expected then
         for _,p in ipairs(new) do assert.are.equal(case.expected,p) end
-        if case.expected~="NO_ACTION" then
+        if case.expected~="NO_ACTION" and case.expected~="WAIT" then
           for _,p in ipairs(old) do assert.are.equal("NO_ACTION",p,"missing old opener not reproduced") end
         end
       else assert.are.same(old,new,"non-stealth behaviour changed") end

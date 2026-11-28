@@ -4,6 +4,7 @@ on:
     paths:
       - ".github/workflows/feral-stealth-v0121.yml"
       - "experiments/native/aplforever_feral_stealth_v0121_spec.lua"
+      - "experiments/native/aplforever_feral_stealth_cast_v0121_spec.lua"
       - "roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt"
       - "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt"
       - "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
@@ -40,3 +41,10 @@ jobs:
         run: |
           cp "$APLFOREVER_ROOT/experiments/native/aplforever_feral_stealth_v0121_spec.lua" tests/Forever/aplforever_feral_stealth_v0121_spec.lua
           .lua/bin/busted --verbose tests/Forever/aplforever_feral_stealth_v0121_spec.lua
+      - name: Full native opener presses and subsequent combat
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_feral_stealth_cast_v0121_spec.lua" tests/Forever/aplforever_feral_stealth_cast_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_feral_stealth_cast_v0121_spec.lua
