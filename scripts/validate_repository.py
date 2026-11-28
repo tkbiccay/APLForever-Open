@@ -80,14 +80,6 @@ def render_catalogue(data: dict[str, Any]) -> str:
             rows.append("| INVALID | — | — | — | — | — | — | — |")
             continue
         preferred = role.get("preferred_apl") or "—"
-        if data.get("lifecycle_policy") == "protected-current-v1" and role.get("support_status") == "Supported":
-            protected = role.get("protected_rollback_apl")
-            current = [path for path in role_paths if "Current" in Path(path).parts]
-            if not isinstance(protected, str) or protected not in role_paths or current != [protected]:
-                errors.append(f"{label}: exactly one Current must match protected_rollback_apl")
-            native_test = role.get("native_test_apl")
-            if native_test is not None and (not isinstance(native_test, str) or native_test not in role_paths):
-                errors.append(f"{label}: native_test_apl must resolve to an owned revision")
         latest = role.get("latest_revision") or "—"
         rows.append(
             f"| {role.get('apl_name', '—')} | {role['class']} | {role['spec']} | {role['role']} | "
@@ -350,6 +342,14 @@ def validate_repository(
                     errors.append(f"{label}: protected reference is missing: {reference}")
                 if not revision.get("sha256"):
                     errors.append(f"{label}: protected reference has no content hash: {reference}")
+        if data.get("lifecycle_policy") == "protected-current-v1" and role.get("support_status") == "Supported":
+            protected = role.get("protected_rollback_apl")
+            current = [path for path in role_paths if "Current" in Path(path).parts]
+            if not isinstance(protected, str) or protected not in role_paths or current != [protected]:
+                errors.append(f"{label}: exactly one Current must match protected_rollback_apl")
+            native_test = role.get("native_test_apl")
+            if native_test is not None and (not isinstance(native_test, str) or native_test not in role_paths):
+                errors.append(f"{label}: native_test_apl must resolve to an owned revision")
         latest = role.get("latest_revision")
         if latest is not None and (not isinstance(latest, str) or latest not in role_revisions):
             errors.append(f"{label}: latest_revision does not resolve to a declared revision")

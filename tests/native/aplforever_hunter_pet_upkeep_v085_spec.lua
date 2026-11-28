@@ -77,7 +77,7 @@ local function recommend(row, variant, state)
             if variant == "original" then
                 -- Source-compatible v1.0 is the exact archived comparator,
                 -- verified by the manifest builder across all catalogue hashes.
-                text = read(root .. "/roles/Hunter/Archive/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt")
+                text = read(root .. "/roles/Hunter/Current/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt")
             end
         end
         if variant == "hypothesis" and row.key ~= "Hunter_BeastMastery" then

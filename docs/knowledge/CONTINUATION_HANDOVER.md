@@ -12,3 +12,5 @@ Owner 28 Nov: Cross-Spec Research Multiplier mandatory; scheduled prompt updated
 ### Owner lifecycle migration — 28 November 2026
 
 PR #126: 11 proposed path-only relocations; 59 original Git APL blobs verified identical in the prepared tree (23 Current, 26 Candidates, 10 Archive). Catalogue protected rollback is explicit; historical source-native comparator identity must remain intact. No gameplay approval or rotation changes. Do not merge until exact-head CI and stale operational reference audit pass; reconcile #125 and later role PRs against the final catalogue.
+
+Migration first run red: shared validator block was erroneously inserted in render_catalogue, causing NameError before native checks; stale-reference gate identified three paths (Hunter v0.8.5 pet, Guardian stealth fixture and workflow). Corrected placement and those references. Exact-head retest required; no APL changes.
