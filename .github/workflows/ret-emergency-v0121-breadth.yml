@@ -1,0 +1,44 @@
+name: "Breadth #36 Ret v0.12.1 solo emergency Divine Shield"
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/ret-emergency-v0121-breadth.yml"
+      - "experiments/native/aplforever_ret_emergency_v0121_spec.lua"
+      - "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt"
+      - "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.3_Draft.txt"
+      - "scripts/audit_apl_observability.py"
+      - "tests/test_apl_observability.py"
+      - "tests/test_retribution_v12_native_fix.py"
+      - "docs/Tests_Breadth_Ret_Emergency_v0121.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-ret:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: a4ca044512d7aacfdebca85cef617b1127115962
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify released source and protected hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "a4ca044512d7aacfdebca85cef617b1127115962"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap released source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Compare full Ret profiles and emergency controls
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_ret_emergency_v0121_spec.lua" tests/Forever/aplforever_ret_emergency_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_ret_emergency_v0121_spec.lua

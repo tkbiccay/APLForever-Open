@@ -291,3 +291,7 @@
 ## Lesson 30 — Independent range castability oracle
 
 28 Nov v0.12.1: WORLD.distance alone does not establish client range; explicit W.moveTo event and sampled C_Spell response required. Mage resolver omits p.range and automatic filter conditional. Strict Fire Blast range oracle supplied verified 0–20 range on test-only press, not engine input. [#119 native 13/13](https://github.com/tkbiccay/APLForever-Open/actions/runs/46126372648): Current 1488 repeated range refuses /0 offensive vs explicit in_range guard 0/64, near action parity. No live defect inferred; audit older range-dependent claims, preserve negative logs. New guard remains nil/secret permissive per source; not certainty.
+
+## Lesson 31 — Historical gates must protect identity, not freeze revision growth
+
+28 Nov #120 native 10/10 but validator RED found a too-broad precombat health exception and fixed latest-revision assertion. Tighten exception to tested Bloodrage; exact shield RHS combat only. Preserve old hash/path/rollback and null selection, allow newer unselected Drafts; test both cases. Never waive a failing test merely because native passes.

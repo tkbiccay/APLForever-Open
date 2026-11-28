@@ -30,6 +30,11 @@ local function run(profile,seed,case)
   assert.are.same({},H.errors)
   local t=H.Hekili.DB.profile.toggles
   t.cooldowns.value=case.major;t.minor_cooldowns.value=case.minor;t.defensives.value=false
+  t.cooldowns.override=false;t.cooldowns.infusion=false
+  t.minor_cooldowns.override=case.auto==true
+  local effectiveMinor=case.minor or (case.auto==true and case.major)
+  assert.are.equal(effectiveMinor,H.Hekili.State.toggle.minor_cooldowns,"native effective Minor toggle")
+  print("SHADOW_FOCUS_TOGGLE",profile,case.name,seed,tostring(case.major),tostring(case.minor),tostring(t.minor_cooldowns.override),tostring(H.Hekili.State.toggle.minor_cooldowns))
   t.interrupts.value=false;if t.movement then t.movement.value=false end
   local focus=assert(H.Hekili.Class.auras.inner_focus.id)
   local flay=assert(H.ns.VirtualState.KnownID(H.Hekili.Class.abilities.mind_flay.id))
@@ -103,7 +108,7 @@ local function run(profile,seed,case)
     assert.are.equal(0,c.dark_sacrifice or 0)
     assert.is_true(v.offence>=3)
     if v.focus>0 then assert.is_true(v.afterFocus>=3,"no subsequent progression") end
-    if not case.major or not case.minor then assert.are.equal(0,v.focus,"native off-switch violation") end
+    if not case.major or not (case.minor or (case.auto==true and case.major)) then assert.are.equal(0,v.focus,"native off-switch violation") end
   end
   return v
 end
@@ -115,13 +120,14 @@ describe("Shadow v0.12.1 low-Mana Inner Focus upkeep opportunity",function()
       {name="quarter_on",pct=0.25,major=true,minor=true},
       {name="extreme_on",pct=0.05,major=true,minor=true},
       {name="extreme_minor_off",pct=0.05,major=true,minor=false},
+      {name="extreme_minor_auto",pct=0.05,major=true,minor=false,auto=true},
       {name="extreme_major_off",pct=0.05,major=false,minor=true},
     }) do
       it(case.name.." seed "..seed,function()
         run("shipped",seed,case)
         local old=run("current",seed,case)
         local new=run("alternative",seed,case)
-        if not case.major or not case.minor then
+        if not case.major or not (case.minor or (case.auto==true and case.major)) then
           assert.are.same(old.counts,new.counts,"off-switch baseline changed")
         else
           opportunities=opportunities+new.freeDot
