@@ -8,8 +8,8 @@ local ws=require("Forever.helpers.wowsims")
 local stock=assert(require("Forever.helpers.druid_loop_world").Feral)
 local root=assert(os.getenv("APLFOREVER_ROOT"))
 local profiles={
-    current="roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
-    candidate="roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt",
+    current="roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+    candidate="roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt",
 }
 local function read(path)
     local f=assert(io.open(root.."/"..path,"rb"))

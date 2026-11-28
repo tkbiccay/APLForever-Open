@@ -4,8 +4,8 @@ on:
     paths:
       - ".github/workflows/feral-v011-combo-tail.yml"
       - "experiments/native/aplforever_feral_combo_tail_v011_spec.lua"
-      - "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
-      - "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt"
   workflow_dispatch:
 permissions:
   contents: read

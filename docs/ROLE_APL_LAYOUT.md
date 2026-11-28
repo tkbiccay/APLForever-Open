@@ -1,50 +1,21 @@
-# Role APL folders — find the right file
+# APL repository lifecycle
 
-**Effective 16 November 2026.** GitHub `roles/` is organised by **class first**, then the revision's actual lifecycle. Specialisations are kept in the *filenames*, not nested into separate subfolders. The source of truth for support, current testing selection, preferred and rollback is always [catalogue/roles.json](../catalogue/roles.json), not a directory label.
+Effective 28 November 2026, per owner decision. The repository is organised by class, with three active lifecycle folders.
 
-```text
-roles/
-  Druid/
-    Current/
-    Candidates/
-    Checkpoints/
-    Archive/
-  Hunter/
-    Current/
-    Candidates/
-    Checkpoints/
-    Archive/
-  Mage/ Paladin/ Priest/ Rogue/ Shaman/ Warlock/ Warrior/
-    (the same four folders)
-```
+| Folder | Purpose |
+| --- | --- |
+| Current | Exactly one protected development rollback per Supported role. Not necessarily Approved or reported working. |
+| Candidates | Active standalone, independently hashed Draft alternatives newer than the protected rollback. |
+| Archive | Older, superseded, rejected or abandoned revisions and past defaults; historical research, exact regression comparators and recovery only. |
 
-| Folder | What belongs here | What it **does not** mean |
-| --- | --- | --- |
-| **Current** | The **selected** APL for each supported specialisation: the catalogue's preferred file when one exists, otherwise its latest source-compatible testing revision. This is the normal location to import from, **subject to its actual validation status**. | Not necessarily the newest, Approved, proven safe for everyday use or even reported working; a Draft under Current is still a Draft. |
-| **Candidates** | A **new alternative under investigation** that could replace the selected Current after fair tests and, if appropriate, player validation. | Not the default for gameplay and never entitled to displace an existing Checkpoint solely because it is newer or passes CI. |
-| **Checkpoints** | **Protected rollback(s)** with genuine reported-working or approved evidence, usually the previous Current after promotion. Retain the last-known-working copy while newer candidates are evaluated. | Not a disposable interim copy: a new Candidate or Current must **never automatically overwrite, remove or replace** a working Checkpoint. Historical Drafts are not proven checkpoints. |
-| **Archive** | Superseded/old drafts, past defaults and research comparators that aren't selected or designated last-known-working. | **Normally do not import for regular play**, but never delete: exact bytes, source SHA-256 and Git history are protected, and an archived draft may be an unverified recovery comparator when no true Checkpoint exists. |
+The protected rollback is explicitly recorded in `catalogue/roles.json` as `protected_rollback_apl`. Default v1.0; Feral DPS v1.6 is the owner-designated exception. `preferred_apl`, `last_working_apl`, `last_approved_apl` and status remain distinct from engineering rollback. `native_test_apl`, when present, preserves an exact historical source-native comparator independently of folder placement; it is not a new preferred profile. Historical test runs and their filenames remain evidence, not current recommendations.
 
-There are nine class directories with every category visible; empty categories have a `.gitkeep` placeholder until an actual APL is placed there. As of this initial migration: **23 Current, one Candidate, four Archive, zero Checkpoints** (Guardian and Demonology reported-working v1.0 are still their selected Current versions). All **28** revisions were moved with unchanged Git **blob SHA** and catalogue SHA-256. Nothing was copied or modified in its APL text.
+## Promotion and housekeeping
 
-**Examples**
+1. Develop new full standalone Drafts in Candidates, never overwrite existing APL bytes.
+2. Compare against Current, last-working and shipped default under matched conditions. Green headless CI is not gameplay approval.
+3. After owner approval/designation, move the replacement to Current; archive the previous Current and superseded candidates. Archive all versions below the new protected rollback. Keep any demonstrably useful newer active Candidate only when explicitly justified.
+4. Update catalogue paths, rollback registry, regression fixtures, path-keyed allowlists, docs and workflow references atomically. Preserve exact Git blobs, SHA-256, previous test comparators and status. Never delete historical APLs. No new Checkpoints folder is needed; existing empty placeholders can be removed without affecting APL content.
+5. Continue development from the new protected baseline. No implicit promotion based on latest_revision or folder label.
 
-- [Hunter — Current](../roles/Hunter/Current/): `APL_Hunter_BeastMastery_v1.1_Draft.txt`. Latest testable **Draft**, **not Approved**.
-- [Hunter — Archive](../roles/Hunter/Archive/): historical BM v1.0 Draft, the exact rollback/research comparator.
-- [Druid — Current](../roles/Druid/Current/): Guardian v1.0 **ReportedWorking / NeedsRetest**, alongside other current Druid specs.
-- [Druid — Candidates](../roles/Druid/Candidates/): independent Guardian v1.1 Draft, **not** a replacement of v1.0.
-- [Warlock — Current](../roles/Warlock/Current/): Demonology v1.0 **ReportedWorking / NeedsRetest**.
-- [Warlock — Archive](../roles/Warlock/Archive/): shipped Demonology v0.8 comparator.
-
-## Selecting, evolving and reverting
-
-1. Open [catalogue/roles.json](../catalogue/roles.json) or [generated role overview](../Catalogue_All_Roles.md). **Use the exact `apl_name`** for in-game imports. Check source-version compatibility, status, `preferred_apl`, `last_working_apl` and `latest_revision`. The newest file is not necessarily the right/approved one.
-2. For a new test-ready revision, use a **new immutable APL file** with [canonical filename](FILE_NAMING_STANDARD.md), exact byte hash, research, tests, source minimum if applicable and rollback metadata. Never edit an existing APL in place.
-3. **If the current preferred version must remain active**, the new unselected revision goes to **Candidates**. For a supported role lacking a preferred APL, the latest revision is the **Current testing selection** but still retains its Draft status until validated.
-4. On evidence-backed promotion/replacement: move the new selected revision to **Current**, and move the displaced prior selected revision to **Checkpoints only if genuinely working/approved**, otherwise **Archive**. **Preserve any earlier last-known-working Checkpoint unchanged** until another equally proven safe replacement is deliberately designated; promotion is never automatic Checkpoint deletion. Change path references atomically in the catalogue and native tests; preserve blob equality, SHA-256, `rollback_reference`, source-version selection and exact previous version in Git history. Do not create duplicates across folders.
-5. **Rollback** selects the catalogue's last-known-working import if one exists; otherwise the prior experimental copy explicitly labelled as unverified. A Git checkpoint / old commit always preserves the previous state. A successful import or simulated DPS gain alone never proves a working checkpoint.
-6. Run Python repository validation plus protected v0.8.2/v0.8.3 and newest released source-native CI **for any changed APL path**, then minimal in-game checks as required. Use [handover](knowledge/CONTINUATION_HANDOVER.md) to avoid redundant work.
-
-**Migration provenance:** each existing catalogue revision has a `relocated_from` pointing to its former flat `roles/APL_*.txt` path. The [repository validator](../scripts/validate_repository.py) enforces class/folder placement, verifies all revision hashes and checks *previous baseline Git blobs* against the relocated source. This is a one-time **path-only migration**, not an APL redesign or permission to rewrite protected history. For future moves record the immediate prior path in `relocated_from` (Git history preserves earlier moves) and revalidate unchanged bytes.
-
-Relevant governance: [naming standard](FILE_NAMING_STANDARD.md), [validation policy](VALIDATION_POLICY.md), [continuation handover](knowledge/CONTINUATION_HANDOVER.md).
+The initial 28 November migration proposes 23 Current, 26 Candidates and 10 Archive APLs (59 total), with 11 path-only moves. See [protected rollback registry](knowledge/PROTECTED_ROLLBACKS.md), [catalogue](../catalogue/roles.json) and the [validator](../scripts/validate_repository.py). Historical initial-layout documentation remains available in Git history.

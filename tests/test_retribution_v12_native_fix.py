@@ -13,9 +13,9 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-OLD10 = ROOT / "roles/Paladin/Archive/APL_Paladin_Retribution_DPS_v1.0_Draft.txt"
+OLD10 = ROOT / "roles/Paladin/Current/APL_Paladin_Retribution_DPS_v1.0_Draft.txt"
 OLD11 = ROOT / "roles/Paladin/Archive/APL_Paladin_Retribution_v1.1_Draft.txt"
-NEW12 = ROOT / "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt"
+NEW12 = ROOT / "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.2_Draft.txt"
 HASHES = (
     "dcbfa7e6c9ba4d34d40c3d464652917c47b240c4743ace3f2ba89595f693a3aa",
     "8ad51a292f53ece1e0248444fd4a4c5dc6fdf180532c637ee23155a4bd4fbb9a",

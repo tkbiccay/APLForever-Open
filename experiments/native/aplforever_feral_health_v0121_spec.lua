@@ -10,15 +10,15 @@ local function read(path)
   local s=assert(f:read("*a"));f:close();return s
 end
 local apl={
-  current=read("roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"),
-  candidate=read("roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt")
+  current=read("roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt"),
+  candidate=read("roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt")
 }
 local before="&(group|active_enemies>=2)&!buff.barkskin.up"
 local after="&((group|active_enemies>=2)|(health.known&health.pct<=65))&!buff.barkskin.up"
 local n
 apl.health,n=apl.candidate:gsub(before:gsub("([^%w])","%%%1"),function() return after end)
 assert.are.equal(1,n,"only the existing Barkskin eligibility branch may change")
-local stored=read("roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt")
+local stored=read("roles/Druid/Archive/APL_Druid_Feral_v1.5_Draft.txt")
 assert.are.equal(apl.health,stored,"complete stored Draft differs from measured hypothesis")
 apl.health=stored
 local id=22812

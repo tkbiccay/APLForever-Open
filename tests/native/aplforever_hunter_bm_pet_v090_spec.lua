@@ -52,7 +52,7 @@ local function first(mode, state)
 
     if mode ~= "shipped" then
         local src = mode == "archived"
-            and "roles/Hunter/Archive/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt"
+            and "roles/Hunter/Current/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt"
             or selected().apl_file
         local parsed, warnings = H.Hekili:ImportSimcAPL(
             "Hunter_BeastMastery", "APLForever", read(root .. "/" .. src), C.PACK)

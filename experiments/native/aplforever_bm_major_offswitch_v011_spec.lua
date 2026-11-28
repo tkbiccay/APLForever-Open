@@ -6,7 +6,7 @@ local hunter=require("Forever.helpers.hunter_world")
 local stock=assert(hunter.BeastMasteryTurret)
 local root=assert(os.getenv("APLFOREVER_ROOT"))
 local paths={
- current="roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+ current="roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
  candidate="roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt",
 }
 local content=setmetatable({

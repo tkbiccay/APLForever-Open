@@ -7,7 +7,7 @@ local loop=require("Game.harness.loop")
 local stock=require("Forever.helpers.hunter_world").BeastMasteryTurret
 local root=assert(os.getenv("APLFOREVER_ROOT"))
 local files={
-    current="roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+    current="roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
     candidate="roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt",
 }
 local function read(p)

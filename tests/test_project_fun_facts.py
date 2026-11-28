@@ -10,7 +10,7 @@ from scripts import project_fun_facts as facts
 class ProjectFunFactsTests(unittest.TestCase):
     def test_numstat_separates_text_from_source_and_skips_binary(self):
         example = (
-            "4\t2\troles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt\n"
+            "4\t2\troles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt\n"
             "12\t3\tscripts/example.py\n"
             "10\t0\tdocs/Research_Druid.md\n"
             "6\t1\t.github/workflows/validate.yml\n"
