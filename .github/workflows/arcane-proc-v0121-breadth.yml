@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/arcane-proc-v0121-breadth.yml"
-      - "experiments/native/aplforever_arcane_proc_v0121_spec.lua"
+      - "experiments/native/aplforever_arcane_range_oracle_v0121_spec.lua"
       - "roles/Mage/Current/APL_Mage_Arcane_v1.0_Draft.txt"
       - "docs/Tests_Breadth_Arcane_Proc_v0121.md"
   workflow_dispatch:
@@ -36,5 +36,5 @@ jobs:
         env:
           APLFOREVER_ROOT: ${{ github.workspace }}/project
         run: |
-          cp "$APLFOREVER_ROOT/experiments/native/aplforever_arcane_proc_v0121_spec.lua" tests/Forever/aplforever_arcane_proc_v0121_spec.lua
-          .lua/bin/busted --verbose tests/Forever/aplforever_arcane_proc_v0121_spec.lua
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_arcane_range_oracle_v0121_spec.lua" tests/Forever/aplforever_arcane_range_oracle_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_arcane_range_oracle_v0121_spec.lua
