@@ -5,9 +5,9 @@ on:
       - ".github/workflows/feral-stealth-v0121.yml"
       - "experiments/native/aplforever_feral_stealth_v0121_spec.lua"
       - "experiments/native/aplforever_feral_stealth_cast_v0121_spec.lua"
-      - "roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt"
-      - "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt"
-      - "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
+      - "roles/Druid/Current/APL_Druid_Feral_v1.6_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_v1.5_Draft.txt"
+      - "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt"
       - "docs/Tests_Druid_Feral_Stealth_v1.6.md"
   workflow_dispatch:
 permissions:

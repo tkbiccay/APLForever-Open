@@ -4,7 +4,7 @@ local loop = require("Game.harness.loop")
 local druid = require("Forever.helpers.druid_loop_world")
 local stock = druid.Feral
 local root = assert(os.getenv("APLFOREVER_ROOT"), "APLFOREVER_ROOT is required")
-local path = "roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt"
+local path = "roles/Druid/Archive/APL_Druid_Feral_v1.2_Draft.txt"
 local h = assert(io.open(root .. "/" .. path, "rb"))
 local source = assert(h:read("*a"))
 h:close()

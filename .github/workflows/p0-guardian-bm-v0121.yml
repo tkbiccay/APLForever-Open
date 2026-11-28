@@ -10,7 +10,7 @@ on:
       - "experiments/native/aplforever_bm_hawk_cap_v011_spec.lua"
       - "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
       - "roles/Druid/Candidates/APL_Druid_Guardian_v1.*_Draft.txt"
-      - "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt"
       - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.*_Draft.txt"
       - "docs/Tests_P0_Combat_Compatibility_v0121.md"
   workflow_dispatch:

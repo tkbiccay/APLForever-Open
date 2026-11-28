@@ -5,7 +5,7 @@ on:
       - ".github/workflows/bm-three-fights-v0110.yml"
       - "experiments/native/aplforever_bm_three_fights_v011_spec.lua"
       - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt"
-      - "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+      - "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt"
   workflow_dispatch:
 permissions:
   contents: read

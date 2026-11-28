@@ -9,9 +9,9 @@ local function read(path)
   local f=assert(io.open(root.."/"..path,"rb"));local s=assert(f:read("*a"));f:close();return s
 end
 local apl={
- current=read("roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"),
- prior=read("roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt"),
- new=read("roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt")
+ current=read("roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt"),
+ prior=read("roles/Druid/Archive/APL_Druid_Feral_v1.5_Draft.txt"),
+ new=read("roles/Druid/Current/APL_Druid_Feral_v1.6_Draft.txt")
 }
 local originalCharacter=stock.character
 local oldEffects={}

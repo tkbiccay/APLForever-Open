@@ -9,7 +9,7 @@ local function read(path)
 end
 local current=read("roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt")
 local prior=read("roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt")
-local feral=read("roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt")
+local feral=read("roles/Druid/Current/APL_Druid_Feral_v1.6_Draft.txt")
 local gate="buff.cat_form.up&buff.prowl.up&!group"
 local safe="!("..gate..")"
 local opener=assert(feral:match("(actions%.stealth=.-)\n\n"))

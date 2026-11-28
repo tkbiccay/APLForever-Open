@@ -15,7 +15,7 @@ local content = setmetatable({
         {__index=stock.WORLD}),
 },{__index=stock})
 local files = {
-    ["current-v1.1"] = "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+    ["current-v1.1"] = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
     ["candidate-v1.4"] = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt",
 }
 local function sortedCounts(counts)

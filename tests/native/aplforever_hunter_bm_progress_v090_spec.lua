@@ -29,7 +29,7 @@ end
 
 local profiles = {
     { name = "shipped" },
-    { name = "archived-v1.0", path = "roles/Hunter/Archive/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt" },
+    { name = "archived-v1.0", path = "roles/Hunter/Current/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt" },
     { name = "draft-v1.1", path = draft().apl_file },
     { name = "candidate-v1.2", path = "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt" },
 }

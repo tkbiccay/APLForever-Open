@@ -37,7 +37,8 @@
           "relocated_from": "roles/APL_Druid_Balance_DPS_v1.0_Draft.txt"
         }
       ],
-      "apl_name": "Druid_Balance"
+      "apl_name": "Druid_Balance",
+      "protected_rollback_apl": "roles/Druid/Current/APL_Druid_Balance_DPS_v1.0_Draft.txt"
     },
     {
       "class": "Druid",
@@ -45,7 +46,7 @@
       "role": "DPS",
       "support_status": "Supported",
       "validation_status": "Draft",
-      "preferred_apl": "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+      "preferred_apl": "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt",
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
@@ -60,7 +61,7 @@
       "revisions": [
         {
           "revision": "v1.0",
-          "apl_file": "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+          "apl_file": "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt",
           "status": "Draft",
           "sha256": "f2f72d0621c8e709c7df8f2ccff248ce0af604a1c02e115a5ad725cf93d288f1",
           "evidence": [],
@@ -84,11 +85,14 @@
           "caveat": "Archival source-untested preferred Draft until 21 Nov 2026: v0.11 full-import 3 parser H.errors due three health.pct predicates (isolated source-native 3→0 on in-memory replacement). Source world can press other abilities but this does NOT validate complete Current or establish in-game error. Preserve exact APL and selection; Needs Retest.",
           "legacy_filename": true,
           "purity_review": "Review pending: assess Feral cat-DPS branch purpose, bounded level support and possible defensive Bear shifting; mixture alone is not invalid.",
-          "relocated_from": "roles/APL_Druid_Feral_DPS_v1.0_Draft.txt"
+          "relocated_from": "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+          "relocation_history": [
+            "roles/APL_Druid_Feral_DPS_v1.0_Draft.txt"
+          ]
         },
         {
           "revision": "v1.1",
-          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.1_Draft.txt",
+          "apl_file": "roles/Druid/Archive/APL_Druid_Feral_v1.1_Draft.txt",
           "status": "Draft",
           "sha256": "f611e4510a52ca125103eed9f3d1d4fc99a0b656b161cdc88134f0e72b6e52f7",
           "evidence": [
@@ -102,17 +106,19 @@
             }
           ],
           "test_results": [],
-          "rollback_reference": "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+          "rollback_reference": "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt",
           "game_build": null,
           "addon_version": "v0.8.5",
           "talents": null,
           "gear": null,
           "settings": null,
-          "caveat": "Full standalone Shred-over-Claw positional-proxy fallback and 4-CP Rip Draft; no in-game facing proof, no source-native candidate result yet; do not displace Current v1.0 or claim working status."
+          "caveat": "Full standalone Shred-over-Claw positional-proxy fallback and 4-CP Rip Draft; no in-game facing proof, no source-native candidate result yet; do not displace Current v1.0 or claim working status.",
+          "relocation_history": [],
+          "relocated_from": "roles/Druid/Candidates/APL_Druid_Feral_v1.1_Draft.txt"
         },
         {
           "revision": "v1.2",
-          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt",
+          "apl_file": "roles/Druid/Archive/APL_Druid_Feral_v1.2_Draft.txt",
           "status": "Draft",
           "sha256": "52568f2d069699c5b453aaa98515c3c2096594f4b790ba0e8591c417bcdb95c9",
           "evidence": [
@@ -122,18 +128,20 @@
             }
           ],
           "test_results": [],
-          "rollback_reference": "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt",
+          "rollback_reference": "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt",
           "min_source_release": "v0.10.0",
           "game_build": null,
           "addon_version": "v0.10.0",
           "talents": null,
           "gear": null,
           "settings": "Defensives toggle ON to consider Barkskin when tanking/in melee; Frenzied Regeneration and Nature's Grasp manually controlled.",
-          "caveat": "Self-contained Draft only. Barkskin considered only in real combat while player is tanking and in melee, never based on hidden player health. Frenzied Regeneration and Nature's Grasp are deliberately manual pending real triage evidence. No numerical DPS or survival claim; exact source-native test pending, in-game unrun."
+          "caveat": "Self-contained Draft only. Barkskin considered only in real combat while player is tanking and in melee, never based on hidden player health. Frenzied Regeneration and Nature's Grasp are deliberately manual pending real triage evidence. No numerical DPS or survival claim; exact source-native test pending, in-game unrun.",
+          "relocation_history": [],
+          "relocated_from": "roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt"
         },
         {
           "revision": "v1.3",
-          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt",
+          "apl_file": "roles/Druid/Archive/APL_Druid_Feral_v1.3_Draft.txt",
           "status": "Draft",
           "sha256": "f235f9c0512a8ceab0ec46daadc2de6b7b497e85de1ad116459aa874f93a9450",
           "evidence": [
@@ -143,18 +151,20 @@
             }
           ],
           "test_results": [],
-          "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt",
+          "rollback_reference": "roles/Druid/Archive/APL_Druid_Feral_v1.2_Draft.txt",
           "min_source_release": "v0.10.0",
           "game_build": null,
           "addon_version": "v0.10.0",
           "talents": null,
           "gear": null,
           "settings": "No required Feral spec setting. Barkskin under native Defensives toggle; source-observable aggro and group/AoE, while actually in melee and GCD ready. Player health not read.",
-          "caveat": "Source-native Draft ONLY. Source World uses a controlled client threat read and explicitly modelled learned Barkskin; real instance threat, target count, player HP, damage/mitigation, and in-game DPS unproven. No promotion; existing Current v1.0 Draft and complete v1.2 Candidate are exact protected comparators."
+          "caveat": "Source-native Draft ONLY. Source World uses a controlled client threat read and explicitly modelled learned Barkskin; real instance threat, target count, player HP, damage/mitigation, and in-game DPS unproven. No promotion; existing Current v1.0 Draft and complete v1.2 Candidate are exact protected comparators.",
+          "relocation_history": [],
+          "relocated_from": "roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt"
         },
         {
           "revision": "v1.4",
-          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt",
+          "apl_file": "roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt",
           "status": "Draft",
           "sha256": "3ccb818012c29e5972ee4788b2613631103b028755cf5f9a34767ffaaeca85b4",
           "evidence": [
@@ -171,18 +181,20 @@
               "result": "5/5 PASS source-native: 12 full-source profile worlds, 1/3 naturally attacking mobs x seeds30417/30418 x shipped/Current/v1.4, 120s. Full v1.4 imports without H.errors, accepted 48/45/22/28 casts with 0 refused; natural true Energy fell <=20, at least 3 subsequent accepted actions and 3 time/event-advanced final-fallback samples without repeated immediately ready but unaccepted recommendation. Current v1.0 had 3 importer health.pct diagnostics: failed comparator completeness, see its independent record. No faithful damage, multi-target count, boss, game proof or superiority. Candidate remains unselected Draft."
             }
           ],
-          "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.3_Draft.txt",
+          "rollback_reference": "roles/Druid/Archive/APL_Druid_Feral_v1.3_Draft.txt",
           "min_source_release": "v0.11.0",
           "game_build": null,
           "addon_version": "v0.11.0",
           "talents": null,
           "gear": null,
           "settings": "No required spec setting. Retains native optional cooldown and Defensive off-switches; uses source-reported combat, target within 5yd and !moving.",
-          "caveat": "Fully standalone v0.11 Source-Native 5/5 in tested Cat Energy/CP/finisher and low-Energy fallback worlds, no refused casts; v1.4 Travel Form stationary shift also tested separately. No proven damage superiority, multi-unit AoE, movement intent, low-level unlocks or client health observability. 3 Current v1.0 source import health.pct errors remain separate issue. No Approved, no selection/promotion."
+          "caveat": "Fully standalone v0.11 Source-Native 5/5 in tested Cat Energy/CP/finisher and low-Energy fallback worlds, no refused casts; v1.4 Travel Form stationary shift also tested separately. No proven damage superiority, multi-unit AoE, movement intent, low-level unlocks or client health observability. 3 Current v1.0 source import health.pct errors remain separate issue. No Approved, no selection/promotion.",
+          "relocation_history": [],
+          "relocated_from": "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt"
         },
         {
           "revision": "v1.5",
-          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt",
+          "apl_file": "roles/Druid/Archive/APL_Druid_Feral_v1.5_Draft.txt",
           "status": "Draft",
           "sha256": "79385bc5f160890b546559f062c5d76c60275112c592ed20d0ab02d429b8a7d7",
           "evidence": [
@@ -192,18 +204,20 @@
             }
           ],
           "test_results": [],
-          "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt",
+          "rollback_reference": "roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt",
           "min_source_release": "v0.12.1",
           "addon_version": "v0.12.1",
           "game_build": null,
           "talents": "Native Feral level 60 fixture; Barkskin explicitly learned in test adapter",
           "gear": "Native Feral source world",
           "settings": "No per-spec settings; native Defensives OFF respected, separate/inline supported",
-          "caveat": "Unselected complete Draft; exact v1.4 except tested Barkskin group/AoE OR known low HP branch. Controlled health/threat only, modelled aura not mitigation; no 1–60/live superiority. Current v1.0 and all earlier revisions retained."
+          "caveat": "Unselected complete Draft; exact v1.4 except tested Barkskin group/AoE OR known low HP branch. Controlled health/threat only, modelled aura not mitigation; no 1–60/live superiority. Current v1.0 and all earlier revisions retained.",
+          "relocation_history": [],
+          "relocated_from": "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt"
         },
         {
           "revision": "v1.6",
-          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt",
+          "apl_file": "roles/Druid/Current/APL_Druid_Feral_v1.6_Draft.txt",
           "status": "Draft",
           "sha256": "701838368217898cdc0e2035a2c17ee8bbc3f4d692a992171b382194234bcc62",
           "evidence": [
@@ -220,17 +234,21 @@
               "result": "20/20 native tests, 40 combat worlds and 120 repeated icon samples, 29/29 CI. Nine modelled single opener casts, 9–14 accepted follow-ons, zero raw across 10 candidate worlds; modelled hit/miss CP1/0 and Pounce bleed1/0, 12yd approach, zero Energy forecast, manual break, nonstealth parity. Test-only class-backed adapter, no real facing/unlock/damage proof."
             }
           ],
-          "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt",
+          "rollback_reference": "roles/Druid/Archive/APL_Druid_Feral_v1.5_Draft.txt",
           "min_source_release": "v0.12.1",
           "addon_version": "v0.12.1",
           "game_build": null,
           "talents": "Source Feral fixture with controlled opener availability",
           "gear": "Source Feral fixture",
           "settings": "Manual Prowl; no new settings",
-          "caveat": "Unselected Draft; v1.5 plus stealth list. Stored native tests pass; both advanced openers require rear position, targeting proxy not geometry. Modelled hit/miss only. Actual client positioning, unlocks, Poised/Clearcasting, damage and live test pending."
+          "caveat": "Unselected Draft; v1.5 plus stealth list. Stored native tests pass; both advanced openers require rear position, targeting proxy not geometry. Modelled hit/miss only. Actual client positioning, unlocks, Poised/Clearcasting, damage and live test pending.",
+          "relocation_history": [],
+          "relocated_from": "roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt"
         }
       ],
-      "apl_name": "Druid_Feral"
+      "apl_name": "Druid_Feral",
+      "protected_rollback_apl": "roles/Druid/Current/APL_Druid_Feral_v1.6_Draft.txt",
+      "native_test_apl": "roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt"
     },
     {
       "class": "Druid",
@@ -465,7 +483,8 @@
         "v1.3 Draft: auto group+tanking Roar path separated from Defensives; requires source-native positive and in-game verification; v1.0 remains reported-working preferred.",
         "Guardian v1.4 Draft: Roar no longer requires addon maintenance option; conservative automatic policy pending source-native and live checks, including final fallback."
       ],
-      "apl_name": "Druid_Guardian"
+      "apl_name": "Druid_Guardian",
+      "protected_rollback_apl": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt"
     },
     {
       "class": "Druid",
@@ -503,7 +522,7 @@
       "revisions": [
         {
           "revision": "v1.0",
-          "apl_file": "roles/Hunter/Archive/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt",
+          "apl_file": "roles/Hunter/Current/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt",
           "status": "Draft",
           "sha256": "8b552b6dd6fc9f0c4221e75242ef147c840242b3c03c3e2a75d46aedfe039eba",
           "evidence": [],
@@ -520,11 +539,14 @@
           "caveat": "Archived development draft only: not a working, preferred or Approved APL",
           "legacy_filename": true,
           "purity_review": "Review pending: BM melee weaving is possible; assess kit timing, intended build and matched output, not a blanket purity failure.",
-          "relocated_from": "roles/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt"
+          "relocated_from": "roles/Hunter/Archive/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt",
+          "relocation_history": [
+            "roles/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt"
+          ]
         },
         {
           "revision": "v1.1",
-          "apl_file": "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+          "apl_file": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
           "status": "Draft",
           "sha256": "a9d752c5e6cdc11fc369fcb6627b73686cc52b5139ed2df4c6628db6c7826d96",
           "min_source_release": "v0.8.5",
@@ -532,7 +554,7 @@
             "Source-native v0.8.5 Hunter pet registration and shipped guards; candidate not yet approved"
           ],
           "test_results": [],
-          "rollback_reference": "roles/Hunter/Archive/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt",
+          "rollback_reference": "roles/Hunter/Current/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt",
           "game_build": null,
           "addon_version": null,
           "talents": null,
@@ -540,7 +562,10 @@
           "settings": null,
           "caveat": "Source-pinned development candidate; actual Call/Revive casts and post-cast pet transitions not yet validated in game.",
           "purity_review": "Pet-upkeep only; source-verified Lone Wolf gate and main-pet Bestial Wrath state; retain original custom ranged/melee architecture.",
-          "relocated_from": "roles/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+          "relocated_from": "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+          "relocation_history": [
+            "roles/APL_Hunter_BeastMastery_v1.1_Draft.txt"
+          ]
         },
         {
           "revision": "v1.2",
@@ -553,7 +578,7 @@
             "Public PR #8 source-native six-yard out-of-range negative comparator (shipped Serpent Sting 109 refused; v1.1 zero) and in-memory Hawk accepted-cast positive test"
           ],
           "test_results": [],
-          "rollback_reference": "roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+          "rollback_reference": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
           "game_build": null,
           "addon_version": "v0.9.0",
           "talents": null,
@@ -633,7 +658,9 @@
           "caveat": "UNSELECTED Draft. Published v0.11 BM source-native Raptor positive at 4yd only with exact released spell added to TEST fixture, not stored APL; 7 accepted queues/6 paid strikes per lv1/4/6/9 seed and 0 refuses, still 6yd dead-zone, unfaithful pre-10 pet/Mana and no three GCD/live proof. Earlier 10/10 Lone Wolf + Hawk model tests apply only to specified source worlds. Current v1.1, candidate and all 45 APLs protected; live player proof and damage needed."
         }
       ],
-      "apl_name": "Hunter_BeastMastery"
+      "apl_name": "Hunter_BeastMastery",
+      "protected_rollback_apl": "roles/Hunter/Current/APL_Hunter_BeastMastery_DPS_v1.0_Draft.txt",
+      "native_test_apl": "roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt"
     },
     {
       "class": "Hunter",
@@ -701,7 +728,8 @@
           "caveat": "Unselected Draft. Full v0.11.0 native source tests 8/8 PASS across MM and SV in source pet-client-state and accepted normal-combat modes. No actual accepted pet summon/revive, arrival, pet damage, level 1–60, DPS or in-game validation."
         }
       ],
-      "apl_name": "Hunter_Marksmanship"
+      "apl_name": "Hunter_Marksmanship",
+      "protected_rollback_apl": "roles/Hunter/Current/APL_Hunter_Marksmanship_DPS_v1.0_Draft.txt"
     },
     {
       "class": "Hunter",
@@ -769,7 +797,8 @@
           "caveat": "Unselected Draft. Full v0.11.0 native source tests 8/8 PASS across MM and SV in source pet-client-state and accepted normal-combat modes. No actual accepted pet summon/revive, arrival, pet damage, level 1–60, DPS or in-game validation."
         }
       ],
-      "apl_name": "Hunter_Survival"
+      "apl_name": "Hunter_Survival",
+      "protected_rollback_apl": "roles/Hunter/Current/APL_Hunter_Survival_DPS_v1.0_Draft.txt"
     },
     {
       "class": "Mage",
@@ -827,7 +856,8 @@
           "caveat": "Unselected Draft. Exact Current plus action.fire_blast.in_range. Strict test-only range oracle; no real player range, other spell range, unknown API, low-level or DPS proof. Mixed proc reorder not included."
         }
       ],
-      "apl_name": "Mage_Arcane"
+      "apl_name": "Mage_Arcane",
+      "protected_rollback_apl": "roles/Mage/Current/APL_Mage_Arcane_v1.0_Draft.txt"
     },
     {
       "class": "Mage",
@@ -885,7 +915,8 @@
           "caveat": "Unselected experimental complete Draft. The observed true-vs-Belief Mana discrepancy is 17.2805 at 60; +20 is a scenario-derived reserve, not a universal bound or proven optimal. Exact-cost v1.1 initially failed source; replacement +20 requires positive full latest-release CI. Level1–59, moving, non-boss, real client, DPS and future resource uncertainty remain unverified. Current v1.0 protected, no promotion."
         }
       ],
-      "apl_name": "Mage_Fire"
+      "apl_name": "Mage_Fire",
+      "protected_rollback_apl": "roles/Mage/Current/APL_Mage_Fire_v1.0_Draft.txt"
     },
     {
       "class": "Mage",
@@ -922,7 +953,8 @@
           "relocated_from": "roles/APL_Mage_Frost_v1.0_Draft.txt"
         }
       ],
-      "apl_name": "Mage_Frost"
+      "apl_name": "Mage_Frost",
+      "protected_rollback_apl": "roles/Mage/Current/APL_Mage_Frost_v1.0_Draft.txt"
     },
     {
       "class": "Paladin",
@@ -1003,7 +1035,8 @@
           "caveat": "Unselected full-source-native PASS Draft: actual client threat, Mana belief, low-level ability/rank gating, ability Require Toggle, numerical mitigation/TPS and player gameplay unverified; no in-game validation or promotion."
         }
       ],
-      "apl_name": "Paladin_Protection"
+      "apl_name": "Paladin_Protection",
+      "protected_rollback_apl": "roles/Paladin/Current/APL_Paladin_Protection_Tank_v1.0_Draft.txt"
     },
     {
       "class": "Paladin",
@@ -1020,7 +1053,7 @@
       "revisions": [
         {
           "revision": "v1.0",
-          "apl_file": "roles/Paladin/Archive/APL_Paladin_Retribution_DPS_v1.0_Draft.txt",
+          "apl_file": "roles/Paladin/Current/APL_Paladin_Retribution_DPS_v1.0_Draft.txt",
           "status": "Draft",
           "sha256": "dcbfa7e6c9ba4d34d40c3d464652917c47b240c4743ace3f2ba89595f693a3aa",
           "evidence": [
@@ -1039,7 +1072,10 @@
           "caveat": "Independent custom APL with source-pinned Twist of Light/Echo and Holy Shock talent handling; static/source checks only. Seal transitions, hit/miss and Echo state unverified in-game. Not preferred or Approved.",
           "legacy_filename": true,
           "purity_review": "Review pending: Holy Shock cross-tree talent can support a Retribution DPS variant; validate action use/talent gates and gameplay, not an automatic off-role failure.",
-          "relocated_from": "roles/APL_Paladin_Retribution_DPS_v1.0_Draft.txt"
+          "relocated_from": "roles/Paladin/Archive/APL_Paladin_Retribution_DPS_v1.0_Draft.txt",
+          "relocation_history": [
+            "roles/APL_Paladin_Retribution_DPS_v1.0_Draft.txt"
+          ]
         },
         {
           "revision": "v1.1",
@@ -1053,7 +1089,7 @@
             }
           ],
           "test_results": [],
-          "rollback_reference": "roles/Paladin/Archive/APL_Paladin_Retribution_DPS_v1.0_Draft.txt",
+          "rollback_reference": "roles/Paladin/Current/APL_Paladin_Retribution_DPS_v1.0_Draft.txt",
           "game_build": null,
           "addon_version": null,
           "talents": null,
@@ -1064,7 +1100,7 @@
         },
         {
           "revision": "v1.2",
-          "apl_file": "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt",
+          "apl_file": "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.2_Draft.txt",
           "status": "Draft",
           "sha256": "d5a05302c341bbbcb7a69157a40d0a4ae2df8504ce40838e03407515e4e4731b",
           "evidence": [
@@ -1092,7 +1128,10 @@
           "gear": null,
           "settings": null,
           "caveat": "Pinned native Hekili importer/compile/one headless update PASS in GitHub Actions 43645496132. Blessing of Might action is unsupported, so precombat Blessing upkeep is manual. Multi-cast fallbacks, talents/procs, level 1–60 and in-game performance NOT RUN. Draft only, not preferred/Approved.",
-          "relocated_from": "roles/APL_Paladin_Retribution_v1.2_Draft.txt"
+          "relocated_from": "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt",
+          "relocation_history": [
+            "roles/APL_Paladin_Retribution_v1.2_Draft.txt"
+          ]
         },
         {
           "revision": "v1.3",
@@ -1106,7 +1145,7 @@
             }
           ],
           "test_results": [],
-          "rollback_reference": "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt",
+          "rollback_reference": "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.2_Draft.txt",
           "min_source_release": "v0.12.1",
           "addon_version": "v0.12.1",
           "game_build": null,
@@ -1116,7 +1155,9 @@
           "caveat": "Unselected Draft. Exact v1.2 plus conservative solo emergency shield at known <=20% health and aggro, no Forbearance. Adapter not immunity/threat/damage penalty simulation. Actual survival, level unlocks, real group state, and live approval unverified."
         }
       ],
-      "apl_name": "Paladin_Retribution"
+      "apl_name": "Paladin_Retribution",
+      "protected_rollback_apl": "roles/Paladin/Current/APL_Paladin_Retribution_DPS_v1.0_Draft.txt",
+      "native_test_apl": "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.2_Draft.txt"
     },
     {
       "class": "Priest",
@@ -1183,7 +1224,8 @@
           "relocated_from": "roles/APL_Priest_Shadow_v1.0_Draft.txt"
         }
       ],
-      "apl_name": "Priest_Shadow"
+      "apl_name": "Priest_Shadow",
+      "protected_rollback_apl": "roles/Priest/Current/APL_Priest_Shadow_v1.0_Draft.txt"
     },
     {
       "class": "Rogue",
@@ -1250,7 +1292,8 @@
           "caveat": "Fully standalone unselected Draft; original Current v1.0 and previous hashes unchanged. Only a released-source-world one-line Stealth Garrote guard tested; 4/4 source-native PASS on 45143611408. No client Stealth/Vanish, real damage, Combo Point truth or in-game proof. Do not mark Approved or preferred."
         }
       ],
-      "apl_name": "Rogue_Assassination"
+      "apl_name": "Rogue_Assassination",
+      "protected_rollback_apl": "roles/Rogue/Current/APL_Rogue_Assassination_v1.0_Draft.txt"
     },
     {
       "class": "Rogue",
@@ -1313,7 +1356,8 @@
           "caveat": "UNSELECTED FULL Draft. Original Current v1.0 retained byte-for-byte and unselected. Source-world 25 Energy opener regression resolved with one verified combat-state guard; actual Stealth/Vanish transitions, levels 1–60, poison application, Slice and Dice intent, DPS, client cast success and true subsequent live rotations remain UNVERIFIED."
         }
       ],
-      "apl_name": "Rogue_Combat"
+      "apl_name": "Rogue_Combat",
+      "protected_rollback_apl": "roles/Rogue/Current/APL_Rogue_Combat_v1.0_Draft.txt"
     },
     {
       "class": "Rogue",
@@ -1371,7 +1415,8 @@
           "caveat": "UNSELECTED experimental complete Draft; one conditional tighter Stealth opener. Source fixed repeat-unusable Garrote at Energy 0 while keeping Ghostly Strike next-Garrote proc, but source IsStealthed API always false and belief is cast-derived. In-game Stealth, Vanish, actual level1–60, position/facing, weapon damage, poison, AoE and true DPS not verified; 0 Approved. Preserve exact full Current."
         }
       ],
-      "apl_name": "Rogue_Subtlety"
+      "apl_name": "Rogue_Subtlety",
+      "protected_rollback_apl": "roles/Rogue/Current/APL_Rogue_Subtlety_v1.0_Draft.txt"
     },
     {
       "class": "Shaman",
@@ -1408,7 +1453,8 @@
           "relocated_from": "roles/APL_Shaman_Elemental_v1.0_Draft.txt"
         }
       ],
-      "apl_name": "Shaman_Elemental"
+      "apl_name": "Shaman_Elemental",
+      "protected_rollback_apl": "roles/Shaman/Current/APL_Shaman_Elemental_v1.0_Draft.txt"
     },
     {
       "class": "Shaman",
@@ -1465,7 +1511,8 @@
           "caveat": "UNSELECTED experimental whole v1.1. One action added before existing grouped totem call: solo Windfury Totem when known, absent, in combat, <3 enemies, non-boss, source Mana lo >=20%. Source at 25%+ starting Mana creates real Windfury totem/bonus attacks with zero rejected casts and preserves Maelstrom instant zero-Mana Bolts. Source lacks Windfury Weapon imbue state, actual player survival/damage/DPS, all level 1–60, moving/target changes, group threat and true in-game mana. Numbers are genuine modelled procs, not calibrated damage superiority. Current original remains immutable and preferred=null until live owner evidence."
         }
       ],
-      "apl_name": "Shaman_Enhancement"
+      "apl_name": "Shaman_Enhancement",
+      "protected_rollback_apl": "roles/Shaman/Current/APL_Shaman_Enhancement_v1.0_Draft.txt"
     },
     {
       "class": "Shaman",
@@ -1492,7 +1539,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [
         "No automatic Life Tap because reliable health-cost safety cannot be checked from current Forever API; manual Life Tap may be required."
       ],
@@ -1518,9 +1565,35 @@
           "caveat": "Independent custom APL; static key/list audit only. NO native import, replay, loop or in-game tests; not preferred or approved.",
           "legacy_filename": true,
           "relocated_from": "roles/APL_Warlock_Affliction_DPS_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Warlock/Candidates/APL_Warlock_Affliction_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "77dd177ab7b3b3acb21b766b960ad00e7e8fee85b7e377ba0b47b781bd132ad7",
+          "evidence": [
+            {
+              "kind": "native",
+              "reference": "v0.12.1 a4ca044512d7aacfdebca85cef617b1127115962; in-memory refined 22/22 native, 25/25 CI https://github.com/tkbiccay/APLForever-Open/actions/runs/46137958361. Stored retest pending."
+            },
+            {
+              "kind": "native",
+              "reference": "Stored exact candidate: 34/34 native tests, 99 matched worlds, 27/27 CI on 80376cd545751bf7ca7f5b5a66edb08ff64dab27; https://github.com/tkbiccay/APLForever-Open/actions/runs/46150026550. Reconciliation requires fresh CI."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Warlock/Current/APL_Warlock_Affliction_DPS_v1.0_Draft.txt",
+          "min_source_release": "v0.12.1",
+          "addon_version": "v0.12.1",
+          "game_build": null,
+          "talents": "Source Affliction fixture",
+          "gear": "Source Affliction fixture",
+          "settings": "No new settings or health-spending action; native toggles unchanged.",
+          "caveat": "Unselected Draft. At quarter Mana, tested refined partial Wrack increases modelled shadow periodic events 18→40, cost 3075→2971, end Mana80.25→121 in 115s; short 20s end Mana lower by105.25, one fewer accepted offensive action. Not calibrated DPS or real kill-time proof. Stored refined rerun found identical outcomes at other starting-resource contexts; fresh reconciliation CI pending. No automatic Life Tap; no live or approval claim."
         }
       ],
-      "apl_name": "Warlock_Affliction"
+      "apl_name": "Warlock_Affliction",
+      "protected_rollback_apl": "roles/Warlock/Current/APL_Warlock_Affliction_DPS_v1.0_Draft.txt"
     },
     {
       "class": "Warlock",
@@ -1587,7 +1660,8 @@
           "relocated_from": "roles/APL_Warlock_Demonology_DPS_v0.8_Default.txt"
         }
       ],
-      "apl_name": "Warlock_Demonology"
+      "apl_name": "Warlock_Demonology",
+      "protected_rollback_apl": "roles/Warlock/Current/APL_Warlock_Demonology_DPS_v1.0_ReportedWorking.txt"
     },
     {
       "class": "Warlock",
@@ -1627,7 +1701,8 @@
           "relocated_from": "roles/APL_Warlock_Destruction_DPS_v1.0_Draft.txt"
         }
       ],
-      "apl_name": "Warlock_Destruction"
+      "apl_name": "Warlock_Destruction",
+      "protected_rollback_apl": "roles/Warlock/Current/APL_Warlock_Destruction_DPS_v1.0_Draft.txt"
     },
     {
       "class": "Warrior",
@@ -1704,7 +1779,8 @@
           "caveat": "Unselected Draft: exact Current v1.0 plus first health.known conjunction. First-icon safety proven in controlled source reader, not real cast/health cost, source band accuracy, all levels or DPS. v1.1 omission retained. Full stored and progression gates pending."
         }
       ],
-      "apl_name": "Warrior_Arms"
+      "apl_name": "Warrior_Arms",
+      "protected_rollback_apl": "roles/Warrior/Current/APL_Warrior_Arms_DPS_v1.0_StaticValidated.txt"
     },
     {
       "class": "Warrior",
@@ -1813,7 +1889,8 @@
           "caveat": "Independent test of Whirlwind Rage uncertainty; +5 to both Whirlwind ST and AoE conditions over complete preserved v1.2. New unselected Draft only, preserve exact Current v1.0, archived v1.1 and v1.2; zero in-game proof or DPS advantage. Source/native v0.11 CI and full current-release validation required before any further consideration."
         }
       ],
-      "apl_name": "Warrior_Fury"
+      "apl_name": "Warrior_Fury",
+      "protected_rollback_apl": "roles/Warrior/Current/APL_Warrior_Fury_DPS_v1.0_Draft.txt"
     },
     {
       "class": "Warrior",
@@ -1872,7 +1949,9 @@
           "caveat": "Complete independent source-preserving Draft. No in-game proof, real client aggro/threat, full 1–60, sustained Rage/revenge advantage, DPS/TPS or survivability result. Protect legacy v1.0 PendingInGame and all rollbacks."
         }
       ],
-      "apl_name": "Warrior_Protection"
+      "apl_name": "Warrior_Protection",
+      "protected_rollback_apl": "roles/Warrior/Current/APL_Warrior_Protection_Tank_v1.0_PendingInGame.txt"
     }
-  ]
+  ],
+  "lifecycle_policy": "protected-current-v1"
 }

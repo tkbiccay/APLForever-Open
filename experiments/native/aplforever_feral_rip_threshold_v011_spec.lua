@@ -9,8 +9,8 @@ local function read(path)
   local s=assert(f:read("*a"));f:close();return s
 end
 local apl={
-  current=read("roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"),
-  four=read("roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt")
+  current=read("roles/Druid/Archive/APL_Druid_Feral_DPS_v1.0_Draft.txt"),
+  four=read("roles/Druid/Archive/APL_Druid_Feral_v1.4_Draft.txt")
 }
 local n
 apl.five,n=apl.four:gsub("action%.rip%.known&combo_points%.current>=4&","action.rip.known&combo_points.current>=5&")

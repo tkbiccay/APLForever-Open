@@ -4,7 +4,7 @@
 
 A fun, independent passion project: people and AI collaborating to explore better, safer gameplay recommendations. We share what works, what fails, and what we still don't know. No inflated DPS claims or pretence that AI-generated code is automatically correct.
 
-> **Project status (19 November 2026):** `main` is our single canonical working location. [Hunter BM v1.2 Draft Candidate](roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt), [Hunter BM v1.1 Current Draft](roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt), the [Guardian reported-working rollback](roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt), and the [source-pinned Hunter/Druid reference](knowledge/README.md) are all present on `main`. PRs #6, #8 and #9 merged after green CI; merge **never** means a Candidate was Approved. Positive high-Rage Maul remains blocked. The old private repository is read-only.
+> **Project status (19 November 2026):** `main` is our single canonical working location. [Hunter BM v1.2 Draft Candidate](roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.2_Draft.txt), [Hunter BM v1.1 historical test Candidate](roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt), the [Guardian reported-working rollback](roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt), and the [source-pinned Hunter/Druid reference](knowledge/README.md) are all present on `main`. PRs #6, #8 and #9 merged after green CI; merge **never** means a Candidate was Approved. Positive high-Rage Maul remains blocked. The old private repository is read-only.
 
 ## Project fun facts
 
@@ -38,7 +38,7 @@ Our source-pinned [class mechanics knowledge base](knowledge/README.md) records 
 
 Our [current published release and compatibility status](docs/knowledge/engine/current-release.json) is source-pinned in the [release ledger](docs/knowledge/engine/RELEASE_LEDGER.md). A [lightweight daily GitHub Action](.github/workflows/monitor-forever-release.yml) checks for newer **published** Forever versions and opens a single review issue if needed; it never edits APLs, triggers expensive simulations, adopts an upstream default, or marks a role Approved. Latest published, bounded headless-tested and in-game validated are **different** facts.
 
-**19 November 2026:** upstream **v0.10.0** is published. Its full 23-role compatibility remains **Partial / Needs Retest**, with [Draft PR #13](https://github.com/tkbiccay/APLForever-Open/pull/13) blocked by documented inherited Feral in-combat health conditions and an Arms precombat warning. The newly published [Feral v1.2 Candidate](roles/Druid/Candidates/APL_Druid_Feral_v1.2_Draft.txt) passed narrow native tests but remains **unselected**. Guardian and Hunter BM stay our co-equal P0 priorities.
+**19 November 2026:** upstream **v0.10.0** is published. Its full 23-role compatibility remains **Partial / Needs Retest**, with [Draft PR #13](https://github.com/tkbiccay/APLForever-Open/pull/13) blocked by documented inherited Feral in-combat health conditions and an Arms precombat warning. The newly published [historical Feral v1.2 Draft](roles/Druid/Archive/APL_Druid_Feral_v1.2_Draft.txt) passed narrow native tests but remains **unselected**. Guardian and Hunter BM stay our co-equal P0 priorities.
 
 ## Mission
 
@@ -54,9 +54,8 @@ See our [project priorities](docs/PROJECT_PRIORITIES.md) and [AI-first working m
 
 | Location on main | Meaning |
 | --- | --- |
-| [Current](roles/Hunter/Current/) | Selected development/test import, **not necessarily Approved** |
+| [Current](roles/Hunter/Current/) | One owner-designated protected development rollback per Supported role, **not necessarily Approved** |
 | [Candidates](roles/Hunter/Candidates/) | Full new standalone experimental APLs ready for targeted testing |
-| `roles/<Class>/Checkpoints/` (where present) | Immutable fallback snapshots; the last-working APL may instead remain in `Current` |
 | [Archive](roles/Hunter/Archive/) | Historical APLs preserved for comparison and rollback |
 | [Knowledge](knowledge/) | Research once → Preserve → Reuse, source-pinned mechanics and limits |
 | [Tests](tests/) | Headless regression tests and pinned source evidence |
@@ -71,8 +70,8 @@ The [static observability audit and per-role evidence matrix](docs/HEADLESS_VALI
 
 ## Development and approval
 
-- **Current** means the selected test/import revision, **not automatically Approved**.
-- **Candidates** are experimental; **Checkpoints** hold known-working rollback bytes; **Archive** preserves historic evidence.
+- **Current** means the protected development rollback, **not automatically Approved**.
+- **Candidates** are experimental; **Archive** preserves superseded versions, including exact historical working recovery references.
 - Protect full APL files and SHA-256 hashes. Preserve the default comparator and the last-working baseline.
 - Prefer version-pinned source-native import/compile and state-advanced accepted/refused casts; use game testing where the engine cannot reproduce live conditions.
 - Compare candidates against both shipped default and last-working behaviour, including low-resource and repeated-fallback cases.

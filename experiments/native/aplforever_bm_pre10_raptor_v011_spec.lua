@@ -11,7 +11,7 @@ local learn=ws.learn("HUNTER")
 local levels={1,4,6,9}
 local distances={4,6,12}
 local files={
-    current="roles/Hunter/Current/APL_Hunter_BeastMastery_v1.1_Draft.txt",
+    current="roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.1_Draft.txt",
     candidate="roles/Hunter/Candidates/APL_Hunter_BeastMastery_v1.4_Draft.txt"
 }
 local function read(path)
