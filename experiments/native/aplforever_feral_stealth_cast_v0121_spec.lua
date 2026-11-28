@@ -34,7 +34,14 @@ local function adapt(case)
     return {points=1,requires=function(_,e) return e.auras[5215]~=nil,"not prowled" end,
       effect=function(W,e,_,X)
         leave(W,e)
+        -- W.hit outcome rows do not carry a spell ID. Capture the returned
+        -- truth event at the exact adapter invocation, not a nearby hit.
+        local old=e.target.avoid.miss
+        if case.outcome then e.target.avoid.miss=case.outcome=="MISS" and 1 or 0 end
         local result=W.hit(e,e.target,0,1,"miss")
+        e.target.avoid.miss=old
+        e.aplforeverOpenerOutcomes=e.aplforeverOpenerOutcomes or {}
+        e.aplforeverOpenerOutcomes[#e.aplforeverOpenerOutcomes+1]={key=key,event=result}
         if key=="pounce" and result.act=="WOUND" then
           local a,b=assert(X.aura.pounce),assert(X.aura.pounce_bleed)
           assert.are.equal(9005,a.id);assert.are.equal(9007,b.id);assert.are.equal(18,b.duration)
@@ -78,6 +85,11 @@ local function trial(profile,case)
     noMelee=true,attackers=0,
     script=function(W,us)
       stock.WORLD.script(W,us)
+      -- Precombat can spend Energy even when WORLD.power was 100.
+      -- Establish the manual-Prowl boundary using real world resource events.
+      W.gain(us,(case.energy or 100)-us.power)
+      W.emit({kind="gain",src=us,pt=4,cost=W.res(us,4)})
+      us.aplforeverPullEnergy=us.power
       enter(W,us)
       W.moveTo(us,case.distance or 4)
       if case.distance then W.at(W.t+4,function() W.moveTo(us,4) end) end
@@ -103,6 +115,7 @@ local function trial(profile,case)
   local installed=false
   local attempts,follow,raw,stealthSamples,farSamples,early,short=0,0,0,0,0,0,0
   local first,openerTime,openerEnergy="none",-1,-1
+  local openerCP,openerCost,openerAct=-1,-1,"none"
   local rr=loop.run(L,case.seed,{duration=35,on=function(w,_,time)
     if not installed then
       installed=true
@@ -112,12 +125,18 @@ local function trial(profile,case)
         if key=="ravage" or key=="pounce" or key=="claw" or key=="shred" or key=="rake" or key=="rip" or key=="ferocious_bite" then p.range={0,5} end
         local prowled=e.auras[5215]~=nil
         local mana=e.power
+        local cpBefore=w.W.res(e,4)
         local ok,why=press(e,key,p)
         if w.W.t>=loop.PULL then
           if not ok then raw=raw+1;print("FERAL_STEALTH_REFUSAL",profile,case.name,w.W.t,key,why,mana,p.cost or 0)
           elseif prowled and key~="prowl" then
             attempts=attempts+1
-            if first=="none" then first=key;openerTime=w.W.t;openerEnergy=mana end
+            if first=="none" then
+              first=key;openerTime=w.W.t;openerEnergy=mana
+              openerCP=w.W.res(e,4)-cpBefore;openerCost=p.cost or 0
+              local events=e.aplforeverOpenerOutcomes or {}
+              if #events>0 then openerAct=events[#events].event.act end
+            end
             if w.W.distance>5 then early=early+1 end
             if mana+1e-6<(p.cost or 0) then short=short+1 end
           elseif first~="none" and key~="prowl" and not e.stopped then follow=follow+1 end
@@ -140,15 +159,19 @@ local function trial(profile,case)
     if ev.t>=loop.PULL then
       if ev.kind=="stealthed" and ev.on==false then breaks=breaks+1 end
       if ev.src==rr.us and (ev.spell==6785 or ev.spell==9005) then
-        if ev.kind=="cast" then casts=casts+1
-        elseif ev.kind=="spell" then
-          if ev.act=="WOUND" then landed=landed+1 else missed=missed+1 end
-        end
+        if ev.kind=="cast" then casts=casts+1 end
       end
       if ev.src==rr.us and ev.kind=="gain" and ev.pt==4 and (ev.rage or 0)>0 then gains=gains+ev.rage end
       if ev.kind=="aura" and ev.aura==9007 and (ev.stacks or 0)>0 then bleed=bleed+1 end
     end
   end
+  for _,row in ipairs(rr.us.aplforeverOpenerOutcomes or {}) do
+    if row.event.t>=loop.PULL then
+      if row.event.act=="WOUND" then landed=landed+1 else missed=missed+1 end
+    end
+  end
+  assert.are.equal(case.energy or 100,rr.us.aplforeverPullEnergy,"actual pull Energy control")
+  print("FERAL_STEALTH_OPENER_TRUTH",profile,case.name,case.seed,rr.us.aplforeverPullEnergy,openerEnergy,openerCost,openerAct,openerCP)
   print(("FERAL_STEALTH_CAST profile=%s case=%s seed=%d first=%s time=%.2f energy=%.2f attempts=%d casts=%d landed=%d missed=%d bleed=%d cpGains=%d breaks=%d follow=%d raw=%d tracedRaw=%d stealthSamples=%d farSamples=%d early=%d short=%d total=%d"):format(
     profile,case.name,case.seed,first,openerTime,openerEnergy,attempts,casts,landed,missed,bleed,gains,breaks,follow,rawTotal,raw,stealthSamples,farSamples,early,short,rr.presses))
   if profile=="new" then
@@ -158,24 +181,29 @@ local function trial(profile,case)
     if case.breakStealth then
       assert.is_true(breaks>=1);assert.is_true(rr.presses>=3)
     else
-      assert.are.equal(case.ravage and "ravage" or "pounce",first)
+      assert.are.equal(case.expected or (case.ravage and "ravage" or "pounce"),first)
       assert.are.equal(1,attempts);assert.are.equal(1,casts)
       assert.are.equal(1,landed+missed);assert.are.equal(1,breaks)
       assert.is_true(follow>=3,"no three accepted actions after opener")
       if case.distance then assert.is_true(farSamples>3);assert.is_true(openerTime>=loop.PULL+4) end
-      if not case.ravage then assert.are.equal(landed,bleed) end
+      if first=="pounce" then assert.are.equal(landed,bleed) else assert.are.equal(0,bleed) end
+      assert.are.equal(landed,openerCP,"combo point must follow actual opener outcome")
+      if case.outcome then assert.are.equal(case.outcome,openerAct) end
     end
   end
 end
 describe("Feral v1.6 source-native cast progression with explicit Prowl event",function()
   after_each(restore)
   for _,case in ipairs({
-    {name="ravage",ravage=true,seed=30417},
-    {name="ravage_second",ravage=true,seed=30437},
-    {name="pounce",ravage=false,seed=30417},
-    {name="pounce_second",ravage=false,seed=30437},
+    {name="ravage",ravage=true,seed=30417,outcome="WOUND"},
+    {name="ravage_second",ravage=true,seed=30437,outcome="WOUND"},
+    {name="ravage_miss",ravage=true,seed=30417,outcome="MISS"},
+    {name="pounce",ravage=false,seed=30417,outcome="WOUND"},
+    {name="pounce_second",ravage=false,seed=30437,outcome="WOUND"},
+    {name="pounce_miss",ravage=false,seed=30417,outcome="MISS"},
+    {name="pounce_cost_window",ravage=true,energy=53,expected="pounce",seed=30417,outcome="WOUND"},
     {name="approach",ravage=true,distance=12,seed=30417},
-    {name="low_energy",ravage=true,energy=0,seed=30417},
+    {name="low_energy",ravage=true,energy=0,expected="pounce",seed=30417,outcome="WOUND"},
     {name="manual_break",ravage=true,distance=12,breakStealth=true,seed=30417}
   }) do
     it(case.name,function()

@@ -5,7 +5,7 @@
 | Role | Baseline revision / SHA prefix | Latest revision | Improvement review |
 |---|---|---|---|
 | Druid_Balance | v1.0 1cf83328f343 | v1.0 | Retain v1.0 after #33: 60 worlds, late Insect eliminated but one medium fight regressed; no consistent gain; revisit estimate confidence and AoE |
-| Druid_Feral | v1.0 f2f72d0621c8 | v1.6 Draft | v1.5 measured Barkskin merged #116; owner-requested stealth v1.6 implemented, native/live validation pending |
+| Druid_Feral | v1.0 f2f72d0621c8 | v1.6 Draft | v1.5 measured Barkskin merged #116; owner-requested v1.6 icons 10/10, actual press preliminary raw0, cast assertions corrected; full gate/live pending |
 | Druid_Guardian | v1.0 f386e158a5e2 | v1.6 | P0 scoped v0.12.1 native candidate evidence #114; live gate pending |
 | Hunter_BeastMastery | v1.1 a9d752c5e6cd | v1.4 | P0 scoped v0.12.1 native candidate evidence #114; live gate pending |
 | Hunter_Marksmanship | v1.0 43c78f4517f2 | v1.1 | Audit existing candidate measured benefit; improve or retain |
@@ -15,7 +15,7 @@
 | Mage_Frost | v1.0 f05a17a34b9d | v1.0 | Retain v1.0 after #34: 45 worlds, low-Mana Cone eliminated but costs/progression mixed; merged #118, seek independent improvement |
 | Paladin_Protection | v1.0 8f1ba35a4663 | v1.1 | Audit existing candidate measured benefit; improve or retain |
 | Paladin_Retribution | v1.2 d5a05302c341 | v1.3 Draft | Measured emergency shield at known critical solo health, 30 worlds, native 10/10; merged #120, 30/30 CI and 10/10 native |
-| Priest_Shadow | v1.0 66ee308453ae | v1.0 | #121 RED 13/16, completed matches identical; Minor OFF Current failure, diagnosis pending |
+| Priest_Shadow | v1.0 66ee308453ae | v1.0 | #121 merged 19/19 native, 54 worlds, all matched outcomes identical; effective toggle auto-enable verified; retain Current |
 | Rogue_Assassination | v1.0 f817fe4ab906 | v1.1 | Audit existing candidate measured benefit; improve or retain |
 | Rogue_Combat | v1.0 ff69f6d4baa3 | v1.1 | Audit existing candidate measured benefit; improve or retain |
 | Rogue_Subtlety | v1.0 3d5fa90ecfd4 | v1.1 | Audit existing candidate measured benefit; improve or retain |
