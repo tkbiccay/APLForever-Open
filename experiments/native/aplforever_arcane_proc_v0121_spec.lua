@@ -15,7 +15,10 @@ local offence={arcane_wrath=true,arcane_blast=true,arcane_missiles=true,fire_bla
 local function trial(profile,seed,case)
   local initial=stock.WORLD.max*case.pct
   local C=setmetatable({WORLD=setmetatable({power=initial,mobHealth=1000000000,
-    distance=case.range,attackers=1},{__index=stock.WORLD})},{__index=stock})
+    distance=case.range,attackers=1,script=function(W,us)
+      stock.WORLD.script(W,us)
+      W.moveTo(us,case.range)
+    end},{__index=stock.WORLD})},{__index=stock})
   local L=loop.new(C);local H=L.us
   assert.are.same({},H.loadErrors);assert.are.same({},H.Hekili.Class.loadErrors or {})
   if profile~="shipped" then
@@ -38,7 +41,14 @@ local function trial(profile,seed,case)
     paidFireWithProc=0,procMissiles=0,freeMissiles=0,ccRetained=0,firstMana=-1,
     firstTime=-1,totalCost=0,channels=0,cut=0,full=0,unclosed=0}
   local installed=false
-  local rr=loop.run(L,seed,{duration=100,on=function(w)
+  local rangeSamples=0
+  local fireID=assert(C.IDS.fire_blast[#C.IDS.fire_blast])
+  local rr=loop.run(L,seed,{duration=100,on=function(w,_,time)
+    if time>loop.PULL+1 and not w.us.stopped then
+      assert.are.equal(case.range,H.ctl.distance.target,"movement range event not observed")
+      assert.are.equal(case.range<=20,H.api.C_Spell.IsSpellInRange(fireID,"target"),"Fire Blast API range control not exercised")
+      rangeSamples=rangeSamples+1
+    end
     if installed then return end
     installed=true
     local old=w.W.press
@@ -46,6 +56,9 @@ local function trial(profile,seed,case)
       if e~=w.us or w.W.t<loop.PULL then return old(e,key,p) end
       local stop=e.stopped==true
       local proc=e.auras[mb]~=nil
+      if key=="fire_blast" and case.range>20 then
+        print("ARCANE_RANGE_ATTEMPT",profile,case.name,seed,w.W.t,tostring(H.ctl.distance.target))
+      end
       local clear=e.auras[cc]~=nil
       local mana=e.power
       local ok,why=old(e,key,p)
@@ -73,6 +86,8 @@ local function trial(profile,seed,case)
     end
   end},{{H=H}})
   assert.are.equal(0,rr.errors);assert.are.equal(0,rr.raises)
+  assert.is_true(rangeSamples>3,"range control not sampled")
+  print("ARCANE_RANGE_V0121",profile,case.name,seed,case.range,rangeSamples)
   assert.is_true(math.abs(initial-rr.us.power0)<1e-6)
   local raw=0;for _,n in pairs(rr.refused or {}) do raw=raw+n end
   assert.are.equal(raw,v.raw)

@@ -4,15 +4,15 @@
 
 | Role | Baseline revision / SHA prefix | Latest revision | Improvement review |
 |---|---|---|---|
-| Druid_Balance | v1.0 1cf83328f343 | v1.0 | In progress #33: native TTD Insect Swarm opportunity, no stored candidate yet |
+| Druid_Balance | v1.0 1cf83328f343 | v1.0 | Retain v1.0 after #33: 60 worlds, late Insect eliminated but one medium fight regressed; no consistent gain; revisit estimate confidence and AoE |
 | Druid_Feral | v1.0 f2f72d0621c8 | v1.5 | Measured stored v1.5 low-health Barkskin, 10/10, 40 worlds; merged #116, live gate pending |
 | Druid_Guardian | v1.0 f386e158a5e2 | v1.6 | P0 scoped v0.12.1 native candidate evidence #114; live gate pending |
 | Hunter_BeastMastery | v1.1 a9d752c5e6cd | v1.4 | P0 scoped v0.12.1 native candidate evidence #114; live gate pending |
 | Hunter_Marksmanship | v1.0 43c78f4517f2 | v1.1 | Audit existing candidate measured benefit; improve or retain |
 | Hunter_Survival | v1.0 e58fe21c311c | v1.1 | Audit existing candidate measured benefit; improve or retain |
-| Mage_Arcane | v1.0 d89600259308 | v1.0 | Priority gap: no separate Candidate file; audit existing whole APL and test worthwhile alternative |
+| Mage_Arcane | v1.0 d89600259308 | v1.0 | #119 proc reorder mixed initial results, three range controls failed; corrected actual range observation pending |
 | Mage_Fire | v1.0 500a40752f3f | v1.1 | Audit existing candidate measured benefit; improve or retain |
-| Mage_Frost | v1.0 f05a17a34b9d | v1.0 | Priority gap: no separate Candidate file; audit existing whole APL and test worthwhile alternative |
+| Mage_Frost | v1.0 f05a17a34b9d | v1.0 | Retain v1.0 after #34: 45 worlds, low-Mana Cone eliminated but costs/progression mixed; merged #118, seek independent improvement |
 | Paladin_Protection | v1.0 8f1ba35a4663 | v1.1 | Audit existing candidate measured benefit; improve or retain |
 | Paladin_Retribution | v1.2 d5a05302c341 | v1.2 | Priority gap: no separate Candidate file; audit existing whole APL and test worthwhile alternative |
 | Priest_Shadow | v1.0 66ee308453ae | v1.0 | Priority gap: no separate Candidate file; audit existing whole APL and test worthwhile alternative |
