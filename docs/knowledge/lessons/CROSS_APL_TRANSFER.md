@@ -207,3 +207,40 @@ The first negative test [44809596783](https://github.com/tkbiccay/APLForever-Ope
 **22 Nov 2026, source-confirmed for published Forever v0.11.0 `86b739cbc4e6afbcbc693c3790ee81197fc6234b`.** Hunter [`spec:RegisterPets`](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili_Hunter/Hunter.lua#L411-L416) defines `summon_hawk` as an offensive **temporary guardian** with **two-cap / 18s duration**; its [registered spell](https://github.com/zmsl/hekili/blob/v0.11.0/src/Hekili_Hunter/Hunter.lua#L782-L799) has a 6s cooldown shared with Arcane Shot. `aspect_of_the_hawk` is a **player buff**. `call_pet` and `revive_pet` are **permanent-pet** recovery using different client state and intent. Similar names must never collapse these separate state machines into one "pet arrived" assertion.
 
 [Exact v0.11 Hunter BM native 6/6](https://github.com/tkbiccay/APLForever-Open/actions/runs/44991615130) accepted 3–4 `summon_hawk` casts in 35-second source pulls with independently checked one `aspect_of_the_hawk` and three later non-summon offensive actions; **recasting guardians over time is not itself failed final fallback**. The released Hunter Turret fixture does **not** faithfully model actual guardian damage or arrival/count, so source acceptance cannot verify efficient real-client capped uptime. The separate Call/Revive pet-arrival check remains in-game only. This is a **test/research classification lesson**, not a source-validated change to another spec's APL. When transferred, verify the receiving class's actual registered pet/guardian model and cooldown, then distinguish ready-but-refused first icons from cooldown-spaced legal casts. No speculative cross-role formula or shared runtime dependency.
+
+
+## 28 November 2026 — Cross-Spec Research Multiplier: mandatory applicability gate
+
+For each material discovery: Discover → establish root cause → resolve/test origin → scan all supported roles → independently validate receiving roles → retain permanent regression. Use a scoped row of exact source pin, originating PR/run, receiving role and baseline/branch, affected ability/condition, applicability and rationale, next test, outcome. States Applicable / Not Applicable / Needs Evidence / Blocked. Reuse prior scans with unchanged pins and files; no duplicative full sweep per minor edit. Do not transfer test success, copy identical guards blindly or infer live engine observability from world truth. Use matched default/working/engineering baseline, complete action chain and final/repeated fallback. Track measured improvements separately.
+
+### Initial DoT/debuff applicability inventory — 23/23 supported baselines inspected
+
+Pin v0.12.1 a4ca044512d7aacfdebca85cef617b1127115962; repository fa6c3b534bdb8935cac72045f70a06e20ea878ed. Exact catalogue selected/Current files, except owner-selected Feral v1.6 engineering baseline. This is a **static discovery scan**, not an independent receiving-role validation, exhaustive spell kit audit or all-candidate scan. Auras below are literal debuff references found in those complete files. For origin Affliction #125, the transferable principle is to evaluate actual periodic effects and duration/resource tradeoffs, not to copy Wrack conditions. For AURA-LAND-017, all resistible debuff application families merit scoped checks.
+
+| Role | Observed DoT/debuff references | Applicability / next test |
+| --- | --- | --- |
+| Druid Balance | insect_swarm, moonfire | Applicable: short target lifetime and expiry; reuse #117 negative result |
+| Druid Feral v1.6 | rake, rip, lacerate, moonfire, faerie_fire, demoralizing_roar | Applicable: CP-scaled Rip, actual landed bleed, refresh and form transitions; no blanket timing |
+| Druid Guardian v1.0 | moonfire, lacerate, faerie_fire, demoralizing_roar | Applicable: stack expiry, landed Roar; preserve working and #64 evidence |
+| Hunter BM | serpent_sting, hunters_mark | Applicable: sting upkeep vs target lifetime, landed/expiry |
+| Hunter MM | serpent_sting, hunters_mark | Applicable: sting upkeep vs cast/shot priority |
+| Hunter Survival | immolation_trap, serpent_sting, hunters_mark | Applicable: trap activation vs aura and sting uptime |
+| Mage Arcane | none | Not applicable to existing explicit debuff branches; kit/other candidates need separate scan if issue relevant |
+| Mage Fire | fire_vulnerability | Needs Evidence: stack debuff upkeep, not DoT refresh; inspect Ignite mechanics separately |
+| Mage Frost | winters_chill | Needs Evidence: stack consumption, not DoT refresh; reuse #118 |
+| Paladin Protection | consecrated_ground | Needs Evidence: ground area effect versus target aura |
+| Paladin Retribution | judgement_of_the_crusader | Needs Evidence: judgement/seal state, not ordinary periodic DoT |
+| Priest Shadow | shadow_word_pain, devouring_plague, vampiric_embrace | Applicable: actual periodic effects, channel overlap and low Mana |
+| Rogue Assassination | rupture, garrote | Applicable: CP and opener bleed duration/landed effects |
+| Rogue Combat | garrote | Applicable: opener bleed and short-pull value |
+| Rogue Subtlety | rupture, garrote, death_mark | Applicable: CP/stealth and mark distinct from periodic bleed |
+| Shaman Elemental | flame_shock | Applicable: shock shared CD, expiry and Mana |
+| Shaman Enhancement | flame_shock, stormstrike | Applicable: shock expiry vs charges; distinguish debuff consumption |
+| Warlock Affliction | corruption, bane_of_agony, siphon_life, immolate, curse_of_the_elements | Origin: #125 [22/22](https://github.com/tkbiccay/APLForever-Open/actions/runs/46137958361); tighter mana.hi/full-channel overlap reproduces gains at quarter Mana, short end Mana lower, no DPS claim |
+| Warlock Demonology | immolate, corruption, bane_of_doom, bane_of_agony, curses, demonic_brand | Applicable: actual landed DoTs, charge state and post-upkeep DEMO-006; preserve reported-working |
+| Warlock Destruction | immolate, corruption, curse_of_the_elements, bane_of_agony | Applicable: Immolate consumption/Conflagrate, resource expiry tradeoff |
+| Warrior Arms | rend, sunder_armor, demoralizing_shout, thunder_clap | Applicable: Rend vs armor/mitigation debuff, rage and stance |
+| Warrior Fury | rend, demoralizing_shout, sunder_armor | Applicable: Rend opportunity cost and rage |
+| Warrior Protection | rend, thunder_clap, thunderfury, sunder_armor, demoralizing_shout | Applicable: bleed/stack/mitigation debuffs, threat/rage reserve |
+
+Five healers remain Blocked for triage; no transfer to healing priority without verified support. Receiving-role independent outcomes pending; prioritise next actual Destruction/Demonology work, then risk-ranked other roles. No claim all listed spells are DoTs or that any receiving APL is defective. Other mechanic families use the same gate. No production APL edits in this policy change.

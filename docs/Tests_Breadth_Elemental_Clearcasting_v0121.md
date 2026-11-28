@@ -6,3 +6,6 @@
 
 ## Measured first result — retain Current
 [13/13 native PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/46136697441), job 140953481533, exact first head 6eef834f2d536f0c0162eb50b53708547790cb47, 36 worlds. Current low-Mana free CL starts 1 total; alternative 21, zero paid low starts for both; all 12 matched actual completed offensive costs identical. Completed spells equal in nine pairs, -2/-1/-1 in full seed30437, full seed30461 and quarter seed30461. End Mana same or small differences (+5.30,+31.80,+15.90,-2.65 in changed cases), no general savings. Alternative raw1 casting boundary full30437, classified sub1e-8, no substantive refusals. Free casts displace free Lightning Bolts, not necessarily paid spells; native damage uncalibrated. No superior rotation or new APL. Retain exact Current, archive hypothesis, seek independent change, no forced optimisation. Range event validates observed20yd only. Proc expiry, real AoE and live unproved. Final evidence CI/rebase pending.
+
+## Final result
+#123 merged 1498ee76c79b9db0927d1c3b4d648af6c73d81f9 at exact head 91c9f31d57ad8b9f0841a0e75362ceb225a1d53e, 28/28 CI, [13/13 final native](https://github.com/tkbiccay/APLForever-Open/actions/runs/46136925834), job 140954184310. No APL change. Retain Current and count distinct breadth #39, not an improved role. All 58 hashes preserved.
