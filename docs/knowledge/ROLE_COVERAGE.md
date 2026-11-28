@@ -61,3 +61,7 @@
 ## 28 November — P0 migration and Arms #31
 
 [#114 27/27 PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/46119049582) merged, Guardian/BM scoped current-release evidence. [#115 5/5 first-head PASS](https://github.com/tkbiccay/APLForever-Open/actions/runs/46119135081) unknown-health Bloodrage guard real source observations, stored full v1.2 and combat tests pending. No Approval, no premature count.
+
+## 28 November — Balance/Frost retain decisions
+
+Balance #33 merged [16/16 native](https://github.com/tkbiccay/APLForever-Open/actions/runs/46124181853), 60 worlds, real TTD; veryshort gains but medium regression. Frost #34 [16/16 native](https://github.com/tkbiccay/APLForever-Open/actions/runs/46124270910), 45 worlds, 10→0 low-Mana Cone, mixed spending/accepted progress; final reconciliation pending. No APL edits, both retain exact Current. Neither is a measured superior APL. See dedicated reports and portfolio.
