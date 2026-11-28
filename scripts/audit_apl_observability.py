@@ -113,6 +113,16 @@ def guarded_feral_barkskin(rhs: str, phase: str, min_source_release: str) -> boo
                 and phase == "combat" and rhs == FERAL_BARKSKIN_HEALTH)
 
 
+# Exact tested solo emergency shield only; not a general combat-health exception.
+RET_EMERGENCY_HEALTH = "divine_shield,if=health.known&health.pct<=20&toggle.defensives&combat>0&!group&aggro&action.divine_shield.known&!buff.forbearance.up&!buff.divine_shield.up&gcd.remains<=0"
+
+
+def guarded_ret_emergency(rhs: str, phase: str, min_source_release: str) -> bool:
+    version = re.fullmatch(r"v(\d+)\.(\d+)\.(\d+)", min_source_release)
+    return bool(version and tuple(map(int, version.groups())) >= (0, 12, 1)
+                and phase == "combat" and rhs == RET_EMERGENCY_HEALTH)
+
+
 def scan_apl(source: str, min_source_release: str = "") -> list[dict]:
     rows = action_lines(source)
     phase_map = phases(rows)
@@ -122,7 +132,8 @@ def scan_apl(source: str, min_source_release: str = "") -> list[dict]:
             for match in regex.finditer(rhs):
                 if (rule == "player_health" and match.group() == "health.pct"
                         and (guarded_precombat_health(rhs, phase_map[list_name], min_source_release)
-                             or guarded_feral_barkskin(rhs, phase_map[list_name], min_source_release))
+                             or guarded_feral_barkskin(rhs, phase_map[list_name], min_source_release)
+                             or guarded_ret_emergency(rhs, phase_map[list_name], min_source_release))
                         and match.start() >= rhs.index(",if=") + 4):
                     continue
                 findings.append({

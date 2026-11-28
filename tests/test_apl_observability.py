@@ -80,6 +80,26 @@ class ObservabilityTests(unittest.TestCase):
         ):
             self.assertEqual(1, len(audit.scan_apl(unsafe, "v0.12.1")), unsafe)
 
+    def test_exact_ret_emergency_no_broad_waiver(self):
+        line = "actions=" + audit.RET_EMERGENCY_HEALTH + "\n"
+        self.assertEqual([], audit.scan_apl(line, "v0.12.1"))
+        self.assertEqual(1, len(audit.scan_apl(line, "v0.12.0")))
+        for unsafe in (
+            line.replace("health.known&", ""),
+            line.replace("health.known&", "!health.known&"),
+            line.replace("health.known&", "health.known|"),
+            line.replace("health.pct<=20", "health.pct<=95"),
+            line.replace("&!group", ""),
+            line.replace("&aggro", ""),
+            line.replace("&!buff.forbearance.up", ""),
+            line.replace("&toggle.defensives", ""),
+            line.replace("&gcd.remains<=0", ""),
+            line.replace("divine_shield,", "bloodrage,", 1),
+            line.replace("actions=", "actions.precombat="),
+            line.rstrip() + "|1\n",
+        ):
+            self.assertEqual(1, len(audit.scan_apl(unsafe, "v0.12.1")), unsafe)
+
     def test_release_guard_is_narrow_and_fail_closed(self):
         src = "actions.precombat=bloodrage,if=health.known&health.pct>=95&rage.lo<=10\n"
         self.assertEqual([], audit.scan_apl(src, "v0.12.1"))

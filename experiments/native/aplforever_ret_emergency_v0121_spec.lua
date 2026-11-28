@@ -9,6 +9,10 @@ local current=assert(f:read("*a"));f:close()
 local line="actions=divine_shield,if=health.known&health.pct<=20&toggle.defensives&combat>0&!group&aggro&action.divine_shield.known&!buff.forbearance.up&!buff.divine_shield.up&gcd.remains<=0"
 local alt,n=current:gsub("actions=call_action_list,name=crusader_open",line.."\nactions+=/call_action_list,name=crusader_open")
 assert.are.equal(1,n)
+local sf=assert(io.open(root.."/roles/Paladin/Candidates/APL_Paladin_Retribution_v1.3_Draft.txt","rb"))
+local stored=assert(sf:read("*a"));sf:close()
+assert.are.equal(alt,stored,"stored complete Draft differs from measured alternative")
+alt=stored
 local original=stock.character
 local id=642
 local function adapt()

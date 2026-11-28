@@ -945,7 +945,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.2",
+      "latest_revision": "v1.3",
       "limitations": [],
       "revisions": [
         {
@@ -1023,6 +1023,27 @@
           "settings": null,
           "caveat": "Pinned native Hekili importer/compile/one headless update PASS in GitHub Actions 43645496132. Blessing of Might action is unsupported, so precombat Blessing upkeep is manual. Multi-cast fallbacks, talents/procs, level 1–60 and in-game performance NOT RUN. Draft only, not preferred/Approved.",
           "relocated_from": "roles/APL_Paladin_Retribution_v1.2_Draft.txt"
+        },
+        {
+          "revision": "v1.3",
+          "apl_file": "roles/Paladin/Candidates/APL_Paladin_Retribution_v1.3_Draft.txt",
+          "status": "Draft",
+          "sha256": "6d4fdbd61e0594e7b9b2007c34d33c599cb56beee592a01a2a2826ed2e11c04e",
+          "evidence": [
+            {
+              "kind": "native",
+              "reference": "v0.12.1 exact pin; https://github.com/tkbiccay/APLForever-Open/actions/runs/46126484914 10/10, 30 worlds. Controlled health and threat, class-backed shield aura/Forbearance, positive two seeds, 17 subsequent accepted each, raw0; native OFF/separate/group/no-threat/Forbearance controls. Stored retest pending."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Paladin/Current/APL_Paladin_Retribution_v1.2_Draft.txt",
+          "min_source_release": "v0.12.1",
+          "addon_version": "v0.12.1",
+          "game_build": null,
+          "talents": "Native L60 Ret fixture; rank1 Divine Shield test adapter",
+          "gear": "Native Paladin source world",
+          "settings": "Native Defensives toggle; no per-spec settings",
+          "caveat": "Unselected Draft. Exact v1.2 plus conservative solo emergency shield at known <=20% health and aggro, no Forbearance. Adapter not immunity/threat/damage penalty simulation. Actual survival, level unlocks, real group state, and live approval unverified."
         }
       ],
       "apl_name": "Paladin_Retribution"
