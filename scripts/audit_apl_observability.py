@@ -84,13 +84,36 @@ def phases(rows: list[tuple[int, str, str]]) -> dict[str, str]:
     }
 
 
-def scan_apl(source: str) -> list[dict]:
+def guarded_precombat_health(rhs: str, phase: str, min_source_release: str) -> bool:
+    """Conservative v0.12.1+ exception: first conjunct, no OR, precombat only.
+    Do not treat known health as exact health or waive other hidden-state rules.
+    Old-version and combat predicates remain subject to the historical audit.
+    """
+    version = re.fullmatch(r"v(\d+)\.(\d+)\.(\d+)", min_source_release)
+    if not version or tuple(map(int, version.groups())) < (0, 12, 1):
+        return False
+    if phase != "precombat":
+        return False
+    fields = [part[3:] for part in rhs.split(",") if part.startswith("if=")]
+    # Deliberately accept only a terminal if= with simple conjunctions of
+    # identifier/negation/numeric-comparison atoms; reject XOR, OR, arithmetic,
+    # parentheses and other options until separately validated.
+    return (len(fields) == 1 and rhs.rsplit(",", 1)[-1] == "if=" + fields[0]
+            and re.fullmatch(r"health\.known(?:&!?[a-z_][a-z0-9_.]*(?:(?:>=|<=|!=|=|>|<)[0-9]+(?:\.[0-9]+)?)?)+", fields[0]) is not None
+            and fields[0].count("health.known") == 1)
+
+
+def scan_apl(source: str, min_source_release: str = "") -> list[dict]:
     rows = action_lines(source)
     phase_map = phases(rows)
     findings = []
     for line_num, list_name, rhs in rows:
         for rule, regex in RULES.items():
             for match in regex.finditer(rhs):
+                if (rule == "player_health" and match.group() == "health.pct"
+                        and guarded_precombat_health(rhs, phase_map[list_name], min_source_release)
+                        and match.start() >= rhs.index(",if=") + 4):
+                    continue
                 findings.append({
                     "line": line_num, "list": list_name,
                     "phase": phase_map[list_name], "rule": rule,
@@ -120,7 +143,7 @@ def analyse(root: Path) -> tuple[list[dict], list[dict]]:
             sha = hashlib.sha256(raw).hexdigest()
             if sha != revision["sha256"]:
                 raise ValueError("immutable APL hash mismatch: " + path)
-            findings = scan_apl(raw.decode("utf-8-sig"))
+            findings = scan_apl(raw.decode("utf-8-sig"), revision.get("min_source_release", ""))
             row = {
                 "role": role["apl_name"], "revision": revision["revision"],
                 "path": path, "sha256": sha, "status": revision["status"],

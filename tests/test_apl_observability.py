@@ -63,6 +63,27 @@ class ObservabilityTests(unittest.TestCase):
         found = audit.scan_apl(source)
         self.assertEqual("combat", found[0]["phase"])
 
+    def test_release_guard_is_narrow_and_fail_closed(self):
+        src = "actions.precombat=bloodrage,if=health.known&health.pct>=95&rage.lo<=10\n"
+        self.assertEqual([], audit.scan_apl(src, "v0.12.1"))
+        for version in ("", "v0.11.0", "v0.12.0", "garbage"):
+            self.assertEqual(1, len(audit.scan_apl(src, version)))
+        for unsafe in (
+            src.replace("health.known&", ""),
+            src.replace("health.known&", "!health.known&"),
+            src.replace("health.known&", "health.known|"),
+            src.replace("&rage.lo<=10", "|rage.lo<=10"),
+            src.replace("&rage.lo<=10", "^rage.lo<=10"),
+            src.replace("&rage.lo<=10", "&(rage.lo<=10)"),
+            src.rstrip() + ",value=1\n",
+            src.replace("actions.precombat", "actions"),
+            src.replace("health.pct", "health.current"),
+            src + "actions=call_action_list,name=precombat\n",
+        ):
+            self.assertEqual(1, len(audit.scan_apl(unsafe, "v0.12.1")), unsafe)
+        self.assertEqual(["pet_health"], [x["rule"] for x in audit.scan_apl(
+            src.replace("&rage.lo<=10", "&pet.health.pct>50"), "v0.12.1")])
+
     def test_pet_health_is_observability_debt_not_ignored(self):
         source = (
             "actions=wrath,if=pet.health.pct<20&health.max>0&healthstone.known&"

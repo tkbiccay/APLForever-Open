@@ -279,3 +279,7 @@
 ## Lesson 27 — Observed targeting context is not geometry; threshold timing is not bleed DPS
 
 26 Nov, historical v0.11.0, [#30 9/9](https://github.com/tkbiccay/APLForever-Open/actions/runs/45907551286). Isolating only Rip >=4 vs >=5 gives earlier four-point Rip and higher fixture aura seconds, no raw refusals. Source lacks CP-scaled bleed duration/damage; actual world target attacks player while observer suppresses targettarget answer, changing Shred/Claw; do not infer real facing or DPS. Recheck new v0.12.1 resource, health, missed-bleed and TTD semantics before transfer. [Report](../Tests_Breadth_Feral_Rip_Threshold_v011.md). Preserve APLs; risk-based retest not blanket retirement.
+
+## Lesson 28 — Unknown health fallback can pass a positive health threshold
+
+28 Nov v0.12.1 [5/5 native](https://github.com/tkbiccay/APLForever-Open/actions/runs/46119135081): source health.known false and health.pct=100, old Arms Bloodrage fires first on repeated precombat cycles. First health.known guard prevents it, known high positive retained. Guarded precombat only version-aware audit, not blanket hidden-health allowance; real HP cost absent from native world. Verify each transferred spec and combat reachability independently.
