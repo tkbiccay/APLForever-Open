@@ -9,8 +9,11 @@ local alternativeLine=anchor:sub(1,-2).."|(active_enemies=1&mana.lo<action.sipho
 local at=assert(current:find(anchor,1,true))
 assert.is_nil(current:find(anchor,at+#anchor,1,true))
 local alternative=current:sub(1,at-1)..alternativeLine..current:sub(at+#anchor)
+local refined=alternative:gsub("mana%.lo<action%.siphon_life%.cost","mana.hi<action.siphon_life.cost"):gsub("debuff%.corruption%.remains>=3&debuff%.bane_of_agony%.remains>=3","debuff.corruption.remains>=action.wrack.cast+0.2&debuff.bane_of_agony.remains>=action.wrack.cast+0.2")
+assert.are_not.equal(alternative,refined)
 local offence={shadow_bolt=true,searing_pain=true,wrack=true,corruption=true,bane_of_agony=true,siphon_life=true,immolate=true,rain_of_fire=true}
-local function trial(profile,seed,pct)
+local function trial(profile,seed,pct,duration)
+  duration=duration or 115
   local initial=stock.WORLD.max*pct
   local C=setmetatable({WORLD=setmetatable({power=initial,mobHealth=1000000000,distance=25,
     attackers=1,script=function(W,us) stock.WORLD.script(W,us);W.moveTo(us,25) end
@@ -19,7 +22,7 @@ local function trial(profile,seed,pct)
   assert.are.same({},H.loadErrors);assert.are.same({},H.Hekili.Class.loadErrors or {})
   if profile~="shipped" then
     local lists,warnings=H.Hekili:ImportSimcAPL("Warlock_Affliction","APLForever-Affliction-partial-"..profile,
-      profile=="current" and current or alternative,C.PACK)
+      profile=="current" and current or profile=="refined" and refined or alternative,C.PACK)
     for _,k in ipairs({"precombat","default","boss_curse","major_cooldowns","aoe","minor_cooldowns","upkeep","final_fallback"}) do assert.is_table(lists[k]) end
     assert.is_falsy((warnings or ""):find("Unsupported action",1,true))
     assert.is_falsy((warnings or ""):find("Unknown key",1,true))
@@ -43,7 +46,7 @@ local function trial(profile,seed,pct)
     local a=e and e.auras[id]
     return a and math.max(0,a.expires-now) or 0
   end
-  local rr=loop.run(L,seed,{duration=115,on=function(w,_,time)
+  local rr=loop.run(L,seed,{duration=duration,on=function(w,_,time)
     if time>loop.PULL+1 and not w.us.stopped then
       assert.are.equal(25,H.ctl.distance.target);v.rangeSamples=v.rangeSamples+1
       local c,b,s=remains(w.us.target,cor,w.W.t),remains(w.us.target,bane,w.W.t),remains(w.us.target,siphon,w.W.t)
@@ -104,13 +107,14 @@ local function trial(profile,seed,pct)
   end
   local c=rr.pressedBy or {}
   v.tap=c.life_tap or 0;v.pain=c.searing_pain or 0;v.endMana=rr.us.power
+  print("AFF_PARTIAL_DURATION",profile,seed,pct,duration)
   print(("AFF_PARTIAL_V0121 profile=%s seed=%d pct=%.2f active=%d follow=%d raw=%d epsilon=%d partial=%d opportunities=%d wrack=%d full=%d clip=%d cutoff=%d cor=%d bane=%d siphon=%d ticks=%d shadow=%d nightfall=%d pain=%d tap=%d cost=%.2f endMana=%.2f"):format(
     profile,seed,pct,v.offence,v.follow,v.raw,v.epsilon,v.partial,v.partialOpportunity,v.wrackStarts,v.full,v.clip,v.cutoff,v.cor,v.bane,v.siphon,v.ticks,v.shadowTicks,v.nightfall,v.pain,v.tap,v.cost,v.endMana))
   if profile~="shipped" then
     assert.are.equal(0,v.tap,"automatic Life Tap regression")
     assert.are.equal(0,v.raw-v.epsilon,"substantive refusal")
     assert.is_true(v.offence>=3,"final fallback progression")
-    if pct>=0.25 then assert.is_true(v.follow>=3,"post-DoT progression") end
+    if pct>=0.25 and duration>=45 then assert.is_true(v.follow>=3,"post-DoT progression") end
   end
   return v
 end
@@ -132,4 +136,22 @@ describe("Affliction v0.12.1 partial-upkeep Wrack while Siphon unaffordable",fun
   it("actual partial Wrack opportunity exercised",function()
     assert.is_true(opportunity>0,"no naturally exercised partial Wrack; blocked not improved")
   end)
+end)
+
+-- A low resource floor does not prove Siphon is unaffordable. Test the
+-- upper-bound variant, and preserve enough DoT duration for the whole channel.
+describe("Affliction short-pull and conservative full-channel overlap controls",function()
+  for _,seed in ipairs({30417,30437,30461}) do
+    for _,duration in ipairs({20,45,115}) do
+      it(("quarter Mana seed %d duration %d"):format(seed,duration),function()
+        local old=trial("current",seed,0.25,duration)
+        local loose=trial("alternative",seed,0.25,duration)
+        local tight=trial("refined",seed,0.25,duration)
+        assert.is_true(loose.clip<=old.clip,"new combat clip loose")
+        assert.is_true(tight.clip<=old.clip,"new combat clip refined")
+        print(("AFF_PARTIAL_REFINED seed=%d duration=%d basePartial=%d loosePartial=%d tightPartial=%d baseFull=%d looseFull=%d tightFull=%d baseTicks=%d looseTicks=%d tightTicks=%d baseOffence=%d looseOffence=%d tightOffence=%d baseCost=%.2f looseCost=%.2f tightCost=%.2f baseMana=%.2f looseMana=%.2f tightMana=%.2f"):format(
+          seed,duration,old.partial,loose.partial,tight.partial,old.full,loose.full,tight.full,old.shadowTicks,loose.shadowTicks,tight.shadowTicks,old.offence,loose.offence,tight.offence,old.cost,loose.cost,tight.cost,old.endMana,loose.endMana,tight.endMana))
+      end)
+    end
+  end
 end)
