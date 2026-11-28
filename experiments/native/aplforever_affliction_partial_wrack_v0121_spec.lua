@@ -11,6 +11,9 @@ assert.is_nil(current:find(anchor,at+#anchor,1,true))
 local alternative=current:sub(1,at-1)..alternativeLine..current:sub(at+#anchor)
 local refined=alternative:gsub("mana%.lo<action%.siphon_life%.cost","mana.hi<action.siphon_life.cost"):gsub("debuff%.corruption%.remains>=3&debuff%.bane_of_agony%.remains>=3","debuff.corruption.remains>=action.wrack.cast+0.2&debuff.bane_of_agony.remains>=action.wrack.cast+0.2")
 assert.are_not.equal(alternative,refined)
+local storedFile=assert(io.open(root.."/roles/Warlock/Candidates/APL_Warlock_Affliction_v1.1_Draft.txt","rb"))
+local stored=assert(storedFile:read("*a"));storedFile:close()
+assert.are.equal(refined,stored,"exact stored refined APL bytes")
 local offence={shadow_bolt=true,searing_pain=true,wrack=true,corruption=true,bane_of_agony=true,siphon_life=true,immolate=true,rain_of_fire=true}
 local function trial(profile,seed,pct,duration)
   duration=duration or 115
@@ -22,7 +25,7 @@ local function trial(profile,seed,pct,duration)
   assert.are.same({},H.loadErrors);assert.are.same({},H.Hekili.Class.loadErrors or {})
   if profile~="shipped" then
     local lists,warnings=H.Hekili:ImportSimcAPL("Warlock_Affliction","APLForever-Affliction-partial-"..profile,
-      profile=="current" and current or profile=="refined" and refined or alternative,C.PACK)
+      profile=="current" and current or profile=="refined" and stored or alternative,C.PACK)
     for _,k in ipairs({"precombat","default","boss_curse","major_cooldowns","aoe","minor_cooldowns","upkeep","final_fallback"}) do assert.is_table(lists[k]) end
     assert.is_falsy((warnings or ""):find("Unsupported action",1,true))
     assert.is_falsy((warnings or ""):find("Unknown key",1,true))
@@ -154,4 +157,27 @@ describe("Affliction short-pull and conservative full-channel overlap controls",
       end)
     end
   end
+end)
+
+-- Stored refined file, all original Mana contexts against both full comparators.
+describe("Affliction stored v1.1 full starting-Mana regression",function()
+ for _,seed in ipairs({30417,30437,30461}) do
+  for _,pct in ipairs({1,0.35,0.25,0.05}) do
+   it(("stored seed %d Mana %.2f"):format(seed,pct),function()
+    local shipped=trial("shipped",seed,pct,115)
+    local old=trial("current",seed,pct,115)
+    local new=trial("refined",seed,pct,115)
+    assert.is_true(new.clip<=old.clip,"new combat clipping")
+    if pct==0.25 then
+      assert.is_true(new.full>=2 and new.partial>=2,"partial channel opportunity lost")
+      assert.is_true(new.shadowTicks>old.shadowTicks and new.cost<old.cost,"measured benefit lost")
+    else
+      assert.are.equal(old.offence,new.offence,"non-quarter accepted actions changed")
+      assert.are.equal(old.cost,new.cost,"non-quarter cost changed")
+      assert.are.equal(old.shadowTicks,new.shadowTicks,"non-quarter periodic effects changed")
+    end
+    print("AFF_STORED_MATCH",seed,pct,shipped.tap,old.full,new.full,old.shadowTicks,new.shadowTicks,old.cost,new.cost,old.endMana,new.endMana,new.raw,new.epsilon)
+   end)
+  end
+ end
 end)

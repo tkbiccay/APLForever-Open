@@ -1471,7 +1471,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.0",
+      "latest_revision": "v1.1",
       "limitations": [
         "No automatic Life Tap because reliable health-cost safety cannot be checked from current Forever API; manual Life Tap may be required."
       ],
@@ -1497,6 +1497,27 @@
           "caveat": "Independent custom APL; static key/list audit only. NO native import, replay, loop or in-game tests; not preferred or approved.",
           "legacy_filename": true,
           "relocated_from": "roles/APL_Warlock_Affliction_DPS_v1.0_Draft.txt"
+        },
+        {
+          "revision": "v1.1",
+          "apl_file": "roles/Warlock/Candidates/APL_Warlock_Affliction_v1.1_Draft.txt",
+          "status": "Draft",
+          "sha256": "77dd177ab7b3b3acb21b766b960ad00e7e8fee85b7e377ba0b47b781bd132ad7",
+          "evidence": [
+            {
+              "kind": "native",
+              "reference": "v0.12.1 a4ca044512d7aacfdebca85cef617b1127115962; in-memory refined 22/22 native, 25/25 CI https://github.com/tkbiccay/APLForever-Open/actions/runs/46137958361. Stored retest pending."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Warlock/Current/APL_Warlock_Affliction_DPS_v1.0_Draft.txt",
+          "min_source_release": "v0.12.1",
+          "addon_version": "v0.12.1",
+          "game_build": null,
+          "talents": "Source Affliction fixture",
+          "gear": "Source Affliction fixture",
+          "settings": "No new settings or health-spending action; native toggles unchanged.",
+          "caveat": "Unselected Draft. At quarter Mana, tested refined partial Wrack increases modelled shadow periodic events 18→40, cost 3075→2971, end Mana80.25→121 in 115s; short 20s end Mana lower by105.25, one fewer accepted offensive action. Not calibrated DPS or real kill-time proof. All other starting-resource contexts require exact stored refined rerun. No automatic Life Tap; no live or approval claim."
         }
       ],
       "apl_name": "Warlock_Affliction"

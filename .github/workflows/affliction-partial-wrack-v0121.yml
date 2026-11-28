@@ -5,6 +5,7 @@ on:
       - ".github/workflows/affliction-partial-wrack-v0121.yml"
       - "experiments/native/aplforever_affliction_partial_wrack_v0121_spec.lua"
       - "roles/Warlock/Current/APL_Warlock_Affliction_DPS_v1.0_Draft.txt"
+      - "roles/Warlock/Candidates/APL_Warlock_Affliction_v1.1_Draft.txt"
       - "docs/Tests_Breadth_Affliction_Partial_Wrack_v0121.md"
   workflow_dispatch:
 permissions:
