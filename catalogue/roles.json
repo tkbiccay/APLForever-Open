@@ -212,7 +212,14 @@
               "reference": "v0.12.1 exact pin, source/Forever guide review 28 Nov; controlled native icon tests NOT RUN."
             }
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "kind": "source_native_v0121_feral_stealth_stored",
+              "source": "Hekili Forever v0.12.1 @ a4ca044512d7aacfdebca85cef617b1127115962",
+              "reference": "https://github.com/tkbiccay/APLForever-Open/actions/runs/46136566441",
+              "result": "20/20 native tests, 40 combat worlds and 120 repeated icon samples, 29/29 CI. Nine modelled single opener casts, 9–14 accepted follow-ons, zero raw across 10 candidate worlds; modelled hit/miss CP1/0 and Pounce bleed1/0, 12yd approach, zero Energy forecast, manual break, nonstealth parity. Test-only class-backed adapter, no real facing/unlock/damage proof."
+            }
+          ],
           "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt",
           "min_source_release": "v0.12.1",
           "addon_version": "v0.12.1",
@@ -220,7 +227,7 @@
           "talents": "Source Feral fixture with controlled opener availability",
           "gear": "Source Feral fixture",
           "settings": "Manual Prowl; no new settings",
-          "caveat": "Unselected unvalidated Draft; v1.5 plus stealth list. Both Ravage/Pounce rear-only; targeting proxy not geometry. Actual casts, hit/miss, unlocks and live test pending."
+          "caveat": "Unselected Draft; v1.5 plus stealth list. Stored native tests pass; both advanced openers require rear position, targeting proxy not geometry. Modelled hit/miss only. Actual client positioning, unlocks, Poised/Clearcasting, damage and live test pending."
         }
       ],
       "apl_name": "Druid_Feral"
