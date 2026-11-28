@@ -4,8 +4,8 @@
 
 | Role | Baseline revision / SHA prefix | Latest revision | Improvement review |
 |---|---|---|---|
-| Druid_Balance | v1.0 1cf83328f343 | v1.0 | Priority gap: no separate Candidate file; audit existing whole APL and test worthwhile alternative |
-| Druid_Feral | v1.0 f2f72d0621c8 | v1.5 | Measured v1.5 hypothesis low-health Barkskin, 10/10; stored CI/merge pending #116 |
+| Druid_Balance | v1.0 1cf83328f343 | v1.0 | In progress #33: native TTD Insect Swarm opportunity, no stored candidate yet |
+| Druid_Feral | v1.0 f2f72d0621c8 | v1.5 | Measured stored v1.5 low-health Barkskin, 10/10, 40 worlds; merged #116, live gate pending |
 | Druid_Guardian | v1.0 f386e158a5e2 | v1.6 | P0 scoped v0.12.1 native candidate evidence #114; live gate pending |
 | Hunter_BeastMastery | v1.1 a9d752c5e6cd | v1.4 | P0 scoped v0.12.1 native candidate evidence #114; live gate pending |
 | Hunter_Marksmanship | v1.0 43c78f4517f2 | v1.1 | Audit existing candidate measured benefit; improve or retain |
