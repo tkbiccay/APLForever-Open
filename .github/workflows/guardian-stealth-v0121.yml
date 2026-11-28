@@ -4,6 +4,7 @@ on:
     paths:
       - ".github/workflows/guardian-stealth-v0121.yml"
       - "experiments/native/aplforever_guardian_stealth_v0121_spec.lua"
+      - "experiments/native/aplforever_guardian_stealth_cast_v0121_spec.lua"
       - "roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt"
       - "roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt"
       - "docs/Tests_Breadth_Guardian_Stealth_v0121.md"
@@ -39,3 +40,10 @@ jobs:
         run: |
           cp "$APLFOREVER_ROOT/experiments/native/aplforever_guardian_stealth_v0121_spec.lua" tests/Forever/aplforever_guardian_stealth_v0121_spec.lua
           .lua/bin/busted --verbose tests/Forever/aplforever_guardian_stealth_v0121_spec.lua
+      - name: Controlled native opener to paid Bear transition
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_guardian_stealth_cast_v0121_spec.lua" tests/Forever/aplforever_guardian_stealth_cast_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_guardian_stealth_cast_v0121_spec.lua
