@@ -23,6 +23,14 @@ class RepositoryValidationTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         (self.root / "catalogue").mkdir()
         self.data = json.loads((ROOT / "catalogue" / "roles.json").read_text(encoding="utf-8-sig"))
+        # These legacy-format synthetic fixtures deliberately omit production
+        # revisions; do not inherit real-world lifecycle pointers or policy.
+        # Production lifecycle checks are exercised separately below and in
+        # test_apl_lifecycle.py against the actual repository.
+        self.data.pop("lifecycle_policy", None)
+        for role in self.data["roles"]:
+            role.pop("protected_rollback_apl", None)
+            role.pop("native_test_apl", None)
         # Tests use isolated synthetic revisions, not copied production APLs.
         # Keep the canonical 28-role identities, but start each fixture with no
         # real revisions or protected references so imports do not break tests.
