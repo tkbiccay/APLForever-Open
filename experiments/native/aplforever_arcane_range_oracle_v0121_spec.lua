@@ -162,7 +162,6 @@ describe("Arcane v0.12.1 free Missile Barrage priority",function()
           assert.are.same(new.counts,both.counts,"combined guard changed in-range reorder")
         end
         print(("ARCANE_PROC_MATCH case=%s seed=%d currentPaidFireProc=%d alternatePaidFireProc=%d currentFreeMissiles=%d alternateFreeMissiles=%d currentFull=%d alternateFull=%d currentCut=%d alternateCut=%d currentOffence=%d alternateOffence=%d currentCost=%.2f alternateCost=%.2f currentEndMana=%.2f alternateEndMana=%.2f"):format(case.name,seed,old.paidFireWithProc,new.paidFireWithProc,old.freeMissiles,new.freeMissiles,old.full,new.full,old.cut,new.cut,old.offence,new.offence,old.totalCost,new.totalCost,old.endMana,new.endMana))
-      end)
         print(("ARCANE_RANGE_PAIR case=%s seed=%d oldRaw=%d safeRaw=%d oldOffence=%d safeOffence=%d combinedOffence=%d"):format(case.name,seed,old.raw,safe.raw,old.offence,safe.offence,both.offence))
         end)
     end
