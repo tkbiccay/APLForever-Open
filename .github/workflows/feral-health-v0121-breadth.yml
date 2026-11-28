@@ -1,0 +1,47 @@
+name: "Breadth #32 Feral v0.12.1 health-aware Barkskin"
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/feral-health-v0121-breadth.yml"
+      - "experiments/native/aplforever_feral_health_v0121_spec.lua"
+      - "roles/Druid/Current/APL_Druid_Feral_DPS_v1.0_Draft.txt"
+      - "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt"
+      - "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt"
+      - "scripts/audit_apl_observability.py"
+      - "tests/test_apl_observability.py"
+      - "docs/Tests_Breadth_Feral_Health_v0121.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: feral-health-v0121-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: zmsl/hekili
+          ref: a4ca044512d7aacfdebca85cef617b1127115962
+          path: upstream/hekili
+          persist-credentials: false
+      - name: Verify pin and catalogue hashes
+        run: |
+          test "$(git -C upstream/hekili rev-parse HEAD)" = "a4ca044512d7aacfdebca85cef617b1127115962"
+          python project/scripts/validate_repository.py
+      - name: Bootstrap released source
+        working-directory: upstream/hekili
+        run: make bootstrap
+      - name: Full Feral profiles and health reader controls
+        working-directory: upstream/hekili
+        env:
+          APLFOREVER_ROOT: ${{ github.workspace }}/project
+        run: |
+          cp "$APLFOREVER_ROOT/experiments/native/aplforever_feral_health_v0121_spec.lua" tests/Forever/aplforever_feral_health_v0121_spec.lua
+          .lua/bin/busted --verbose tests/Forever/aplforever_feral_health_v0121_spec.lua

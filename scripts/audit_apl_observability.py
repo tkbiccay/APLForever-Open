@@ -103,6 +103,16 @@ def guarded_precombat_health(rhs: str, phase: str, min_source_release: str) -> b
             and fields[0].count("health.known") == 1)
 
 
+# Exact tested combat Barkskin RHS only; not a general OR waiver.
+FERAL_BARKSKIN_HEALTH = "barkskin,if=toggle.defensives&action.barkskin.known&action.barkskin.ready&combat>0&aggro&target.within5&((group|active_enemies>=2)|(health.known&health.pct<=65))&!buff.barkskin.up&gcd.remains<=0"
+
+
+def guarded_feral_barkskin(rhs: str, phase: str, min_source_release: str) -> bool:
+    version = re.fullmatch(r"v(\d+)\.(\d+)\.(\d+)", min_source_release)
+    return bool(version and tuple(map(int, version.groups())) >= (0, 12, 1)
+                and phase == "combat" and rhs == FERAL_BARKSKIN_HEALTH)
+
+
 def scan_apl(source: str, min_source_release: str = "") -> list[dict]:
     rows = action_lines(source)
     phase_map = phases(rows)
@@ -111,7 +121,8 @@ def scan_apl(source: str, min_source_release: str = "") -> list[dict]:
         for rule, regex in RULES.items():
             for match in regex.finditer(rhs):
                 if (rule == "player_health" and match.group() == "health.pct"
-                        and guarded_precombat_health(rhs, phase_map[list_name], min_source_release)
+                        and (guarded_precombat_health(rhs, phase_map[list_name], min_source_release)
+                             or guarded_feral_barkskin(rhs, phase_map[list_name], min_source_release))
                         and match.start() >= rhs.index(",if=") + 4):
                     continue
                 findings.append({

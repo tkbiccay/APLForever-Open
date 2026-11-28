@@ -49,7 +49,7 @@
       "last_working_apl": null,
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.4",
+      "latest_revision": "v1.5",
       "limitations": [
         "Archived Cat/Bear/caster branches require evidence-based review: distinguish legitimate pre-unlock and defensive shifts from sustained off-role rotation. Preserve original APL unchanged.",
         "Unpromoted Feral DPS v1.1 Candidate must prove Shred/Claw castability by position and resolve combo-point and Shifting Power observability. Current v1.0 remains a Draft, not proven working.",
@@ -179,6 +179,27 @@
           "gear": null,
           "settings": "No required spec setting. Retains native optional cooldown and Defensive off-switches; uses source-reported combat, target within 5yd and !moving.",
           "caveat": "Fully standalone v0.11 Source-Native 5/5 in tested Cat Energy/CP/finisher and low-Energy fallback worlds, no refused casts; v1.4 Travel Form stationary shift also tested separately. No proven damage superiority, multi-unit AoE, movement intent, low-level unlocks or client health observability. 3 Current v1.0 source import health.pct errors remain separate issue. No Approved, no selection/promotion."
+        },
+        {
+          "revision": "v1.5",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Feral_v1.5_Draft.txt",
+          "status": "Draft",
+          "sha256": "79385bc5f160890b546559f062c5d76c60275112c592ed20d0ab02d429b8a7d7",
+          "evidence": [
+            {
+              "kind": "source",
+              "reference": "v0.12.1 a4ca044512d7aacfdebca85cef617b1127115962, PR #116 first head 10/10 native PASS https://github.com/tkbiccay/APLForever-Open/actions/runs/46119844234; full isolated known-low-health solo branch, class-backed Barkskin adapter, controlled observations. Exact stored-file retest pending."
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Druid/Candidates/APL_Druid_Feral_v1.4_Draft.txt",
+          "min_source_release": "v0.12.1",
+          "addon_version": "v0.12.1",
+          "game_build": null,
+          "talents": "Native Feral level 60 fixture; Barkskin explicitly learned in test adapter",
+          "gear": "Native Feral source world",
+          "settings": "No per-spec settings; native Defensives OFF respected, separate/inline supported",
+          "caveat": "Unselected complete Draft; exact v1.4 except tested Barkskin group/AoE OR known low HP branch. Controlled health/threat only, modelled aura not mitigation; no 1–60/live superiority. Current v1.0 and all earlier revisions retained."
         }
       ],
       "apl_name": "Druid_Feral"
