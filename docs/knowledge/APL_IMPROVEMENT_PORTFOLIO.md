@@ -5,7 +5,7 @@
 | Role | Baseline revision / SHA prefix | Latest revision | Improvement review |
 |---|---|---|---|
 | Druid_Balance | v1.0 1cf83328f343 | v1.0 | Retain v1.0 after #33: 60 worlds, late Insect eliminated but one medium fight regressed; no consistent gain; revisit estimate confidence and AoE |
-| Druid_Feral | v1.0 f2f72d0621c8 | v1.6 Draft | v1.5 measured Barkskin merged #116; owner-requested v1.6 merged #122, icons10/10 + combat10/10 (40 worlds), 9–14 follow-ons, raw0; live gate pending |
+| Druid_Feral | v1.6 701838368217 (owner-selected engineering baseline; v1.0 historical Current) | v1.6 Draft | v1.5 measured Barkskin merged #116; owner-requested v1.6 merged #122, icons10/10 + combat10/10 (40 worlds), 9–14 follow-ons, raw0; live gate pending |
 | Druid_Guardian | v1.0 f386e158a5e2 | v1.6 | P0 #114 measured v1.6; #124 solo stealth 11/12 initial, missing off-form Mana hypothesis under retest; live gate pending |
 | Hunter_BeastMastery | v1.1 a9d752c5e6cd | v1.4 | P0 scoped v0.12.1 native candidate evidence #114; live gate pending |
 | Hunter_Marksmanship | v1.0 43c78f4517f2 | v1.1 | Audit existing candidate measured benefit; improve or retain |
@@ -29,3 +29,6 @@
 | Warrior_Protection | v1.0 e97acd14bdeb | v1.1 | Audit existing candidate measured benefit; improve or retain |
 
 Exact hashes and paths in [catalogue](../../catalogue/roles.json). 23 Supported; five healers blocked pending verified group-triage. Nine roles without separate Candidate files: DEMO-006/Demonology, Balance, Arcane, Frost, Retribution, Shadow, Elemental, Affliction, Destruction. Rotate by risk; preserve DEMO rollback, keep co-P0 Guardian/BM and P1 Feral. No 23/23 improvement count inferred from candidate existence. Reconcile historical proof as part of substantive changes.
+
+
+**28 November owner decision:** Feral v1.6 is the explicit engineering comparison baseline for subsequent development; v1.5 SHA 79385bc5f160890b546559f062c5d76c60275112c592ed20d0ab02d429b8a7d7 is immediate rollback. Physical Current and catalogue preferred remain v1.0 until a separate lifecycle/live decision. No new revision, working status or approval. All 58 existing hashes preserved. [Cross-spec applicability](lessons/CROSS_APL_TRANSFER.md) required for material findings.
