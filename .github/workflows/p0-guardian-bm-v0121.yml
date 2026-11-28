@@ -3,8 +3,8 @@ on:
   pull_request:
     paths:
       - ".github/workflows/p0-guardian-bm-v0121.yml"
-      - "experiments/native/aplforever_guardian_aggro_v011_spec.lua"
-      - "experiments/native/aplforever_guardian_barkskin_v011_spec.lua"
+      - "experiments/native/aplforever_guardian_aggro_v0121_spec.lua"
+      - "experiments/native/aplforever_guardian_barkskin_v0121_spec.lua"
       - "experiments/native/aplforever_bm_lone_wolf_v14_spec.lua"
       - "experiments/native/aplforever_bm_lone_wolf_v14_combat_spec.lua"
       - "experiments/native/aplforever_bm_hawk_cap_v011_spec.lua"
@@ -25,8 +25,8 @@ jobs:
       fail-fast: false
       matrix:
         fixture:
-          - aplforever_guardian_aggro_v011_spec.lua
-          - aplforever_guardian_barkskin_v011_spec.lua
+          - aplforever_guardian_aggro_v0121_spec.lua
+          - aplforever_guardian_barkskin_v0121_spec.lua
           - aplforever_bm_lone_wolf_v14_spec.lua
           - aplforever_bm_lone_wolf_v14_combat_spec.lua
           - aplforever_bm_hawk_cap_v011_spec.lua
@@ -48,7 +48,7 @@ jobs:
       - name: Bootstrap published source
         working-directory: upstream/hekili
         run: make bootstrap
-      - name: Execute unchanged historical fixture against new source
+      - name: Execute released-source regression fixture
         working-directory: upstream/hekili
         env:
           APLFOREVER_ROOT: ${{ github.workspace }}/project
