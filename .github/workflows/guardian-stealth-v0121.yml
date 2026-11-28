@@ -6,6 +6,7 @@ on:
       - "experiments/native/aplforever_guardian_stealth_v0121_spec.lua"
       - "experiments/native/aplforever_guardian_stealth_cast_v0121_spec.lua"
       - "roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt"
+      - "roles/Druid/Candidates/APL_Druid_Guardian_v1.7_Draft.txt"
       - "roles/Druid/Candidates/APL_Druid_Feral_v1.6_Draft.txt"
       - "docs/Tests_Breadth_Guardian_Stealth_v0121.md"
   workflow_dispatch:

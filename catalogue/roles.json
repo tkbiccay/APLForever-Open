@@ -246,7 +246,7 @@
       "last_working_apl": "roles/Druid/Current/APL_Druid_Guardian_Tank_v1.0_ReportedWorking.txt",
       "last_approved_apl": null,
       "shipped_default_apl": null,
-      "latest_revision": "v1.6",
+      "latest_revision": "v1.7",
       "limitations": [
         "Guardian v1.5 aggro-driven Roar can under-maintain debuff when threat is hidden. Source-native tests control the client aggro response; no real threat, output, in-game or high-Rage Maul proof.",
         "21 Nov 2026 v0.11 source-native long-fight verified Guardian v1.5 landed Roar 30s expiry and safe resist retry, but source kit omits Barkskin so Defensives ON behaviour and real mitigation remain untested. Roar accepted presses may resist and are not equal to debuff auras; prior false-positive red checks preserved. No promotion.",
@@ -437,6 +437,27 @@
           "settings": "No per-spec settings required. Source-tested self-contained upkeep; respects Major and Defensive optional native OFF; GCD guard on Barkskin, no custom addon checkboxes.",
           "caveat": "Full independently stored, unselected Guardian v1.6 Draft. Strict gcd.remains=0 guard avoids v1.5's 3 source-refused GCD presses in matched class-backed test fixture, without changing accepted Barkskin behaviour. Source helper must be extended with test-only native Barkskin MAP+kit; no damage reduction, client threat validity, actual raid/player safety, 1–60, high-Rage Maul or in-game proof. Barkskin also used under synthetic no-threat client reading; whether practical resource waste unresolved. Working v1.0 ReportedWorking preferred/last working remains untouched; v1.5 source rollback retained. Not Approved.",
           "min_source_release": "v0.11.0"
+        },
+        {
+          "revision": "v1.7",
+          "apl_file": "roles/Druid/Candidates/APL_Druid_Guardian_v1.7_Draft.txt",
+          "status": "Draft",
+          "sha256": "47fd6bd92230619eee15ffb1ef0f823ce7ccd768ea5678deb70f0ca93df8aa40",
+          "evidence": [
+            {
+              "kind": "native",
+              "reference": "v0.12.1 exact source, in-memory alternative 22/22 native https://github.com/tkbiccay/APLForever-Open/actions/runs/46139789312; stored byte equality retest pending"
+            }
+          ],
+          "test_results": [],
+          "rollback_reference": "roles/Druid/Candidates/APL_Druid_Guardian_v1.6_Draft.txt",
+          "min_source_release": "v0.12.1",
+          "addon_version": "v0.12.1",
+          "game_build": null,
+          "talents": "Controlled source Guardian kit plus registered opener ranks",
+          "gear": "Source Guardian fixture",
+          "settings": "Manual solo Prowl only; native toggles retained",
+          "caveat": "Unselected Draft. Modelled hit/miss, paid Bear transition and ordinary tank parity in test-only adapter; actual live facing, damage mitigation, unlocks, Barkskin ON and Maul regression remain pending. Reported-working v1.0 protected."
         }
       ],
       "notes": [

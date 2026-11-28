@@ -34,7 +34,9 @@ for line in prior:gmatch("[^\n]+") do
 end
 assert.are.equal(13,n,"unexpected number of tank entry lines")
 local alternative=table.concat(lines,"\n").."\n"..opener.."\n"
-local packs={current=current,prior=prior,alternative=alternative}
+local stored=read("roles/Druid/Candidates/APL_Druid_Guardian_v1.7_Draft.txt")
+assert.are.equal(alternative,stored,"stored exact alternative bytes")
+local packs={current=current,prior=prior,alternative=stored}
 local openerKeys={ravage=true,pounce=true,shred=true,claw=true}
 local function trial(profile,case)
   local char=C.character()

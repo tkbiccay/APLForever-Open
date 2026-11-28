@@ -33,7 +33,9 @@ for line in prior:gmatch("[^\n]+") do
 end
 assert.are.equal(13,n,"unexpected number of tank entry lines")
 local alternative=table.concat(lines,"\n").."\n"..opener.."\n"
-local packs={current=current,prior=prior,alternative=alternative}
+local stored=read("roles/Druid/Candidates/APL_Druid_Guardian_v1.7_Draft.txt")
+assert.are.equal(alternative,stored,"stored exact alternative bytes")
+local packs={current=current,prior=prior,alternative=stored}
 local openerKeys={ravage=true,pounce=true,shred=true,claw=true}
 -- Independent controlled cast gate. Source Guardian resolver normally has no
 -- off-form pools: explicitly supply native costs for these test-only pools.
